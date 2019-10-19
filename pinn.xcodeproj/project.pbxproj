@@ -8,7 +8,35 @@
 
 /* Begin PBXBuildFile section */
 		E2673966235BC825000CF830 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2673965235BC825000CF830 /* main.swift */; };
+		E267397B235BC8DE000CF830 /* PinnParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2673977235BC8DE000CF830 /* PinnParser.swift */; };
+		E267397C235BC8DE000CF830 /* PinnLexerATN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2673978235BC8DE000CF830 /* PinnLexerATN.swift */; };
+		E267397D235BC8DE000CF830 /* PinnParserATN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2673979235BC8DE000CF830 /* PinnParserATN.swift */; };
+		E267397E235BC8DE000CF830 /* PinnLexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E267397A235BC8DE000CF830 /* PinnLexer.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		E21E6050235BC9DE0084D151 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E2673981235BC954000CF830 /* Antlr4.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = "Antlr4::Antlr4";
+			remoteInfo = Antlr4;
+		};
+		E2673988235BC954000CF830 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E2673981235BC954000CF830 /* Antlr4.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = "Antlr4::Antlr4::Product";
+			remoteInfo = Antlr4;
+		};
+		E267398A235BC954000CF830 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E2673981235BC954000CF830 /* Antlr4.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = "Antlr4::Antlr4Tests::Product";
+			remoteInfo = Antlr4Tests;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		E2673960235BC825000CF830 /* CopyFiles */ = {
@@ -25,6 +53,11 @@
 /* Begin PBXFileReference section */
 		E2673962235BC825000CF830 /* pinn */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = pinn; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2673965235BC825000CF830 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		E2673977235BC8DE000CF830 /* PinnParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinnParser.swift; sourceTree = "<group>"; };
+		E2673978235BC8DE000CF830 /* PinnLexerATN.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinnLexerATN.swift; sourceTree = "<group>"; };
+		E2673979235BC8DE000CF830 /* PinnParserATN.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinnParserATN.swift; sourceTree = "<group>"; };
+		E267397A235BC8DE000CF830 /* PinnLexer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinnLexer.swift; sourceTree = "<group>"; };
+		E2673981235BC954000CF830 /* Antlr4.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Antlr4.xcodeproj; path = ../../antlr4/runtime/Swift/Antlr4.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,6 +76,7 @@
 			children = (
 				E2673964235BC825000CF830 /* pinn */,
 				E2673963235BC825000CF830 /* Products */,
+				E2673981235BC954000CF830 /* Antlr4.xcodeproj */,
 			);
 			sourceTree = "<group>";
 		};
@@ -58,8 +92,21 @@
 			isa = PBXGroup;
 			children = (
 				E2673965235BC825000CF830 /* main.swift */,
+				E267397A235BC8DE000CF830 /* PinnLexer.swift */,
+				E2673978235BC8DE000CF830 /* PinnLexerATN.swift */,
+				E2673977235BC8DE000CF830 /* PinnParser.swift */,
+				E2673979235BC8DE000CF830 /* PinnParserATN.swift */,
 			);
 			path = pinn;
+			sourceTree = "<group>";
+		};
+		E2673982235BC954000CF830 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E2673989235BC954000CF830 /* Antlr4.framework */,
+				E267398B235BC954000CF830 /* Antlr4Tests.xctest */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -76,6 +123,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				E21E6051235BC9DE0084D151 /* PBXTargetDependency */,
 			);
 			name = pinn;
 			productName = pinn;
@@ -108,6 +156,12 @@
 			mainGroup = E2673959235BC825000CF830;
 			productRefGroup = E2673963235BC825000CF830 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = E2673982235BC954000CF830 /* Products */;
+					ProjectRef = E2673981235BC954000CF830 /* Antlr4.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				E2673961235BC825000CF830 /* pinn */,
@@ -115,16 +169,45 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXReferenceProxy section */
+		E2673989235BC954000CF830 /* Antlr4.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Antlr4.framework;
+			remoteRef = E2673988235BC954000CF830 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E267398B235BC954000CF830 /* Antlr4Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = file;
+			path = Antlr4Tests.xctest;
+			remoteRef = E267398A235BC954000CF830 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
 /* Begin PBXSourcesBuildPhase section */
 		E267395E235BC825000CF830 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				E2673966235BC825000CF830 /* main.swift in Sources */,
+				E267397B235BC8DE000CF830 /* PinnParser.swift in Sources */,
+				E267397C235BC8DE000CF830 /* PinnLexerATN.swift in Sources */,
+				E267397D235BC8DE000CF830 /* PinnParserATN.swift in Sources */,
+				E267397E235BC8DE000CF830 /* PinnLexer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		E21E6051235BC9DE0084D151 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Antlr4;
+			targetProxy = E21E6050235BC9DE0084D151 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		E2673967235BC825000CF830 /* Debug */ = {
