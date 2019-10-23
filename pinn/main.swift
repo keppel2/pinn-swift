@@ -18,6 +18,7 @@ var myinput = """
 func main()
 {
         print (44);
+print(5);
 }
 
 """
@@ -27,12 +28,11 @@ func main()
 
 
 class Pvisitor {
-    init() {}
-    class PVal {
-        
+    class Pval {
+        func toString() -> String { return ""}
     }
     
-    class PArray <V>: PVal {
+    class Parray <V>: Pval {
         var ar: [V] = []
         func get(_ k: Int) -> V {
             return ar[k]
@@ -40,6 +40,20 @@ class Pvisitor {
         func set(_ k: Int, v: V) {
             ar[k] = v
         }
+        override func toString() -> String {
+            return String(describing: ar)
+        }
+    }
+    
+    class Pscalar <V>: Pval {
+        var sc: V
+        init(_ v: V) {
+            sc = v
+        }
+        func get() -> V {
+            return sc
+        }
+        override func toString() -> String { return String(describing: sc) }
     }
     
     enum Gtype {
@@ -48,14 +62,15 @@ class Pvisitor {
     struct Kind {
         var vtype: Any.Type
         var gtype: Gtype
+        var count: Int?
     }
     struct FKind {
         var k: Kind
         var s: String
     }
     struct Fc {
-        var m = [String: PVal]()
-        var rt: PVal?
+        var m = [String: Pval]()
+        var rt: Pval?
     }
     
     var fc = Fc()
@@ -89,7 +104,7 @@ class Pvisitor {
         fkmap[ctx.ID()!.getText()] = Fheader(fc: ctx, kind: k, fkinds: fkinds)
     }
     
-    func visitFunction(_ ctx:PinnParser.FunctionContext, _ s: [PVal], _ str: String) throws -> PVal? {
+    func visitFunction(_ ctx:PinnParser.FunctionContext, _ s: [Pval], _ str: String) throws -> Pval? {
         let oldfc = fc
         fc = Fc()
         let fh = fkmap[str]!
@@ -114,43 +129,48 @@ class Pvisitor {
             try! header(child)
         }
         let MAIN = "main"
-        _ = try! visitFunction(fkmap[MAIN]!.fc, [PVal](), MAIN)
+        _ = try! visitFunction(fkmap[MAIN]!.fc, [Pval](), MAIN)
     }
-    func visit(_ ctx: PinnParser.FuncExprContext) {
-        
 
-    }
     func visitKind(_ sctx: PinnParser.KindContext) -> Kind {
         let strType = sctx.TYPES()!.getText()
         let vtype = litToType[strType]!
-        let gtype: Gtype
+        let rt: Kind
         if sctx.MAP() != nil {
-            gtype = .gMap
+            rt = Kind(vtype: vtype, gtype: .gMap, count: 0)
         } else if sctx.SLICE() != nil {
-            gtype = .gSlice
-        } else {
-            gtype = .gScalar
+            rt = Kind(vtype: vtype, gtype: .gSlice, count: 0)
+            
+        } else if sctx.FILL() != nil {
+            rt = Kind(vtype: vtype, gtype: .gArray, count: nil)
         }
-        return Kind(vtype: vtype, gtype: gtype)
+        else if let e = sctx.expr() {
+            let v = visitPVal(e)!
+            let x = (v as! Pscalar<Int>).get()
+            rt = Kind(vtype: vtype, gtype: .gArray, count: x)
+        } else {
+            rt = Kind(vtype: vtype, gtype: .gScalar, count: 1)
+        }
+        return rt
     }
     func visitFKind(_ sctx: PinnParser.FvarDeclContext) -> FKind {
         let str = sctx.ID()!.getText()
         let k = visitKind(sctx.kind()!)
         return FKind(k: k, s: str)
     }
-    func visitList(_ sctx: PinnParser.ExprListContext) -> [PVal] {
-        var rt = [PVal]()
+    func visitList(_ sctx: PinnParser.ExprListContext) -> [Pval] {
+        var rt = [Pval]()
         for child in sctx.expr() {
             let v = visitPVal(child)!
             rt.append(v)
         }
         return rt
     }
-    func childToToken(_ child: Tree) -> PinnParser.Tokens {
+    static func childToToken(_ child: Tree) -> PinnParser.Tokens {
         return PinnParser.Tokens(rawValue: (child as! TerminalNode).getSymbol()!.getType())!
     }
-    func visitPVal(_ ctx: ParserRuleContext) -> PVal? {
-        var rt: PVal?
+    func visitPVal(_ ctx: ParserRuleContext) -> Pval? {
+        var rt: Pval?
         switch ctx {
         case let sctx as PinnParser.ExprContext:
             if sctx.getChildCount() == 1 {
@@ -160,8 +180,13 @@ class Pvisitor {
                     rt = visitPVal(cchild)
                     break
                 }
-                switch childToToken(child) {
+                switch Self.childToToken(child) {
                 case .INT:
+                    let str = sctx.INT()!.getText()
+                    let x = Int(str)!
+                    let pv = Pscalar(x)
+                    rt = pv
+                    
                     break
                 default:
                     break
@@ -171,7 +196,10 @@ class Pvisitor {
                 switch sctx.getStart()!.getText()! {
                 case "print":
                     let s = visitList(sctx.exprList()!)
-                    print(s, ",gottext")
+                    for pv in s {
+                        print(pv.toString())
+                    
+                    }
                 default:
                     break
                 }
@@ -182,15 +210,18 @@ class Pvisitor {
     func visit(_ ctx: ParserRuleContext)
     {
     switch ctx {
-    case is PinnParser.StatementContext:
+    case let sctx as PinnParser.StatementContext:
+        if let e = sctx.expr() {
+            _ = visitPVal(e)
+        } else {
         visit(ctx.getChild(0) as! ParserRuleContext)
+        }
     case let sctx as PinnParser.BlockContext:
         for child in sctx.statement() {
             visit(child)
         }
     default: break
     }
-    print("in f")
     }
 
     
