@@ -8,13 +8,15 @@
 
 import Foundation
 import Antlr4
+
+
+
 struct ErrParamLength: Error {}
 struct ErrWrongType: Error {}
 struct ErrRedeclare: Error {}
 var myinput = """
 func main()
 {
-        print (A);
         print (44);
 }
 
@@ -116,12 +118,7 @@ class Pvisitor {
     }
     func visit(_ ctx: PinnParser.FuncExprContext) {
         
-        switch ctx.getStart()!.getText()! {
-        case "print":
-            print(ctx.exprList()!.getText(), "gottext")
-        default:
-            break;
-        }
+
     }
     func visitKind(_ sctx: PinnParser.KindContext) -> Kind {
         let strType = sctx.TYPES()!.getText()
@@ -141,7 +138,47 @@ class Pvisitor {
         let k = visitKind(sctx.kind()!)
         return FKind(k: k, s: str)
     }
-    
+    func visitList(_ sctx: PinnParser.ExprListContext) -> [PVal] {
+        var rt = [PVal]()
+        for child in sctx.expr() {
+            let v = visitPVal(child)!
+            rt.append(v)
+        }
+        return rt
+    }
+    func childToToken(_ child: Tree) -> PinnParser.Tokens {
+        return PinnParser.Tokens(rawValue: (child as! TerminalNode).getSymbol()!.getType())!
+    }
+    func visitPVal(_ ctx: ParserRuleContext) -> PVal? {
+        var rt: PVal?
+        switch ctx {
+        case let sctx as PinnParser.ExprContext:
+            if sctx.getChildCount() == 1 {
+                let child = sctx.getChild(0)!
+                
+                if let cchild = child as? ParserRuleContext {
+                    rt = visitPVal(cchild)
+                    break
+                }
+                switch childToToken(child) {
+                case .INT:
+                    break
+                default:
+                    break
+                }
+            }
+        case let sctx as PinnParser.FuncExprContext:
+                switch sctx.getStart()!.getText()! {
+                case "print":
+                    let s = visitList(sctx.exprList()!)
+                    print(s, ",gottext")
+                default:
+                    break
+                }
+        default: break
+        }
+        return rt
+    }
     func visit(_ ctx: ParserRuleContext)
     {
     switch ctx {
@@ -151,7 +188,6 @@ class Pvisitor {
         for child in sctx.statement() {
             visit(child)
         }
-        
     default: break
     }
     print("in f")
@@ -175,22 +211,3 @@ var tree = try! parser.file()
 
 var pv = Pvisitor()
 try! pv.start(tree)
-
-
-
-protocol IVal {
-    associatedtype Element
-    associatedtype Key
-    func get(_ a:Key) -> Element
-    func set(_ a:Key, _ e:Element)
-}
- 
-
-enum VType {
-    case invalid, int, bool
-}
-
-class GVal {
-
-}
-
