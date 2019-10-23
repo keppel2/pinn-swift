@@ -23,29 +23,59 @@ print(5);
 
 """
 
-
-
+protocol Pval {
+    func toString() -> String
+    func getKind() -> Pvisitor.Kind
+}
+class aclas {}
 
 
 class Pvisitor {
-    class Pval {
-        func toString() -> String { return ""}
-    }
+
     
     class Parray <V>: Pval {
-        var ar: [V] = []
+        var ar: [V?]
         func get(_ k: Int) -> V {
-            return ar[k]
+            return ar[k]!
         }
         func set(_ k: Int, v: V) {
             ar[k] = v
         }
-        override func toString() -> String {
+        func toString() -> String {
             return String(describing: ar)
         }
+        func getKind() -> Kind {
+            return Kind(vtype: V.self, gtype: .gArray, count: ar.count)
+        }
+        init(_ x: Int) {
+            ar = [V?].init(repeating: nil, count: x)
+        }
+        
     }
-    
+//    class Pslice <V>: Pval {
+//        class inner {
+//            var v: V
+//            init(_ x: V) {
+//                v = x
+//            }
+//        }
+//            var ar: [inner] = []
+//            func get(_ k: Int) -> V {
+//                return ar[k].v
+//            }
+//            func set(_ k: Int, v: V) {
+//                ar[k].v =
+//            }
+//            func toString() -> String {
+//                return String(describing: ar)
+//            }
+//            func getKind() -> Kind {
+//                return Kind(vtype: V.self, gtype: .gArray, count: ar.count)
+//            }
+//    }
     class Pscalar <V>: Pval {
+
+        
         var sc: V
         init(_ v: V) {
             sc = v
@@ -53,16 +83,53 @@ class Pvisitor {
         func get() -> V {
             return sc
         }
-        override func toString() -> String { return String(describing: sc) }
+        func toString() -> String { return String(describing: sc) }
+        func getKind() -> Kind {
+            return Kind(vtype: V.self, gtype: .gScalar, count: 1)
+        }
     }
+    
+    class Pmap <V>: Pval {
+        var m = [String: V]()
+        func get(_ k: String) -> V {
+            return m[k]!
+        }
+        func set(_ k: String, v: V) {
+            m[k] = v
+        }
+        func toString() -> String {
+            return String(describing: m)
+        }
+        func getKind() -> Kind {
+            return Kind(vtype: V.self, gtype: .gArray, count: m.count)
+        }
+    }
+    
     
     enum Gtype {
         case gScalar, gArray, gSlice, gMap
     }
     struct Kind {
+
         var vtype: Any.Type
         var gtype: Gtype
         var count: Int?
+        func equals(_ k: Kind) -> Bool {
+            return vtype == k.vtype && gtype == k.gtype && count == k.count
+        }
+        func equalsError(_ k2: Kind) throws {
+            switch gtype {
+            case .gArray, .gScalar:
+                if !self.equals(k2) {
+                    throw ErrWrongType()
+                }
+            case .gSlice, .gMap:
+                if gtype != k2.gtype || vtype != k2.vtype {
+                    throw ErrWrongType()
+                }
+                
+            }
+        }
     }
     struct FKind {
         var k: Kind
@@ -113,6 +180,7 @@ class Pvisitor {
         }
         var index = 0
         for v in s {
+//            fh.fkinds[index].k.equalsError()
             fc.m[fh.fkinds[index].s] = v
             index += 1
         }
