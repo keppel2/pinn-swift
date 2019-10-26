@@ -254,6 +254,17 @@ class Pvisitor {
     func visitPval(_ ctx: ParserRuleContext) -> Pval? {
         var rt: Pval?
         switch ctx {
+        case let sctx as PinnParser.CallExprContext:
+                var s = [Pval]()
+                 let str =  sctx.ID()!.getText()
+                 if let el = sctx.exprList() {
+                    s = visitList(el)
+            }
+            rt = visitFunction(str, s)
+        
+            
+        case let sctx as PinnParser.ParenExprContext:
+                            rt = visitPval(sctx.expr()!)
         case let sctx as PinnParser.ExprContext:
             if sctx.getChildCount() == 1 {
                 let child = sctx.getChild(0)!
@@ -281,12 +292,6 @@ class Pvisitor {
                 }
                 break
             }
-            if Self.childToToken(sctx.getChild(0)!) == .LPAREN {
-                rt = visitPval(sctx.expr(0)!)
-                break
-            }
-
-            
             if sctx.expr().count == 2 {
                 let op = Self.childToText(sctx.getChild(1)!)
                 let lhs = visitPval(sctx.expr(0)!)!
@@ -357,7 +362,10 @@ class Pvisitor {
             let v2 = v.get(x)
             rt = Pval(v2)
             
-        default: break
+        default:
+//            let schild = ctx.getChild(0) as! ParserRuleContext
+//            rt = visitPval(schild)
+         fatalError(ErrCase)
         }
         return rt
     }
