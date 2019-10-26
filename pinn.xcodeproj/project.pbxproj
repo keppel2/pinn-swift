@@ -12,6 +12,7 @@
 		E267397D235BC8DE000CF830 /* PinnParserATN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2673979235BC8DE000CF830 /* PinnParserATN.swift */; };
 		E267397E235BC8DE000CF830 /* PinnLexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E267397A235BC8DE000CF830 /* PinnLexer.swift */; };
 		E2CDE16E2363EB740065250D /* pval.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2CDE16D2363EB740065250D /* pval.swift */; };
+		E2CDE173236415100065250D /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2673965235BC825000CF830 /* main.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -193,6 +194,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2CDE173236415100065250D /* main.swift in Sources */,
 				E2CDE16E2363EB740065250D /* pval.swift in Sources */,
 				E267397B235BC8DE000CF830 /* PinnParser.swift in Sources */,
 				E267397C235BC8DE000CF830 /* PinnLexerATN.swift in Sources */,

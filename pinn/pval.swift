@@ -7,50 +7,31 @@
 //
 
 //import Foundation
-protocol PinnType: Equatable {
-    static func zeroValue() -> PinnType
-}
 
-extension Int: PinnType {
-    static func zeroValue() -> PinnType {
-        return 0
-    }
-}
 
-extension Bool: PinnType {
-    static func zeroValue() -> PinnType {
-        return false
-    }
-}
+let ErrParamLength    = "Parameter length mismatch."
+let ErrWrongStatement = "Wrong statement."
+let ErrWrongType      = "Wrong type."
+let ErrRange          = "Out of range."
+let ErrCase           = "Case unimplemented."
+let ErrRedeclare      = "Redeclared."
+let ErrUndeclare      = "Undeclared."
 
-struct ErrParamLength: Error {}
-struct ErrWrongType: Error {}
-struct ErrRedeclare: Error {}
-struct ErrUndeclare: Error {}
-struct ErrCase: Error{}
+
+
 
 
 func main() {
-    let v: PinnType
-    v = Int.zeroValue()
-    print(type(of: v))
-    
-    print("hiya")
-    let rt: Pval
-    rt = Pscalar<Int>()
-    var rt2: Pval = rt
-    let x = rt2.getv()
-    print(type(of:x))
+    var ar: [Any]
+    ar = [Int].init(repeating: 0, count: 10)
+
     
 }
 enum Gtype {
     case gScalar, gArray, gMap
 }
 
-func pvAs <V: PinnType> (_ p: Pval) -> V {
-    let ps = p as! Pscalar<V>
-    return ps.sc
-}
+
 //
 //func zeroValue<>() throws -> T {
 //    if T.self == Int.self {
@@ -62,13 +43,7 @@ func pvAs <V: PinnType> (_ p: Pval) -> V {
 //    throw ErrCase()
 //}
 
-protocol Pval {
-    var string: String {get}
-    func getKind() -> Kind
-    func clone() -> Pval
-    func equal(_:Pval) -> Bool
-    func getv() -> PinnType
-}
+
 //
 //    class Pmap <V: Equatable>: Pval {
 //
@@ -156,54 +131,114 @@ protocol Pval {
 //
 //        }
 //
-    class Pscalar <V: PinnType>: Pval {
-        //convert to ==
-        //var klass: Klass<V>
-        func getv() -> PinnType {
-            return sc
-        }
-        func new(t: Any.Type)-> Pval {
-            let rt: Pval
-            if t == Int.self {
-                rt = Pscalar<Int>()
-            } else if t == Bool.self {
-                rt = Pscalar<Bool>()
-            } else {
+
+
+
+class Pval {
+        let g: Gtype
+        let v: Any.Type
+        convenience init(_ a: Any) {
+            switch a {
+            case is Int:
+                self.init(Kind(vtype: Int.self, gtype: .gScalar, count: 1), a)
+            case is Bool:
+                self.init(Kind(vtype: Bool.self, gtype: .gScalar, count: 1), a)
+            default:
                 fatalError()
             }
-            return rt
         }
-        
-
-        func equal(_ p:Pval) -> Bool {
-            guard let p2 = p as? Self else {
-                return false
+        init(_ k: Kind, _ i: Any?) {
+            g = k.gtype
+            v = k.vtype
+            switch g {
+            case .gArray:
+                if v == Int.self {
+                    ar = [Int](repeating: (i ?? 0) as! Int, count: k.count!)
+                } else if v == Bool.self {
+                    ar = [Bool](repeating: (i ?? false) as! Bool, count: k.count!)
+                } else {
+                    fatalError()
+                }
+            case .gMap:
+                if v == Int.self {
+                    map = [String: Int]()
+                 } else if v == Bool.self {
+                    map = [String: Bool]()
+                 } else {
+                     fatalError()
+                 }
+            case .gScalar:
+                if v == Int.self {
+                    sc = i ?? 0
+                } else if v == Bool.self {
+                    sc = i ?? false
+                } else {
+                    fatalError()
+                }
             }
-            return true
-            sc == p2.sc
+        }
+        func equal(_ p:Pval) -> Bool {
+            switch sc {
+            case is Int:
+                return sc as! Int == p.sc as! Int
+            case is Bool:
+                return sc as! Bool == p.sc as! Bool
+            default: fatalError()
+            }
         }
   
-        var sc: V
-        init(_ v: V) {
+        var sc: Any?
+        var ar: [Any]?
+        var map: [String: Any]?
+
+        func get() -> Any {
+            return sc!
+        }
+//        func getPV() -> Pval {
+//
+//        }
+        
+        func get(_ k: String) -> Any {
+            return map![k]!
+        }
+        
+        func get(_ k: Int) -> Any {
+            return ar![k]
+        }
+        
+        func set(_ v: Any) {
             sc = v
         }
-        init() {
-            sc = V.zeroValue() as! V
-        }
-//        init(_ k: Klass<V>) { sc = try! zeroValue()}
         
-
-
-        func get() -> V {
-            return sc
+        func set(_ k: String, _ v: Any) {
+            map![k] = v
         }
-        var string: String { return String(describing: sc) }
+        
+        func set(_ k: Int, _ v: Any) {
+            ar![k] = v
+        }
+        
+        var string: String {
+            switch g {
+                
+            case .gArray: return String(describing: ar)
+            case .gMap: return String(describing: map)
+            case .gScalar: return String(describing: sc!)
+            }
+        }
+        
         func getKind() -> Kind {
-            return Kind(vtype: V.self, gtype: .gScalar, count: 1)
+            switch g {
+            case .gArray:
+                return Kind(vtype: v, gtype: g, count: ar!.count)
+                case .gMap:
+                    return Kind(vtype: v, gtype: g, count: map!.count)
+                case .gScalar:
+                    return Kind(vtype: v, gtype: g, count: 1)
+            }
         }
-        func clone() -> Pval {
-            return Pscalar<V>(sc)
-        }
+        
+//        func clone() -> Pval {        }
     }
     
 
@@ -248,17 +283,18 @@ struct Kind: Equatable {
 //        return rt
 //    }
 //
-//    func equalsError(_ k2: Kind) throws {
-//        switch gtype {
-//        case .gArray, .gScalar:
-//            if self != k2 {
-//                throw ErrWrongType()
-//            }
-//        case .gMap:
-//            if gtype != k2.gtype || vtype != k2.vtype {
-//                throw ErrWrongType()
-//            }
-//
-//        }
+    func equalsError(_ k2: Kind) {
+        switch gtype {
+        case .gArray, .gScalar:
+            if self != k2 {
+                fatalError(ErrWrongType)
+            }
+        case .gMap:
+            if gtype != k2.gtype || vtype != k2.vtype {
+                fatalError(ErrWrongType)
+            }
+
+        }
+    }
 //    }
 }
