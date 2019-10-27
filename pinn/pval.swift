@@ -6,7 +6,7 @@
 //  Copyright © 2019 Ryan Keppel. All rights reserved.
 //
 
-//import Foundation
+import Foundation
 
 
 let ErrParamLength    = "Parameter length mismatch."
@@ -20,12 +20,17 @@ let ErrUndeclare      = "Undeclared."
 
 
 
-
+func fnToString(_ s: String) -> String {
+    let fh = FileHandle(forReadingAtPath: s)!
+    let data = fh.readDataToEndOfFile()
+    return String(describing: data)
+}
 func main() {
-    var ar: [Any]
-    ar = [Int].init(repeating: 0, count: 10)
-
     
+    let fh = FileHandle(forReadingAtPath: "/Users/ryankeppel/fib.pinn")!
+    let data = fh.readDataToEndOfFile()
+    let str = String(data: data, encoding: String.Encoding.utf8)!
+    print(str)
 }
 enum Gtype {
     case gScalar, gArray, gMap
@@ -132,49 +137,56 @@ enum Gtype {
 //        }
 //
 
-
+func zeroValue(_ v:Any.Type) -> Any {
+    if v == Int.self {
+        return 0
+    } else if v == Bool.self {
+        return false
+    } else {
+        fatalError()
+    }
+}
 
 class Pval {
+    static func sf() {}
+    
         let g: Gtype
         let v: Any.Type
         convenience init(_ a: Any) {
-            switch a {
-            case is Int:
-                self.init(Kind(vtype: Int.self, gtype: .gScalar, count: 1), a)
-            case is Bool:
-                self.init(Kind(vtype: Bool.self, gtype: .gScalar, count: 1), a)
-            default:
-                fatalError()
-            }
+            self.init(Kind(vtype: type(of: a), gtype: .gScalar, count: 1), a)
         }
+
         init(_ k: Kind, _ i: Any?) {
             g = k.gtype
             v = k.vtype
             switch g {
             case .gArray:
-                if v == Int.self {
-                    ar = [Int](repeating: (i ?? 0) as! Int, count: k.count!)
-                } else if v == Bool.self {
-                    ar = [Bool](repeating: (i ?? false) as! Bool, count: k.count!)
-                } else {
-                    fatalError()
-                }
+                ar = [Any](repeating: i ?? zeroValue(k.vtype), count: k.count!)
+//                if v == Int.self {
+//                    ar = [Any](repeating: (i ?? 0) as! Int, count: k.count!)
+//                } else if v == Bool.self {
+//                    ar = [Bool](repeating: (i ?? false) as! Bool, count: k.count!)
+//                } else {
+//                    fatalError()
+//                }
             case .gMap:
-                if v == Int.self {
-                    map = [String: Int]()
-                 } else if v == Bool.self {
-                    map = [String: Bool]()
-                 } else {
-                     fatalError()
-                 }
+                map = [String: Any]()
+//                if v == Int.self {
+//                    map = [String: Int]()
+//                 } else if v == Bool.self {
+//                    map = [String: Bool]()
+//                 } else {
+//                     fatalError()
+//                 }
             case .gScalar:
-                if v == Int.self {
-                    sc = i ?? 0
-                } else if v == Bool.self {
-                    sc = i ?? false
-                } else {
-                    fatalError()
-                }
+                sc = i ?? zeroValue(k.vtype)
+//                if v == Int.self {
+//                    sc = i ?? 0
+//                } else if v == Bool.self {
+//                    sc = i ?? false
+//                } else {
+//                    fatalError()
+//                }
             }
         }
         func equal(_ p:Pval) -> Bool {
@@ -210,7 +222,7 @@ class Pval {
             sc = v
         }
         
-        func set(_ k: String, _ v: Any) {
+        func set(_ k: String, _ v: Any?) {
             map![k] = v
         }
         
@@ -221,8 +233,8 @@ class Pval {
         var string: String {
             switch g {
                 
-            case .gArray: return String(describing: ar)
-            case .gMap: return String(describing: map)
+            case .gArray: return String(describing: ar!)
+            case .gMap: return String(describing: map!)
             case .gScalar: return String(describing: sc!)
             }
         }
@@ -238,7 +250,19 @@ class Pval {
             }
         }
         
-//        func clone() -> Pval {        }
+        func clone() -> Pval {
+            let rt = Pval(getKind(), nil)
+            
+            switch getKind().gtype {
+            case .gArray:
+                rt.ar = ar!
+            case .gScalar:
+                rt.sc = sc!
+            case .gMap:
+                rt.map = map!
+            }
+            return rt
+    }
     }
     
 
