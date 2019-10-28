@@ -26,7 +26,7 @@
 			isEditable = 1;
 			outputFiles = (
 			);
-			script = "# Type a script or drag a script file from your workspace to insert its path.\ntouch aFile\n";
+			script = "# Type a script or drag a script file from your workspace to insert its path.\n\n";
 		};
 /* End PBXBuildRule section */
 
