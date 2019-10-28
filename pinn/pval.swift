@@ -24,7 +24,7 @@ func fnToString(_ s: String) -> String {
     return String(describing: data)
 }
 func main() {
-    
+    print(FileManager.default.currentDirectoryPath)
     let fh = FileHandle(forReadingAtPath: "/Users/ryankeppel/fib.pinn")!
     let data = fh.readDataToEndOfFile()
     let str = String(data: data, encoding: String.Encoding.utf8)!

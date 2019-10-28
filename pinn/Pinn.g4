@@ -1,7 +1,7 @@
 grammar Pinn;
 
 TWODOTS : '@' ;
-file : ( function | varDecl ';' )+ ;
+file : ( block | function | varDecl ';' )+ ;
 function
   : 'func' ID LPAREN (fvarDecl (',' fvarDecl)*)?  ')' kind? block ;
 
