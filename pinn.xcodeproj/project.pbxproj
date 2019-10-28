@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		E2CDE16E2363EB740065250D /* pval.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2CDE16D2363EB740065250D /* pval.swift */; };
 		E2CDE173236415100065250D /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2673965235BC825000CF830 /* main.swift */; };
+		E2D2DC042366BE3700E0CC35 /* PinnLexerATN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D2DC002366BE3700E0CC35 /* PinnLexerATN.swift */; };
+		E2D2DC052366BE3700E0CC35 /* PinnParserATN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D2DC012366BE3700E0CC35 /* PinnParserATN.swift */; };
+		E2D2DC062366BE3700E0CC35 /* PinnParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D2DC022366BE3700E0CC35 /* PinnParser.swift */; };
+		E2D2DC072366BE3700E0CC35 /* PinnLexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D2DC032366BE3700E0CC35 /* PinnLexer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -61,6 +65,10 @@
 		E2CDE16D2363EB740065250D /* pval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = pval.swift; sourceTree = "<group>"; };
 		E2D2DBEE2366B45E00E0CC35 /* Antlr4.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Antlr4.xcodeproj; sourceTree = "<group>"; };
 		E2D2DBFB2366B76500E0CC35 /* Pinn.g4 */ = {isa = PBXFileReference; lastKnownFileType = text; path = Pinn.g4; sourceTree = "<group>"; };
+		E2D2DC002366BE3700E0CC35 /* PinnLexerATN.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinnLexerATN.swift; sourceTree = "<group>"; };
+		E2D2DC012366BE3700E0CC35 /* PinnParserATN.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinnParserATN.swift; sourceTree = "<group>"; };
+		E2D2DC022366BE3700E0CC35 /* PinnParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinnParser.swift; sourceTree = "<group>"; };
+		E2D2DC032366BE3700E0CC35 /* PinnLexer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinnLexer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +102,10 @@
 		E2673964235BC825000CF830 /* pinn */ = {
 			isa = PBXGroup;
 			children = (
+				E2D2DC032366BE3700E0CC35 /* PinnLexer.swift */,
+				E2D2DC002366BE3700E0CC35 /* PinnLexerATN.swift */,
+				E2D2DC022366BE3700E0CC35 /* PinnParser.swift */,
+				E2D2DC012366BE3700E0CC35 /* PinnParserATN.swift */,
 				E2673965235BC825000CF830 /* main.swift */,
 				E2D2DBFB2366B76500E0CC35 /* Pinn.g4 */,
 				E2CDE16D2363EB740065250D /* pval.swift */,
@@ -215,6 +227,10 @@
 			files = (
 				E2CDE173236415100065250D /* main.swift in Sources */,
 				E2CDE16E2363EB740065250D /* pval.swift in Sources */,
+				E2D2DC042366BE3700E0CC35 /* PinnLexerATN.swift in Sources */,
+				E2D2DC072366BE3700E0CC35 /* PinnLexer.swift in Sources */,
+				E2D2DC052366BE3700E0CC35 /* PinnParserATN.swift in Sources */,
+				E2D2DC062366BE3700E0CC35 /* PinnParser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
