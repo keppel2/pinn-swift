@@ -26,109 +26,67 @@ func meta(_ m: Any.Type) -> Any {
 
 
 var myinput = """
-// 0 tie, 1 player true, 2 player false
-// 0 empty, 1 true, 2 false
-
-func coord (x int, y int) int {
-    return x * 3 + y;
-}
-
-func printBoard (board [9]int) {
-    y int;
-        for y = range 0:3 {
-        print (board[coord(0, y)], board[coord(1, y)], board[coord(2, y)]);
-        }
-}
-
-func winner (board [9]int) int {
-    current int;
-    x int;
-    y int;
-    for x = range 0:3 {
-        current = board[coord(x, 0)];
-        for y = range 1:3 {
-            if board[coord(x, y)] != current {
-                current = 0;
-            }
-        }
-        if current != 0 {
-            return current;
-        }
-    }
-    for y = range 0:3 {
-        current = board[coord(0, y)];
-        for x = range 1:3 {
-            if board[coord(x, y)] != current {
-                current = 0;
-            }
-        }
-        if current != 0 {
-            return current;
-        }
-    }
-    if board[coord(0, 0)] != 0 &&
-        board[coord(0, 0)] == board[coord(1, 1)] &&
-        board[coord(1, 1)] == board[coord(2, 2)] {
-            return board[coord(1, 1)];
-    }
-    if board[coord(2, 0)] != 0 &&
-        board[coord(2, 0)] == board[coord(1, 1)] &&
-        board[coord(1, 1)] == board[coord(0, 2)] {
-            return board[coord(1, 1)];
-    }
-    return 0;
-}
-
-func opposite (x int) int {
-    if x == 1 { return 2;}
-    return 1;
-}
-
-iters int;
-            
-func minimax (player int, board [9]int) int
-{
-
-    result int;
-    best int = -1;
-    result = winner(board);
-    if result != 0 {
-        return result;
-    }
-    x int;
-    y int;
-    for x = range 0:3 {
-        for y = range 0:3 {
-            if board[coord(x, y)] == 0 {
-                if best == -1 {
-                    best = opposite(player);
-                }
-                board[coord(x, y)] = player;
-                result = minimax(opposite(player), board);
-                if result == player {
-                    return player;
-                }
-                if result == 0 {
-                    best = 0;
-                }
-                board[coord(x, y)] = 0;
-            }
-        }
-    }
-    if best == -1 {
-        best = 0;
-    }
-    return best;
-}
-
 func main ( )
 {
-    board [9]int;
-    printBoard(board);
-    board[3] = 0;
-    result int = minimax (1, board);
-    print (result);
+
+    print("tern");
+    iTernary int;
+print(iTernary);
+iTernary = 10;
+    iTernary = true ? 10 : 5;
+
+    print (iTernary);
+    iTernary = false ? print("bad") : 5;
+    print (iTernary);
+    iTernary = true ? true ? 23 : 11 : 3;
+    print(iTernary);
+
+
+
+    key2 int;
+    val2 int;
+    arr [fill]int = 10, 15, 20;
+    for key2, val2 = range arr {
+    print(key2);
+    print(val2);
+    }
+
+    for key2, val2 = range 101:105 {
+    print(val2);
+    }
+
+    ar [fill]int = 1, 7, 8;
+    print(ar);
+    doArray(ar);
+    print(ar);
+
+
+    switch 5 {
+    case 1, 5, void():
+        print ("Multi case");
+    }
+    print ("Repeat");
+    ri := 101;
+    repeat {
+        print(ri);
+    } while ri < 100;
+
+    guard true else {
+        print("fail");
+        return;
+    }
+    print("guard pass");
+
+    if true print("simple if");
+    if true if false ; else print("dangling if");
+    {print("block statement");}
+
 }
+func doArray(v [3]int) {
+    v[0] = 23;
+}
+
+func void() int { print ("checking redundant case"); return 42;}
 
 """
 
@@ -209,20 +167,32 @@ class Pvisitor {
     var fc: Fc?
     var gm = [String: Pval]()
     var fkmap = [String:Fheader]()
-    var prc: ParserRuleContext?
+
     var stack = [ParserRuleContext]()
     
-    let litToType: [String: Any.Type] = ["int": Int.self, "bool": Bool.self]
+    let litToType: [String: Any.Type] = ["int": Int.self, "bool": Bool.self, "string": String.self]
     
     struct Fheader {
         var fc: PinnParser.FunctionContext
         var kind: Kind?
         var fkinds: [FKind]
     }
+    
+    struct Debug {
+        var textStack = [String]()
+    }
+    var debug = Debug()
 
+    func loadDebug(_ ctx:ParserRuleContext) {
+        
+        debug.textStack.append(ctx.getText())
+    }
+    func popDebug() {
+        debug.textStack.removeLast()
+    }
     
     func header(_ ctx:PinnParser.FunctionContext )  {
-            prc = ctx
+
         
         if fkmap[ctx.ID()!.getText()] != nil {
  
@@ -267,7 +237,6 @@ class Pvisitor {
     
     
     func start(_ ctx: PinnParser.FileContext)  {
-        prc = ctx
         for child in ctx.function() {
              header(child)
         }
@@ -278,6 +247,8 @@ class Pvisitor {
     }
 
     func visitKind(_ sctx: PinnParser.KindContext) -> Kind {
+        loadDebug(sctx)
+        defer {popDebug()}
         let strType = sctx.TYPES()!.getText()
         let vtype = litToType[strType]!
         let rt: Kind
@@ -299,11 +270,17 @@ class Pvisitor {
         return rt
     }
     func visitFKind(_ sctx: PinnParser.FvarDeclContext) -> FKind {
+        loadDebug(sctx)
+        defer {popDebug()}
+
         let str = sctx.ID()!.getText()
         let k = visitKind(sctx.kind()!)
         return FKind(k: k, s: str)
     }
     func visitList(_ sctx: PinnParser.ExprListContext) -> [Pval] {
+        loadDebug(sctx)
+        defer {popDebug()}
+
         var rt = [Pval]()
         for child in sctx.expr() {
             let v = visitPval(child)!
@@ -312,6 +289,9 @@ class Pvisitor {
         return rt
     }
     func visitListCase(_ sctx: PinnParser.ExprListContext, _ v: Pval) -> Bool {
+        loadDebug(sctx)
+        defer {popDebug()}
+
         var rt = false
         for child in sctx.expr() {
             let cv = visitPval(child)!
@@ -351,11 +331,12 @@ class Pvisitor {
     }
     func doOp(_ lhs: Pval, _ rhs: Pval, _ str: String) -> Pval {
         let rt: Pval
+        if str == "+" {
+            return lhs.plus(rhs)
+        }
         let lhsv = lhs.get() as! Int
         var rhsv = rhs.get() as! Int
                        switch str {
-                          case "+":
-                                  rt = Pval(lhsv + rhsv)
                           case "-":
                                   rt = Pval(lhsv - rhsv)
                           case "*":
@@ -409,6 +390,8 @@ class Pvisitor {
         }
     }
     func visitCase(_ sctx: PinnParser.CaseStatementContext, _ v: Pval) -> Bool {
+        loadDebug(sctx)
+        defer {popDebug()}
         var rt = false
         if fc!.path == Path.pFallthrough || visitListCase(sctx.exprList()!, v) {
             rt = true
@@ -436,6 +419,9 @@ class Pvisitor {
         return rt
     }
     func visitPval(_ ctx: ParserRuleContext) -> Pval? {
+        loadDebug(ctx)
+        defer {popDebug()}
+
         var rt: Pval?
         switch ctx {
         case let sctx as PinnParser.CallExprContext:
@@ -458,6 +444,10 @@ class Pvisitor {
                     break
                 }
                 switch Self.childToToken(child) {
+                case .STRING:
+                    let str = sctx.STRING()!.getText()
+                    let pv = Pval(str)
+                    rt = pv
                 case .INT:
                     let str = sctx.INT()!.getText()
                     let x = Int(str)!
@@ -510,10 +500,12 @@ class Pvisitor {
                 }
                 let rhs = visitPval(sctx.expr(1)!)!
                 if op == "==" {
+                    lhs.getKind().equalsError(rhs.getKind())
                     rt = Pval(lhs.equal(rhs))
                     break
                 }
                 if op == "!=" {
+                    lhs.getKind().equalsError(rhs.getKind())
                     rt = Pval(!lhs.equal(rhs))
                     break
                 }
@@ -525,10 +517,11 @@ class Pvisitor {
             if sctx.expr().count == 3 {
                 let b = visitPval(sctx.expr(0)!)!.get() as! Bool
                 if b {
-                    rt = Pval(visitPval(sctx.expr(1)!)!)
-                } else {
-                    rt = Pval(visitPval(sctx.expr(2)!)!)
+                    rt = visitPval(sctx.expr(1)!)!
+                    } else {
+                    rt = visitPval(sctx.expr(2)!)!
                 }
+                    break
             }
                 
                 
@@ -551,6 +544,58 @@ class Pvisitor {
                     fatalError(ErrCase)
                 }
             
+
+        case let sctx as PinnParser.FuncExprContext:
+                switch sctx.getStart()!.getText()! {
+                case "len":
+                    let str = sctx.ID()!.getText()
+                    let v = getPv(str)
+                    rt = Pval(v.getKind().count!)
+                case "print":
+                    let s = visitList(sctx.exprList()!)
+                    var ar = [String]()
+                    for e in s {
+                        ar.append(e.string)
+                    }
+                        print(ar)
+                case "printH":
+                    let e = visitPval(sctx.expr()!)!.get() as! Int
+                    print(String(e, radix: 16, uppercase: false))
+                    case "printB":
+                                       let e = visitPval(sctx.expr()!)!.get() as! Int
+                                       print(String(e, radix: 2, uppercase: false))
+                case "delete":
+                    let e = visitPval(sctx.expr()!)!
+                    let v = getPv(sctx.ID()!.getText())
+                    v.set(e.get(), nil)
+                    
+                default:
+                    break
+                }
+        case let sctx as PinnParser.IndexExprContext:
+            let v =  getPv(sctx.ID()!.getText())
+            let e = visitPval(sctx.expr(0)!)!
+            let x = e.get()
+            let v2 = v.get(x)
+            rt = Pval(v2)
+            
+        default:
+//            let schild = ctx.getChild(0) as! ParserRuleContext
+//            rt = visitPval(schild)
+         fatalError(ErrCase)
+        }
+        return rt
+    }
+    func dbg() {
+        fatalError()        
+    }
+    
+    func visit(_ ctx: ParserRuleContext)
+    {
+        loadDebug(ctx)
+        defer {popDebug()}
+
+    switch ctx {
         case let sctx as PinnParser.SwitchStatementContext:
             let v = visitPval(sctx.expr()!)!
             var broken = false
@@ -581,55 +626,6 @@ class Pvisitor {
                         }
                 }
             }
-        case let sctx as PinnParser.FuncExprContext:
-                switch sctx.getStart()!.getText()! {
-                case "len":
-                    let str = sctx.ID()!.getText()
-                    let v = getPv(str)
-                    rt = Pval(v.getKind().count!)
-                case "print":
-                    let s = visitList(sctx.exprList()!)
-                    var ar = [String]()
-                    for e in s {
-                        ar.append(e.string)
-                    }
-                        print(ar)
-                case "printH":
-                    let e = visitPval(sctx.expr()!)!.get() as! Int
-                    print(String(e, radix: 16, uppercase: false))
-                    case "printB":
-                                       let e = visitPval(sctx.expr()!)!.get() as! Int
-                                       print(String(e, radix: 2, uppercase: false))
-                case "delete":
-                    let e = visitPval(sctx.expr()!)!
-                    let v = getPv(sctx.ID()!.getText())
-                    v.set(e.get() as! String, nil)
-                    
-                default:
-                    break
-                }
-        case let sctx as PinnParser.IndexExprContext:
-            let v =  getPv(sctx.ID()!.getText())
-            let e = visitPval(sctx.expr(0)!)!
-            let x = e.get() as! Int
-            let v2 = v.get(x)
-            rt = Pval(v2)
-            
-        default:
-//            let schild = ctx.getChild(0) as! ParserRuleContext
-//            rt = visitPval(schild)
-         fatalError(ErrCase)
-        }
-        return rt
-    }
-    func dbg() {
-        print(fc!.m)
-        
-    }
-    
-    func visit(_ ctx: ParserRuleContext)
-    {
-    switch ctx {
     case let sctx as PinnParser.CompoundSetContext:
         let str = sctx.ID()!.getText()
         let v = getPv(str)
@@ -707,12 +703,18 @@ class Pvisitor {
         let str = sctx.ID()!.getText()
         let v = getPv(str)
         if sctx.expr().count == 2 {
-            let key = visitPval(sctx.expr(0)!)!.get() as! Int
+            let key = visitPval(sctx.expr(0)!)!.get()
             let value = visitPval(sctx.expr(1)!)!.get()
             v.set(key, value)
         } else {
+            
             let e = visitPval(sctx.expr(0)!)!
-            v.set(e.get())
+            if e.getKind().gtype == .gScalar {
+                
+                v.set(e.get())
+            } else {
+                putPv(str, e)
+            }
         }
     case let sctx as PinnParser.IfStatementContext:
         

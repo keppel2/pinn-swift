@@ -18,8 +18,6 @@ let ErrRedeclare      = "Redeclared."
 let ErrUndeclare      = "Undeclared."
 
 
-
-
 func fnToString(_ s: String) -> String {
     let fh = FileHandle(forReadingAtPath: s)!
     let data = fh.readDataToEndOfFile()
@@ -142,8 +140,37 @@ func zeroValue(_ v:Any.Type) -> Any {
         return 0
     } else if v == Bool.self {
         return false
+    } else if v == String.self {
+        return ""
     } else {
         fatalError()
+    }
+}
+
+func equalValue(_ v1: Any, _ v2: Any) -> Bool {
+    guard type(of: v1) == type(of: v2) else {
+        return false
+    }
+    switch v1 {
+    case let v1v as Int:
+        return v1v == v2 as! Int
+    case let v1v as Bool:
+        return v1v == v2 as! Bool
+    case let v1v as String:
+        return v1v == v2 as! String
+    default:
+        fatalError(ErrCase)
+    }
+}
+
+func plusValue(_ v1: Any, _ v2: Any) -> Any {
+    switch v1 {
+    case let v1v as Int:
+        return v1v + (v2 as! Int)
+    case let v1v as String:
+        return v1v + (v2 as! String)
+    default:
+        fatalError(ErrCase)
     }
 }
 
@@ -190,12 +217,23 @@ class Pval {
             }
         }
         func equal(_ p:Pval) -> Bool {
-            switch sc {
-            case is Int:
-                return sc as! Int == p.sc as! Int
-            case is Bool:
-                return sc as! Bool == p.sc as! Bool
-            default: fatalError()
+            switch getKind().gtype {
+            case .gScalar:
+                return equalValue(sc!, p.sc!)
+            case .gArray:
+                for (key, value) in p.ar!.enumerated() {
+                    if !equalValue(value, p.ar![key]) {
+                        return false
+                    }
+                }
+                return true
+            case .gMap:
+                for (key, value) in p.map! {
+                    if !equalValue(value, p.map![key]!) {
+                        return false
+                    }
+                }
+                return true
             }
         }
   
@@ -210,25 +248,44 @@ class Pval {
 //
 //        }
         
-        func get(_ k: String) -> Any {
-            return map![k]!
+        func get(_ k: Any) -> Any {
+            switch k {
+            case let v1v as Int:
+                return ar![v1v]
+            case let v1v as String:
+                return map![v1v]!
+            default:
+                fatalError(ErrCase)
+            }
         }
-        
-        func get(_ k: Int) -> Any {
-            return ar![k]
-        }
-        
         func set(_ v: Any) {
             sc = v
         }
         
-        func set(_ k: String, _ v: Any?) {
-            map![k] = v
+        func set(_ k: Any, _ v: Any?) {
+            
+            
+            switch k {
+            case let v1v as Int:
+                ar![v1v] = v!
+            case let v1v as String:
+                map![v1v] = v
+            default:
+                fatalError(ErrCase)
+            }
         }
-        
-        func set(_ k: Int, _ v: Any) {
-            ar![k] = v
+    
+    func plus(_ p: Pval) -> Pval {
+        if getKind() != p.getKind() {
+            fatalError(ErrWrongType)
         }
+        switch getKind().gtype {
+        case .gScalar:
+            return Pval(plusValue(sc!, p.sc!))
+        case .gMap, .gArray:
+            fatalError(ErrCase)
+        }
+    }
         
         var string: String {
             switch g {
