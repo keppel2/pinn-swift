@@ -26,67 +26,10 @@ func meta(_ m: Any.Type) -> Any {
 
 
 var myinput = """
-func main ( )
-{
-
-    print("tern");
-    iTernary int;
-print(iTernary);
-iTernary = 10;
-    iTernary = true ? 10 : 5;
-
-    print (iTernary);
-    iTernary = false ? print("bad") : 5;
-    print (iTernary);
-    iTernary = true ? true ? 23 : 11 : 3;
-    print(iTernary);
-
-
-
-    key2 int;
-    val2 int;
-    arr [fill]int = 10, 15, 20;
-    for key2, val2 = range arr {
-    print(key2);
-    print(val2);
-    }
-
-    for key2, val2 = range 101:105 {
-    print(val2);
-    }
-
-    ar [fill]int = 1, 7, 8;
-    print(ar);
-    doArray(ar);
-    print(ar);
-
-
-    switch 5 {
-    case 1, 5, void():
-        print ("Multi case");
-    }
-    print ("Repeat");
-    ri := 101;
-    repeat {
-        print(ri);
-    } while ri < 100;
-
-    guard true else {
-        print("fail");
-        return;
-    }
-    print("guard pass");
-
-    if true print("simple if");
-    if true if false ; else print("dangling if");
-    {print("block statement");}
-
-}
-func doArray(v [3]int) {
-    v[0] = 23;
+func main() {
+a := 5;
 }
 
-func void() int { print ("checking redundant case"); return 42;}
 
 """
 
@@ -237,7 +180,7 @@ class Pvisitor {
     
     
     func start(_ ctx: PinnParser.FileContext)  {
-        print(ctx.block())
+        
         for child in ctx.function() {
              header(child)
         }
@@ -450,6 +393,7 @@ class Pvisitor {
                     let pv = Pval(str)
                     rt = pv
                 case .INT:
+                    dbg()
                     let str = sctx.INT()!.getText()
                     let x = Int(str)!
                     let pv = Pval(x)
@@ -552,6 +496,12 @@ class Pvisitor {
                     let str = sctx.ID()!.getText()
                     let v = getPv(str)
                     rt = Pval(v.getKind().count!)
+                case "strLen":
+                    let e = visitPval(sctx.expr()!)!
+                    rt = Pval((e.get() as! String).count)
+                case "stringValue":
+                    let v = visitPval(sctx.expr()!)!.string
+                    rt = Pval(v)
                 case "print":
                     let s = visitList(sctx.exprList()!)
                     var ar = [String]()
@@ -569,6 +519,7 @@ class Pvisitor {
                     let e = visitPval(sctx.expr()!)!
                     let v = getPv(sctx.ID()!.getText())
                     v.set(e.get(), nil)
+                
                     
                 default:
                     break
@@ -586,9 +537,6 @@ class Pvisitor {
          fatalError(ErrCase)
         }
         return rt
-    }
-    func dbg() {
-        fatalError()        
     }
     
     func visit(_ ctx: ParserRuleContext)
@@ -833,6 +781,11 @@ class Pvisitor {
                     }
                     newV.set(ai[0].get())
                 case .gArray:
+                    if ai.count == 1 && ai[0].getKind().gtype == .gArray {
+                        k.equalsError(ai[0].getKind())
+                        newV = ai[0]
+                        break
+                    }
                     if k.count! != ai.count {
                         fatalError(ErrParamLength)
                     }
@@ -845,10 +798,12 @@ class Pvisitor {
                     if ai.count != 1 {
                         fatalError(ErrParamLength)
                     }
+                    k.equalsError(ai[0].getKind())
                     newV = ai[0]
                 }
-            } else {             newV = Pval(k, nil)
-}
+            } else {
+                newV = Pval(k, nil)
+            }
         }
         if fc != nil {
             fc!.m[str] = newV
@@ -862,6 +817,9 @@ class Pvisitor {
 
     
 }
+func dbg() {
+    fatalError()
+}
 
 
 
@@ -874,5 +832,5 @@ var parser =  try! PinnParser(stream)
 var tree =  try! parser.file()
 
 var pv = Pvisitor()
-pv.start(tree)
-//main()
+//pv.start(tree)
+main()

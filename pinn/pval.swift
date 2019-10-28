@@ -249,6 +249,7 @@ class Pval {
 //        }
         
         func get(_ k: Any) -> Any {
+
             switch k {
             case let v1v as Int:
                 return ar![v1v]
@@ -259,12 +260,17 @@ class Pval {
             }
         }
         func set(_ v: Any) {
+            guard type(of: sc) == type(of: v) else {
+                fatalError(ErrWrongType)
+            }
             sc = v
         }
         
         func set(_ k: Any, _ v: Any?) {
-            
-            
+
+            guard v == nil || getKind().vtype == type(of:v!) else {
+                fatalError(ErrWrongType)
+            }
             switch k {
             case let v1v as Int:
                 ar![v1v] = v!

@@ -69,6 +69,7 @@
 		E2D2DC012366BE3700E0CC35 /* PinnParserATN.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinnParserATN.swift; sourceTree = "<group>"; };
 		E2D2DC022366BE3700E0CC35 /* PinnParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinnParser.swift; sourceTree = "<group>"; };
 		E2D2DC032366BE3700E0CC35 /* PinnLexer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinnLexer.swift; sourceTree = "<group>"; };
+		E2D2DC0D2366D10300E0CC35 /* a.pinn */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = a.pinn; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +103,7 @@
 		E2673964235BC825000CF830 /* pinn */ = {
 			isa = PBXGroup;
 			children = (
+				E2D2DC0D2366D10300E0CC35 /* a.pinn */,
 				E2D2DC032366BE3700E0CC35 /* PinnLexer.swift */,
 				E2D2DC002366BE3700E0CC35 /* PinnLexerATN.swift */,
 				E2D2DC022366BE3700E0CC35 /* PinnParser.swift */,
