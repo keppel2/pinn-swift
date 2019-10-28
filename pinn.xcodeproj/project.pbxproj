@@ -16,23 +16,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		E21E6050235BC9DE0084D151 /* PBXContainerItemProxy */ = {
+		E2D2DBF52366B45F00E0CC35 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = E2673981235BC954000CF830 /* Antlr4.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = "Antlr4::Antlr4";
-			remoteInfo = Antlr4;
-		};
-		E2673988235BC954000CF830 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E2673981235BC954000CF830 /* Antlr4.xcodeproj */;
+			containerPortal = E2D2DBEE2366B45E00E0CC35 /* Antlr4.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = "Antlr4::Antlr4::Product";
 			remoteInfo = Antlr4;
 		};
-		E267398A235BC954000CF830 /* PBXContainerItemProxy */ = {
+		E2D2DBF72366B45F00E0CC35 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = E2673981235BC954000CF830 /* Antlr4.xcodeproj */;
+			containerPortal = E2D2DBEE2366B45E00E0CC35 /* Antlr4.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = "Antlr4::Antlr4Tests::Product";
 			remoteInfo = Antlr4Tests;
@@ -54,12 +47,13 @@
 /* Begin PBXFileReference section */
 		E2673962235BC825000CF830 /* pinn */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = pinn; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2673965235BC825000CF830 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
-		E2673981235BC954000CF830 /* Antlr4.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Antlr4.xcodeproj; path = ../../antlr4/runtime/Swift/Antlr4.xcodeproj; sourceTree = "<group>"; };
 		E2CDE16D2363EB740065250D /* pval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = pval.swift; sourceTree = "<group>"; };
 		E2CDE17C236425460065250D /* PinnParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinnParser.swift; sourceTree = "<group>"; };
 		E2CDE17D236425460065250D /* PinnLexer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinnLexer.swift; sourceTree = "<group>"; };
 		E2CDE17E236425460065250D /* PinnParserATN.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinnParserATN.swift; sourceTree = "<group>"; };
 		E2CDE17F236425460065250D /* PinnLexerATN.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinnLexerATN.swift; sourceTree = "<group>"; };
+		E2D2DBEE2366B45E00E0CC35 /* Antlr4.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Antlr4.xcodeproj; sourceTree = "<group>"; };
+		E2D2DBFB2366B76500E0CC35 /* Pinn.g4 */ = {isa = PBXFileReference; lastKnownFileType = text; path = Pinn.g4; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,9 +70,9 @@
 		E2673959235BC825000CF830 = {
 			isa = PBXGroup;
 			children = (
+				E2D2DBEE2366B45E00E0CC35 /* Antlr4.xcodeproj */,
 				E2673964235BC825000CF830 /* pinn */,
 				E2673963235BC825000CF830 /* Products */,
-				E2673981235BC954000CF830 /* Antlr4.xcodeproj */,
 			);
 			sourceTree = "<group>";
 		};
@@ -96,6 +90,7 @@
 				E2673965235BC825000CF830 /* main.swift */,
 				E2CDE17D236425460065250D /* PinnLexer.swift */,
 				E2CDE17F236425460065250D /* PinnLexerATN.swift */,
+				E2D2DBFB2366B76500E0CC35 /* Pinn.g4 */,
 				E2CDE17C236425460065250D /* PinnParser.swift */,
 				E2CDE17E236425460065250D /* PinnParserATN.swift */,
 				E2CDE16D2363EB740065250D /* pval.swift */,
@@ -103,11 +98,11 @@
 			path = pinn;
 			sourceTree = "<group>";
 		};
-		E2673982235BC954000CF830 /* Products */ = {
+		E2D2DBEF2366B45E00E0CC35 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E2673989235BC954000CF830 /* Antlr4.framework */,
-				E267398B235BC954000CF830 /* Antlr4Tests.xctest */,
+				E2D2DBF62366B45F00E0CC35 /* Antlr4.framework */,
+				E2D2DBF82366B45F00E0CC35 /* Antlr4Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -126,7 +121,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				E21E6051235BC9DE0084D151 /* PBXTargetDependency */,
 			);
 			name = pinn;
 			productName = pinn;
@@ -161,8 +155,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = E2673982235BC954000CF830 /* Products */;
-					ProjectRef = E2673981235BC954000CF830 /* Antlr4.xcodeproj */;
+					ProductGroup = E2D2DBEF2366B45E00E0CC35 /* Products */;
+					ProjectRef = E2D2DBEE2366B45E00E0CC35 /* Antlr4.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -173,18 +167,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		E2673989235BC954000CF830 /* Antlr4.framework */ = {
+		E2D2DBF62366B45F00E0CC35 /* Antlr4.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = Antlr4.framework;
-			remoteRef = E2673988235BC954000CF830 /* PBXContainerItemProxy */;
+			remoteRef = E2D2DBF52366B45F00E0CC35 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		E267398B235BC954000CF830 /* Antlr4Tests.xctest */ = {
+		E2D2DBF82366B45F00E0CC35 /* Antlr4Tests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = file;
 			path = Antlr4Tests.xctest;
-			remoteRef = E267398A235BC954000CF830 /* PBXContainerItemProxy */;
+			remoteRef = E2D2DBF72366B45F00E0CC35 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -204,14 +198,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		E21E6051235BC9DE0084D151 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = Antlr4;
-			targetProxy = E21E6050235BC9DE0084D151 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		E2673967235BC825000CF830 /* Debug */ = {
