@@ -21,7 +21,7 @@ let ErrUndeclare      = "Undeclared."
 func fnToString(_ s: String) -> String {
     let fh = FileHandle(forReadingAtPath: s)!
     let data = fh.readDataToEndOfFile()
-    return String(describing: data)
+    return String(data: data, encoding: String.Encoding.utf8)!
 }
 func main() {
     print(FileManager.default.currentDirectoryPath)

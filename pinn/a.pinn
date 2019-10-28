@@ -1,3 +1,6 @@
 func main() {
-a := 5;
+a := 151;
+b := 1@5;
+print(a);
+print(b);
 }

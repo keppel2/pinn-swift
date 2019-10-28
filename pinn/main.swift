@@ -25,13 +25,6 @@ func meta(_ m: Any.Type) -> Any {
 
 
 
-var myinput = """
-func main() {
-a := 5;
-}
-
-
-"""
 
 
 
@@ -393,7 +386,6 @@ class Pvisitor {
                     let pv = Pval(str)
                     rt = pv
                 case .INT:
-                    dbg()
                     let str = sctx.INT()!.getText()
                     let x = Int(str)!
                     let pv = Pval(x)
@@ -504,11 +496,15 @@ class Pvisitor {
                     rt = Pval(v)
                 case "print":
                     let s = visitList(sctx.exprList()!)
+                    if s.count == 1 {
+                        print(s[0].string)
+                    } else {
                     var ar = [String]()
                     for e in s {
                         ar.append(e.string)
                     }
                         print(ar)
+                    }
                 case "printH":
                     let e = visitPval(sctx.expr()!)!.get() as! Int
                     print(String(e, radix: 16, uppercase: false))
@@ -823,14 +819,15 @@ func dbg() {
 
 
 
-
-var aInput = ANTLRInputStream(myinput)
-var lexer = PinnLexer(aInput)
-var stream = CommonTokenStream(lexer)
-var parser =  try! PinnParser(stream)
+let myinput = fnToString("/Users/ryankeppel/Documents/pinn/pinn/a.pinn")
+print(myinput)
+let aInput = ANTLRInputStream(myinput)
+let lexer = PinnLexer(aInput)
+let stream = CommonTokenStream(lexer)
+let parser =  try! PinnParser(stream)
 
 var tree =  try! parser.file()
 
 var pv = Pvisitor()
-//pv.start(tree)
-main()
+pv.start(tree)
+//main()
