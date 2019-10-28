@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E2CDE16E2363EB740065250D /* pval.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2CDE16D2363EB740065250D /* pval.swift */; };
+		E28CB40223679F640045FA67 /* Pvisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E28CB40123679F640045FA67 /* Pvisitor.swift */; };
+		E2CDE16E2363EB740065250D /* Pval.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2CDE16D2363EB740065250D /* Pval.swift */; };
 		E2CDE173236415100065250D /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2673965235BC825000CF830 /* main.swift */; };
 		E2D2DC042366BE3700E0CC35 /* PinnLexerATN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D2DC002366BE3700E0CC35 /* PinnLexerATN.swift */; };
 		E2D2DC052366BE3700E0CC35 /* PinnParserATN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D2DC012366BE3700E0CC35 /* PinnParserATN.swift */; };
@@ -62,7 +63,8 @@
 /* Begin PBXFileReference section */
 		E2673962235BC825000CF830 /* pinn */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = pinn; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2673965235BC825000CF830 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
-		E2CDE16D2363EB740065250D /* pval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = pval.swift; sourceTree = "<group>"; };
+		E28CB40123679F640045FA67 /* Pvisitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pvisitor.swift; sourceTree = "<group>"; };
+		E2CDE16D2363EB740065250D /* Pval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pval.swift; sourceTree = "<group>"; };
 		E2D2DBEE2366B45E00E0CC35 /* Antlr4.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Antlr4.xcodeproj; sourceTree = "<group>"; };
 		E2D2DBFB2366B76500E0CC35 /* Pinn.g4 */ = {isa = PBXFileReference; lastKnownFileType = text; path = Pinn.g4; sourceTree = "<group>"; };
 		E2D2DC002366BE3700E0CC35 /* PinnLexerATN.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinnLexerATN.swift; sourceTree = "<group>"; };
@@ -106,11 +108,12 @@
 				E2D2DC0D2366D10300E0CC35 /* a.pinn */,
 				E2D2DC032366BE3700E0CC35 /* PinnLexer.swift */,
 				E2D2DC002366BE3700E0CC35 /* PinnLexerATN.swift */,
+				E28CB40123679F640045FA67 /* Pvisitor.swift */,
 				E2D2DC022366BE3700E0CC35 /* PinnParser.swift */,
 				E2D2DC012366BE3700E0CC35 /* PinnParserATN.swift */,
 				E2673965235BC825000CF830 /* main.swift */,
 				E2D2DBFB2366B76500E0CC35 /* Pinn.g4 */,
-				E2CDE16D2363EB740065250D /* pval.swift */,
+				E2CDE16D2363EB740065250D /* Pval.swift */,
 			);
 			path = pinn;
 			sourceTree = "<group>";
@@ -218,7 +221,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\njava -jar ~/antlr-4.7.2-complete.jar -no-listener -Dlanguage=Swift -message-format gnu pinn/Pinn.g4\ntouch aFile\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\njava -jar ~/antlr-4.7.2-complete.jar -no-listener -Dlanguage=Swift -message-format gnu pinn/Pinn.g4\ncp pinn/*.pinn /tmp\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -228,8 +231,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				E2CDE173236415100065250D /* main.swift in Sources */,
-				E2CDE16E2363EB740065250D /* pval.swift in Sources */,
+				E2CDE16E2363EB740065250D /* Pval.swift in Sources */,
 				E2D2DC042366BE3700E0CC35 /* PinnLexerATN.swift in Sources */,
+				E28CB40223679F640045FA67 /* Pvisitor.swift in Sources */,
 				E2D2DC072366BE3700E0CC35 /* PinnLexer.swift in Sources */,
 				E2D2DC052366BE3700E0CC35 /* PinnParserATN.swift in Sources */,
 				E2D2DC062366BE3700E0CC35 /* PinnParser.swift in Sources */,

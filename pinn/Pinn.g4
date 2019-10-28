@@ -71,14 +71,7 @@ expr
   | callExpr
   | parenExpr 
   | expr (TWODOTS | COLON) expr
-  | ID
-  | FLOAT
-  | INT
-  | BOOL
-  | STRING
-  | CHAR
-  | IOTA
-
+  | (ID | FLOAT | INT | BOOL | STRING | CHAR | IOTA)
   | expr '?' expr COLON expr;
 
 exprList
