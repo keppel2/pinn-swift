@@ -368,7 +368,8 @@ class Pvisitor {
                     var str = sctx.STRING()!.getText()
                     str.remove(at: str.startIndex)
                     str.remove(at: str.index(before: str.endIndex))
-                    let pv = Pval(str)
+                    let str2 = str.replacingOccurrences(of: "\\\"", with: "\"")
+                    let pv = Pval(str2)
                     rt = pv
                 case .INT:
                     let str = sctx.INT()!.getText()

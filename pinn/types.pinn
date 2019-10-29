@@ -1,11 +1,20 @@
 func main() {
-print("Create int. 0.");
+println("Create int: 0.");
 x int;
-print(x);
-print("Set to. 10.");
+println(x);
+println("Set to: 10.");
 x = 10;
-print(x);
-print("Create bool. false.");
+println(x);
+println("Create bool: false.");
 b bool;
-print(b);
+println(b);
+println("Create string: .");
+str string;
+println(str);
+println("Set string: value.");
+str = "value";
+println(str);
+println("Create array of string: [\"alpha\", \"bravo\", \"charlie\"].");
+arStr [fill]string = "alpha", "bravo", "charlie";
+println(arStr);
 }

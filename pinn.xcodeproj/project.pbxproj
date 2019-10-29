@@ -225,7 +225,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\ncp pinn/*.pinn /tmp\njava -jar ~/antlr-4.7.2-complete.jar -no-listener -Dlanguage=Swift -message-format gnu pinn/Pinn.g4\n\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\ncp pinn/*.pinn /tmp\njava -jar ~/antlr-4.7.2-complete.jar -no-listener -Dlanguage=Swift -message-format gnu -Werror pinn/Pinn.g4\n\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
