@@ -128,7 +128,9 @@ class Pvisitor {
             fatalError(ErrParamLength)
         }
         for (index, v) in s.enumerated() {
-             fh.fkinds[index].k.equalsError(v.getKind())
+            if !fh.fkinds[index].k.varEquals(v.getKind()) {
+                fatalError(ErrWrongType)
+            }
             fc!.m[fh.fkinds[index].s] = v
         }
         visit(ctx.block()!)
@@ -138,7 +140,9 @@ class Pvisitor {
             
         }
         else {
-             fc!.rt!.getKind().equalsError(fh.kind!)
+            if !fc!.rt!.getKind().varEquals(fh.kind!) {
+                fatalError(ErrWrongType)
+            }
         }
         let rt = fc!.rt
         fc = oldfc
@@ -170,6 +174,8 @@ class Pvisitor {
 //
         } else if sctx.FILL() != nil {
             rt = Kind(vtype: vtype, gtype: .gArray, count: nil)
+        } else if sctx.SLICE() != nil {
+            rt = Kind(vtype: vtype, gtype: .gSlice, count: 0)
         }
         else if let e = sctx.expr() {
             let v = visitPval(e)!
@@ -292,13 +298,16 @@ class Pvisitor {
         return rt
     }
     func putPv(_ s: String, _ pv: Pval) {
+        let pvOld: Pval
         if fc?.m[s] != nil {
-            let pvOld = fc!.m.updateValue(pv, forKey: s)!
-             pvOld.getKind().equalsError(pv.getKind())
+            pvOld = fc!.m.updateValue(pv, forKey: s)!
         } else {
-            let pvOld = gm.updateValue(pv, forKey: s)!
-             pvOld.getKind().equalsError(pv.getKind())
+            pvOld = gm.updateValue(pv, forKey: s)!
         }
+        if !pvOld.getKind().varEquals(pv.getKind()) {
+            fatalError(ErrWrongType)
+        }
+
     }
     func visitCase(_ sctx: PinnParser.CaseStatementContext, _ v: Pval) -> Bool {
         loadDebug(sctx)
@@ -594,7 +603,7 @@ class Pvisitor {
             }
             
             if let e = sctx.expr() {
-                let ev = visitPval(e)!.get() as! Int
+                let ev = visitPval(e)!.get()
                 let lhsv = v.get(ev) as! Int
                 v.set(ev, lhsv + rhsv)
                 break
@@ -751,27 +760,17 @@ class Pvisitor {
                         fatalError(ErrParamLength)
                     }
                     newV.set(ai[0].get())
-                case .gArray:
-                    if ai.count == 1 && ai[0].getKind().gtype == .gArray {
-                        k.equalsError(ai[0].getKind())
-                        newV = ai[0]
-                        break
-                    }
+                case .gArray, .gSlice:
                     if k.count! != ai.count {
                         fatalError(ErrParamLength)
                     }
                     for (key, value) in ai.enumerated() {
                         newV.set(key, value.get())
                     }
-                    
-                    
                 case .gMap:
-                    if ai.count != 1 {
-                        fatalError(ErrParamLength)
-                    }
-                    k.equalsError(ai[0].getKind())
-                    newV = ai[0]
+                    fatalError(ErrWrongType)
                 }
+                
             } else {
                 newV = Pval(k, nil)
             }

@@ -35,12 +35,11 @@ func main() {
     print(str)
 }
 enum Gtype {
-    case gScalar, gArray, gMap
+    case gScalar, gArray, gMap, gSlice
 }
 
 struct Kind: Equatable {
-
-    
+//
     static func == (k1: Self, k2: Self) -> Bool {
         return k1.vtype == k2.vtype && k1.gtype == k2.gtype && k1.count == k2.count
     }
@@ -78,17 +77,12 @@ struct Kind: Equatable {
 //        return rt
 //    }
 //
-    func equalsError(_ k2: Kind) {
+    func varEquals(_ k2: Kind) -> Bool {
         switch gtype {
         case .gArray, .gScalar:
-            if self != k2 {
-                fatalError(ErrWrongType)
-            }
-        case .gMap:
-            if gtype != k2.gtype || vtype != k2.vtype {
-                fatalError(ErrWrongType)
-            }
-
+            return self == k2
+        case .gMap, .gSlice:
+            return gtype == k2.gtype && vtype == k2.vtype
         }
     }
 //    }
@@ -272,7 +266,7 @@ func dbg() {
 
 //let myinput = fnToString("/Users/ryankeppel/Documents/pinn/pinn/a.pinn")
 
-let myinput = fnToString("/tmp/a.pinn")
+let myinput = fnToString("/tmp/e52.pinn")
 //print(myinput)
 func stringToParser(_ s: String) -> PinnParser {
     let aInput = ANTLRInputStream(myinput)

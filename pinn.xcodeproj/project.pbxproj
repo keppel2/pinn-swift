@@ -64,6 +64,7 @@
 		E2673962235BC825000CF830 /* pinn */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = pinn; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2673965235BC825000CF830 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		E28CB40123679F640045FA67 /* Pvisitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pvisitor.swift; sourceTree = "<group>"; };
+		E28CB4032367FE120045FA67 /* e52.pinn */ = {isa = PBXFileReference; lastKnownFileType = text; path = e52.pinn; sourceTree = "<group>"; };
 		E2CDE16D2363EB740065250D /* Pval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pval.swift; sourceTree = "<group>"; };
 		E2D2DBEE2366B45E00E0CC35 /* Antlr4.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Antlr4.xcodeproj; sourceTree = "<group>"; };
 		E2D2DBFB2366B76500E0CC35 /* Pinn.g4 */ = {isa = PBXFileReference; lastKnownFileType = text; path = Pinn.g4; sourceTree = "<group>"; };
@@ -108,6 +109,7 @@
 				E2D2DC0D2366D10300E0CC35 /* a.pinn */,
 				E2D2DC032366BE3700E0CC35 /* PinnLexer.swift */,
 				E2D2DC002366BE3700E0CC35 /* PinnLexerATN.swift */,
+				E28CB4032367FE120045FA67 /* e52.pinn */,
 				E28CB40123679F640045FA67 /* Pvisitor.swift */,
 				E2D2DC022366BE3700E0CC35 /* PinnParser.swift */,
 				E2D2DC012366BE3700E0CC35 /* PinnParserATN.swift */,

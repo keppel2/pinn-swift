@@ -8,13 +8,6 @@
 
 import Foundation
 
-
-
-
-
-
-
-
 class Pval {
     static func sf() {}
     
@@ -28,13 +21,12 @@ class Pval {
             g = k.gtype
             v = k.vtype
             switch g {
-            case .gArray:
+            case .gArray, .gSlice:
                 ar = [Any](repeating: i ?? zeroValue(k.vtype), count: k.count!)
             case .gMap:
                 map = [String: Any]()
             case .gScalar:
                 sc = i ?? zeroValue(k.vtype)
-
             }
         }
         func equal(_ p:Pval) -> Bool {
@@ -44,7 +36,7 @@ class Pval {
             switch getKind().gtype {
             case .gScalar:
                 return equalValue(sc!, p.sc!)
-            case .gArray:
+            case .gArray, .gSlice:
                 for (key, value) in p.ar!.enumerated() {
                     if !equalValue(value, p.ar![key]) {
                         return false
@@ -77,13 +69,16 @@ class Pval {
             case let v1v as Int:
                 return ar![v1v]
             case let v1v as String:
+                if map![v1v] == nil {
+                    map![v1v] = zeroValue(getKind().vtype)
+                }
                 return map![v1v]!
             default:
                 fatalError(ErrCase)
             }
         }
         func set(_ v: Any) {
-            guard type(of: sc) == type(of: v) else {
+            guard type(of: sc!) == type(of: v) else {
                 fatalError(ErrWrongType)
             }
             sc = v
@@ -96,7 +91,11 @@ class Pval {
             }
             switch k {
             case let v1v as Int:
+                if getKind().gtype == .gSlice && v1v == ar!.count {
+                    ar!.append(v!)
+                } else {
                 ar![v1v] = v!
+                }
             case let v1v as String:
                 map![v1v] = v
             default:
@@ -111,7 +110,7 @@ class Pval {
         switch getKind().gtype {
         case .gScalar:
             return Pval(plusValue(sc!, p.sc!))
-        case .gMap, .gArray:
+        case .gMap, .gArray, .gSlice:
             fatalError(ErrCase)
         }
     }
@@ -119,7 +118,7 @@ class Pval {
         var string: String {
             switch g {
                 
-            case .gArray: return String(describing: ar!)
+            case .gArray, .gSlice: return String(describing: ar!)
             case .gMap: return String(describing: map!)
             case .gScalar: return String(describing: sc!)
             }
@@ -127,7 +126,7 @@ class Pval {
         
         func getKind() -> Kind {
             switch g {
-            case .gArray:
+            case .gArray, .gSlice:
                 return Kind(vtype: v, gtype: g, count: ar!.count)
                 case .gMap:
                     return Kind(vtype: v, gtype: g, count: map!.count)
@@ -140,7 +139,7 @@ class Pval {
             let rt = Pval(getKind(), nil)
             
             switch getKind().gtype {
-            case .gArray:
+            case .gArray, .gSlice:
                 rt.ar = ar!
             case .gScalar:
                 rt.sc = sc!
