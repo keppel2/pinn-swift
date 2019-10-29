@@ -65,6 +65,7 @@
 		E2673965235BC825000CF830 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		E28CB40123679F640045FA67 /* Pvisitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pvisitor.swift; sourceTree = "<group>"; };
 		E28CB4032367FE120045FA67 /* e52.pinn */ = {isa = PBXFileReference; lastKnownFileType = text; path = e52.pinn; sourceTree = "<group>"; };
+		E28CB40423680A0B0045FA67 /* types.pinn */ = {isa = PBXFileReference; lastKnownFileType = text; path = types.pinn; sourceTree = "<group>"; };
 		E2CDE16D2363EB740065250D /* Pval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pval.swift; sourceTree = "<group>"; };
 		E2D2DBEE2366B45E00E0CC35 /* Antlr4.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Antlr4.xcodeproj; sourceTree = "<group>"; };
 		E2D2DBFB2366B76500E0CC35 /* Pinn.g4 */ = {isa = PBXFileReference; lastKnownFileType = text; path = Pinn.g4; sourceTree = "<group>"; };
@@ -110,6 +111,7 @@
 				E2D2DC032366BE3700E0CC35 /* PinnLexer.swift */,
 				E2D2DC002366BE3700E0CC35 /* PinnLexerATN.swift */,
 				E28CB4032367FE120045FA67 /* e52.pinn */,
+				E28CB40423680A0B0045FA67 /* types.pinn */,
 				E28CB40123679F640045FA67 /* Pvisitor.swift */,
 				E2D2DC022366BE3700E0CC35 /* PinnParser.swift */,
 				E2D2DC012366BE3700E0CC35 /* PinnParserATN.swift */,
@@ -223,7 +225,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\njava -jar ~/antlr-4.7.2-complete.jar -no-listener -Dlanguage=Swift -message-format gnu pinn/Pinn.g4\ncp pinn/*.pinn /tmp\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\ncp pinn/*.pinn /tmp\njava -jar ~/antlr-4.7.2-complete.jar -no-listener -Dlanguage=Swift -message-format gnu pinn/Pinn.g4\n\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

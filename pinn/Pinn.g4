@@ -48,6 +48,7 @@ indexExpr :
 
 funcExpr
   : 'print' LPAREN exprList ')'
+  | 'println' LPAREN exprList ')'
   | 'printB' LPAREN expr ')'
   | 'printH' LPAREN expr ')'
   | 'delete' LPAREN ID ',' expr ')'

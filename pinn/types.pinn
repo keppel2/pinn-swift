@@ -1,0 +1,11 @@
+func main() {
+print("Create int. 0.");
+x int;
+print(x);
+print("Set to. 10.");
+x = 10;
+print(x);
+print("Create bool. false.");
+b bool;
+print(b);
+}

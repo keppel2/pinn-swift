@@ -365,7 +365,9 @@ class Pvisitor {
                 }
                 switch Self.childToToken(child) {
                 case .STRING:
-                    let str = sctx.STRING()!.getText()
+                    var str = sctx.STRING()!.getText()
+                    str.remove(at: str.startIndex)
+                    str.remove(at: str.index(before: str.endIndex))
                     let pv = Pval(str)
                     rt = pv
                 case .INT:
@@ -477,16 +479,20 @@ class Pvisitor {
                 case "stringValue":
                     let v = visitPval(sctx.expr()!)!.string
                     rt = Pval(v)
-                case "print":
-                    let s = visitList(sctx.exprList()!)
+                case "println", "print":
+                    var s = visitList(sctx.exprList()!)
                     if s.count == 1 {
-                        print(s[0].string)
+                        print(s[0].string, terminator: "")
                     } else {
-                    var ar = [String]()
-                    for e in s {
-                        ar.append(e.string)
+                        print(s[0].string, terminator: "")
+                        s.removeFirst()
+                        for e in s {
+                            print(", " + e.string, terminator: "")
+                        }
+                        print(".", terminator: "")
                     }
-                        print(ar)
+                    if sctx.getStart()!.getText()! == "println" {
+                        print()
                     }
                 case "printH":
                     let e = visitPval(sctx.expr()!)!.get() as! Int

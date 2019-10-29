@@ -1,4 +1,5 @@
 func mapEqual(m1 [map]int, m2[map]int) bool {
+/*
 	if len(m1) != len(m2) { return false; }
 	k string;
 	v int;
@@ -6,6 +7,8 @@ func mapEqual(m1 [map]int, m2[map]int) bool {
 		if m2[k] != v { return false; }
 	}
 	return true;
+ */
+ return m1 == m2;
 }
 
 func mapDigits(x int) [map]int {
@@ -51,6 +54,9 @@ func it(x int) bool {
 }
 
 func main() {
+s [fill]int;
+s = decDigits(1234);
+print(s);
 	print(decDigits(1232));
 	print (strLen(stringValue(65)));
 	print (strLen(stringValue(65 * 2)));

@@ -266,7 +266,7 @@ func dbg() {
 
 //let myinput = fnToString("/Users/ryankeppel/Documents/pinn/pinn/a.pinn")
 
-let myinput = fnToString("/tmp/e52.pinn")
+let myinput = fnToString("/tmp/a.pinn")
 //print(myinput)
 func stringToParser(_ s: String) -> PinnParser {
     let aInput = ANTLRInputStream(myinput)

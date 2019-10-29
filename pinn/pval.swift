@@ -44,8 +44,12 @@ class Pval {
                 }
                 return true
             case .gMap:
+                
                 for (key, value) in p.map! {
-                    if !equalValue(value, p.map![key]!) {
+                    if map![key] == nil {
+                        return false
+                    }
+                    if !equalValue(value, map![key]!) {
                         return false
                     }
                 }
