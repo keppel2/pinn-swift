@@ -266,15 +266,18 @@ func dbg() {
 
 //let myinput = fnToString("/Users/ryankeppel/Documents/pinn/pinn/a.pinn")
 
-let myinput = fnToString("/tmp/types.pinn")
+let myinput = fnToString("/tmp/a.pinn")
 //print(myinput)
 func stringToParser(_ s: String) -> PinnParser {
     let aInput = ANTLRInputStream(myinput)
     let lexer = PinnLexer(aInput)
     let stream = CommonTokenStream(lexer)
+    print(stream.getTokens())
     let parser =  try! PinnParser(stream)
     return parser
 }
+let tokens = false
+
 print(545)
 print(FileManager.default.currentDirectoryPath)
 let parser = stringToParser(myinput)
@@ -284,7 +287,12 @@ if tree == nil {
     let parser2 = stringToParser(myinput)
     try! parser2.file()
 } else {
+    if tokens {
+        let stream = parser.getTokenStream() as! CommonTokenStream
+        print(stream.getTokens())
+    }
     let pv = Pvisitor()
     pv.start(tree!)
 }
+
 //main()

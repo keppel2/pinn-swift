@@ -1,8 +1,3 @@
 func main() {
-str := "ba\"d";
-println(str);
-println("he\"llo");
-println(1, 2, 4);
-println("bye");
-println(5);
+print(1@5);
 }
