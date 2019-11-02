@@ -1,4 +1,3 @@
-func main() {
 println("Create int: 0.");
 x int;
 println(x);
@@ -17,4 +16,18 @@ println(str);
 println("Create array of string: [\"alpha\", \"bravo\", \"charlie\"].");
 arStr [fill]string = "alpha", "bravo", "charlie";
 println(arStr);
+println("Print open interval 1 to 5: [1, 2, 3, 4]");
+println(1:5);
+println("For range closed interval 11 to 14: 11,12,13,14,.");
+xRange int;
+for xRange = range 11@14 {
+    print(xRange);
+    print(",");
 }
+println("");
+println("3 part for statement: 10,12,14,.");
+for forX int = 10; forX < 15; forX += 2 {
+    print(forX);
+    print(",");
+}
+println("");

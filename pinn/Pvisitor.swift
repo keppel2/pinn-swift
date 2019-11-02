@@ -163,12 +163,6 @@ class Pvisitor {
                 
             }
         }
-        
-        
-//        for child in ctx.varDecl() {
-//            visit(child)
-//        }
-//        _ =  visitFunction("main", [Pval]())
     }
 
     func visitKind(_ sctx: PinnParser.KindContext) -> Kind {
