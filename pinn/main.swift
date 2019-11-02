@@ -201,6 +201,11 @@ func zeroValue(_ v:Any.Type) -> Any {
     }
 }
 
+//
+//func equalValue<T: Equatable>(_ v1: T, _ v2: T) -> Bool {
+//    return v1 == v2
+//}
+
 func equalValue(_ v1: Any, _ v2: Any) -> Bool {
     guard type(of: v1) == type(of: v2) else {
         return false
