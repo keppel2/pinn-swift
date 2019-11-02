@@ -11,15 +11,21 @@ import Antlr4
 
 _ = 124444;
 
+struct MyError {
+    let str: String
+    init (_ s: String) {
+        str = s
+    }
+}
 
+let ErrParamLength = MyError("Parameter length mismatch.")
 
-let ErrParamLength    = "Parameter length mismatch."
-let ErrWrongStatement = "Wrong statement."
-let ErrWrongType      = "Wrong type."
-let ErrRange          = "Out of range."
-let ErrCase           = "Case unimplemented."
-let ErrRedeclare      = "Redeclared."
-let ErrUndeclare      = "Undeclared."
+let ErrWrongStatement = MyError("Wrong statement.")
+let ErrWrongType      = MyError("Wrong type.")
+let ErrRange          = MyError("Out of range.")
+let ErrCase           = MyError("Case unimplemented.")
+let ErrRedeclare      = MyError("Redeclared.")
+let ErrUndeclare      = MyError("Undeclared.")
 
 
 func fnToString(_ s: String) -> String {
@@ -188,6 +194,9 @@ struct Kind: Equatable {
 //
 //        }
 //
+func de(_ me: MyError) -> Never {
+    fatalError(me.str)
+}
 
 func newElement(_ vtype: Any.Type)  -> Any {
     var rt: Any
@@ -197,7 +206,7 @@ func newElement(_ vtype: Any.Type)  -> Any {
     case is Bool.Type:
         rt = Bool(false)
     default:
-        fatalError(ErrCase)
+        de(ErrParamLength)
     }
     return rt
 }
@@ -230,7 +239,7 @@ func equalValue(_ v1: Any, _ v2: Any) -> Bool {
     case let v1v as String:
         return v1v == v2 as! String
     default:
-        fatalError(ErrCase)
+        de(ErrCase)
     }
 }
 
@@ -241,7 +250,7 @@ func plusValue(_ v1: Any, _ v2: Any) -> Any {
     case let v1v as String:
         return v1v + (v2 as! String)
     default:
-        fatalError(ErrCase)
+        de(ErrCase)
     }
 }
 

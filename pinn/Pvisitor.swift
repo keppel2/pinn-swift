@@ -57,7 +57,7 @@ class Pvisitor {
             case .pExiting:
                 return true
             default:
-                fatalError(ErrCase)
+                de(ErrCase)
             }
         }
         
@@ -94,7 +94,7 @@ class Pvisitor {
         
         if fkmap[ctx.ID()!.getText()] != nil {
  
-            fatalError(ErrRedeclare)
+            de(ErrRedeclare)
         }
         var k: Kind?
         if let kctx = ctx.kind() {
@@ -113,15 +113,20 @@ class Pvisitor {
         let fh = fkmap[str]!
         let ctx = fh.funcContext
         if s.count != fh.fkinds.count {
-            fatalError(ErrParamLength)
+            de(ErrParamLength)
         }
         for (index, v) in s.enumerated() {
             if !fh.fkinds[index].k.varEquals(v.getKind()) {
-                fatalError(ErrWrongType)
+                de(ErrWrongType)
             }
             fc.m[fh.fkinds[index].s] = v
         }
         visit(ctx.block()!)
+        switch lfc!.path {
+        case .pBreak, .pContinue, .pFallthrough:
+            de(ErrWrongStatement)
+        default: break
+        }
         
         if lfc!.rt == nil && fh.kind == nil
         {
@@ -129,7 +134,7 @@ class Pvisitor {
         }
         else {
             if !lfc!.rt!.getKind().varEquals(fh.kind!) {
-                fatalError(ErrWrongType)
+                de(ErrWrongType)
             }
         }
         let rt = lfc!.rt
@@ -147,11 +152,15 @@ class Pvisitor {
         
         for child in ctx.statement() {
             visit(child)
-            if fc.path == .pFallthrough {
-                fatalError(ErrWrongStatement)
-            }
-            if fc.path != .pNormal {
-                break
+            switch fc.path {
+            case .pBreak, .pContinue, .pFallthrough:
+                de(ErrWrongStatement)
+            case .pExiting:
+                if fc.rt != nil {
+                    de(ErrWrongType)
+                }
+            case .pNormal: break
+                
             }
         }
         
@@ -245,7 +254,7 @@ class Pvisitor {
                 return v
             }
         }
-        fatalError(ErrUndeclare)
+        de(ErrUndeclare)
     }
     func doOp(_ lhs: Pval, _ rhs: Pval, _ str: String) -> Pval {
         let rt: Pval
@@ -286,7 +295,7 @@ class Pvisitor {
                         fallthrough
                        case ":":
                         guard rhsv - lhsv >= 0 else {
-                            fatalError(ErrRange)
+                            de(ErrRange)
                         }
                         rt = Pval(Kind(vtype: Int.self, gtype: .gArray, count: rhsv - lhsv), nil)
                         for x in lhsv..<rhsv {
@@ -294,7 +303,7 @@ class Pvisitor {
                         }
                         
                           default:
-                           fatalError(ErrCase)
+                           de(ErrCase)
         }
         return rt
     }
@@ -306,7 +315,7 @@ class Pvisitor {
             pvOld = fc.m.updateValue(pv, forKey: s)!
         }
         if !pvOld.getKind().varEquals(pv.getKind()) {
-            fatalError(ErrWrongType)
+            de(ErrWrongType)
         }
 
     }
@@ -324,7 +333,7 @@ class Pvisitor {
                 switch fc.path {
                 case .pFallthrough:
                     if key != sctx.statement().count - 1 {
-                        fatalError(ErrWrongStatement)
+                        de(ErrWrongStatement)
                     }
                     
                 case .pBreak:
@@ -391,7 +400,7 @@ class Pvisitor {
                         rt = getPv(str).clone()
                     }
                 default:
-                    fatalError(ErrCase)
+                    de(ErrCase)
                 }
                 break
             }
@@ -465,7 +474,7 @@ class Pvisitor {
 
 
                 default:
-                    fatalError(ErrCase)
+                    de(ErrCase)
                 }
             
 
@@ -521,7 +530,7 @@ class Pvisitor {
         default:
 //            let schild = ctx.getChild(0) as! ParserRuleContext
 //            rt = visitPval(schild)
-         fatalError(ErrCase)
+         de(ErrCase)
         }
         return rt
     }
@@ -596,7 +605,7 @@ class Pvisitor {
         case ";":
             break
         default:
-            fatalError(ErrCase)
+            de(ErrCase)
         }
         
     case let sctx as PinnParser.SimpleStatementContext:
@@ -607,7 +616,7 @@ class Pvisitor {
             switch sctx.DOUBLEOP()!.getText() {
             case "++": rhsv = 1
             case "--": rhsv = -1
-            default: fatalError(ErrCase)
+            default: de(ErrCase)
             }
             
             if let e = sctx.expr() {
@@ -630,7 +639,7 @@ class Pvisitor {
         for child in sctx.statement() {
             visit(child)
             if fc.path == .pFallthrough {
-                fatalError(ErrWrongStatement)
+                de(ErrWrongStatement)
             }
             if fc.path != .pNormal {
                 break
@@ -718,7 +727,7 @@ class Pvisitor {
                 }
                 break
             default:
-                fatalError(ErrCase)
+                de(ErrCase)
             }
             break
         }
@@ -742,7 +751,7 @@ class Pvisitor {
         if !(v.get() as! Bool) {
             visit(sctx.block()!)
             if fc.path == .pNormal {
-                fatalError(ErrWrongStatement)
+                de(ErrWrongStatement)
             }
         }
         
@@ -751,7 +760,7 @@ class Pvisitor {
         let map = lfc?.m ?? fc.m
         var newV: Pval
         if map[str] != nil {
-            fatalError(ErrRedeclare)
+            de(ErrRedeclare)
         }
         if sctx.CE() != nil {
             newV = visitPval(sctx.expr()!)!
@@ -765,18 +774,18 @@ class Pvisitor {
                 switch k.gtype {
                 case .gScalar:
                     if ai.count != 1 {
-                        fatalError(ErrParamLength)
+                        de(ErrParamLength)
                     }
                     newV.set(ai[0].get())
                 case .gArray, .gSlice:
                     if k.count! != ai.count {
-                        fatalError(ErrParamLength)
+                        de(ErrParamLength)
                     }
                     for (key, value) in ai.enumerated() {
                         newV.set(key, value.get())
                     }
                 case .gMap:
-                    fatalError(ErrWrongType)
+                    de(ErrWrongType)
                 }
                 
             } else {

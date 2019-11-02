@@ -78,12 +78,12 @@ class Pval {
                 }
                 return map![v1v]!
             default:
-                fatalError(ErrCase)
+                de(ErrCase)
             }
         }
         func set(_ v: Any) {
             guard type(of: sc!) == type(of: v) else {
-                fatalError(ErrWrongType)
+                de(ErrWrongType)
             }
             sc = v
         }
@@ -91,7 +91,7 @@ class Pval {
         func set(_ k: Any, _ v: Any?) {
 
             guard v == nil || getKind().vtype == type(of:v!) else {
-                fatalError(ErrWrongType)
+                de(ErrWrongType)
             }
             switch k {
             case let v1v as Int:
@@ -103,19 +103,19 @@ class Pval {
             case let v1v as String:
                 map![v1v] = v
             default:
-                fatalError(ErrCase)
+                de(ErrCase)
             }
         }
     
     func plus(_ p: Pval) -> Pval {
         if getKind() != p.getKind() {
-            fatalError(ErrWrongType)
+            de(ErrWrongType)
         }
         switch getKind().gtype {
         case .gScalar:
             return Pval(plusValue(sc!, p.sc!))
         case .gMap, .gArray, .gSlice:
-            fatalError(ErrCase)
+            de(ErrCase)
         }
     }
         
