@@ -189,6 +189,18 @@ struct Kind: Equatable {
 //        }
 //
 
+func newElement(_ vtype: Any.Type)  -> Any {
+    var rt: Any
+    switch vtype {
+    case is Int.Type:
+        rt = Int(0)
+    case is Bool.Type:
+        rt = Bool(false)
+    default:
+        fatalError(ErrCase)
+    }
+    return rt
+}
 func zeroValue(_ v:Any.Type) -> Any {
     if v == Int.self {
         return 0

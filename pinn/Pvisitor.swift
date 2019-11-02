@@ -32,18 +32,7 @@ class Pvisitor {
     //    }
 
     
-    static func newElement(_ vtype: Any.Type)  -> Any {
-        var rt: Any
-        switch vtype {
-        case is Int.Type:
-            rt = Int(0)
-        case is Bool.Type:
-            rt = Bool(false)
-        default:
-            fatalError(ErrCase)
-        }
-        return rt
-    }
+
     enum Path {
         case pNormal, pExiting, pBreak, pContinue, pFallthrough
     }
@@ -74,8 +63,8 @@ class Pvisitor {
         
     }
     
-    var fc: Fc?
-    var gm = [String: Pval]()
+    var fc = Fc()
+    var lfc: Fc?
     var fkmap = [String:Fheader]()
 
     var stack = [ParserRuleContext]()
@@ -83,7 +72,7 @@ class Pvisitor {
     let litToType: [String: Any.Type] = ["int": Int.self, "bool": Bool.self, "string": String.self]
     
     struct Fheader {
-        var fc: PinnParser.FunctionContext
+        var funcContext: PinnParser.FunctionContext
         var kind: Kind?
         var fkinds: [FKind]
     }
@@ -94,7 +83,6 @@ class Pvisitor {
     var debug = Debug()
 
     func loadDebug(_ ctx:ParserRuleContext) {
-        
         debug.textStack.append(ctx.getText())
     }
     func popDebug() {
@@ -116,14 +104,14 @@ class Pvisitor {
         for child in ctx.fvarDecl() {
             fkinds.append(visitFKind(child))
         }
-        fkmap[ctx.ID()!.getText()] = Fheader(fc: ctx, kind: k, fkinds: fkinds)
+        fkmap[ctx.ID()!.getText()] = Fheader(funcContext: ctx, kind: k, fkinds: fkinds)
     }
     
     func visitFunction(_ str: String, _ s: [Pval])  -> Pval? {
-        let oldfc = fc
-        fc = Fc()
+        let oldfc = lfc
+        lfc = Fc()
         let fh = fkmap[str]!
-        let ctx = fh.fc
+        let ctx = fh.funcContext
         if s.count != fh.fkinds.count {
             fatalError(ErrParamLength)
         }
@@ -131,21 +119,21 @@ class Pvisitor {
             if !fh.fkinds[index].k.varEquals(v.getKind()) {
                 fatalError(ErrWrongType)
             }
-            fc!.m[fh.fkinds[index].s] = v
+            fc.m[fh.fkinds[index].s] = v
         }
         visit(ctx.block()!)
         
-        if fc!.rt == nil && fh.kind == nil
+        if lfc!.rt == nil && fh.kind == nil
         {
             
         }
         else {
-            if !fc!.rt!.getKind().varEquals(fh.kind!) {
+            if !lfc!.rt!.getKind().varEquals(fh.kind!) {
                 fatalError(ErrWrongType)
             }
         }
-        let rt = fc!.rt
-        fc = oldfc
+        let rt = lfc!.rt
+        lfc = oldfc
         return rt
     }
     
@@ -155,10 +143,23 @@ class Pvisitor {
         for child in ctx.function() {
              header(child)
         }
-        for child in ctx.varDecl() {
+        
+        
+        for child in ctx.statement() {
             visit(child)
+            if fc.path == .pFallthrough {
+                fatalError(ErrWrongStatement)
+            }
+            if fc.path != .pNormal {
+                break
+            }
         }
-        _ =  visitFunction("main", [Pval]())
+        
+        
+//        for child in ctx.varDecl() {
+//            visit(child)
+//        }
+//        _ =  visitFunction("main", [Pval]())
     }
 
     func visitKind(_ sctx: PinnParser.KindContext) -> Kind {
@@ -236,7 +237,7 @@ class Pvisitor {
  */
     
     func getPv(_ s: String)  -> Pval  {
-        for m in [fc?.m, gm] {
+        for m in [lfc?.m, fc.m] {
             if m == nil {
                 continue
             }
@@ -299,10 +300,10 @@ class Pvisitor {
     }
     func putPv(_ s: String, _ pv: Pval) {
         let pvOld: Pval
-        if fc?.m[s] != nil {
-            pvOld = fc!.m.updateValue(pv, forKey: s)!
+        if lfc?.m[s] != nil {
+            pvOld = lfc!.m.updateValue(pv, forKey: s)!
         } else {
-            pvOld = gm.updateValue(pv, forKey: s)!
+            pvOld = fc.m.updateValue(pv, forKey: s)!
         }
         if !pvOld.getKind().varEquals(pv.getKind()) {
             fatalError(ErrWrongType)
@@ -313,21 +314,21 @@ class Pvisitor {
         loadDebug(sctx)
         defer {popDebug()}
         var rt = false
-        if fc!.path == Path.pFallthrough || visitListCase(sctx.exprList()!, v) {
+        if fc.path == Path.pFallthrough || visitListCase(sctx.exprList()!, v) {
             rt = true
-            if fc!.path == Path.pFallthrough {
-                fc!.path = .pNormal
+            if fc.path == Path.pFallthrough {
+                fc.path = .pNormal
             }
             cloop: for (key, child) in sctx.statement().enumerated() {
                 visit(child)
-                switch fc!.path {
+                switch fc.path {
                 case .pFallthrough:
                     if key != sctx.statement().count - 1 {
                         fatalError(ErrWrongStatement)
                     }
                     
                 case .pBreak:
-                    fc!.path = .pNormal
+                    fc.path = .pNormal
                 fallthrough
                     case .pContinue, .pExiting:
                         break cloop
@@ -538,7 +539,7 @@ class Pvisitor {
             {
                 if visitCase(child, v) {
                     broken = true
-                    if fc!.path == .pFallthrough {
+                    if fc.path == .pFallthrough {
                         broken = false
                         continue
                     }
@@ -546,15 +547,15 @@ class Pvisitor {
                 }
             }
             if !broken {
-                if fc!.path == .pFallthrough {
-                    fc!.path = .pNormal
+                if fc.path == .pFallthrough {
+                    fc.path = .pNormal
                 }
                 loop:
                     for child in sctx.statement() {
                         visit(child)
-                        switch fc!.path {
+                        switch fc.path {
                             
-                        case .pBreak: fc!.path = .pNormal
+                        case .pBreak: fc.path = .pNormal
                             fallthrough
                         case .pContinue, .pExiting: break loop
                         default: break
@@ -585,11 +586,11 @@ class Pvisitor {
         }
         switch Self.childToText(c0) {
         case "break":
-            fc!.path = .pBreak
+            fc.path = .pBreak
         case "continue":
-            fc!.path = .pContinue
+            fc.path = .pContinue
         case "fallthrough":
-            fc!.path = .pFallthrough
+            fc.path = .pFallthrough
         case "debug":
             dbg()
         case ";":
@@ -621,17 +622,17 @@ class Pvisitor {
         }
         visit(sctx.getChild(0) as! ParserRuleContext)
     case let sctx as PinnParser.ReturnStatementContext:
-        fc!.path = .pExiting
+        fc.path = .pExiting
         if let e = sctx.expr() {
-            fc!.rt = visitPval(e)
+            fc.rt = visitPval(e)
         }
     case let sctx as PinnParser.BlockContext:
         for child in sctx.statement() {
             visit(child)
-            if fc!.path == .pFallthrough {
+            if fc.path == .pFallthrough {
                 fatalError(ErrWrongStatement)
             }
-            if fc!.path != .pNormal {
+            if fc.path != .pNormal {
                 break
             }
         }
@@ -664,7 +665,7 @@ class Pvisitor {
         var b = true
         while b {
             visit(sctx.block()!)
-            if  fc!.toEndBlock() {
+            if  fc.toEndBlock() {
                 break
             }
             let v = visitPval(sctx.expr()!)!
@@ -677,7 +678,7 @@ class Pvisitor {
 
         while v.get() as! Bool {
             visit(sctx.block()!)
-            if  fc!.toEndBlock() {break}
+            if  fc.toEndBlock() {break}
             v = visitPval(sctx.expr()!)!
         }
     case let sctx as PinnParser.FoStatementContext:
@@ -699,7 +700,7 @@ class Pvisitor {
                     key?.set(x)
                     
                     visit(sctx.block()!)
-                    if fc!.toEndBlock() {
+                    if fc.toEndBlock() {
                         break
                     }
                 }
@@ -709,7 +710,7 @@ class Pvisitor {
                     key?.set(mkey)
                     value.set(mvalue)
                     visit(sctx.block()!)
-                    if fc!.toEndBlock() {
+                    if fc.toEndBlock() {
                         break
                     }
                     
@@ -731,7 +732,7 @@ class Pvisitor {
         while v.get() as! Bool {
             visit(sctx.block()!)
 
-            if  fc!.toEndBlock() {break}
+            if  fc.toEndBlock() {break}
             visit(sctx.sss)
             v = visitPval(sctx.expr()!)!
 
@@ -740,14 +741,14 @@ class Pvisitor {
         let v = visitPval(sctx.expr()!)!
         if !(v.get() as! Bool) {
             visit(sctx.block()!)
-            if fc!.path == .pNormal {
+            if fc.path == .pNormal {
                 fatalError(ErrWrongStatement)
             }
         }
         
     case let sctx as PinnParser.VarDeclContext:
         let str = sctx.ID()!.getText()
-        let map = fc?.m ?? gm
+        let map = lfc?.m ?? fc.m
         var newV: Pval
         if map[str] != nil {
             fatalError(ErrRedeclare)
@@ -782,10 +783,10 @@ class Pvisitor {
                 newV = Pval(k, nil)
             }
         }
-        if fc != nil {
-            fc!.m[str] = newV
+        if lfc != nil {
+            lfc!.m[str] = newV
         } else {
-            gm[str] = newV
+            fc.m[str] = newV
         }
         
     default: break
