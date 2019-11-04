@@ -304,8 +304,6 @@ func stringToParser(_ s: String) -> PinnParser {
 }
 let tokens = false
 
-print(545)
-print(FileManager.default.currentDirectoryPath)
 let parser = stringToParser(myinput)
 parser.setErrorHandler(BailErrorStrategy())
 var tree =  try? parser.file()
