@@ -54,3 +54,19 @@ if false ; else println("else");
 print("If true do not print else:#");
 if true ; else print("bad else");
 println("");
+print("While countdown:50.40.30.20.#");
+wh int = 50;
+while wh > 10 {
+print(wh);
+wh -= 10;
+print(".");
+}
+println("");
+print("Repeat \"ab\" and doubling while len < 8:ab.abab.#");
+wstr := "ab";
+repeat {
+print(wstr);
+print(".");
+wstr += wstr;
+} while strLen(wstr) < 8;
+println("");

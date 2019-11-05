@@ -330,14 +330,17 @@ if tree == nil {
 }
 let TEST = true
 if (TEST) {
+    print("")
+    print("----")
 let fString = fnToString(TMP)
 let fsplit = fString.split(separator: "\n")
     if fsplit.count == 0 {
         de(ErrTestFail)
     }
     for str in fsplit {
+            print(str)
     let hashed = str.split(separator: ":")[1]
-    print("Testing", hashed)
+
     let compare = hashed.split(separator: "#", maxSplits: 2, omittingEmptySubsequences: false)
     if compare[0] != compare[1] {
         de(ErrTestFail)
