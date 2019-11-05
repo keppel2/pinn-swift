@@ -1,33 +1,56 @@
-println("Create int: 0.");
+print("Create int:0#");
 x int;
 println(x);
-println("Set to: 10.");
+print("Set to:10#");
 x = 10;
 println(x);
-println("Create bool: false.");
+print("Create bool:false#");
 b bool;
 println(b);
-println("Create string: .");
+print("Create string:#");
 str string;
 println(str);
-println("Set string: value.");
+print("Set string:value#");
 str = "value";
 println(str);
-println("Create array of string: [\"alpha\", \"bravo\", \"charlie\"].");
+print("Create array of string:[\"alpha\", \"bravo\", \"charlie\"]#");
 arStr [fill]string = "alpha", "bravo", "charlie";
 println(arStr);
-println("Print open interval 1 to 5: [1, 2, 3, 4]");
+print("Print open interval 1 to 5:[1, 2, 3, 4]#");
 println(1:5);
-println("For range closed interval 11 to 14: 11,12,13,14,.");
+print("For range closed interval 11 to 14:11,12,13,14,#");
 xRange int;
 for xRange = range 11@14 {
     print(xRange);
     print(",");
 }
 println("");
-println("3 part for statement: 10,12,14,.");
+print("3 part for statement:10,12,14,#");
 for forX int = 10; forX < 15; forX += 2 {
     print(forX);
     print(",");
 }
+println("");
+print("For range key value:0, abcd.1, xyz.2, hello.#");
+key int;
+value string;
+arS [fill]string = "abcd", "xyz", "hello";
+for key, value = range arS {
+    print(key, value);
+}
+println("");
+print("For loop without init:In for#");
+bFor bool;
+for ; bFor != true; bFor = !bFor {
+println("In for");
+}
+print("If true print true:true#");
+if true println("true");
+print("If false do not print bad:#");
+if false print("bad");
+println("");
+print("If false print else:else#");
+if false ; else println("else");
+print("If true do not print else:#");
+if true ; else print("bad else");
 println("");

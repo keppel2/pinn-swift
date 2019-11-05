@@ -26,8 +26,12 @@ let ErrRange          = MyError("Out of range.")
 let ErrCase           = MyError("Case unimplemented.")
 let ErrRedeclare      = MyError("Redeclared.")
 let ErrUndeclare      = MyError("Undeclared.")
+let ErrTestFail = MyError("Test failed.")
 
-
+func writeString(_ s: String, _ f: String) {
+    let fh = FileHandle(forWritingAtPath: f)!
+    fh.write(Data(s.utf8))
+}
 func fnToString(_ s: String) -> String {
     let fh = FileHandle(forReadingAtPath: s)!
     let data = fh.readDataToEndOfFile()
@@ -294,11 +298,17 @@ func dbg() {
 
 let myinput = fnToString("/tmp/types.pinn")
 //print(myinput)
+let TMP = "/tmp/types.out"
+FileManager.default.createFile(atPath: TMP, contents: nil)
+let fh = FileHandle(forWritingAtPath: TMP)!
+//writeString("first", "/tmp/a.out")
+//writeString("second", "/tmp/a.out")
+
 func stringToParser(_ s: String) -> PinnParser {
     let aInput = ANTLRInputStream(myinput)
     let lexer = PinnLexer(aInput)
     let stream = CommonTokenStream(lexer)
-    print(stream.getTokens())
+ //   print(stream.getTokens())
     let parser =  try! PinnParser(stream)
     return parser
 }
@@ -318,5 +328,20 @@ if tree == nil {
     let pv = Pvisitor()
     pv.start(tree!)
 }
-
+let TEST = true
+if (TEST) {
+let fString = fnToString(TMP)
+let fsplit = fString.split(separator: "\n")
+    if fsplit.count == 0 {
+        de(ErrTestFail)
+    }
+    for str in fsplit {
+    let hashed = str.split(separator: ":")[1]
+    print("Testing", hashed)
+    let compare = hashed.split(separator: "#", maxSplits: 2, omittingEmptySubsequences: false)
+    if compare[0] != compare[1] {
+        de(ErrTestFail)
+    }
+}
+}
 //main()

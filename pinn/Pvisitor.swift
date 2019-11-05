@@ -67,7 +67,7 @@ class Pvisitor {
     var lfc: Fc?
     var fkmap = [String:Fheader]()
 
-    var stack = [ParserRuleContext]()
+//    var stack = [ParserRuleContext]()
     
     let litToType: [String: Any.Type] = ["int": Int.self, "bool": Bool.self, "string": String.self]
     
@@ -485,20 +485,25 @@ class Pvisitor {
                     let v = visitPval(sctx.expr()!)!.string
                     rt = Pval(v)
                 case "println", "print":
+                    var outStr = ""
                     var s = visitList(sctx.exprList()!)
                     if s.count == 1 {
-                        print(s[0].string, terminator: "")
+
+                        print(s[0].string, terminator: "", to: &outStr)
                     } else {
-                        print(s[0].string, terminator: "")
+                        print(s[0].string, terminator: "", to: &outStr)
                         s.removeFirst()
                         for e in s {
-                            print(", " + e.string, terminator: "")
+                            print(", " + e.string, terminator: "", to: &outStr)
                         }
-                        print(".", terminator: "")
+                        print(".", terminator: "", to: &outStr)
                     }
                     if sctx.getStart()!.getText()! == "println" {
-                        print()
+                        print(to: &outStr)
                     }
+                    print(outStr, terminator: "")
+                    fh.write(Data(outStr.utf8))
+
                 case "printH":
                     let e = visitPval(sctx.expr()!)!.get() as! Int
                     print(String(e, radix: 16, uppercase: false))
@@ -727,7 +732,7 @@ class Pvisitor {
         }
         if let vd = sctx.varDecl() {
             visit(vd)
-        }
+        } else
         if sctx.fss != nil {
             visit(sctx.fss)
         }
