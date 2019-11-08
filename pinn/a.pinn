@@ -1,3 +1,11 @@
-println("hi");
+func f(i ...int) {
+    x int;
+    for x = range i {
+    println(x);
 }
+}
+
+f(1, 5, 6);
+println("hi");
+println("dot dot");
 println("there");

@@ -70,3 +70,8 @@ print(".");
 wstr += wstr;
 } while strLen(wstr) < 8;
 println("");
+
+ar [fill]int = 1, 4, 5, 14, 23, 32;
+s := ar[1:3];
+print("Slice middle of array:[4, 5]#");
+println(s);

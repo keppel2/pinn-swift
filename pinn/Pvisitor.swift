@@ -41,6 +41,7 @@ class Pvisitor {
     struct FKind {
         var k: Kind
         var s: String
+        var variadic = false
     }
     struct Fc {
         var m = [String: Pval]()
@@ -101,8 +102,11 @@ class Pvisitor {
             k = visitKind(kctx)
         }
         var fkinds = [FKind]()
-        for child in ctx.fvarDecl() {
+        for (index, child) in ctx.fvarDecl().enumerated() {
             fkinds.append(visitFKind(child))
+            if fkinds.last!.variadic && index < ctx.fvarDecl().count - 1 {
+                de(ErrWrongType)
+            }
         }
         fkmap[ctx.ID()!.getText()] = Fheader(funcContext: ctx, kind: k, fkinds: fkinds)
     }
@@ -112,14 +116,31 @@ class Pvisitor {
         lfc = Fc()
         let fh = fkmap[str]!
         let ctx = fh.funcContext
+        if fh.fkinds.last != nil && fh.fkinds.last!.variadic {
+            if s.count < fh.fkinds.count - 1 {
+                de(ErrParamLength)
+            }
+        } else
         if s.count != fh.fkinds.count {
             de(ErrParamLength)
         }
-        for (index, v) in s.enumerated() {
-            if !fh.fkinds[index].k.varEquals(v.getKind()) {
+        for (index, v) in fh.fkinds.enumerated() {
+            if v.variadic {
+                let par = Pval(Kind(vtype: v.k.vtype, gtype: .gArray, count: s.count - index), nil)
+
+                for (key, varadds) in s[index...].enumerated() {
+                    if !varadds.getKind().kindEquivalent(v.k) {
+                        de(ErrWrongType)
+                    }
+                    par.set(key, varadds.get())
+                }
+                fc.m[fh.fkinds[index].s] = par
+                continue
+            }
+            if !s[index].getKind().kindEquivalent(v.k) {
                 de(ErrWrongType)
             }
-            fc.m[fh.fkinds[index].s] = v
+            fc.m[fh.fkinds[index].s] = s[index]
         }
         visit(ctx.block()!)
         switch lfc!.path {
@@ -133,7 +154,7 @@ class Pvisitor {
             
         }
         else {
-            if !lfc!.rt!.getKind().varEquals(fh.kind!) {
+            if !lfc!.rt!.getKind().kindEquivalent(fh.kind!) {
                 de(ErrWrongType)
             }
         }
@@ -196,7 +217,7 @@ class Pvisitor {
 
         let str = sctx.ID()!.getText()
         let k = visitKind(sctx.kind()!)
-        return FKind(k: k, s: str)
+        return FKind(k: k, s: str, variadic: sctx.THREEDOT() != nil)
     }
     func visitList(_ sctx: PinnParser.ExprListContext) -> [Pval] {
         loadDebug(sctx)
@@ -308,7 +329,7 @@ class Pvisitor {
         } else {
             pvOld = fc.m.updateValue(pv, forKey: s)!
         }
-        if !pvOld.getKind().varEquals(pv.getKind()) {
+        if !pvOld.getKind().kindEquivalent(pv.getKind()) {
             de(ErrWrongType)
         }
 
@@ -521,6 +542,24 @@ class Pvisitor {
                 }
         case let sctx as PinnParser.IndexExprContext:
             let v =  getPv(sctx.ID()!.getText())
+            if (sctx.TWODOTS() != nil || sctx.COLON() != nil) {
+                var lhsv = 0
+                if let lh = sctx.first {
+                    lhsv = visitPval(lh)!.get() as! Int
+                }
+                var rhsv = v.getKind().count!
+                if let rh = sctx.second {
+                    rhsv = visitPval(rh)!.get() as! Int
+                }
+                if (sctx.TWODOTS() != nil) {
+                    rhsv+=1
+                }
+                rt = Pval(Kind(vtype: v.getKind().vtype, gtype: .gSlice, count: rhsv - lhsv), nil)
+                rt!.ar = Array(v.ar![lhsv..<rhsv])
+            
+                
+                break
+            }
             let e = visitPval(sctx.expr(0)!)!
             let x = e.get()
             let v2 = v.get(x)

@@ -87,7 +87,7 @@ struct Kind: Equatable {
 //        return rt
 //    }
 //
-    func varEquals(_ k2: Kind) -> Bool {
+    func kindEquivalent(_ k2: Kind) -> Bool {
         switch gtype {
         case .gArray, .gScalar:
             return self == k2
@@ -296,7 +296,7 @@ func dbg() {
 
 //let myinput = fnToString("/Users/ryankeppel/Documents/pinn/pinn/a.pinn")
 
-let myinput = fnToString("/tmp/types.pinn")
+let myinput = fnToString("/tmp/a.pinn")
 //print(myinput)
 let TMP = "/tmp/types.out"
 FileManager.default.createFile(atPath: TMP, contents: nil)
@@ -328,7 +328,7 @@ if tree == nil {
     let pv = Pvisitor()
     pv.start(tree!)
 }
-let TEST = true
+let TEST = false
 if (TEST) {
     print("")
     print("----")

@@ -12,9 +12,10 @@ testRule
 
 block
   : '{' statement* '}' ;
-
+THREEDOT
+  : '...' ;
 fvarDecl
-  : ID kind ;
+  : ID THREEDOT? kind ;
 
 varDecl
   : ID kind ('=' exprList)?
@@ -102,10 +103,10 @@ foStatement
   | 'for' ID COMMA ID '=' RANGE expr block |
     'for' ID '=' RANGE expr block ;
 caseStatement
-  : 'case' exprList COLON statement* ;
+  : 'arm' exprList COLON statement* ;
 
 switchStatement
-  : 'switch' expr '{' caseStatement* ('default' COLON statement*)? '}' ;
+  : 'match' expr '{' caseStatement* ('default' COLON statement*)? '}' ;
 
 statement
   :  expr ';'
