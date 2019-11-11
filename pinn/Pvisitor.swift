@@ -548,9 +548,8 @@ class Pvisitor {
         case let sctx as PinnParser.FuncExprContext:
                 switch sctx.getStart()!.getText()! {
                 case "len":
-                    let str = sctx.ID()!.getText()
-                    let v = getPv(str)
-                    rt = Pval(v.getKind().count!)
+                    let e = visitPval(sctx.expr()!)!
+                    rt = Pval(e.getKind().count!)
                 case "strLen":
                     let e = visitPval(sctx.expr()!)!
                     rt = Pval((e.get() as! String).count)

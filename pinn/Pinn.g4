@@ -55,7 +55,7 @@ funcExpr
   | 'printB' LPAREN expr ')'
   | 'printH' LPAREN expr ')'
   | 'delete' LPAREN ID ',' expr ')'
-  |  'len' LPAREN ID ')'
+  |  'len' LPAREN expr ')'
   | 'strLen' LPAREN expr ')'
   | 'stringValue' LPAREN expr ')' ;
 
