@@ -49,14 +49,14 @@ enum Gtype {
 }
 
 struct Kind: Equatable {
-//
+    //
     static func == (k1: Self, k2: Self) -> Bool {
         return k1.vtype == k2.vtype && k1.gtype == k2.gtype && k1.count == k2.count
     }
     var vtype: Ptype.Type
     var gtype: Gtype
     var count: Int?
-
+    
     func kindEquivalent(_ k2: Kind) -> Bool {
         switch gtype {
         case .gArray, .gScalar:
@@ -65,7 +65,7 @@ struct Kind: Equatable {
             return gtype == k2.gtype && vtype == k2.vtype
         }
     }
-//    }
+    //    }
 }
 
 func de(_ me: MyError) -> Never {
@@ -122,7 +122,7 @@ func stringToParser(_ s: String) -> PinnParser {
     let aInput = ANTLRInputStream(myinput)
     let lexer = PinnLexer(aInput)
     let stream = CommonTokenStream(lexer)
- //   print(stream.getTokens())
+    //   print(stream.getTokens())
     let parser =  try! PinnParser(stream)
     return parser
 }
@@ -146,15 +146,15 @@ let TEST = true
 if (TEST) {
     print();
     print("----");
-let fString = fnToString(TMP)
-let fsplit = fString.split(separator: "\n", omittingEmptySubsequences: false)
-     if fsplit.count == 0 {
+    let fString = fnToString(TMP)
+    let fsplit = fString.split(separator: "\n", omittingEmptySubsequences: false)
+    if fsplit.count == 0 {
         de(ErrTestFail)
     }
     for str in fsplit {
-                print(str)
+        print(str)
         let hashed = str.split(separator: "!")[1]
-
+        
         let compare = hashed.split(separator: "#", maxSplits: 2, omittingEmptySubsequences: false)
         if compare[0] != compare[1] {
             de(ErrTestFail)
@@ -162,3 +162,4 @@ let fsplit = fString.split(separator: "\n", omittingEmptySubsequences: false)
     }
 }
 //main()
+
