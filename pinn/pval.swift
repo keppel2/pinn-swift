@@ -130,10 +130,7 @@ class Pval {
         func get() -> Ptype {
             return sc!
         }
-//        func getPV() -> Pval {
-//
-//        }
-        
+
         func get(_ k: Ktype) -> Ptype {
             switch k {
             case let v1v as Int:
