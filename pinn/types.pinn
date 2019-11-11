@@ -1,16 +1,16 @@
 func ec() {
-    println("");
+println("");
 }
 func conc(d string, v string) string {
-    return d + "!" + v + "#";
+return d + "!" + v + "#";
 }
 func ft(d string, v string) {
-    ec();
-    
-    print(conc(d, v));
+ec();
+
+print(conc(d, v));
 }
 func ft2(d string, v string) {
-    print(conc(d, v));
+print(conc(d, v));
 }
 
 func brak(s int) {
@@ -101,39 +101,39 @@ ft("Empty", "");
 ft("For range closed interval 11 to 14", "11,12,13,14,");
 xRange int;
 for xRange = range 11@14 {
-    print(xRange);
-    print(",");
+print(xRange);
+print(",");
 }
 
 ft("Continue on evens--print odds", "23,25,27,");
 xRange86 int;
 for xRange86 = range 22@27 {
-    if xRange86 % 2 == 0 continue;
-    print(xRange86);
-    print(",");
+if xRange86 % 2 == 0 continue;
+print(xRange86);
+print(",");
 }
 ft("Break", "101,102,");
 xBreak int;
 for xBreak = range 101@104 {
-    if xBreak == 103 {
-        break;
-    }
-    print(xBreak);
-    print(",");
+if xBreak == 103 {
+break;
+}
+print(xBreak);
+print(",");
 }
 ft("Deep return", "203");
 func deepReturn() int {
-    i int;
-    for i = range 202@205 {
-        if i == 203 return i;
-    }
+i int;
+for i = range 202@205 {
+if i == 203 return i;
+}
 }
 print(deepReturn());
 
 ft("3 part for statement", "10,12,14,");
 for forX int = 10; forX < 15; forX += 2 {
-    print(forX);
-    print(",");
+print(forX);
+print(",");
 }
 
 ft("For range key value", "0, abcd.1, xyz.2, hello.");
@@ -141,7 +141,7 @@ key int;
 value string;
 arS [fill]string = "abcd", "xyz", "hello";
 for key, value = range arS {
-    print(key, value);
+print(key, value);
 }
 
 ft("For loop without init", "In for");
@@ -207,11 +207,11 @@ g(42);
 
 ft("Call variadic", "7,13,101,");
 func variadic(i ...int) {
-    x int;
-    for x = range i {
-        print(x);
-        print(",");
-    }
+x int;
+for x = range i {
+print(x);
+print(",");
+}
 }
 variadic(7, 13, 101);
 
@@ -219,21 +219,21 @@ ft("Forward call", "forward");
 forward();
 
 func forward() {
-    print("forward");
+print("forward");
 }
 
 
 ft("Call returns", "42");
 func returns42() int {
-    return 42;
+return 42;
 }
 print(returns42());
 
 ft("Return exits", "good");
 func exits() {
-    print("good");
-    return;
-    print("bad");
+print("good");
+return;
+print("bad");
 }
 exits();
 
@@ -241,27 +241,27 @@ ft("Call recursive", "4,3,2,1,");
 func countToOne(i int) {
 print(i);
 print(",");
-    if i > 1
-      countToOne(i - 1);
+if i > 1
+countToOne(i - 1);
 }
 countToOne(4);
 
 ft("Function with map, slice, variadic", "foo, 42.10,11,12,13,14,false,false,true,");
 func fLots(m [map]int, a [slice]int, vary ...bool) {
-    s string;
-    i int;
-    for s, i = range m {
-    print(s, i);
-    }
-    for i = range a {
-    print(i);
-    print(",");
-    }
-    b bool;
-    for b = range vary {
-        print(b);
-        print(",");
-    }
+s string;
+i int;
+for s, i = range m {
+print(s, i);
+}
+for i = range a {
+print(i);
+print(",");
+}
+b bool;
+for b = range vary {
+print(b);
+print(",");
+}
 }
 outerm [map]int;
 outerm["foo"] = 42;
@@ -269,64 +269,64 @@ fLots(outerm, 10@14, false, false, true);
 
 ft("Deep function return", "");
 func deep() {
-    repeat {
-        return;
-        print("bad");
-    } while false;
+repeat {
+return;
+print("bad");
+} while false;
 }
 
 ft("Guard fail", "fail");
 func fguard() {
-    guard false else {
-        print("fail");
-        return;
-    }
-    print("bad");
+guard false else {
+print("fail");
+return;
+}
+print("bad");
 }
 fguard();
 
 ft("Guard pass", "afterguard");
 func fguard2() {
-    guard true else {
-        print("bad");
-        return;
-    }
-    print("afterguard");
+guard true else {
+print("bad");
+return;
+}
+print("afterguard");
 }
 fguard2();
 
 ft("Chain call", "true");
 func call2nd() int {
-    return 42;
+return 42;
 }
 func call1st() bool {
-    return call2nd() < 45;
+return call2nd() < 45;
 }
 print(call1st());
 
 ft("Mutually recurse", "m1,1m2,2m1,4m2,5m1,10m2,11m1,22m2,23m1,46m2,47m1,94m2,95");
 MLIMIT := 100;
 func mrecurse1(x int) {
-    print("m1,");
-    print(x);
-    x += 1;
-    if x < MLIMIT {
-        mrecurse2(x);
-    }
+print("m1,");
+print(x);
+x += 1;
+if x < MLIMIT {
+mrecurse2(x);
+}
 }
 func mrecurse2(i int) {
-    print("m2,");
-    print(i);
-    i *= 2;
-    if i < MLIMIT {
-        mrecurse1(i);
-    }
+print("m2,");
+print(i);
+i *= 2;
+if i < MLIMIT {
+mrecurse1(i);
+}
 }
 mrecurse1(1);
 ft("Return slice of strings","[\"aap\", \"noot\", \"mies\"]");
 func returnSliceString() [slice]string {
-    ar [fill]string = "aap", "noot", "mies";
-    return ar[:];
+ar [fill]string = "aap", "noot", "mies";
+return ar[:];
 }
 print(returnSliceString());
 
@@ -344,59 +344,59 @@ default: print("default");
 ft("Fallthrough", "start,fell through");
 match true {
 when true: print("start,");
-    fallthrough;
-    when false: print("fell through");
+fallthrough;
+when false: print("fell through");
 }
 ft("Fallthrough default", "match foo,fell through default");
 match "foo" {
-    when "foo":
-    print("match foo,");
-    fallthrough;
-    default:
-    print("fell through default");
+when "foo":
+print("match foo,");
+fallthrough;
+default:
+print("fell through default");
 }
 ft("Break out of default", "default only,");
 match true {
-    default:
-    print("default only,");
-    break;
-    print("after break");
+default:
+print("default only,");
+break;
+print("after break");
 }
 ft("Continue with outer for", "in match,10in match,11in match,12in match,13in match,14");
 deepX int;
 for deepX = range 10@14 {
 match true {
-    when true:
-        print("in match,");
-        print(deepX);
-        continue;
-    }
-    print("bad");
+when true:
+print("in match,");
+print(deepX);
+continue;
+}
+print("bad");
 }
 
 ft("Break with outer for", "in break match,10in break match,11in break match,12in break match,13in break match,14");
 deepX324 int;
 for deepX324 = range 10@14 {
 match true {
-    when true:
-        print("in break match,");
-        print(deepX324);
-        break;
-        print("bad");
-    }
+when true:
+print("in break match,");
+print(deepX324);
+break;
+print("bad");
+}
 }
 
 ft("Return from deep match in function", "201,203");
 func deepR() int {
-    x int;
-    for x = range 201@204 {
-    match x {
-        when 203:
-        return 203;
-        when 201:
-        print("201,");
-    }
-    }
+x int;
+for x = range 201@204 {
+match x {
+when 203:
+return 203;
+when 201:
+print("201,");
+}
+}
 }
 
 print(deepR());
