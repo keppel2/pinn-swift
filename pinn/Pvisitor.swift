@@ -73,7 +73,7 @@ class Pvisitor {
 
 //    var stack = [ParserRuleContext]()
     
-    let litToType: [String: Any.Type] = ["int": Int.self, "bool": Bool.self, "string": String.self]
+    let litToType: [String: Ptype.Type] = ["int": Int.self, "bool": Bool.self, "string": String.self]
     
     struct Fheader {
         var funcContext: PinnParser.FunctionContext
@@ -284,44 +284,28 @@ class Pvisitor {
         let rt: Pval
         switch str {
         case "+":
-            return lhs.plus(rhs)
+            let lh = lhs.get() as! Plus
+            let rh = rhs.get() as! Plus
+            rt = Pval(lh.plus(rh))
+            return rt
         case "<", "<=", ">", ">=":
-            switch lhs.get() {
-            case let lhsv as Int:
-                let rhsv = rhs.get() as! Int
+            let lh = lhs.get() as! Compare
+            let rh = rhs.get() as! Compare
+                    let result: Bool
                 switch str {
-                    case "<":
-                                               rt = Pval(lhsv < rhsv)
-                                       case "<=":
-                                               rt = Pval(lhsv <= rhsv)
-                                       case ">":
-                                               rt = Pval(lhsv > rhsv)
-                                       case ">=":
-                                               rt = Pval(lhsv >= rhsv)
-                default: de(ErrCase)
-                }
-                return rt
-            case let lhsv as String:
-                let rhsv = rhs.get() as! String
-                switch str {
-                    case "<":
-                                               rt = Pval(lhsv < rhsv)
-                                       case "<=":
-                                               rt = Pval(lhsv <= rhsv)
-                                       case ">":
-                                               rt = Pval(lhsv > rhsv)
-                                       case ">=":
-                                               rt = Pval(lhsv >= rhsv)
-                default: de(ErrCase)
-                }
-                return rt
-            default: de(ErrCase)
-            }
             
+                    case "<":
+                        result = lh.lt(rh)
+                                       case "<=":
+                                        result = lh.lt(rh) || lh.equal(rh)
+                                       case ">":
+                                        result = lh.gt(rh)
+                                       case ">=":
+                                        result = lh.gt(rh) || lh.equal(rh)
+                default: de(ErrCase)
+                }
+                return Pval(result)
         default: break
-        }
-        if str == "+" {
-            return lhs.plus(rhs)
         }
         let lhsv = lhs.get() as! Int
         var rhsv = rhs.get() as! Int
@@ -590,7 +574,7 @@ class Pvisitor {
                 case "delete":
                     let e = visitPval(sctx.expr()!)!
                     let v = getPv(sctx.ID()!.getText())
-                    v.set(e.get(), nil)
+                    v.set(e.get() as! Ktype, nil)
                 
                     
                 default:
@@ -618,7 +602,7 @@ class Pvisitor {
             }
             let e = visitPval(sctx.expr(0)!)!
             let x = e.get()
-            let v2 = v.get(x)
+            let v2 = v.get(x as! Ktype)
             rt = Pval(v2)
             
         default:
@@ -715,8 +699,8 @@ class Pvisitor {
             
             if let e = sctx.expr() {
                 let ev = visitPval(e)!.get()
-                let lhsv = v.get(ev) as! Int
-                v.set(ev, lhsv + rhsv)
+                let lhsv = v.get(ev as! Ktype) as! Int
+                v.set(ev as! Ktype, lhsv + rhsv)
                 break
             }
             let lhsv = v.get() as! Int
@@ -745,7 +729,7 @@ class Pvisitor {
         if sctx.expr().count == 2 {
             let key = visitPval(sctx.expr(0)!)!.get()
             let value = visitPval(sctx.expr(1)!)!.get()
-            v.set(key, value)
+            v.set(key as! Ktype, value)
         } else {
             
             let e = visitPval(sctx.expr(0)!)!

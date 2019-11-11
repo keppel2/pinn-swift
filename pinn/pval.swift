@@ -7,26 +7,92 @@
 //
 
 import Foundation
+protocol Ptype {
+    static func zeroValue() -> Ptype
+    func equal(_: Ptype) -> Bool
+}
+protocol Ktype {}
+
+
+protocol Plus: Ptype {
+    func plus(_: Plus) -> Plus
+}
+
+protocol Compare: Ptype {
+    func lt(_: Compare) -> Bool
+    func gt(_: Compare) -> Bool
+}
+
+extension Int: Ptype, Ktype, Plus, Compare {
+    func lt(_ a: Compare) -> Bool {
+        let x = self < a as! Self
+        return x
+    }
+    
+    func gt(_ a: Compare) -> Bool {
+        let x = self > a as! Self
+        return x
+    }
+    
+    static func zeroValue() -> Ptype { return 0 }
+    func plus(_ a: Plus) -> Plus {
+        let x = self + (a as! Self)
+        return x
+    }
+    func equal(_ a: Ptype) -> Bool {
+        return self == a as! Self
+    }
+    
+}
+extension Bool: Ptype, Ktype {
+    static func zeroValue() -> Ptype { return false }
+    func equal(_ a: Ptype) -> Bool {
+        return self == a as! Self
+    }
+}
+extension String: Ptype, Ktype, Plus, Compare {
+    
+    func lt(_ a: Compare) -> Bool {
+        let x = self < a as! Self
+        return x
+    }
+    
+    func gt(_ a: Compare) -> Bool {
+        let x = self > a as! Self
+        return x
+    }
+    static func zeroValue() -> Ptype { return "" }
+        func plus(_ a: Plus) -> Plus {
+            let x = self + (a as! String)
+            return x
+        }
+    func equal(_ a: Ptype) -> Bool {
+        return self == a as! Self
+    }
+}
+
 
 class Pval {
-    static func sf() {}
-    
+    static func sf() {
+
+    }
+        
         let g: Gtype
-        let v: Any.Type
-        convenience init(_ a: Any) {
+        let v: Ptype.Type
+        convenience init(_ a: Ptype) {
             self.init(Kind(vtype: type(of: a), gtype: .gScalar, count: 1), a)
         }
 
-        init(_ k: Kind, _ i: Any?) {
+        init(_ k: Kind, _ i: Ptype?) {
             g = k.gtype
             v = k.vtype
             switch g {
             case .gArray, .gSlice:
-                ar = [Any](repeating: i ?? zeroValue(k.vtype), count: k.count!)
+                ar = [Ptype](repeating: i ?? v.self.zeroValue(), count: k.count!)
             case .gMap:
-                map = [String: Any]()
+                map = [String: Ptype]()
             case .gScalar:
-                sc = i ?? zeroValue(k.vtype)
+                sc = i ?? v.self.zeroValue()
             }
         }
         func equal(_ p:Pval) -> Bool {
@@ -35,10 +101,10 @@ class Pval {
             }
             switch getKind().gtype {
             case .gScalar:
-                return equalValue(sc!, p.sc!)
+                return sc!.equal(p.sc!)
             case .gArray, .gSlice:
                 for (key, value) in p.ar!.enumerated() {
-                    if !equalValue(value, p.ar![key]) {
+                    if !value.equal(p.ar![key]) {
                         return false
                     }
                 }
@@ -49,7 +115,7 @@ class Pval {
                     if map![key] == nil {
                         return false
                     }
-                    if !equalValue(value, map![key]!) {
+                    if !value.equal(map![key]!) {
                         return false
                     }
                 }
@@ -57,38 +123,38 @@ class Pval {
             }
         }
   
-        var sc: Any?
-        var ar: [Any]?
-        var map: [String: Any]?
+        var sc: Ptype?
+        var ar: [Ptype]?
+        var map: [String: Ptype]?
 
-        func get() -> Any {
+        func get() -> Ptype {
             return sc!
         }
 //        func getPV() -> Pval {
 //
 //        }
         
-        func get(_ k: Any) -> Any {
+        func get(_ k: Ktype) -> Ptype {
             switch k {
             case let v1v as Int:
                 return ar![v1v]
             case let v1v as String:
                 if map![v1v] == nil {
-                    map![v1v] = zeroValue(getKind().vtype)
+                    map![v1v] = getKind().vtype.zeroValue()
                 }
                 return map![v1v]!
             default:
                 de(ErrCase)
             }
         }
-        func set(_ v: Any) {
+        func set(_ v: Ptype) {
             guard type(of: sc!) == type(of: v) else {
                 de(ErrWrongType)
             }
             sc = v
         }
         
-        func set(_ k: Any, _ v: Any?) {
+        func set(_ k: Ktype, _ v: Ptype?) {
 
             guard v == nil || getKind().vtype == type(of:v!) else {
                 de(ErrWrongType)
@@ -107,17 +173,7 @@ class Pval {
             }
         }
     
-    func plus(_ p: Pval) -> Pval {
-        if getKind() != p.getKind() {
-            de(ErrWrongType)
-        }
-        switch getKind().gtype {
-        case .gScalar:
-            return Pval(plusValue(sc!, p.sc!))
-        case .gMap, .gArray, .gSlice:
-            de(ErrCase)
-        }
-    }
+
         
         var string: String {
             switch g {
