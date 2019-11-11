@@ -103,7 +103,7 @@ foStatement
   | 'for' ID COMMA ID '=' RANGE expr block |
     'for' ID '=' RANGE expr block ;
 caseStatement
-  : 'arm' exprList COLON statement* ;
+  : 'when' exprList COLON statement* ;
 
 switchStatement
   : 'match' expr '{' caseStatement* ('default' COLON statement*)? '}' ;

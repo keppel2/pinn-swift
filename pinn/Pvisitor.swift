@@ -43,11 +43,14 @@ class Pvisitor {
         var s: String
         var variadic = false
     }
-    struct Fc {
+    class Fc {
         var m = [String: Pval]()
         var rt: Pval?
         var path = Path.pNormal
-        mutating func toEndBlock()  -> Bool {
+        func setPath(_ p: Path) {
+            path = p
+        }
+        func toEndBlock()  -> Bool {
             switch path {
             case .pNormal, .pContinue:
                 path = .pNormal
@@ -63,7 +66,7 @@ class Pvisitor {
         }
         
     }
-    
+    var cfc: Fc {return lfc ?? fc}
     var fc = Fc()
     var lfc: Fc?
     var fkmap = [String:Fheader]()
@@ -134,13 +137,19 @@ class Pvisitor {
                     }
                     par.set(key, varadds.get())
                 }
-                fc.m[fh.fkinds[index].s] = par
+                if lfc!.m[fh.fkinds[index].s] != nil {
+                    de(ErrRedeclare)
+                }
+                lfc!.m[fh.fkinds[index].s] = par
                 continue
             }
             if !s[index].getKind().kindEquivalent(v.k) {
                 de(ErrWrongType)
             }
-            fc.m[fh.fkinds[index].s] = s[index]
+            if lfc!.m[fh.fkinds[index].s] != nil {
+                de(ErrRedeclare)
+            }
+            lfc!.m[fh.fkinds[index].s] = s[index]
         }
         visit(ctx.block()!)
         switch lfc!.path {
@@ -271,8 +280,46 @@ class Pvisitor {
         }
         de(ErrUndeclare)
     }
-    func doOp(_ lhs: Pval, _ rhs: Pval, _ str: String) -> Pval {
+    static func doOp(_ lhs: Pval, _ rhs: Pval, _ str: String) -> Pval {
         let rt: Pval
+        switch str {
+        case "+":
+            return lhs.plus(rhs)
+        case "<", "<=", ">", ">=":
+            switch lhs.get() {
+            case let lhsv as Int:
+                let rhsv = rhs.get() as! Int
+                switch str {
+                    case "<":
+                                               rt = Pval(lhsv < rhsv)
+                                       case "<=":
+                                               rt = Pval(lhsv <= rhsv)
+                                       case ">":
+                                               rt = Pval(lhsv > rhsv)
+                                       case ">=":
+                                               rt = Pval(lhsv >= rhsv)
+                default: de(ErrCase)
+                }
+                return rt
+            case let lhsv as String:
+                let rhsv = rhs.get() as! String
+                switch str {
+                    case "<":
+                                               rt = Pval(lhsv < rhsv)
+                                       case "<=":
+                                               rt = Pval(lhsv <= rhsv)
+                                       case ">":
+                                               rt = Pval(lhsv > rhsv)
+                                       case ">=":
+                                               rt = Pval(lhsv >= rhsv)
+                default: de(ErrCase)
+                }
+                return rt
+            default: de(ErrCase)
+            }
+            
+        default: break
+        }
         if str == "+" {
             return lhs.plus(rhs)
         }
@@ -312,7 +359,7 @@ class Pvisitor {
                         guard rhsv - lhsv >= 0 else {
                             de(ErrRange)
                         }
-                        rt = Pval(Kind(vtype: Int.self, gtype: .gArray, count: rhsv - lhsv), nil)
+                        rt = Pval(Kind(vtype: Int.self, gtype: .gSlice, count: rhsv - lhsv), nil)
                         for x in lhsv..<rhsv {
                             rt.set(x - lhsv, x)
                         }
@@ -338,21 +385,21 @@ class Pvisitor {
         loadDebug(sctx)
         defer {popDebug()}
         var rt = false
-        if fc.path == Path.pFallthrough || visitListCase(sctx.exprList()!, v) {
+        if cfc.path == Path.pFallthrough || visitListCase(sctx.exprList()!, v) {
             rt = true
-            if fc.path == Path.pFallthrough {
-                fc.path = .pNormal
+            if cfc.path == Path.pFallthrough {
+                cfc.setPath(.pNormal)
             }
             cloop: for (key, child) in sctx.statement().enumerated() {
                 visit(child)
-                switch fc.path {
+                switch cfc.path {
                 case .pFallthrough:
                     if key != sctx.statement().count - 1 {
                         de(ErrWrongStatement)
                     }
                     
                 case .pBreak:
-                    fc.path = .pNormal
+                    cfc.path = .pNormal
                 fallthrough
                     case .pContinue, .pExiting:
                         break cloop
@@ -363,6 +410,11 @@ class Pvisitor {
         }
         return rt
     }
+    func textout(_ outStr: String) {
+        print(outStr, terminator: "")
+        fh.write(Data(outStr.utf8))
+    }
+    
     func visitPval(_ ctx: ParserRuleContext) -> Pval? {
         loadDebug(ctx)
         defer {popDebug()}
@@ -458,7 +510,7 @@ class Pvisitor {
                     break
                 }
 
-                rt = doOp(lhs, rhs, op)
+                rt = Self.doOp(lhs, rhs, op)
                 break
                
             }
@@ -522,15 +574,20 @@ class Pvisitor {
                     if sctx.getStart()!.getText()! == "println" {
                         print(to: &outStr)
                     }
-                    print(outStr, terminator: "")
-                    fh.write(Data(outStr.utf8))
+                    textout(outStr)
 
                 case "printH":
+                                        var outStr = ""
                     let e = visitPval(sctx.expr()!)!.get() as! Int
-                    print(String(e, radix: 16, uppercase: false))
+                                    
+                                        print(String(e, radix: 16, uppercase: false), terminator: "", to: &outStr)
+                                        textout(outStr)
                     case "printB":
+                        var outStr = ""
                                        let e = visitPval(sctx.expr()!)!.get() as! Int
-                                       print(String(e, radix: 2, uppercase: false))
+                        print(String(e, radix: 2, uppercase: false), terminator: "", to: &outStr)
+                                        textout(outStr)
+                                
                 case "delete":
                     let e = visitPval(sctx.expr()!)!
                     let v = getPv(sctx.ID()!.getText())
@@ -586,7 +643,7 @@ class Pvisitor {
             {
                 if visitCase(child, v) {
                     broken = true
-                    if fc.path == .pFallthrough {
+                    if cfc.path == .pFallthrough {
                         broken = false
                         continue
                     }
@@ -594,15 +651,15 @@ class Pvisitor {
                 }
             }
             if !broken {
-                if fc.path == .pFallthrough {
-                    fc.path = .pNormal
+                if cfc.path == .pFallthrough {
+                    cfc.path = .pNormal
                 }
                 loop:
                     for child in sctx.statement() {
                         visit(child)
-                        switch fc.path {
+                        switch cfc.path {
                             
-                        case .pBreak: fc.path = .pNormal
+                        case .pBreak: cfc.path = .pNormal
                             fallthrough
                         case .pContinue, .pExiting: break loop
                         default: break
@@ -614,7 +671,7 @@ class Pvisitor {
         let v = getPv(str)
         let op = sctx.children![sctx.children!.count - 3].getText()
         let rhs = visitPval(sctx.rhs)!
-        let result = doOp(v, rhs, op).get()
+        let result = Self.doOp(v, rhs, op).get()
         if let ictx = sctx.index {
             let index = visitPval(ictx)!.get() as! Int
             v.set(index, result)
@@ -633,11 +690,11 @@ class Pvisitor {
         }
         switch Self.childToText(c0) {
         case "break":
-            fc.path = .pBreak
+            cfc.path = .pBreak
         case "continue":
-            fc.path = .pContinue
+            cfc.path = .pContinue
         case "fallthrough":
-            fc.path = .pFallthrough
+            cfc.path = .pFallthrough
         case "debug":
             dbg()
         case ";":
@@ -669,17 +726,17 @@ class Pvisitor {
         }
         visit(sctx.getChild(0) as! ParserRuleContext)
     case let sctx as PinnParser.ReturnStatementContext:
-        fc.path = .pExiting
+        cfc.path = .pExiting
         if let e = sctx.expr() {
-            fc.rt = visitPval(e)
+            cfc.rt = visitPval(e)
         }
     case let sctx as PinnParser.BlockContext:
         for child in sctx.statement() {
             visit(child)
-            if fc.path == .pFallthrough {
+            if cfc.path == .pFallthrough {
                 de(ErrWrongStatement)
             }
-            if fc.path != .pNormal {
+            if cfc.path != .pNormal {
                 break
             }
         }
@@ -712,7 +769,7 @@ class Pvisitor {
         var b = true
         while b {
             visit(sctx.block()!)
-            if  fc.toEndBlock() {
+            if  cfc.toEndBlock() {
                 break
             }
             let v = visitPval(sctx.expr()!)!
@@ -725,7 +782,7 @@ class Pvisitor {
 
         while v.get() as! Bool {
             visit(sctx.block()!)
-            if  fc.toEndBlock() {break}
+            if  cfc.toEndBlock() {break}
             v = visitPval(sctx.expr()!)!
         }
     case let sctx as PinnParser.FoStatementContext:
@@ -741,13 +798,13 @@ class Pvisitor {
             
             let ranger = visitPval(sctx.expr()!)!
             switch ranger.getKind().gtype {
-            case .gArray:
+            case .gSlice, .gArray:
                 for x in 0..<ranger.getKind().count! {
                     value.set(ranger.get(x))
                     key?.set(x)
                     
                     visit(sctx.block()!)
-                    if fc.toEndBlock() {
+                    if cfc.toEndBlock() {
                         break
                     }
                 }
@@ -757,7 +814,7 @@ class Pvisitor {
                     key?.set(mkey)
                     value.set(mvalue)
                     visit(sctx.block()!)
-                    if fc.toEndBlock() {
+                    if cfc.toEndBlock() {
                         break
                     }
                     
@@ -779,7 +836,7 @@ class Pvisitor {
         while v.get() as! Bool {
             visit(sctx.block()!)
 
-            if  fc.toEndBlock() {break}
+            if  cfc.toEndBlock() {break}
             visit(sctx.sss)
             v = visitPval(sctx.expr()!)!
 
@@ -788,7 +845,7 @@ class Pvisitor {
         let v = visitPval(sctx.expr()!)!
         if !(v.get() as! Bool) {
             visit(sctx.block()!)
-            if fc.path == .pNormal {
+            if cfc.path == .pNormal {
                 de(ErrWrongStatement)
             }
         }

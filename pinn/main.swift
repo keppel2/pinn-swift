@@ -296,7 +296,7 @@ func dbg() {
 
 //let myinput = fnToString("/Users/ryankeppel/Documents/pinn/pinn/a.pinn")
 
-let myinput = fnToString("/tmp/a.pinn")
+let myinput = fnToString("/tmp/types.pinn")
 //print(myinput)
 let TMP = "/tmp/types.out"
 FileManager.default.createFile(atPath: TMP, contents: nil)
@@ -328,23 +328,23 @@ if tree == nil {
     let pv = Pvisitor()
     pv.start(tree!)
 }
-let TEST = false
+let TEST = true
 if (TEST) {
-    print("")
-    print("----")
+    print();
+    print("----");
 let fString = fnToString(TMP)
-let fsplit = fString.split(separator: "\n")
-    if fsplit.count == 0 {
+let fsplit = fString.split(separator: "\n", omittingEmptySubsequences: false)
+     if fsplit.count == 0 {
         de(ErrTestFail)
     }
     for str in fsplit {
-            print(str)
-    let hashed = str.split(separator: ":")[1]
+                print(str)
+        let hashed = str.split(separator: "!")[1]
 
-    let compare = hashed.split(separator: "#", maxSplits: 2, omittingEmptySubsequences: false)
-    if compare[0] != compare[1] {
-        de(ErrTestFail)
+        let compare = hashed.split(separator: "#", maxSplits: 2, omittingEmptySubsequences: false)
+        if compare[0] != compare[1] {
+            de(ErrTestFail)
+        }
     }
-}
 }
 //main()
