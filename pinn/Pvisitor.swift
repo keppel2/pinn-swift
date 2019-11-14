@@ -563,18 +563,12 @@ class Pvisitor {
                 rt = Pval(v)
             case "println", "print":
                 var outStr = ""
-                var s = visitList(sctx.exprList()!)
-                if s.count == 1 {
-                    
-                    print(s[0].string, terminator: "", to: &outStr)
-                } else {
-                    print(s[0].string, terminator: "", to: &outStr)
-                    s.removeFirst()
-                    for e in s {
-                        print(", " + e.string, terminator: "", to: &outStr)
-                    }
-                    print(".", terminator: "", to: &outStr)
+                let s = visitList(sctx.exprList()!)
+                outStr += s[0].string
+                for v in s[1...] {
+                    outStr += " " + v.string
                 }
+                
                 if sctx.getStart()!.getText()! == "println" {
                     print(to: &outStr)
                 }

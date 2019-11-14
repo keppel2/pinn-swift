@@ -246,8 +246,29 @@ class Pval {
     var string: String {
         switch g {
             
-        case .gArray, .gSlice: return String(describing: ar!)
-        case .gMap: return String(describing: map!)
+        case .gArray, .gSlice:
+            var rt = ""
+            rt += "["
+            if let f = ar!.first {
+                rt += String(describing: f)
+                for v in ar![1...] {
+                    rt += " " + String(describing: v)
+                }
+            }
+
+            rt += "]"
+            return rt
+        case .gMap:
+            var rt = ""
+            rt += "{"
+            for (key, value) in map! {
+                if rt != "{" {
+                    rt += " "
+                }
+                rt += key + ":" + String(describing: value)
+            }
+            rt += "}"
+            return rt
         case .gScalar: return String(describing: sc!)
         }
     }
