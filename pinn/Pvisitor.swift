@@ -195,6 +195,16 @@ class Pvisitor {
         }
     }
     
+    func visitObjectPair(_ sctx: PinnParser.ObjectPairContext) -> (String, Pval) {
+        loadDebug(sctx)
+        defer {popDebug()}
+        let rt1: String
+        let rt2: Pval
+        rt1 = sctx.ID()!.getText()
+        rt2 = visitPval(sctx.expr()!)!
+        return (rt1, rt2)
+    }
+    
     func visitKind(_ sctx: PinnParser.KindContext) -> Kind {
         loadDebug(sctx)
         defer {popDebug()}
@@ -421,6 +431,19 @@ class Pvisitor {
             
         case let sctx as PinnParser.ParenExprContext:
             rt = visitPval(sctx.expr()!)
+        case let sctx as PinnParser.ObjectLiteralContext:
+            let list = sctx.objectPair()
+            var kind: Kind?
+            for op in list {
+                
+                let (str, pv) = visitObjectPair(op)
+                if kind == nil {
+                    kind = Kind(vtype: pv.v, gtype: .gMap, count: 0)
+                    rt = Pval(kind!, nil)
+                }
+                rt!.set(str, pv.get())
+            }
+//            let kind = Kind(vtype: list.first!.1)
         case let sctx as PinnParser.ArrayLiteralContext:
             let el = sctx.exprList()!
             let ae = visitList(el)

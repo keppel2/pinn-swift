@@ -134,6 +134,7 @@ var tree =  try? parser.file()
 if tree == nil {
     let parser2 = stringToParser(myinput)
     try! parser2.file()
+    de(ErrTestFail)
 } else {
     if tokens {
         let stream = parser.getTokenStream() as! CommonTokenStream

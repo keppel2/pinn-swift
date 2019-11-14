@@ -53,6 +53,11 @@ indexExpr :
 arrayLiteral :
   LSQUARE exprList ']' ;
 
+objectPair :
+ID ':' expr ;
+
+objectLiteral :
+'{' objectPair ( ',' objectPair )* '}' ;
 funcExpr
   : 'print' LPAREN exprList ')'
   | 'println' LPAREN exprList ')'
@@ -73,6 +78,7 @@ expr
   funcExpr
   | indexExpr
   | arrayLiteral
+  | objectLiteral
   | ('+' | '-' | '!' | '^') expr
   | expr ('+' | '-' | '^' | BINOP) expr
   | expr ('==' | '!=' | '>' | '<' | '>=' | '<=' ) expr
