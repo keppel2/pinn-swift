@@ -26,7 +26,7 @@ class Pval {
         case .gMap:
             map = [String: Ptype]()
         case .gScalar:
-            sc = i ?? v.self.zeroValue()
+            ar = [i ?? v.self.zeroValue()]
         }
     }
     func equal(_ p:Pval) -> Bool {
@@ -35,7 +35,7 @@ class Pval {
         }
         switch kind.gtype {
         case .gScalar:
-            return sc!.equal(p.sc!)
+            return ar!.first!.equal(p.ar!.first!)
         case .gArray, .gSlice:
             for (key, value) in p.ar!.enumerated() {
                 if !value.equal(p.ar![key]) {
@@ -56,13 +56,12 @@ class Pval {
             return true
         }
     }
-    
-    private var sc: Ptype?
+
     var ar: [Ptype]?
     var map: [String: Ptype]?
     
     func get() -> Ptype {
-        return sc!
+        return ar!.first!
     }
     
     func get(_ k: Ktype) -> Ptype {
@@ -79,10 +78,10 @@ class Pval {
         }
     }
     func set(_ v: Ptype) {
-        guard type(of: sc!) == type(of: v) else {
+        guard type(of: ar!.first!) == type(of: v) else {
             de(ErrWrongType)
         }
-        sc = v
+        ar![0] = v
     }
     
     func set(_ k: Ktype, _ v: Ptype?) {
@@ -132,7 +131,7 @@ class Pval {
             }
             rt += "}"
             return rt
-        case .gScalar: return String(describing: sc!)
+        case .gScalar: return String(describing: ar!.first!)
         }
     }
 
@@ -154,7 +153,7 @@ class Pval {
         case .gArray, .gSlice:
             rt.ar = ar!
         case .gScalar:
-            rt.sc = sc!
+            rt.ar![0] = ar!.first!
         case .gMap:
             rt.map = map!
         }
