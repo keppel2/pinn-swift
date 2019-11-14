@@ -73,7 +73,7 @@ class Pvisitor {
     
     //    var stack = [ParserRuleContext]()
     
-    let litToType: [String: Ptype.Type] = ["int": Int.self, "bool": Bool.self, "string": String.self]
+    let litToType: [String: Ptype.Type] = ["int": Int.self, "bool": Bool.self, "string": String.self, "decimal": Decimal.self]
     
     struct Fheader {
         var funcContext: PinnParser.FunctionContext
@@ -288,6 +288,11 @@ class Pvisitor {
             let rh = rhs.get() as! Plus
             rt = Pval(lh.plus(rh))
             return rt
+        case "-", "*", "/":
+            let lh = lhs.get() as! Arith
+            let rh = rhs.get() as! Arith
+            rt = Pval(lh.arith(rh, str))
+            return rt
         case "<", "<=", ">", ">=":
             let lh = lhs.get() as! Compare
             let rh = rhs.get() as! Compare
@@ -416,6 +421,16 @@ class Pvisitor {
             
         case let sctx as PinnParser.ParenExprContext:
             rt = visitPval(sctx.expr()!)
+        case let sctx as PinnParser.ArrayLiteralContext:
+            let el = sctx.exprList()!
+            let ae = visitList(el)
+            let kind = Kind(vtype: ae.first!.getKind().vtype, gtype: .gSlice, count: ae.count)
+            rt = Pval(kind, ae.count)
+            for (k, pv) in ae.enumerated() {
+                rt!.set(k, pv.get())
+            }
+            return rt
+//            rt = Pval(Kind(vtyp
         case let sctx as PinnParser.ExprContext:
             if sctx.getChildCount() == 1 {
                 let child = sctx.getChild(0)!
@@ -436,6 +451,11 @@ class Pvisitor {
                     let str = sctx.INT()!.getText()
                     let x = Int(str)!
                     let pv = Pval(x)
+                    rt = pv
+                case .FLOAT:
+                    let str = sctx.FLOAT()!.getText()
+                    let d = Decimal(string: str)!
+                    let pv = Pval(d)
                     rt = pv
                 case .BOOL:
                     let str = sctx.BOOL()!.getText()
@@ -515,8 +535,9 @@ class Pvisitor {
                 rt = Pval(!e)
                 break
             case "-":
-                let e = visitPval(sctx.expr(0)!)!.get() as! Int
-                rt = Pval(-e)
+                
+                let e = visitPval(sctx.expr(0)!)!.get() as! Negate
+                rt = Pval(e.neg())
                 break
             case "+":
                 let e = visitPval(sctx.expr(0)!)!.get() as! Int

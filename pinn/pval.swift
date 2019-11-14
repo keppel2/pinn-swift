@@ -13,9 +13,16 @@ protocol Ptype {
 }
 protocol Ktype {}
 
-
 protocol Plus: Ptype {
     func plus(_: Plus) -> Plus
+}
+
+protocol Negate: Ptype {
+    func neg() -> Negate
+}
+
+protocol Arith: Ptype {
+    func arith(_: Arith, _: String) -> Arith
 }
 
 protocol Compare: Ptype {
@@ -23,7 +30,50 @@ protocol Compare: Ptype {
     func gt(_: Compare) -> Bool
 }
 
-extension Int: Ptype, Ktype, Plus, Compare {
+extension Decimal: Ptype, Plus, Compare, Arith {
+   
+    func lt(_ a: Compare) -> Bool {
+        let x = self < a as! Self
+        return x
+    }
+    
+    func gt(_ a: Compare) -> Bool {
+        let x = self > a as! Self
+        return x
+    }
+    
+    static func zeroValue() -> Ptype { return Decimal.init() }
+    
+    func neg() -> Negate {
+        let x = 0 - self
+        return x as! Negate
+    }
+    
+    func plus(_ a: Plus) -> Plus {
+        let x = self + (a as! Self)
+        return x
+    }
+    func arith(_ a: Arith, _ s: String) -> Arith {
+        let lhv = self
+        let rhv = a as! Self
+        let x: Self
+        switch s {
+        case "-":
+            x = lhv - rhv
+        case "*":
+            x = lhv * rhv
+        case "/":
+            x = lhv / rhv
+        default: de(ErrCase)
+        }
+        return x
+    }
+
+    func equal(_ a: Ptype) -> Bool {
+        return self == a as! Self
+    }
+}
+extension Int: Ptype, Ktype, Plus, Compare, Arith {
     func lt(_ a: Compare) -> Bool {
         let x = self < a as! Self
         return x
@@ -39,8 +89,29 @@ extension Int: Ptype, Ktype, Plus, Compare {
         let x = self + (a as! Self)
         return x
     }
+    func neg() -> Negate {
+        let x = 0 - self
+        return x as! Negate
+    }
+    
     func equal(_ a: Ptype) -> Bool {
         return self == a as! Self
+    }
+    
+    func arith(_ a: Arith, _ s: String) -> Arith {
+        let lhv = self
+        let rhv = a as! Self
+        let x: Self
+        switch s {
+        case "-":
+            x = lhv - rhv
+        case "*":
+            x = lhv * rhv
+        case "/":
+            x = lhv / rhv
+        default: de(ErrCase)
+        }
+        return x
     }
     
 }
@@ -180,6 +251,23 @@ class Pval {
         case .gScalar: return String(describing: sc!)
         }
     }
+    
+    var kind: Kind {
+        return getKind()
+    }
+    
+//    var v: Ptype.Type {
+//        return kind.vtype
+//    }
+//    
+//    var g: Gtype {
+//        return kind.gtype
+//    }
+//    
+    var c: Int {
+        return kind.count!
+    }
+
     
     func getKind() -> Kind {
         switch g {

@@ -65,6 +65,10 @@ ft("Create array of string", "[\"alpha\", \"bravo\", \"charlie\"]");
 arStr [fill]string = "alpha", "bravo", "charlie";
 print(arStr);
 
+ft("Short declaration array", "[10, 23, 42, 101]");
+sda := [10, 23, 42, 101];
+print(sda);
+
 ft("Print open interval 1 to 5", "[1, 2, 3, 4]");
 print(1:5);
 
@@ -400,7 +404,6 @@ print("201,");
 }
 
 print(deepR());
-
 ft("7, 3. + - * / %", "10, 4, 21, 2, 1.");
 A := 7;
 B := 3;
@@ -411,8 +414,8 @@ ft("<= and >=", "true, false, true, false.");
 print (5 <= 5, 6 <= 5, 5 >= 5, 4 >= 5);
 SA := "bar";
 SB := "foo";
-ft("bar foo < > ==", "true, false, false.");
-print (SA < SB, SA > SB, SA == SB);
+ft("bar foo < > ==", "barfoo, true, false, false.");
+print (SA + SB, SA < SB, SA > SB, SA == SB);
 
 ft("&& ||", "true, false, true, false.");
 print (true && true, true && false, true || false, false || false);
@@ -469,3 +472,7 @@ ft("string Value", "42");
 strv string;
 strv = stringValue(42);
 print(strv);
+DA := 1.1;
+DB := 5.5;
+ft("decimal + - * /", "6.6, -4.4, 6.05, 0.2.");
+print(DA + DB, DA - DB, DA * DB, DA / DB);

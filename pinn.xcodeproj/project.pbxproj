@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		E254FD61236FEF8C0094DFA9 /* Antlr4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2B0D664236FE9EC006DB0A3 /* Antlr4.framework */; };
-		E254FD62236FEF8C0094DFA9 /* Antlr4.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E2B0D664236FE9EC006DB0A3 /* Antlr4.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		E254FD62236FEF8C0094DFA9 /* Antlr4.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E2B0D664236FE9EC006DB0A3 /* Antlr4.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E28CB40223679F640045FA67 /* Pvisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E28CB40123679F640045FA67 /* Pvisitor.swift */; };
 		E2CDE16E2363EB740065250D /* Pval.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2CDE16D2363EB740065250D /* Pval.swift */; };
 		E2CDE173236415100065250D /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2673965235BC825000CF830 /* main.swift */; };
@@ -192,7 +192,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1100;
-				LastUpgradeCheck = 1100;
+				LastUpgradeCheck = 1120;
 				ORGANIZATIONNAME = "Ryan Keppel";
 				TargetAttributes = {
 					E2673961235BC825000CF830 = {
@@ -403,6 +403,7 @@
 		E267396A235BC825000CF830 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
@@ -413,6 +414,7 @@
 		E267396B235BC825000CF830 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;

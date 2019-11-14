@@ -36,7 +36,8 @@ FILL
  : 'fill' ;
 
 TYPES
-  : ('int' | 'bool' | 'unit' | 'string' | 'big' | 'float' | 'char' ) ; 
+  : ('int' | 'bool' | 'unit' | 'string' | 'big' | 'float' | 'char' | 'decimal'
+   ) ;
 
 DOUBLEOP
   : '++' | '--' ;
@@ -48,6 +49,9 @@ simpleStatement
 indexExpr :
   ID LSQUARE first=expr? (TWODOTS | COLON) second=expr? ']' 
   | ID LSQUARE expr ']' ;
+  
+arrayLiteral :
+  LSQUARE exprList ']' ;
 
 funcExpr
   : 'print' LPAREN exprList ')'
@@ -68,6 +72,7 @@ expr
   : 
   funcExpr
   | indexExpr
+  | arrayLiteral
   | ('+' | '-' | '!' | '^') expr
   | expr ('+' | '-' | '^' | BINOP) expr
   | expr ('==' | '!=' | '>' | '<' | '>=' | '<=' ) expr
