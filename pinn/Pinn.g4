@@ -33,7 +33,7 @@ SLICE
  : 'slice' ;
 
 FILL
- : 'fill' ;
+ : 'array' ;
 
 TYPES
   : ('int' | 'bool' | 'unit' | 'string' | 'big' | 'float' | 'char' | 'decimal'

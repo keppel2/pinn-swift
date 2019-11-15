@@ -73,8 +73,7 @@ class Pvisitor {
     
     //    var stack = [ParserRuleContext]()
     
-    let litToType: [String: Ptype.Type] = ["int": Int.self, "bool": Bool.self, "string": String.self, "decimal": Decimal.self]
-    
+   
     struct Fheader {
         var funcContext: PinnParser.FunctionContext
         var kind: Kind?
@@ -209,6 +208,8 @@ class Pvisitor {
         loadDebug(sctx)
         defer {popDebug()}
         let strType = sctx.TYPES()!.getText()
+        let litToType: [String: Ptype.Type] = ["int": Int.self, "bool": Bool.self, "string": String.self, "decimal": Decimal.self]
+        
         let vtype = litToType[strType]!
         let rt: Kind
         if sctx.MAP() != nil {
