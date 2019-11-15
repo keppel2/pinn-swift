@@ -75,9 +75,9 @@ class Pvisitor {
     
    
     struct Fheader {
-        var funcContext: PinnParser.FunctionContext
+        var funcContext: PinnParser.FunctionContext?
         var kind: Kind?
-        var fkinds: [FKind]
+        var fkinds = [FKind]()
     }
     
     struct Debug {
@@ -112,12 +112,67 @@ class Pvisitor {
         }
         fkmap[ctx.ID()!.getText()] = Fheader(funcContext: ctx, kind: k, fkinds: fkinds)
     }
+    func reserveFunction(_ s: String) {
+        if fkmap[s] != nil {
+            de(ErrRedeclare)
+        }
+        fkmap[s] = Fheader()
+        
+    }
     
     func visitFunction(_ str: String, _ s: [Pval])  -> Pval? {
+        var rt: Pval?
+        let fh = fkmap[str]!
+        guard let ctx = fh.funcContext else {
+            
+            
+            
+            
+            
+            switch str {
+            case "len":
+                rt = Pval(s[0].kind.count!)
+            case "strLen":
+                rt = Pval((s[0].get() as! String).count)
+            case "stringValue":
+                let v = s[0].string
+                rt = Pval(v)
+            case "println", "print":
+                var outStr = ""
+                outStr += s[0].string
+                for v in s[1...] {
+                    outStr += " " + v.string
+                }
+                
+                if str == "println" {
+                    print(to: &outStr)
+                }
+                textout(outStr)
+                
+            case "printH":
+                var outStr = ""
+                let e = s[0].get() as! Int
+
+                print(String(e, radix: 16, uppercase: false), terminator: "", to: &outStr)
+                textout(outStr)
+            case "printB":
+                var outStr = ""
+                let e = s[0].get() as! Int
+
+                print(String(e, radix: 2, uppercase: false), terminator: "", to: &outStr)
+                textout(outStr)
+                
+            case "delete":
+                let mkey = s[1].get() as! String
+                s[0].set(mkey, nil)
+
+            default: de(ErrCase)
+            }
+            return rt
+        }
         let oldfc = lfc
         lfc = Fc()
-        let fh = fkmap[str]!
-        let ctx = fh.funcContext
+
         if fh.fkinds.last != nil && fh.fkinds.last!.variadic {
             if s.count < fh.fkinds.count - 1 {
                 de(ErrParamLength)
@@ -166,7 +221,7 @@ class Pvisitor {
                 de(ErrWrongType)
             }
         }
-        let rt = lfc!.rt
+        rt = lfc!.rt
         lfc = oldfc
         return rt
     }
@@ -176,6 +231,10 @@ class Pvisitor {
         
         for child in ctx.function() {
             header(child)
+        }
+        
+        for str in ["print","println","printB","printH","delete" , "len","strLen", "stringValue"] {
+            reserveFunction(str)
         }
         
         
@@ -574,51 +633,7 @@ class Pvisitor {
             }
             
             
-        case let sctx as PinnParser.FuncExprContext:
-            switch sctx.getStart()!.getText()! {
-            case "len":
-                let e = visitPval(sctx.expr()!)!
-                rt = Pval(e.kind.count!)
-            case "strLen":
-                let e = visitPval(sctx.expr()!)!
-                rt = Pval((e.get() as! String).count)
-            case "stringValue":
-                let v = visitPval(sctx.expr()!)!.string
-                rt = Pval(v)
-            case "println", "print":
-                var outStr = ""
-                let s = visitList(sctx.exprList()!)
-                outStr += s[0].string
-                for v in s[1...] {
-                    outStr += " " + v.string
-                }
-                
-                if sctx.getStart()!.getText()! == "println" {
-                    print(to: &outStr)
-                }
-                textout(outStr)
-                
-            case "printH":
-                var outStr = ""
-                let e = visitPval(sctx.expr()!)!.get() as! Int
-                
-                print(String(e, radix: 16, uppercase: false), terminator: "", to: &outStr)
-                textout(outStr)
-            case "printB":
-                var outStr = ""
-                let e = visitPval(sctx.expr()!)!.get() as! Int
-                print(String(e, radix: 2, uppercase: false), terminator: "", to: &outStr)
-                textout(outStr)
-                
-            case "delete":
-                let e = visitPval(sctx.expr()!)!
-                let v = getPv(sctx.ID()!.getText())
-                v.set(e.get() as! Ktype, nil)
-                
-                
-            default:
-                break
-            }
+
         case let sctx as PinnParser.IndexExprContext:
             let v =  getPv(sctx.ID()!.getText())
             if (sctx.TWODOTS() != nil || sctx.COLON() != nil) {

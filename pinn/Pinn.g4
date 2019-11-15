@@ -59,25 +59,14 @@ ID ':' expr ;
 objectLiteral :
 '{' objectPair ( ',' objectPair )* '}' ;
 
-funcExpr
-  : 'print' LPAREN exprList ')'
-  | 'println' LPAREN exprList ')'
-  | 'printB' LPAREN expr ')'
-  | 'printH' LPAREN expr ')'
-  | 'delete' LPAREN ID ',' expr ')'
-  |  'len' LPAREN expr ')'
-  | 'strLen' LPAREN expr ')'
-  | 'stringValue' LPAREN expr ')' ;
-
-callExpr: 
-
+callExpr:
   ID LPAREN exprList? ')';
 parenExpr: LPAREN expr ')';
 
 expr
   : 
-  funcExpr
-  | indexExpr
+
+   indexExpr
   | arrayLiteral
   | objectLiteral
   | ('+' | '-' | '!' | '^') expr
