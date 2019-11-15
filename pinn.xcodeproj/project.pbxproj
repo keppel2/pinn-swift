@@ -10,6 +10,7 @@
 		E254FD61236FEF8C0094DFA9 /* Antlr4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2B0D664236FE9EC006DB0A3 /* Antlr4.framework */; };
 		E254FD62236FEF8C0094DFA9 /* Antlr4.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E2B0D664236FE9EC006DB0A3 /* Antlr4.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E28CB40223679F640045FA67 /* Pvisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E28CB40123679F640045FA67 /* Pvisitor.swift */; };
+		E2AA0545237EA5E300424FCE /* protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2AA0544237EA5E300424FCE /* protocols.swift */; };
 		E2B5A283237E0FB200E91CE2 /* Kind.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B5A282237E0FB200E91CE2 /* Kind.swift */; };
 		E2CDE16E2363EB740065250D /* Pval.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2CDE16D2363EB740065250D /* Pval.swift */; };
 		E2CDE173236415100065250D /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2673965235BC825000CF830 /* main.swift */; };
@@ -87,6 +88,7 @@
 		E28CB40123679F640045FA67 /* Pvisitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pvisitor.swift; sourceTree = "<group>"; };
 		E28CB4032367FE120045FA67 /* e52.pinn */ = {isa = PBXFileReference; lastKnownFileType = text; path = e52.pinn; sourceTree = "<group>"; };
 		E28CB40423680A0B0045FA67 /* types.pinn */ = {isa = PBXFileReference; lastKnownFileType = text; path = types.pinn; sourceTree = "<group>"; };
+		E2AA0544237EA5E300424FCE /* protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = protocols.swift; sourceTree = "<group>"; };
 		E2B0D65C236FE9EC006DB0A3 /* Antlr4.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Antlr4.xcodeproj; path = ../../../../usr/local/lib/Antlr_Swift/Antlr4.xcodeproj; sourceTree = "<group>"; };
 		E2B5A282237E0FB200E91CE2 /* Kind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Kind.swift; sourceTree = "<group>"; };
 		E2CDE16D2363EB740065250D /* Pval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pval.swift; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 				E2D2DC022366BE3700E0CC35 /* PinnParser.swift */,
 				E2D2DC012366BE3700E0CC35 /* PinnParserATN.swift */,
 				E2673965235BC825000CF830 /* main.swift */,
+				E2AA0544237EA5E300424FCE /* protocols.swift */,
 				E2B5A282237E0FB200E91CE2 /* Kind.swift */,
 				E2D2DBFB2366B76500E0CC35 /* Pinn.g4 */,
 				E2CDE16D2363EB740065250D /* Pval.swift */,
@@ -275,6 +278,7 @@
 				E2B5A283237E0FB200E91CE2 /* Kind.swift in Sources */,
 				E28CB40223679F640045FA67 /* Pvisitor.swift in Sources */,
 				E2D2DC072366BE3700E0CC35 /* PinnLexer.swift in Sources */,
+				E2AA0545237EA5E300424FCE /* protocols.swift in Sources */,
 				E2D2DC052366BE3700E0CC35 /* PinnParserATN.swift in Sources */,
 				E2D2DC062366BE3700E0CC35 /* PinnParser.swift in Sources */,
 			);

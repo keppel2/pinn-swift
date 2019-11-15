@@ -10,23 +10,37 @@ import Foundation
 
 
 class Pval {
-
-    let g: Gtype
-    let v: Ptype.Type
+    private let k: Kind
+//    let g: Gtype
+//    let v: Ptype.Type
+    
+    private var pva: [Pval]?
+    
+    private var ar: [Ptype]?
+    private var map: [String: Ptype]?
+    
     convenience init(_ a: Ptype) {
         self.init(Kind(vtype: type(of: a), gtype: .gScalar, count: 1), a)
     }
     
-    init(_ k: Kind, _ i: Ptype?) {
-        g = k.gtype
-        v = k.vtype
-        switch g {
+    convenience init(_ pv: Pval, _ a: Int, _ b: Int) {
+        self.init(Kind(vtype: pv.kind.vtype, gtype: .gSlice, count: pv.ar!.count))
+        self.ar = Array(pv.ar![a..<b])
+//        self.init(pv.ar![a..<b])
+    }
+//    private convenience init <T: Ptype>(_ ar: ArraySlice<T>) {
+//        self.init(Kind(vtype: T.self, gtype: .gSlice, count: ar.count))
+//        self.ar = Array(ar)
+//    }
+    init(_ k: Kind, _ i: Ptype? = nil) {
+        self.k = k
+        switch k.gtype {
         case .gArray, .gSlice:
-            ar = [Ptype](repeating: i ?? v.self.zeroValue(), count: k.count!)
+            ar = [Ptype](repeating: i ?? k.vtype.self.zeroValue(), count: k.count!)
         case .gMap:
             map = [String: Ptype]()
         case .gScalar:
-            ar = [i ?? v.self.zeroValue()]
+            ar = [i ?? k.vtype.self.zeroValue()]
         }
     }
     func equal(_ p:Pval) -> Bool {
@@ -57,13 +71,18 @@ class Pval {
         }
     }
 
-    var ar: [Ptype]?
-    var map: [String: Ptype]?
-    
+
     func get() -> Ptype {
         return ar!.first!
     }
-    
+    func getKeys() -> [String] {
+        return [String](map!.keys)
+//        var rt = [String]()
+//        for v in map!.keys {
+//            rt.append(v)
+//        }
+//        return rt
+    }
     func get(_ k: Ktype) -> Ptype {
         switch k {
         case let v1v as Int:
@@ -93,11 +112,13 @@ class Pval {
         case let v1v as Int:
             if kind.gtype == .gSlice && v1v == ar!.count {
                 ar!.append(v!)
+                kind.count = ar!.count
             } else {
                 ar![v1v] = v!
             }
         case let v1v as String:
             map![v1v] = v
+            kind.count = map!.count
         default:
             de(ErrCase)
         }
@@ -106,7 +127,7 @@ class Pval {
     
     
     var string: String {
-        switch g {
+        switch kind.gtype {
             
         case .gArray, .gSlice:
             var rt = ""
@@ -136,15 +157,15 @@ class Pval {
     }
 
     
-    var kind: Kind {
-        switch g {
-        case .gArray, .gSlice:
-            return Kind(vtype: v, gtype: g, count: ar!.count)
-        case .gMap:
-            return Kind(vtype: v, gtype: g, count: map!.count)
-        case .gScalar:
-            return Kind(vtype: v, gtype: g, count: 1)
-        }
+    var kind: Kind { return k
+//        switch g {
+//        case .gArray, .gSlice:
+//            return Kind(vtype: v, gtype: g, count: ar!.count)
+//        case .gMap:
+//            return Kind(vtype: v, gtype: g, count: map!.count)
+//        case .gScalar:
+//            return Kind(vtype: v, gtype: g, count: 1)
+//        }
     }
     
     func clone() -> Pval {

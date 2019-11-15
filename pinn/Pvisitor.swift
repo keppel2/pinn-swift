@@ -9,30 +9,6 @@
 import Foundation
 import Antlr4
 class Pvisitor {
-    
-    
-    
-    //    class Pmap <V>: Pval {
-    //        var m = [String: V]()
-    //        func get(_ k: String) -> V {
-    //            return m[k]!
-    //        }
-    //        func set(_ k: String, v: V) {
-    //            m[k] = v
-    //        }
-    //        func toString() -> String {
-    //            return String(describing: m)
-    //        }
-    //        func kind -> Kind {
-    //            return Kind(vtype: V.self, gtype: .gArray, count: m.count)
-    //        }
-    //        func clone() -> Pval {
-    //            return self
-    //        }
-    //    }
-    
-    
-    
     enum Path {
         case pNormal, pExiting, pBreak, pContinue, pFallthrough
     }
@@ -105,7 +81,16 @@ class Pvisitor {
         }
         var fkinds = [FKind]()
         for (index, child) in ctx.fvarDecl().enumerated() {
+            let vfk = visitFKind(child)
+            if (fkinds.contains { fk in vfk.s == fk.s }) {
+                de(ErrRedeclare)
+            }
             fkinds.append(visitFKind(child))
+            
+//            let ar = [1,55].contains() {
+//
+//            }
+            
             if fkinds.last!.variadic && index < ctx.fvarDecl().count - 1 {
                 de(ErrWrongType)
             }
@@ -124,11 +109,6 @@ class Pvisitor {
         var rt: Pval?
         let fh = fkmap[str]!
         guard let ctx = fh.funcContext else {
-            
-            
-            
-            
-            
             switch str {
             case "len":
                 rt = Pval(s[0].kind.count!)
@@ -165,6 +145,8 @@ class Pvisitor {
             case "delete":
                 let mkey = s[1].get() as! String
                 s[0].set(mkey, nil)
+            case "debug":
+                                dbg()
 
             default: de(ErrCase)
             }
@@ -233,7 +215,7 @@ class Pvisitor {
             header(child)
         }
         
-        for str in ["print","println","printB","printH","delete" , "len","strLen", "stringValue"] {
+        for str in ["print","println","printB","printH","delete" , "len","strLen", "stringValue", "debug"] {
             reserveFunction(str)
         }
         
@@ -498,8 +480,8 @@ class Pvisitor {
                 
                 let (str, pv) = visitObjectPair(op)
                 if kind == nil {
-                    kind = Kind(vtype: pv.v, gtype: .gMap, count: 0)
-                    rt = Pval(kind!, nil)
+                    kind = Kind(vtype: pv.kind.vtype, gtype: .gMap, count: 0)
+                    rt = Pval(kind!)
                 }
                 rt!.set(str, pv.get())
             }
@@ -648,8 +630,10 @@ class Pvisitor {
                 if (sctx.TWODOTS() != nil) {
                     rhsv+=1
                 }
-                rt = Pval(Kind(vtype: v.kind.vtype, gtype: .gSlice, count: rhsv - lhsv), nil)
-                rt!.ar = Array(v.ar![lhsv..<rhsv])
+//                rt = Pval(Kind(vtype: v.kind.vtype, gtype: .gSlice, count: rhsv - lhsv))
+                
+//                rt!.ar = Array(v.ar![lhsv..<rhsv])
+                rt = Pval(v, lhsv, rhsv)
                 
                 
                 break
@@ -732,8 +716,7 @@ class Pvisitor {
                 cfc.path = .pContinue
             case "fallthrough":
                 cfc.path = .pFallthrough
-            case "debug":
-                dbg()
+
             case ";":
                 break
             default:
@@ -846,10 +829,10 @@ class Pvisitor {
                         }
                     }
                 case .gMap:
-                    let map = ranger.map!
-                    for (mkey, mvalue) in map {
+                    let keys = ranger.getKeys()
+                    for mkey in keys {
                         key?.set(mkey)
-                        value.set(mvalue)
+                        value.set(ranger.get(mkey))
                         visit(sctx.block()!)
                         if cfc.toEndBlock() {
                             break

@@ -36,7 +36,7 @@ FILL
  : 'array' ;
 
 TYPES
-  : ('int' | 'bool' | 'unit' | 'string' | 'big' | 'float' | 'char' | 'decimal'
+  : ('int' | 'bool' |'string' | 'decimal'
    ) ;
 
 DOUBLEOP
@@ -124,7 +124,6 @@ statement
   | 'break' ';'
   | 'continue' ';'
   | 'fallthrough' ';'
-  | 'debug' LPAREN ')' ';'
   | ';' ;
 pset
   : ID (LSQUARE expr ']')? '=' expr #simpleSet

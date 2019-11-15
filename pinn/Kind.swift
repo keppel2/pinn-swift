@@ -8,9 +8,9 @@
 
 import Foundation
 
-struct Kind: Equatable {
+class Kind: Equatable {
     //
-    static func == (k1: Self, k2: Self) -> Bool {
+    static func == (k1: Kind, k2: Kind) -> Bool {
         return k1.vtype == k2.vtype && k1.gtype == k2.gtype && k1.count == k2.count
     }
     init(vtype: Ptype.Type, gtype: Gtype, count: Int?) {
@@ -21,7 +21,6 @@ struct Kind: Equatable {
     var vtype: Ptype.Type
     var gtype: Gtype
     var count: Int?
-    
     func kindEquivalent(_ k2: Kind) -> Bool {
         switch gtype {
         case .gArray, .gScalar:
