@@ -13,10 +13,17 @@ class Kind: Equatable {
     static func == (k1: Kind, k2: Kind) -> Bool {
         return k1.vtype == k2.vtype && k1.gtype == k2.gtype && k1.count == k2.count
     }
-    init(vtype: Ptype.Type, gtype: Gtype, count: Int?) {
+    init(_ vtype: Ptype.Type, _ gtype: Gtype, _ count: Int? = nil) {
         self.vtype = vtype
         self.gtype = gtype
-        self.count = count
+        switch gtype {
+        case .gMap:
+            self.count = 0
+        case .gScalar:
+            self.count = 1
+        case .gSlice, .gArray:
+            self.count = count
+        }
     }
     var vtype: Ptype.Type
     var gtype: Gtype

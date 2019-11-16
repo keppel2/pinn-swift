@@ -56,16 +56,17 @@ class Pvisitor {
         var fkinds = [FKind]()
     }
     
-    struct Debug {
-        var textStack = [String]()
-    }
-    var debug = Debug()
+    var textStack = [String]()
+    var line = -1
+    var prc: ParserRuleContext?
     
     func loadDebug(_ ctx:ParserRuleContext) {
-        debug.textStack.append(ctx.getText())
+        prc = ctx
+        textStack.append(ctx.getText())
+        line = ctx.start!.getLine()
     }
     func popDebug() {
-        debug.textStack.removeLast()
+        textStack.removeLast()
     }
     
     func header(_ ctx:PinnParser.FunctionContext )  {
@@ -85,6 +86,7 @@ class Pvisitor {
             if (fkinds.contains { fk in vfk.s == fk.s }) {
                 de(ErrRedeclare)
             }
+            
             fkinds.append(visitFKind(child))
             
 //            let ar = [1,55].contains() {
@@ -147,7 +149,9 @@ class Pvisitor {
                 s[0].set(mkey, nil)
             case "debug":
                                 dbg()
-
+            case "sort":
+                s[0].sort()
+                rt = s[0]
             default: de(ErrCase)
             }
             return rt
@@ -165,7 +169,7 @@ class Pvisitor {
         }
         for (index, v) in fh.fkinds.enumerated() {
             if v.variadic {
-                let par = Pval(Kind(vtype: v.k.vtype, gtype: .gArray, count: s.count - index), nil)
+                let par = Pval(Kind(v.k.vtype, .gArray, s.count - index), nil)
                 
                 for (key, varadds) in s[index...].enumerated() {
                     if !varadds.kind.kindEquivalent(v.k) {
@@ -215,7 +219,7 @@ class Pvisitor {
             header(child)
         }
         
-        for str in ["print","println","printB","printH","delete" , "len","strLen", "stringValue", "debug"] {
+        for str in ["print","println","printB","printH","delete" , "len","strLen", "stringValue", "debug", "sort"] {
             reserveFunction(str)
         }
         
@@ -254,21 +258,21 @@ class Pvisitor {
         let vtype = litToType[strType]!
         let rt: Kind
         if sctx.MAP() != nil {
-            rt = Kind(vtype: vtype, gtype: .gMap, count: 0)
+            rt = Kind(vtype, .gMap)
             //        } else if sctx.SLICE() != nil {
             //            rt = Kind(vtype: vtype, gtype: .gSlice, count: 0)
             //
         } else if sctx.FILL() != nil {
-            rt = Kind(vtype: vtype, gtype: .gArray, count: nil)
+            rt = Kind(vtype, .gArray)
         } else if sctx.SLICE() != nil {
-            rt = Kind(vtype: vtype, gtype: .gSlice, count: 0)
+            rt = Kind(vtype, .gSlice, 0)
         }
         else if let e = sctx.expr() {
             let v = visitPval(e)!
             let x = v.get() as! Int
-            rt = Kind(vtype: vtype, gtype: .gArray, count: x)
+            rt = Kind(vtype, .gArray, x)
         } else {
-            rt = Kind(vtype: vtype, gtype: .gScalar, count: 1)
+            rt = Kind(vtype, .gScalar)
         }
         return rt
     }
@@ -400,7 +404,7 @@ class Pvisitor {
             guard rhsv - lhsv >= 0 else {
                 de(ErrRange)
             }
-            rt = Pval(Kind(vtype: Int.self, gtype: .gSlice, count: rhsv - lhsv), nil)
+            rt = Pval(Kind(Int.self, .gSlice, rhsv - lhsv))
             for x in lhsv..<rhsv {
                 rt.set(x - lhsv, x)
             }
@@ -480,7 +484,7 @@ class Pvisitor {
                 
                 let (str, pv) = visitObjectPair(op)
                 if kind == nil {
-                    kind = Kind(vtype: pv.kind.vtype, gtype: .gMap, count: 0)
+                    kind = Kind(pv.kind.vtype, .gMap)
                     rt = Pval(kind!)
                 }
                 rt!.set(str, pv.get())
@@ -489,7 +493,7 @@ class Pvisitor {
         case let sctx as PinnParser.ArrayLiteralContext:
             let el = sctx.exprList()!
             let ae = visitList(el)
-            let kind = Kind(vtype: ae.first!.kind.vtype, gtype: .gSlice, count: ae.count)
+            let kind = Kind(ae.first!.kind.vtype, .gSlice, ae.count)
             rt = Pval(kind, ae.count)
             for (k, pv) in ae.enumerated() {
                 rt!.set(k, pv.get())
@@ -874,14 +878,14 @@ class Pvisitor {
             let str = sctx.ID()!.getText()
             let map = lfc?.m ?? fc.m
             var newV: Pval
-            if map[str] != nil {
+            if let prev = map[str] {
                 de(ErrRedeclare)
             }
             if sctx.CE() != nil {
                 newV = visitPval(sctx.expr()!)!
             } else {
                 
-                var k = visitKind(sctx.kind()!)
+                let k = visitKind(sctx.kind()!)
                 if let el = sctx.exprList() {
                     let ai = visitList(el)
                     k.count = k.count ?? ai.count
@@ -904,7 +908,7 @@ class Pvisitor {
                     }
                     
                 } else {
-                    newV = Pval(k, nil)
+                    newV = Pval(k)
                 }
             }
             if lfc != nil {

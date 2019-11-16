@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+import Antlr4
 
 class Pval {
     private let k: Kind
@@ -18,13 +18,17 @@ class Pval {
     
     private var ar: [Ptype]?
     private var map: [String: Ptype]?
-    
+    let prc: ParserRuleContext
+    var k2: Kind?
+    func sort() {
+        ar!.sort { ($0 as! Compare).lt($1 as! Compare) }
+    }
     convenience init(_ a: Ptype) {
-        self.init(Kind(vtype: type(of: a), gtype: .gScalar, count: 1), a)
+        self.init(Kind(type(of: a), .gScalar, 1), a)
     }
     
     convenience init(_ pv: Pval, _ a: Int, _ b: Int) {
-        self.init(Kind(vtype: pv.kind.vtype, gtype: .gSlice, count: pv.ar!.count))
+        self.init(Kind(pv.kind.vtype, .gSlice, pv.ar!.count))
         self.ar = Array(pv.ar![a..<b])
 //        self.init(pv.ar![a..<b])
     }
@@ -33,6 +37,7 @@ class Pval {
 //        self.ar = Array(ar)
 //    }
     init(_ k: Kind, _ i: Ptype? = nil) {
+        prc = pv.prc!
         self.k = k
         switch k.gtype {
         case .gArray, .gSlice:
@@ -158,18 +163,10 @@ class Pval {
 
     
     var kind: Kind { return k
-//        switch g {
-//        case .gArray, .gSlice:
-//            return Kind(vtype: v, gtype: g, count: ar!.count)
-//        case .gMap:
-//            return Kind(vtype: v, gtype: g, count: map!.count)
-//        case .gScalar:
-//            return Kind(vtype: v, gtype: g, count: 1)
-//        }
     }
     
     func clone() -> Pval {
-        let rt = Pval(kind, nil)
+        let rt = Pval(kind)
         switch kind.gtype {
         case .gArray, .gSlice:
             rt.ar = ar!
