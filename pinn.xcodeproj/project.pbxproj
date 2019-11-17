@@ -126,25 +126,6 @@
 		E2673959235BC825000CF830 = {
 			isa = PBXGroup;
 			children = (
-				E254FD65237018270094DFA9 /* TestPlan.xctestplan */,
-				E2B0D65C236FE9EC006DB0A3 /* Antlr4.xcodeproj */,
-				E2673964235BC825000CF830 /* pinn */,
-				E2673963235BC825000CF830 /* Products */,
-				E254FD5C236FEE710094DFA9 /* Frameworks */,
-			);
-			sourceTree = "<group>";
-		};
-		E2673963235BC825000CF830 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				E2673962235BC825000CF830 /* pinn */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		E2673964235BC825000CF830 /* pinn */ = {
-			isa = PBXGroup;
-			children = (
 				E2D2DC0D2366D10300E0CC35 /* a.pinn */,
 				E2D2DC032366BE3700E0CC35 /* PinnLexer.swift */,
 				E2D2DC002366BE3700E0CC35 /* PinnLexerATN.swift */,
@@ -160,8 +141,19 @@
 				E2B5A282237E0FB200E91CE2 /* Kind.swift */,
 				E2D2DBFB2366B76500E0CC35 /* Pinn.g4 */,
 				E2CDE16D2363EB740065250D /* Pval.swift */,
+				E254FD65237018270094DFA9 /* TestPlan.xctestplan */,
+				E2B0D65C236FE9EC006DB0A3 /* Antlr4.xcodeproj */,
+				E2673963235BC825000CF830 /* Products */,
+				E254FD5C236FEE710094DFA9 /* Frameworks */,
 			);
-			path = pinn;
+			sourceTree = "<group>";
+		};
+		E2673963235BC825000CF830 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E2673962235BC825000CF830 /* pinn */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		E2B0D65D236FE9EC006DB0A3 /* Products */ = {
@@ -269,7 +261,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\ncp pinn/*.pinn /tmp\ncp pinn/*.gold /tmp\njava -jar ~/antlr-4.7.2-complete.jar -no-listener -Dlanguage=Swift -message-format gnu -Werror pinn/Pinn.g4\n\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\ncp *.pinn /tmp\ncp *.gold /tmp\njava -jar ~/antlr-4.7.2-complete.jar -no-listener -Dlanguage=Swift -message-format gnu -Werror Pinn.g4\n\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
