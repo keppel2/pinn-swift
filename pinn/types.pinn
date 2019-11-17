@@ -498,6 +498,3 @@ toSort := [4, 45, 1, 101, 32];
 sorted := sort(toSort);
 print(sorted);
 
-for not = range 0:10 {
-
-}
