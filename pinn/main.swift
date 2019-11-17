@@ -8,10 +8,24 @@
 
 import Foundation
 import Antlr4
+
+let EPARAM_LENGTH = "Parameter length mismatch"
+
+let ESTATEMENT = "Wrong statement"
+let ETYPE      = "Wrong type"
+let ERANGE          = "Out of range"
+let ECASE           = "Case unimplemented"
+let EREDECLARE = "Redeclared"
+let EUNDECLARED = "Undeclared"
+let ETEST_FAIL = "Test failed"
+
+
+let global = "glob"
+
+
 let TEST = true
 let TOKENS = false
 let inFile = TEST ? "types.pinn" : "a.pinn"
-//let myinput = fnToString("/Users/ryankeppel/Documents/pinn/pinn/a.pinn")
 
 let myinput = fnToString("/tmp/\(inFile)")
 let TMP = "/tmp/pinn.out"
@@ -27,14 +41,14 @@ let pv: Pvisitor
 if tree == nil {
     let parser2 = stringToParser(myinput)
     try! parser2.file()
-    de(ErrTestFail)
+    de(ETEST_FAIL)
 } else {
     if TOKENS {
         let stream = parser.getTokenStream() as! CommonTokenStream
         print(stream.getTokens())
     }
     pv = Pvisitor()
-    pv.start(tree!)
+    pv.visitFile(tree!)
 }
 
 if (TEST) {
@@ -43,7 +57,7 @@ if (TEST) {
     let fString = fnToString(TMP)
     let fsplit = fString.split(separator: "\n", omittingEmptySubsequences: false)
     if fsplit.count == 0 {
-        de(ErrTestFail)
+        de(ETEST_FAIL)
     }
     for str in fsplit {
         print(str)
@@ -51,9 +65,7 @@ if (TEST) {
         
         let compare = hashed.split(separator: "#", maxSplits: 2, omittingEmptySubsequences: false)
         if compare[0] != compare[1] {
-            de(ErrTestFail)
+            de(ETEST_FAIL)
         }
     }
 }
-//main()
-

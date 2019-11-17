@@ -9,23 +9,7 @@
 import Foundation
 import Antlr4
 
-class MyError {
-    let str: String
-    var pv: Pval?
-    init (_ s: String) {
-        str = s
-    }
-}
 
-let ErrParamLength = ("Parameter length mismatch.")
-
-let ErrWrongStatement = ("Wrong statement.")
-let ErrWrongType      = ("Wrong type.")
-let ErrRange          = ("Out of range.")
-let ErrCase           = ("Case unimplemented.")
-let ErrRedeclare      = ("Redeclared.")
-let ErrUndeclare      = ("Undeclared.")
-let ErrTestFail = ("Test failed.")
 
 func writeString(_ s: String, _ f: String) {
     let fh = FileHandle(forWritingAtPath: f)!
@@ -36,24 +20,18 @@ func fnToString(_ s: String) -> String {
     let data = fh.readDataToEndOfFile()
     return String(data: data, encoding: String.Encoding.utf8)!
 }
-func main() {
-    print(FileManager.default.currentDirectoryPath)
-    let fh = FileHandle(forReadingAtPath: "/Users/ryankeppel/fib.pinn")!
-    let data = fh.readDataToEndOfFile()
-    let str = String(data: data, encoding: String.Encoding.utf8)!
-    print(str)
-}
+
 enum Gtype {
     case gScalar, gArray, gMap, gSlice
 }
 
 
-func de(_ me: MyError, _ s: String = "") -> Never {
-    fatalError(me.str + s)
+func de(_ me: Error) -> Never {
+    fatalError(me.string)
 }
 
 func de(_ s: String = "") -> Never {
-    fatalError(s)
+    de(Error(s))
 }
 
 func dbg() {

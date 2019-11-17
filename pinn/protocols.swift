@@ -65,7 +65,7 @@ extension Decimal: Ptype, Plus, Compare, Arith {
             x = lhv * rhv
         case "/":
             x = lhv / rhv
-        default: de(ErrCase)
+        default: de(ECASE)
         }
         return x
     }
@@ -110,7 +110,7 @@ extension Int: Ptype, Ktype, Plus, Compare, Arith {
             x = lhv * rhv
         case "/":
             x = lhv / rhv
-        default: de(ErrCase)
+        default: de(ECASE)
         }
         return x
     }

@@ -37,7 +37,7 @@ class Pvisitor {
             case .pExiting:
                 return true
             default:
-                de(ErrCase)
+                de(ECASE)
             }
         }
         
@@ -56,35 +56,132 @@ class Pvisitor {
         var fkinds = [FKind]()
     }
     
+    func getPv(_ s: String)  -> Pval  {
+        for m in [lfc?.m, fc.m] {
+            if m == nil {
+                continue
+            }
+            if let v = m![s] {
+                return v
+            }
+        }
+        de(EUNDECLARED)
+    }
+    static func doOp(_ lhs: Pval, _ rhs: Pval, _ str: String) -> Pval {
+        let rt: Pval
+        switch str {
+        case "+":
+            let lh = lhs.get() as! Plus
+            let rh = rhs.get() as! Plus
+            rt = Pval(lh.plus(rh))
+            return rt
+        case "-", "*", "/":
+            let lh = lhs.get() as! Arith
+            let rh = rhs.get() as! Arith
+            rt = Pval(lh.arith(rh, str))
+            return rt
+        case "<", "<=", ">", ">=":
+            let lh = lhs.get() as! Compare
+            let rh = rhs.get() as! Compare
+            let result: Bool
+            switch str {
+                
+            case "<":
+                result = lh.lt(rh)
+            case "<=":
+                result = lh.lt(rh) || lh.equal(rh)
+            case ">":
+                result = lh.gt(rh)
+            case ">=":
+                result = lh.gt(rh) || lh.equal(rh)
+            default: de(ECASE)
+            }
+            return Pval(result)
+        default: break
+        }
+        let lhsv = lhs.get() as! Int
+        var rhsv = rhs.get() as! Int
+        switch str {
+        case "-":
+            rt = Pval(lhsv - rhsv)
+        case "*":
+            rt = Pval(lhsv * rhsv)
+        case "/":
+            rt = Pval(lhsv / rhsv)
+        case "%":
+            rt = Pval(lhsv % rhsv)
+        case "&":
+            rt = Pval(lhsv & rhsv)
+        case "|":
+            rt = Pval(lhsv | rhsv)
+        case "^":
+            rt = Pval(lhsv ^ rhsv)
+        case "<<":
+            rt = Pval(lhsv << rhsv)
+        case ">>":
+            rt = Pval(lhsv >> rhsv)
+        case "<":
+            rt = Pval(lhsv < rhsv)
+        case "<=":
+            rt = Pval(lhsv <= rhsv)
+        case ">":
+            rt = Pval(lhsv > rhsv)
+        case ">=":
+            rt = Pval(lhsv >= rhsv)
+        case "@":
+            rhsv += 1
+            fallthrough
+        case ":":
+            guard rhsv - lhsv >= 0 else {
+                de(ERANGE)
+            }
+            rt = Pval(Kind(Int.self, .gSlice, rhsv - lhsv))
+            for x in lhsv..<rhsv {
+                rt.set(x - lhsv, x)
+            }
+            
+        default:
+            de(ECASE)
+        }
+        return rt
+    }
+
     var textStack = [String]()
     var line = -1
     var prc: ParserRuleContext?
-    
+    var oldPrc: ParserRuleContext?
+    var pline: Int { return prc!.getStart()!.getLine()}
+    static func childToToken(_ child: Tree) -> PinnParser.Tokens {
+        return PinnParser.Tokens(rawValue: (child as! TerminalNode).getSymbol()!.getType())!
+    }
+    static func childToText(_ child: Tree) -> String {
+        return (child as! TerminalNode).getText()
+    }
     func loadDebug(_ ctx:ParserRuleContext) {
+        oldPrc = prc
         prc = ctx
         textStack.append(ctx.getText())
         line = ctx.start!.getLine()
     }
     func popDebug() {
         textStack.removeLast()
+        prc = oldPrc
     }
     
-    func header(_ ctx:PinnParser.FunctionContext )  {
-        
-        
-        if fkmap[ctx.ID()!.getText()] != nil {
+    func visitHeader(_ sctx:PinnParser.FunctionContext )  {
+        if fkmap[sctx.ID()!.getText()] != nil {
             
-            de(ErrRedeclare)
+            de(Error(EREDECLARE, sctx))
         }
         var k: Kind?
-        if let kctx = ctx.kind() {
+        if let kctx = sctx.kind() {
             k = visitKind(kctx)
         }
         var fkinds = [FKind]()
-        for (index, child) in ctx.fvarDecl().enumerated() {
+        for (index, child) in sctx.fvarDecl().enumerated() {
             let vfk = visitFKind(child)
             if (fkinds.contains { fk in vfk.s == fk.s }) {
-                de(ErrRedeclare)
+                de(Error(EREDECLARE, sctx))
             }
             
             fkinds.append(visitFKind(child))
@@ -93,21 +190,32 @@ class Pvisitor {
 //
 //            }
             
-            if fkinds.last!.variadic && index < ctx.fvarDecl().count - 1 {
-                de(ErrWrongType)
+            if fkinds.last!.variadic && index < sctx.fvarDecl().count - 1 {
+                de(ETYPE)
             }
         }
-        fkmap[ctx.ID()!.getText()] = Fheader(funcContext: ctx, kind: k, fkinds: fkinds)
+        fkmap[sctx.ID()!.getText()] = Fheader(funcContext: sctx, kind: k, fkinds: fkinds)
     }
     func reserveFunction(_ s: String) {
         if fkmap[s] != nil {
-            de(ErrRedeclare)
+            de(EREDECLARE)
         }
         fkmap[s] = Fheader()
         
     }
-    
-    func visitFunction(_ str: String, _ s: [Pval])  -> Pval? {
+    func putPv(_ s: String, _ pv: Pval) {
+        let pvOld: Pval
+        if lfc?.m[s] != nil {
+            pvOld = lfc!.m.updateValue(pv, forKey: s)!
+        } else {
+            pvOld = fc.m.updateValue(pv, forKey: s)!
+        }
+        if !pvOld.kind.kindEquivalent(pv.kind) {
+            de(ETYPE)
+        }
+        
+    }
+    func callFunction(_ str: String, _ s: [Pval])  -> Pval? {
         var rt: Pval?
         let fh = fkmap[str]!
         guard let ctx = fh.funcContext else {
@@ -129,20 +237,20 @@ class Pvisitor {
                 if str == "println" {
                     print(to: &outStr)
                 }
-                textout(outStr)
+                Self.textout(outStr)
                 
             case "printH":
                 var outStr = ""
                 let e = s[0].get() as! Int
 
                 print(String(e, radix: 16, uppercase: false), terminator: "", to: &outStr)
-                textout(outStr)
+                Self.textout(outStr)
             case "printB":
                 var outStr = ""
                 let e = s[0].get() as! Int
 
                 print(String(e, radix: 2, uppercase: false), terminator: "", to: &outStr)
-                textout(outStr)
+                Self.textout(outStr)
                 
             case "delete":
                 let mkey = s[1].get() as! String
@@ -152,7 +260,7 @@ class Pvisitor {
             case "sort":
                 s[0].sort()
                 rt = s[0]
-            default: de(ErrCase)
+            default: de(ECASE)
             }
             return rt
         }
@@ -161,11 +269,11 @@ class Pvisitor {
 
         if fh.fkinds.last != nil && fh.fkinds.last!.variadic {
             if s.count < fh.fkinds.count - 1 {
-                de(ErrParamLength)
+                de(EPARAM_LENGTH)
             }
         } else
             if s.count != fh.fkinds.count {
-                de(ErrParamLength)
+                de(EPARAM_LENGTH)
         }
         for (index, v) in fh.fkinds.enumerated() {
             if v.variadic {
@@ -173,28 +281,28 @@ class Pvisitor {
                 
                 for (key, varadds) in s[index...].enumerated() {
                     if !varadds.kind.kindEquivalent(v.k) {
-                        de(ErrWrongType)
+                        de(ETYPE)
                     }
                     par.set(key, varadds.get())
                 }
                 if lfc!.m[fh.fkinds[index].s] != nil {
-                    de(ErrRedeclare)
+                    de(EREDECLARE)
                 }
                 lfc!.m[fh.fkinds[index].s] = par
                 continue
             }
             if !s[index].kind.kindEquivalent(v.k) {
-                de(ErrWrongType)
+                de(ETYPE)
             }
             if lfc!.m[fh.fkinds[index].s] != nil {
-                de(ErrRedeclare)
+                de(EREDECLARE)
             }
             lfc!.m[fh.fkinds[index].s] = s[index]
         }
         visit(ctx.block()!)
         switch lfc!.path {
         case .pBreak, .pContinue, .pFallthrough:
-            de(ErrWrongStatement)
+            de(ESTATEMENT)
         default: break
         }
         
@@ -204,19 +312,23 @@ class Pvisitor {
         }
         else {
             if !lfc!.rt!.kind.kindEquivalent(fh.kind!) {
-                de(ErrWrongType)
+                de(ETYPE)
             }
         }
         rt = lfc!.rt
         lfc = oldfc
         return rt
     }
+    static func textout(_ outStr: String) {
+        print(outStr, terminator: "")
+        fh.write(Data(outStr.utf8))
+    }
     
     
-    func start(_ ctx: PinnParser.FileContext)  {
+    func visitFile(_ sctx: PinnParser.FileContext)  {
         
-        for child in ctx.function() {
-            header(child)
+        for child in sctx.function() {
+            visitHeader(child)
         }
         
         for str in ["print","println","printB","printH","delete" , "len","strLen", "stringValue", "debug", "sort"] {
@@ -224,14 +336,14 @@ class Pvisitor {
         }
         
         
-        for child in ctx.statement() {
+        for child in sctx.statement() {
             visit(child)
             switch fc.path {
             case .pBreak, .pContinue, .pFallthrough:
-                de(ErrWrongStatement)
+                de(Error(ESTATEMENT, nil, sctx))
             case .pExiting:
                 if fc.rt != nil {
-                    de(ErrWrongType)
+                    de(ETYPE)
                 }
             case .pNormal: break
                 
@@ -309,123 +421,8 @@ class Pvisitor {
         }
         return rt
     }
-    static func childToToken(_ child: Tree) -> PinnParser.Tokens {
-        return PinnParser.Tokens(rawValue: (child as! TerminalNode).getSymbol()!.getType())!
-    }
-    static func childToText(_ child: Tree) -> String {
-        return (child as! TerminalNode).getText()
-    }
-    /*
-     func doOp(_ lhs: Pval, _ rhs: Pval, op: String) -> Pval {
-     var rt: Pval
-     switch op {
-     case "+":
-     rt = lhs + rhs
-     
-     }
-     */
     
-    func getPv(_ s: String)  -> Pval  {
-        for m in [lfc?.m, fc.m] {
-            if m == nil {
-                continue
-            }
-            if let v = m![s] {
-                return v
-            }
-        }
-        de(ErrUndeclare)
-    }
-    static func doOp(_ lhs: Pval, _ rhs: Pval, _ str: String) -> Pval {
-        let rt: Pval
-        switch str {
-        case "+":
-            let lh = lhs.get() as! Plus
-            let rh = rhs.get() as! Plus
-            rt = Pval(lh.plus(rh))
-            return rt
-        case "-", "*", "/":
-            let lh = lhs.get() as! Arith
-            let rh = rhs.get() as! Arith
-            rt = Pval(lh.arith(rh, str))
-            return rt
-        case "<", "<=", ">", ">=":
-            let lh = lhs.get() as! Compare
-            let rh = rhs.get() as! Compare
-            let result: Bool
-            switch str {
-                
-            case "<":
-                result = lh.lt(rh)
-            case "<=":
-                result = lh.lt(rh) || lh.equal(rh)
-            case ">":
-                result = lh.gt(rh)
-            case ">=":
-                result = lh.gt(rh) || lh.equal(rh)
-            default: de(ErrCase)
-            }
-            return Pval(result)
-        default: break
-        }
-        let lhsv = lhs.get() as! Int
-        var rhsv = rhs.get() as! Int
-        switch str {
-        case "-":
-            rt = Pval(lhsv - rhsv)
-        case "*":
-            rt = Pval(lhsv * rhsv)
-        case "/":
-            rt = Pval(lhsv / rhsv)
-        case "%":
-            rt = Pval(lhsv % rhsv)
-        case "&":
-            rt = Pval(lhsv & rhsv)
-        case "|":
-            rt = Pval(lhsv | rhsv)
-        case "^":
-            rt = Pval(lhsv ^ rhsv)
-        case "<<":
-            rt = Pval(lhsv << rhsv)
-        case ">>":
-            rt = Pval(lhsv >> rhsv)
-        case "<":
-            rt = Pval(lhsv < rhsv)
-        case "<=":
-            rt = Pval(lhsv <= rhsv)
-        case ">":
-            rt = Pval(lhsv > rhsv)
-        case ">=":
-            rt = Pval(lhsv >= rhsv)
-        case "@":
-            rhsv += 1
-            fallthrough
-        case ":":
-            guard rhsv - lhsv >= 0 else {
-                de(ErrRange)
-            }
-            rt = Pval(Kind(Int.self, .gSlice, rhsv - lhsv))
-            for x in lhsv..<rhsv {
-                rt.set(x - lhsv, x)
-            }
-            
-        default:
-            de(ErrCase)
-        }
-        return rt
-    }
-    func putPv(_ s: String, _ pv: Pval) {
-        let pvOld: Pval
-        if lfc?.m[s] != nil {
-            pvOld = lfc!.m.updateValue(pv, forKey: s)!
-        } else {
-            pvOld = fc.m.updateValue(pv, forKey: s)!
-        }
-        if !pvOld.kind.kindEquivalent(pv.kind) {
-            de(ErrWrongType)
-        }
-        
-    }
+
     func visitCase(_ sctx: PinnParser.CaseStatementContext, _ v: Pval) -> Bool {
         loadDebug(sctx)
         defer {popDebug()}
@@ -440,7 +437,7 @@ class Pvisitor {
                 switch cfc.path {
                 case .pFallthrough:
                     if key != sctx.statement().count - 1 {
-                        de(ErrWrongStatement)
+                        de(ESTATEMENT)
                     }
                     
                 case .pBreak:
@@ -455,24 +452,20 @@ class Pvisitor {
         }
         return rt
     }
-    func textout(_ outStr: String) {
-        print(outStr, terminator: "")
-        fh.write(Data(outStr.utf8))
-    }
-    
-    func visitPval(_ ctx: ParserRuleContext) -> Pval? {
-        loadDebug(ctx)
+
+    func visitPval(_ sctx: ParserRuleContext) -> Pval? {
+        loadDebug(sctx)
         defer {popDebug()}
         
         var rt: Pval?
-        switch ctx {
+        switch sctx {
         case let sctx as PinnParser.CallExprContext:
             var s = [Pval]()
             let str =  sctx.ID()!.getText()
             if let el = sctx.exprList() {
                 s = visitList(el)
             }
-            rt = visitFunction(str, s)
+            rt = callFunction(str, s)
             
             
         case let sctx as PinnParser.ParenExprContext:
@@ -540,7 +533,7 @@ class Pvisitor {
                         rt = getPv(str).clone()
                     }
                 default:
-                    de(ErrCase)
+                    de(ECASE)
                 }
                 break
             }
@@ -573,12 +566,10 @@ class Pvisitor {
                 }
                 let rhs = visitPval(sctx.expr(1)!)!
                 if op == "==" {
-                    //     lhs.kind.equalsError(rhs.kind)
                     rt = Pval(lhs.equal(rhs))
                     break
                 }
                 if op == "!=" {
-                    //     lhs.kind.equalsError(rhs.kind)
                     rt = Pval(!lhs.equal(rhs))
                     break
                 }
@@ -615,7 +606,7 @@ class Pvisitor {
                 
                 
             default:
-                de(ErrCase)
+                de(ECASE)
             }
             
             
@@ -634,9 +625,7 @@ class Pvisitor {
                 if (sctx.TWODOTS() != nil) {
                     rhsv+=1
                 }
-//                rt = Pval(Kind(vtype: v.kind.vtype, gtype: .gSlice, count: rhsv - lhsv))
-                
-//                rt!.ar = Array(v.ar![lhsv..<rhsv])
+
                 rt = Pval(v, lhsv, rhsv)
                 
                 
@@ -650,17 +639,17 @@ class Pvisitor {
         default:
             //            let schild = ctx.getChild(0) as! ParserRuleContext
             //            rt = visitPval(schild)
-            de(ErrCase)
+            de(Error(ECASE, sctx))
         }
         return rt
     }
     
-    func visit(_ ctx: ParserRuleContext)
+    func visit(_ sctx: ParserRuleContext)
     {
-        loadDebug(ctx)
+        loadDebug(sctx)
         defer {popDebug()}
         
-        switch ctx {
+        switch sctx {
         case let sctx as PinnParser.SwitchStatementContext:
             let v = visitPval(sctx.expr()!)!
             var broken = false
@@ -724,7 +713,7 @@ class Pvisitor {
             case ";":
                 break
             default:
-                de(ErrCase)
+                de(Error(ECASE, nil, sctx))
             }
             
         case let sctx as PinnParser.SimpleStatementContext:
@@ -735,8 +724,8 @@ class Pvisitor {
                 switch sctx.DOUBLEOP()!.getText() {
                 case "++": rhsv = 1
                 case "--": rhsv = -1
-                default: de(ErrCase)
-                }
+                default:
+                                 de(Error(ECASE, nil, sctx))}
                 
                 if let e = sctx.expr() {
                     let ev = visitPval(e)!.get()
@@ -758,7 +747,7 @@ class Pvisitor {
             for child in sctx.statement() {
                 visit(child)
                 if cfc.path == .pFallthrough {
-                    de(ErrWrongStatement)
+                    de(ESTATEMENT)
                 }
                 if cfc.path != .pNormal {
                     break
@@ -846,7 +835,7 @@ class Pvisitor {
                     }
                     break
                 default:
-                    de(ErrCase)
+                    de(Error(ECASE, nil, sctx))
                 }
                 break
             }
@@ -870,7 +859,7 @@ class Pvisitor {
             if !(v.get() as! Bool) {
                 visit(sctx.block()!)
                 if cfc.path == .pNormal {
-                    de(ErrWrongStatement)
+                    de(ESTATEMENT)
                 }
             }
             
@@ -879,7 +868,7 @@ class Pvisitor {
             let map = lfc?.m ?? fc.m
             var newV: Pval
             if let prev = map[str] {
-                de(ErrRedeclare)
+                de(Error(EREDECLARE, prev))
             }
             if sctx.CE() != nil {
                 newV = visitPval(sctx.expr()!)!
@@ -893,18 +882,18 @@ class Pvisitor {
                     switch k.gtype {
                     case .gScalar:
                         if ai.count != 1 {
-                            de(ErrParamLength)
+                            de(EPARAM_LENGTH)
                         }
                         newV.set(ai[0].get())
                     case .gArray, .gSlice:
                         if k.count! != ai.count {
-                            de(ErrParamLength)
+                            de(EPARAM_LENGTH)
                         }
                         for (key, value) in ai.enumerated() {
                             newV.set(key, value.get())
                         }
                     case .gMap:
-                        de(ErrWrongType)
+                        de(ETYPE)
                     }
                     
                 } else {

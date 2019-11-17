@@ -19,6 +19,7 @@ class Pval {
     private var ar: [Ptype]?
     private var map: [String: Ptype]?
     let prc: ParserRuleContext
+//    let pv = Pvisitor
     var k2: Kind?
     func sort() {
         ar!.sort { ($0 as! Compare).lt($1 as! Compare) }
@@ -32,10 +33,6 @@ class Pval {
         self.ar = Array(pv.ar![a..<b])
 //        self.init(pv.ar![a..<b])
     }
-//    private convenience init <T: Ptype>(_ ar: ArraySlice<T>) {
-//        self.init(Kind(vtype: T.self, gtype: .gSlice, count: ar.count))
-//        self.ar = Array(ar)
-//    }
     init(_ k: Kind, _ i: Ptype? = nil) {
         prc = pv.prc!
         self.k = k
@@ -98,12 +95,12 @@ class Pval {
             }
             return map![v1v]!
         default:
-            de(ErrCase)
+            de(ECASE)
         }
     }
     func set(_ v: Ptype) {
         guard type(of: ar!.first!) == type(of: v) else {
-            de(ErrWrongType)
+            de(ETYPE)
         }
         ar![0] = v
     }
@@ -111,7 +108,7 @@ class Pval {
     func set(_ k: Ktype, _ v: Ptype?) {
         
         guard v == nil || kind.vtype == type(of:v!) else {
-            de(ErrWrongType)
+            de(ETYPE)
         }
         switch k {
         case let v1v as Int:
@@ -125,7 +122,7 @@ class Pval {
             map![v1v] = v
             kind.count = map!.count
         default:
-            de(ErrCase)
+            de(ECASE)
         }
     }
     
