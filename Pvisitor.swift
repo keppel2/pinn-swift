@@ -315,7 +315,7 @@ class Pvisitor {
             visit(child)
             switch fc.path {
             case .pBreak, .pContinue, .pFallthrough:
-                de(Error(ESTATEMENT, nil, sctx))
+                de(Perr(ESTATEMENT, nil, sctx))
             case .pExiting:
                 if fc.rt != nil {
                     de(ETYPE)
@@ -341,7 +341,7 @@ class Pvisitor {
              defer {popDebug()}
             if fkmap[sctx.ID()!.getText()] != nil {
                 
-                de(Error(EREDECLARE, sctx))
+                de(Perr(EREDECLARE, sctx))
             }
             var k: Kind?
             if let kctx = sctx.kind() {
@@ -351,10 +351,10 @@ class Pvisitor {
             for (index, child) in sctx.fvarDecl().enumerated() {
                 let vfk = visitFKind(child)
                 if (fkinds.contains { fk in vfk.s == fk.s }) {
-                    de(Error(EREDECLARE, vfk.prc))
+                    de(Perr(EREDECLARE, vfk.prc))
                 }
                 if vfk.variadic && index < sctx.fvarDecl().count - 1 {
-                    de(Error(ETYPE, vfk.prc))
+                    de(Perr(ETYPE, vfk.prc))
                 }
 
                 fkinds.append(visitFKind(child))
@@ -439,7 +439,7 @@ class Pvisitor {
                 switch cfc.path {
                 case .pFallthrough:
                     if key != sctx.statement().count - 1 {
-                        de(Error(ESTATEMENT, sctx))
+                        de(Perr(ESTATEMENT, sctx))
                     }
                     
                 case .pBreak:
@@ -529,7 +529,7 @@ class Pvisitor {
                 case .ID:
                     let str = sctx.ID()!.getText()
                     guard let pv = getPv(str) else {
-                        de(Error(EUNDECLARED, sctx))
+                        de(Perr(EUNDECLARED, sctx))
                     }
                     if pv.kind.gtype == .gMap {
                         rt = pv
@@ -537,7 +537,7 @@ class Pvisitor {
                         rt = pv.clone()
                     }
                 default:
-                    de(Error(ECASE, sctx))
+                    de(Perr(ECASE, sctx))
                 }
                 break
             }
@@ -610,14 +610,14 @@ class Pvisitor {
                 
                 
             default:
-                de(Error(ECASE, sctx))
+                de(Perr(ECASE, sctx))
             }
             
             
 
         case let sctx as PinnParser.IndexExprContext:
             guard let v =  getPv(sctx.ID()!.getText()) else {
-                de(Error(EUNDECLARED, sctx))
+                de(Perr(EUNDECLARED, sctx))
             }
             if (sctx.TWODOTS() != nil || sctx.COLON() != nil) {
                 var lhsv = 0
@@ -645,7 +645,7 @@ class Pvisitor {
         default:
             //            let schild = ctx.getChild(0) as! ParserRuleContext
             //            rt = visitPval(schild)
-            de(Error(ECASE, sctx))
+            de(Perr(ECASE, sctx))
         }
         return rt
     }
@@ -689,7 +689,7 @@ class Pvisitor {
         case let sctx as PinnParser.CompoundSetContext:
             let str = sctx.ID()!.getText()
             guard let v = getPv(str) else {
-                de(Error(EUNDECLARED, sctx))
+                de(Perr(EUNDECLARED, sctx))
             }
             let op = sctx.children![sctx.children!.count - 3].getText()
             let rhs = visitPval(sctx.rhs)!
@@ -721,21 +721,21 @@ class Pvisitor {
             case ";":
                 break
             default:
-                de(Error(ECASE, nil, sctx))
+                de(Perr(ECASE, nil, sctx))
             }
             
         case let sctx as PinnParser.SimpleStatementContext:
             
             if let str = sctx.ID()?.getText() {
                 guard let v = getPv(str) else {
-                    de(Error(EUNDECLARED, sctx))
+                    de(Perr(EUNDECLARED, sctx))
                 }
                 let rhsv: Int
                 switch sctx.DOUBLEOP()!.getText() {
                 case "++": rhsv = 1
                 case "--": rhsv = -1
                 default:
-                                 de(Error(ECASE, nil, sctx))}
+                                 de(Perr(ECASE, nil, sctx))}
                 
                 if let e = sctx.expr() {
                     let ev = visitPval(e)!.get()
@@ -757,7 +757,7 @@ class Pvisitor {
             for child in sctx.statement() {
                 visit(child)
                 if cfc.path == .pFallthrough {
-                    de(Error(ESTATEMENT, sctx))
+                    de(Perr(ESTATEMENT, sctx))
                 }
                 if cfc.path != .pNormal {
                     break
@@ -766,7 +766,7 @@ class Pvisitor {
         case let sctx as PinnParser.SimpleSetContext:
             let str = sctx.ID()!.getText()
             guard let v = getPv(str) else {
-                de(Error(EUNDECLARED, sctx))
+                de(Perr(EUNDECLARED, sctx))
             }
             if sctx.expr().count == 2 {
                 let key = visitPval(sctx.expr(0)!)!.get()
@@ -818,16 +818,16 @@ class Pvisitor {
                     key = getPv(sctx.ID(0)!.getText())
                     if key == nil  {
               
-                        de(Error(EUNDECLARED, sctx.ID(0)!.getSymbol()!))
+                        de(Perr(EUNDECLARED, sctx.ID(0)!.getSymbol()!))
                     }
                     value = getPv(sctx.ID(1)!.getText())
                     if value == nil {
-                        de(Error(EUNDECLARED, sctx.ID(1)!.getSymbol()!))
+                        de(Perr(EUNDECLARED, sctx.ID(1)!.getSymbol()!))
                     }
                 } else {
                     value = getPv(sctx.ID(0)!.getText())
                     if value == nil {
-                        de(Error(EUNDECLARED, sctx.ID(0)!.getSymbol()!))
+                        de(Perr(EUNDECLARED, sctx.ID(0)!.getSymbol()!))
                     }
 
                 }
@@ -859,7 +859,7 @@ class Pvisitor {
                     }
                     break
                 default:
-                    de(Error(ECASE, sctx))
+                    de(Perr(ECASE, sctx))
                 }
                 break
             }
@@ -883,7 +883,7 @@ class Pvisitor {
             if !(v.get() as! Bool) {
                 visit(sctx.block()!)
                 if cfc.path == .pNormal {
-                    de(Error(ESTATEMENT, sctx))
+                    de(Perr(ESTATEMENT, sctx))
                 }
             }
             
@@ -892,7 +892,7 @@ class Pvisitor {
             let map = lfc?.m ?? fc.m
             var newV: Pval
             if let prev = map[str] {
-                de(Error(EREDECLARE, prev))
+                de(Perr(EREDECLARE, prev))
             }
             if sctx.CE() != nil {
                 newV = visitPval(sctx.expr()!)!
@@ -906,18 +906,18 @@ class Pvisitor {
                     switch k.gtype {
                     case .gScalar:
                         if ai.count != 1 {
-                    de(Error(EPARAM_LENGTH, sctx))
+                    de(Perr(EPARAM_LENGTH, sctx))
                         }
                         newV.set(ai[0].get())
                     case .gArray, .gSlice:
                         if k.count! != ai.count {
-                            de(Error(EPARAM_LENGTH, sctx))
+                            de(Perr(EPARAM_LENGTH, sctx))
                         }
                         for (key, value) in ai.enumerated() {
                             newV.set(key, value.get())
                         }
                     case .gMap:
-                        de(Error(ETYPE, sctx))
+                        de(Perr(ETYPE, sctx))
                     }
                     
                 } else {

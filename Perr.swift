@@ -9,7 +9,7 @@
 import Foundation
 import Antlr4
 
-class Error {
+class Perr {
     let str: String
     var pval: Pval?
     var prc: ParserRuleContext?
@@ -17,7 +17,7 @@ class Error {
     init (_ s: String, _ p: Pval? = nil, _ p2: ParserRuleContext? = nil, _ p3: Token? = nil) {
         str = s
         pval = p
-        prc = p2 ?? pv.prc
+        prc = p2 ?? pv?.prc
         tok = p3
     }
     convenience init(_ s: String, _ p: ParserRuleContext) {

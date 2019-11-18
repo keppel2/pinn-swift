@@ -34,7 +34,7 @@ class Pval {
 //        self.init(pv.ar![a..<b])
     }
     init(_ k: Kind, _ i: Ptype? = nil) {
-        prc = pv.prc!
+        prc = pv!.prc!
         self.k = k
         switch k.gtype {
         case .gArray, .gSlice:
@@ -79,11 +79,7 @@ class Pval {
     }
     func getKeys() -> [String] {
         return [String](map!.keys)
-//        var rt = [String]()
-//        for v in map!.keys {
-//            rt.append(v)
-//        }
-//        return rt
+
     }
     func get(_ k: Ktype) -> Ptype {
         switch k {

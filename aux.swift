@@ -26,12 +26,12 @@ enum Gtype {
 }
 
 
-func de(_ me: Error) -> Never {
+func de(_ me: Perr) -> Never {
     fatalError(me.string)
 }
 
 func de(_ s: String = "") -> Never {
-    de(Error(s))
+    de(Perr(s))
 }
 
 func dbg() {

@@ -497,4 +497,3 @@ ec();ft("Slice Sort", "[1 4 32 45 101]");
 toSort := [4, 45, 1, 101, 32];
 sorted := sort(toSort);
 print(sorted);
-

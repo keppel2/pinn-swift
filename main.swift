@@ -37,7 +37,7 @@ let fh = FileHandle(forWritingAtPath: TMP)!
 let parser = stringToParser(myinput)
 parser.setErrorHandler(BailErrorStrategy())
 var tree =  try? parser.file()
-let pv: Pvisitor
+let pv: Pvisitor?
 if tree == nil {
     let parser2 = stringToParser(myinput)
     try! parser2.file()
@@ -48,7 +48,7 @@ if tree == nil {
         print(stream.getTokens())
     }
     pv = Pvisitor()
-    pv.visitFile(tree!)
+    pv!.visitFile(tree!)
 }
 
 
