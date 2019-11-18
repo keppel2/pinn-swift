@@ -35,23 +35,23 @@
 /* End PBXBuildRule section */
 
 /* Begin PBXContainerItemProxy section */
-		E29C78DD23814BD900BBF7E0 /* PBXContainerItemProxy */ = {
+		E244E74623821F3E00D678DE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = E29C78D623814BD900BBF7E0 /* Antlr4.xcodeproj */;
+			containerPortal = E244E73F23821F3E00D678DE /* Antlr4.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = "Antlr4::Antlr4::Product";
 			remoteInfo = Antlr4;
 		};
-		E29C78DF23814BD900BBF7E0 /* PBXContainerItemProxy */ = {
+		E244E74823821F3E00D678DE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = E29C78D623814BD900BBF7E0 /* Antlr4.xcodeproj */;
+			containerPortal = E244E73F23821F3E00D678DE /* Antlr4.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = "Antlr4::Antlr4Tests::Product";
 			remoteInfo = Antlr4Tests;
 		};
-		E29C78E323814BE500BBF7E0 /* PBXContainerItemProxy */ = {
+		E244E74C23821F4C00D678DE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = E29C78D623814BD900BBF7E0 /* Antlr4.xcodeproj */;
+			containerPortal = E244E73F23821F3E00D678DE /* Antlr4.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = "Antlr4::Antlr4";
 			remoteInfo = Antlr4;
@@ -81,7 +81,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		E254FD65237018270094DFA9 /* TestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = TestPlan.xctestplan; sourceTree = "<group>"; };
+		E244E73F23821F3E00D678DE /* Antlr4.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Antlr4.xcodeproj; path = ../../../../usr/local/lib/antlr4/runtime/Swift/Antlr4.xcodeproj; sourceTree = "<group>"; };
 		E2673962235BC825000CF830 /* pinn */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = pinn; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2673965235BC825000CF830 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		E28CB40123679F640045FA67 /* Pvisitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pvisitor.swift; sourceTree = "<group>"; };
@@ -89,7 +89,6 @@
 		E28CB40423680A0B0045FA67 /* types.pinn */ = {isa = PBXFileReference; lastKnownFileType = text; path = types.pinn; sourceTree = "<group>"; };
 		E29BEB1823808A4100969DFF /* aux.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = aux.swift; sourceTree = "<group>"; };
 		E29BEB302380DFE200969DFF /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
-		E29C78D623814BD900BBF7E0 /* Antlr4.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Antlr4.xcodeproj; path = "../../antlr-Swift/Antlr4.xcodeproj"; sourceTree = "<group>"; };
 		E2AA0544237EA5E300424FCE /* protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = protocols.swift; sourceTree = "<group>"; };
 		E2B5A282237E0FB200E91CE2 /* Kind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Kind.swift; sourceTree = "<group>"; };
 		E2CDE16D2363EB740065250D /* Pval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pval.swift; sourceTree = "<group>"; };
@@ -112,6 +111,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E244E74023821F3E00D678DE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E244E74723821F3E00D678DE /* Antlr4.framework */,
+				E244E74923821F3E00D678DE /* Antlr4Tests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		E254FD5C236FEE710094DFA9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -122,7 +130,7 @@
 		E2673959235BC825000CF830 = {
 			isa = PBXGroup;
 			children = (
-				E29C78D623814BD900BBF7E0 /* Antlr4.xcodeproj */,
+				E244E73F23821F3E00D678DE /* Antlr4.xcodeproj */,
 				E2D2DC0D2366D10300E0CC35 /* a.pinn */,
 				E2D2DC032366BE3700E0CC35 /* PinnLexer.swift */,
 				E2D2DC002366BE3700E0CC35 /* PinnLexerATN.swift */,
@@ -138,7 +146,6 @@
 				E2B5A282237E0FB200E91CE2 /* Kind.swift */,
 				E2D2DBFB2366B76500E0CC35 /* Pinn.g4 */,
 				E2CDE16D2363EB740065250D /* Pval.swift */,
-				E254FD65237018270094DFA9 /* TestPlan.xctestplan */,
 				E2673963235BC825000CF830 /* Products */,
 				E254FD5C236FEE710094DFA9 /* Frameworks */,
 			);
@@ -148,15 +155,6 @@
 			isa = PBXGroup;
 			children = (
 				E2673962235BC825000CF830 /* pinn */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		E29C78D723814BD900BBF7E0 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				E29C78DE23814BD900BBF7E0 /* Antlr4.framework */,
-				E29C78E023814BD900BBF7E0 /* Antlr4Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -178,7 +176,7 @@
 				E2D2DBFE2366B86C00E0CC35 /* PBXBuildRule */,
 			);
 			dependencies = (
-				E29C78E423814BE500BBF7E0 /* PBXTargetDependency */,
+				E244E74D23821F4C00D678DE /* PBXTargetDependency */,
 			);
 			name = pinn;
 			productName = pinn;
@@ -213,8 +211,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = E29C78D723814BD900BBF7E0 /* Products */;
-					ProjectRef = E29C78D623814BD900BBF7E0 /* Antlr4.xcodeproj */;
+					ProductGroup = E244E74023821F3E00D678DE /* Products */;
+					ProjectRef = E244E73F23821F3E00D678DE /* Antlr4.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -225,18 +223,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		E29C78DE23814BD900BBF7E0 /* Antlr4.framework */ = {
+		E244E74723821F3E00D678DE /* Antlr4.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = Antlr4.framework;
-			remoteRef = E29C78DD23814BD900BBF7E0 /* PBXContainerItemProxy */;
+			remoteRef = E244E74623821F3E00D678DE /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		E29C78E023814BD900BBF7E0 /* Antlr4Tests.xctest */ = {
+		E244E74923821F3E00D678DE /* Antlr4Tests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = file;
 			path = Antlr4Tests.xctest;
-			remoteRef = E29C78DF23814BD900BBF7E0 /* PBXContainerItemProxy */;
+			remoteRef = E244E74823821F3E00D678DE /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -257,7 +255,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\ncp *.pinn /tmp\ncp *.gold /tmp\njava -jar ~/antlr-4.7.2-complete.jar -no-listener -Dlanguage=Swift -message-format gnu -Werror Pinn.g4\n\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\ncp *.pinn /tmp\njava -jar /usr/local/lib/antlr.jar -no-listener -Dlanguage=Swift -message-format gnu -Werror Pinn.g4\n\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -283,10 +281,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		E29C78E423814BE500BBF7E0 /* PBXTargetDependency */ = {
+		E244E74D23821F4C00D678DE /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = Antlr4;
-			targetProxy = E29C78E323814BE500BBF7E0 /* PBXContainerItemProxy */;
+			targetProxy = E244E74C23821F4C00D678DE /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
