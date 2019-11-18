@@ -18,7 +18,7 @@ fvarDecl
   : ID THREEDOT? kind ;
 
 varDecl
-  : ID kind ('=' exprList)?
+  : 'var' ID kind ('=' exprList)?
   | ID CE expr ;
 
 LSQUARE : '[' ;

@@ -25,9 +25,13 @@ enum Gtype {
     case gScalar, gArray, gMap, gSlice
 }
 
+private func _fatalError(_ s: String) -> Never {
+    print(s)
+    exit(1)
+}
 
 func de(_ me: Perr) -> Never {
-    fatalError(me.string)
+    _fatalError(me.string)
 }
 
 func de(_ s: String = "") -> Never {
@@ -35,7 +39,7 @@ func de(_ s: String = "") -> Never {
 }
 
 func dbg() {
-    fatalError()
+    _fatalError("dbg")
 }
 
 
