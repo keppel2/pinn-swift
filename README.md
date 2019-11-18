@@ -36,14 +36,11 @@ Most lexical elements are borrowed from Go. Later elements include support for `
 * `"{" { <statement> } "}"`
 
 
-## simple statement
-* `<id> [ "[" <expr> "]" ] = <expr>
-* `<id> [ "[" <expr> "]" ] <op> = <expr>
+## simple-statement
+* `<id> [ "[" <expr> "]" ] = <expr>`
+* `<id> [ "[" <expr> "]" ] <op> = <expr>`
 
-## `kind`
-* 
-
-## variable declaration
+## variable-declaration
 * `<id> <kind> [ = expr_list ]`
 * `<id> := <expr>`
 
