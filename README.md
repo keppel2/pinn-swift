@@ -5,6 +5,7 @@ Pinn is a statically typed, imperative language for computers.
 * Syntax taken mostly from Go.
 * Carefully chosen ideas from Swift.
 
+_Implementations as interpreters in Antlr for Go and Swift_
 ## Specification
 
 ## Lexical
