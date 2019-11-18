@@ -17,16 +17,13 @@ Most lexical elements are borrowed from Go. Later elements include support for `
 * `int`. Always a signed 64-bit.
 * `bool`. Standard, `true` or `false`.
 * `string`. Immutable.
-* `big`. Big integer.
-* `float`. Big float. See Go.
-* `char`. Character. Implemented as UTF-32.
-
+* `decimal`. Decimal.
 ## Group Types
 
-* Scalar is a single element.
-* `map`. Key is always a string. Like Go, a missing string returns the zero value.
-* `slice`. Pointer to a region of an array or slice. Shares memory in Go and copies in Swift.
-* `array`. Arrays are passed by value.
+* _Scalar_ is a single element.
+* `map`. A map produces a unique _value_ for each _key_. The key is always a string. Like Go, a missing string returns the zero value for an element.
+* `array`. An array is a group of elements with a constant size. It is only produced in a variable declaration.
+* `slice`. A slice is an array that can be grown. It can be produced by variable declaration, slicing, and ranges.
 
 ## Expressions
 
@@ -38,8 +35,19 @@ Most lexical elements are borrowed from Go. Later elements include support for `
 ## block
 * `"{" { <statement> } "}"`
 
-## statement
 
+## simple statement
+* `<id> [ "[" <expr> "]" ] = <expr>
+* `<id> [ "[" <expr> "]" ] <op> = <expr>
+
+## `kind`
+* 
+
+## variable declaration
+* `<id> <kind> [ = expr_list ]`
+* `<id> := <expr>`
+
+## statement
 * `while <expr> <block>`
   * Evaluate `expr`. If true, execute `block` and repeat this line. If false, go on.
 * `repeat <block> while <expr>`
@@ -50,11 +58,15 @@ Most lexical elements are borrowed from Go. Later elements include support for `
   * Evaluate `expr`. If true, exectue first `statement`. If false, either move on or execute second `statement`.
 * `guard <expr> else <block>`
   * Evaluate `expr`. If false, execute `block`. The block must relinquish control, with a `return`, `break`, or `continue`.
+* `for <id1> [, <id2>] = range <expr> <block>
+  * If `id1` is alone, it becomes the values of the `expr`. If `id2` is present, it is the values and `id1` is the keys. The `expr` must evaluate to an array, slice, or map. The block iterates through the elements. Note that `id1` and `id2` must be predeclared.
+  
+ 
 
 ## Variable declaration
 * `<id> <kind> [ = <expr_list> ]`
   * Declare `id` of `kind` type. Optionally initialize it.
-* `id := <expr>`
+* `<id> := <expr>`
   * Short declaration.
 
 
