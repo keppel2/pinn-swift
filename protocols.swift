@@ -31,7 +31,7 @@ protocol Compare: Ptype {
     func gt(_: Compare) -> Bool
 }
 
-extension Decimal: Ptype, Plus, Compare, Arith {
+extension Decimal: Ptype, Plus, Compare, Arith, Negate {
    
     func lt(_ a: Compare) -> Bool {
         let x = self < a as! Self
@@ -74,7 +74,7 @@ extension Decimal: Ptype, Plus, Compare, Arith {
         return self == a as! Self
     }
 }
-extension Int: Ptype, Ktype, Plus, Compare, Arith {
+extension Int: Ptype, Ktype, Plus, Compare, Negate, Arith {
     func lt(_ a: Compare) -> Bool {
         let x = self < a as! Self
         return x

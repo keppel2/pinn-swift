@@ -595,16 +595,22 @@ class Pvisitor {
             
             switch Self.childToText(sctx.getChild(0)!) {
             case "!":
-                let e = visitPval(sctx.expr(0)!)!.get() as! Bool
+                guard let e = visitPval(sctx.expr(0)!)!.get() as? Bool else {
+                    de(Perr(ETYPE, sctx))
+                }
                 rt = Pval(!e)
                 break
             case "-":
-                
-                let e = visitPval(sctx.expr(0)!)!.get() as! Negate
+                guard let e = visitPval(sctx.expr(0)!)!.get() as? Negate else {
+                    de(Perr(ETYPE, sctx))
+                }
                 rt = Pval(e.neg())
                 break
             case "+":
-                let e = visitPval(sctx.expr(0)!)!.get() as! Int
+                
+                guard let e = visitPval(sctx.expr(0)!)!.get() as? Int else {
+                                        de(Perr(ETYPE, sctx))
+                }
                 rt = Pval(e)
                 break
                 

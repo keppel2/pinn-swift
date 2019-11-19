@@ -34,10 +34,10 @@ class Perr {
             rt += "Regarding pval at line: " + pv.prc.getStart()!.getLine() + "."
         }
         if let pc = prc {
-            rt += "PRC. Line \(pc.getStart()!.getLine()) Col \(pc.getStart()!.getCharPositionInLine())"
+            rt += "PRC. Text \(pc.getText()). Line \(pc.getStart()!.getLine()) Col \(pc.getStart()!.getCharPositionInLine())"
         }
         if let t = tok {
-            rt += "TOKEN. Line \(t.getLine()) Col \(t.getCharPositionInLine())"
+            rt += "TOKEN \(t.getText()!). Line \(t.getLine()) Col \(t.getCharPositionInLine())"
         }
         return rt
     }

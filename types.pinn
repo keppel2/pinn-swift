@@ -457,7 +457,10 @@ brak(dub);
 dub--;
 dub--;
 brak(dub);
-
+ec();ft("Negative int and decimal", "-5 -10.2");
+var negint int = -5;
+var negdec decimal = -10.2;
+print(negint, negdec);
 ec();ft("print", "Hello, world.");
 print("Hello, world.");
 ec();ft("println", "End with lf.");

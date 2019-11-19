@@ -91,6 +91,7 @@
 		E29BEB302380DFE200969DFF /* Perr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Perr.swift; sourceTree = "<group>"; };
 		E2AA0544237EA5E300424FCE /* protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = protocols.swift; sourceTree = "<group>"; };
 		E2B5A282237E0FB200E91CE2 /* Kind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Kind.swift; sourceTree = "<group>"; };
+		E2C2CCED2382412100C6D2A2 /* tic.pinn */ = {isa = PBXFileReference; lastKnownFileType = text; path = tic.pinn; sourceTree = "<group>"; };
 		E2CDE16D2363EB740065250D /* Pval.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pval.swift; sourceTree = "<group>"; };
 		E2D2DBFB2366B76500E0CC35 /* Pinn.g4 */ = {isa = PBXFileReference; lastKnownFileType = text; path = Pinn.g4; sourceTree = "<group>"; };
 		E2D2DC002366BE3700E0CC35 /* PinnLexerATN.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinnLexerATN.swift; sourceTree = "<group>"; };
@@ -136,6 +137,7 @@
 				E2D2DC002366BE3700E0CC35 /* PinnLexerATN.swift */,
 				E28CB4032367FE120045FA67 /* e52.pinn */,
 				E28CB40423680A0B0045FA67 /* types.pinn */,
+				E2C2CCED2382412100C6D2A2 /* tic.pinn */,
 				E29BEB302380DFE200969DFF /* Perr.swift */,
 				E28CB40123679F640045FA67 /* Pvisitor.swift */,
 				E2D2DC022366BE3700E0CC35 /* PinnParser.swift */,

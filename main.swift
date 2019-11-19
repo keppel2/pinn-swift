@@ -23,7 +23,8 @@ let ETEST_FAIL = "Test failed"
 let global = "glob"
 
 
-let TEST = true
+
+let TEST = false
 let TOKENS = false
 let inFile = TEST ? "types.pinn" : "a.pinn"
 
