@@ -21,8 +21,12 @@ let ETEST_FAIL = "Test failed"
 
 
 let global = "glob"
+//print("sleep");
+//sleep(2);
+//print("wakey");
+//
 
-
+//readLine()
 
 let TEST = false
 let TOKENS = false

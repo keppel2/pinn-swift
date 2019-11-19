@@ -218,6 +218,9 @@ class Pvisitor {
                     Pvisitor.textout(rt + "\n")
                     return nil
             },
+            "readLine": {s in readLine()
+                return nil
+            },
             "printH": { s in
                 Pvisitor.textout(String(s[0].get() as! Int, radix: 16, uppercase: false))
                 return nil
@@ -236,6 +239,10 @@ class Pvisitor {
             "sort": { s in
                 s[0].sort()
                 return s[0]
+            },
+            "sleep": { s in
+                sleep(UInt32(s[0].get() as! Int))
+                return nil
             }
     ]
     func callFunction(_ str: String, _ s: [Pval])  -> Pval? {
