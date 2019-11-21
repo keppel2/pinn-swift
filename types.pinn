@@ -228,12 +228,16 @@ func variadic(i ...int) {
 }
 variadic(7, 13, 101);
 
-ec();ft("Forward call", "forward");
-forward();
+/*ec();ft("Forward call", "forward");
 
 func forward() {
-print("forward");
+    forwardCalled();
 }
+forward();
+func forwardCalled() {
+    print("forward");
+}
+*/
 
 
 ec();ft("Call returns", "42");
@@ -250,14 +254,14 @@ func exits() {
 }
 exits();
 
-ec();ft("Call recursive", "4,3,2,1,");
-func countToOne(i int) {
-print(i);
-print(",");
-if i > 1
-countToOne(i - 1);
+ec();ft("Call recursive", "1 ,2 ,3 ,4 ,");
+func countToFour(i int) {
+    if i > 1 {
+        countToFour(i - 1);
+    }
+    print(i, ",");
 }
-countToOne(4);
+countToFour(4);
 
 ec();ft("Function with map, slice, variadic", "foo 4210,11,12,13,14,false,false,true,");
 func fLots(m [map]int, a [slice]int, vary ...bool) {
@@ -502,3 +506,19 @@ ec();ft("Slice Sort", "[1 4 32 45 101]");
 toSort := [4, 45, 1, 101, 32];
 sorted := sort(toSort);
 print(sorted);
+
+ec();ft("Global int in header", "3");
+GLOB := 3;
+func giih(ar [GLOB]bool) {
+    print(len(ar));
+}
+var glob [GLOB] bool;
+giih(glob);
+
+ec();ft("Array copies in call", "23");
+func arFunc(ar [1]int) {
+    ar[0] = 42;
+}
+var arF [1]int = 23;
+arFunc(arF);
+print(arF[0]);

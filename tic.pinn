@@ -1,82 +1,109 @@
-// 0 tie, 1 player true, 2 player false
-// 0 empty, 1 true, 2 false
 EMPTY := 0;
-TIE := 0;
+TIE := 3;
 PLAYER_A := 1;
 PLAYER_B := 2;
+SIZE := 3;
+var last_board [SIZE * SIZE]int;
+var last_board2 [SIZE * SIZE]int;
 func coord (x int, y int) int {
-	return x * 3 + y;
+	return y * SIZE + x;
 }
 
-func printBoard (board [9]int) {
+func printBoard (board [SIZE * SIZE]int) {
 	var y int;
 	var x int;
-	for x = range 0:3 {
-		for y = range 0:3 {
-		print (board[coord(x, y)]);
+	for y = range 0:SIZE {
+        print (board[coord(0, y)]);
+		for x = range 1:SIZE {
         print (" ");
+        print (board[coord(x, y)]);
 		}
         println();
 	}
 	println ("---");
 }
-func full (board [9]int) bool {
-    var x int;
-    for x = range 0:9 {
-        if board[x] == EMPTY {
+func full (board [SIZE * SIZE]int) bool {
+    var e int;
+    for e = range 0:SIZE * SIZE {
+        if board[e] == EMPTY {
             return false;
         }
     }
     return true;
 }
 
-func winner (board [9]int) int {
+func winner (board [SIZE * SIZE]int) int {
 	var current int;
 	var x int;
 	var y int;
-	for x = range 0:3 {
+	for x = range 0:SIZE {
+  // println("alt",current, x, y);
 		current = board[coord(x, 0)];
-		for y = range 1:3 {
+        if current == EMPTY {
+            continue;
+        }
+		for y = range 1:SIZE {
 			if board[coord(x, y)] != current {
-				current = EMPTY;
                 break;
 			}
-		}
-		if current != EMPTY {
-			return current;
-		}
-	}
-	for y = range 0:3 {
-		current = board[coord(0, y)];
-		for x = range 1:3 {
-			if board[coord(x, y)] != current {
-				current = EMPTY;
-			}
-		}
-		if current != EMPTY {
-			return current;
+            if y == SIZE - 1 {
+                return current;
+            
+            }
 		}
 	}
-	if board[coord(0, 0)] != 0 &&
-		board[coord(0, 0)] == board[coord(1, 1)] &&
-		board[coord(1, 1)] == board[coord(2, 2)] {
-			return board[coord(1, 1)];
-	}
-	if board[coord(2, 0)] != 0 &&
-		board[coord(2, 0)] == board[coord(1, 1)] &&
-		board[coord(1, 1)] == board[coord(0, 2)] {
-			return board[coord(1, 1)];
-	}
+    for y = range 0:SIZE {
+        current = board[coord(y, 0)];
+        if current == EMPTY {
+            continue;
+        }
+        for x = range 1:SIZE {
+            if board[coord(x, y)] != current {
+                break;
+            }
+            if x == SIZE - 1 {
+                return current;
+            }
+        }
+    }
+    
+    var diag int;
+    diag = board[coord(0, 0)];
+    
+    if diag != EMPTY {
+        for x = range 1:SIZE {
+            if board[coord(x, x)] != diag {
+                break;
+            }
+            if x == SIZE - 1 {
+                return diag;
+            }
+        }
+    }
+    diag = board[coord(0, SIZE - 1)];
+    if diag != EMPTY {
+        for x = range 1:SIZE {
+            if board[coord(x, SIZE - 1 - x)] != diag {
+                break;
+            }
+            if x == SIZE - 1{
+                return diag;
+            }
+        }
+    }
 	return TIE;
 }
 
 func opposite (x int) int { return x == PLAYER_A ? PLAYER_B : PLAYER_A; }
 			
-func minimax (player int, board [9]int) int
+func minimax (player int, board [SIZE * SIZE]int) int
 {
 	var result int;
 	var best int = opposite(player);
+    last_board2 = last_board;
     last_board = board;
+    //println("Player", player);
+    //printBoard(board);
 	result = winner(board);
 	if result != TIE {
 		return result;
@@ -86,8 +113,8 @@ func minimax (player int, board [9]int) int
     }
 	var x int;
 	var y int;
-	for x = range 0:3 {
-		for y = range 0:3 {
+	for x = range 0:SIZE {
+		for y = range 0:SIZE {
 			if board[coord(x, y)] == EMPTY {
 				board[coord(x, y)] = player;
 				result = minimax(opposite(player), board);
@@ -104,11 +131,51 @@ func minimax (player int, board [9]int) int
 	return best;
 }
 
-var last_board [9]int;
-var	global_board [9]int;
-//board[4] = PLAYER_A;
-	printBoard(global_board);
-var	result int = minimax (PLAYER_A, global_board);
-	println (result);
+func main() {
+    var    board [SIZE * SIZE]int;
+    println("Initial board");
+    ar := [1, 0, 0,
+           0, 0, 0,
+           0, 0, 0];
+           
+    var x int;
+    for x = range 0:SIZE * SIZE {
+        board[x] = ar[x];
+    }
+    
+    //board [coord(0, 3)] = PLAYER_A;
+    //board [coord(1, 2)] = PLAYER_A;
+    //board [coord(2, 1)] = PLAYER_A;
+    //board [coord(3, 0)] = PLAYER_A;
+    printBoard(board);
+    
+    var result int = minimax (PLAYER_A, board);
+   //var result int = winner (board);
+   
+    resultString := "";
+    match result {
+        when TIE:
+            resultString = "Tie.";
+        when PLAYER_A:
+            resultString = "Player A.";
+        when PLAYER_B:
+            resultString = "Player B.";
+    }
+    println ("Winner:", resultString);
+    println ("Last examined board state.");
+    printBoard(last_board);
+    printBoard(last_board2);
+}
+main();
 
-printBoard(last_board);
+/*
+Winner: Player A.
+Last examined board state.
+0 1 0
+0 1 2
+0 1 2
+---
+0 1 2
+0 1 2
+1 0 2
+*/

@@ -218,8 +218,9 @@ class Pvisitor {
                     Pvisitor.textout(rt + "\n")
                     return nil
             },
-            "readLine": {s in readLine()
-                return nil
+            "readLine": {
+                s in
+                return Pval(readLine()!)
             },
             "printH": { s in
                 Pvisitor.textout(String(s[0].get() as! Int, radix: 16, uppercase: false))
@@ -313,22 +314,23 @@ class Pvisitor {
     
     
     func visitFile(_ sctx: PinnParser.FileContext)  {
-        
-        for child in sctx.function() {
-            visitHeader(child)
-        }
-        
-        for child in sctx.statement() {
-            visit(child)
-            switch fc.path {
-            case .pBreak, .pContinue, .pFallthrough:
-                de(Perr(ESTATEMENT, nil, sctx))
-            case .pExiting:
-                if fc.rt != nil {
-                    de(ETYPE)
+        for child in sctx.children! {
+            if let spec = child as? PinnParser.FunctionContext {
+                visitHeader(spec)
+            } else {
+                if let spec = child as? PinnParser.StatementContext {
+                    visit(spec)
+                switch fc.path {
+                case .pBreak, .pContinue, .pFallthrough:
+                    de(Perr(ESTATEMENT, nil, sctx))
+                case .pExiting:
+                    if fc.rt != nil {
+                        de(ETYPE)
+                    }
+                case .pNormal: break
+                    
                 }
-            case .pNormal: break
-                
+                }
             }
         }
     }

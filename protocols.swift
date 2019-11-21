@@ -47,7 +47,7 @@ extension Decimal: Ptype, Plus, Compare, Arith, Negate {
     
     func neg() -> Negate {
         let x = 0 - self
-        return x as! Negate
+        return x
     }
     
     func plus(_ a: Plus) -> Plus {
@@ -92,7 +92,7 @@ extension Int: Ptype, Ktype, Plus, Compare, Negate, Arith {
     }
     func neg() -> Negate {
         let x = 0 - self
-        return x as! Negate
+        return x
     }
     
     func equal(_ a: Ptype) -> Bool {
