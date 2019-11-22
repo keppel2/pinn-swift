@@ -30,7 +30,7 @@ let global = "glob"
 
 let TEST = false
 let TOKENS = false
-let inFile = TEST ? "types.pinn" : "tic.pinn"
+let inFile = TEST ? "types.pinn" : "e52.pinn"
 
 let myinput = fnToString("/tmp/\(inFile)")
 let TMP = "/tmp/pinn.out"

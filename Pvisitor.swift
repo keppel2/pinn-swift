@@ -9,6 +9,62 @@
 import Foundation
 import Antlr4
 class Pvisitor {
+    static func assertPvals( _ s: [Pval], _ i: Int) {
+        if s.count != i {
+            de(EPARAM_LENGTH)
+        }
+    }
+    let builtIns
+    : [String: ([Pval]) -> Pval?] =
+        ["len": { s in assertPvals(s, 1)
+            if s[0].kind.gtype == .gScalar && s[0].kind.vtype == String.self {
+                return Pval((s[0].get() as! String).count)
+                }
+            return Pval(s[0].kind.count!)},
+         "stringValue":
+            { s in assertPvals(s, 1)
+                return Pval(s[0].string) },
+         "print":
+            {s in
+                let rt = Pvisitor.printSpace(s.map {$0.string})
+                Pvisitor.textout(rt)
+                return nil
+            },
+            "println":
+                {s in
+                     var rt = Pvisitor.printSpace(s.map {$0.string})
+                    Pvisitor.textout(rt + "\n")
+                    return nil
+            },
+            "readLine": {
+                s in assertPvals(s, 0)
+                return Pval(readLine()!)
+            },
+            "printH": { s in assertPvals(s, 1)
+                Pvisitor.textout(String(s[0].get() as! Int, radix: 16, uppercase: false))
+                return nil
+            },
+            "printB": { s in assertPvals(s, 1)
+                 Pvisitor.textout(String(s[0].get() as! Int, radix: 2, uppercase: false))
+                 return nil
+             },
+            "delete": { s in assertPvals(s, 2)
+                s[0].set(s[1].get() as! String, nil)
+                return nil
+            },
+            "debug": { s in assertPvals(s, 0)
+                dbg()
+                return nil
+            },
+            "sort": { s in assertPvals(s, 1)
+                s[0].sort()
+                return s[0]
+            },
+            "sleep": { s in assertPvals(s, 1)
+                sleep(UInt32(s[0].get() as! Int))
+                return nil
+            }
+    ]
     enum Path {
         case pNormal, pExiting, pBreak, pContinue, pFallthrough
     }
@@ -199,53 +255,6 @@ class Pvisitor {
         }
         return rt
     }
-    let builtIns
-    : [String: ([Pval]) -> Pval?] =
-        ["len": { s in return Pval(s[0].kind.count!)},
-         "strLen":
-            { s in Pval((s[0].get() as! String).count) },
-         "stringValue":
-            { s in Pval(s[0].string) },
-         "print":
-            {s in
-                let rt = Pvisitor.printSpace(s.map {$0.string})
-                Pvisitor.textout(rt)
-                return nil
-            },
-            "println":
-                {s in
-                     var rt = Pvisitor.printSpace(s.map {$0.string})
-                    Pvisitor.textout(rt + "\n")
-                    return nil
-            },
-            "readLine": {
-                s in
-                return Pval(readLine()!)
-            },
-            "printH": { s in
-                Pvisitor.textout(String(s[0].get() as! Int, radix: 16, uppercase: false))
-                return nil
-            },
-            "printB": { s in
-                 Pvisitor.textout(String(s[0].get() as! Int, radix: 2, uppercase: false))
-                 return nil
-             },
-            "delete": { s in
-                s[0].set(s[1].get() as! String, nil)
-                return nil
-            },
-            "debug": { s in dbg()
-                return nil
-            },
-            "sort": { s in
-                s[0].sort()
-                return s[0]
-            },
-            "sleep": { s in
-                sleep(UInt32(s[0].get() as! Int))
-                return nil
-            }
-    ]
     func callFunction(_ str: String, _ s: [Pval])  -> Pval? {
         var rt: Pval?
         let fh = fkmap[str]!

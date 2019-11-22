@@ -196,7 +196,7 @@ repeat {
     print(wstr);
     print(".");
     wstr += wstr;
-} while strLen(wstr) < 8;
+} while len(wstr) < 8;
 
 ec();ft("Slice middle of array", "[4 5]");
 var ar [array]int = 1, 4, 5, 14, 23, 32;
@@ -492,7 +492,7 @@ brak(len(boolMap));
 boolMap["noot"] = true;
 brak(len(boolMap));
 ec();ft("string length", "4");
-print(strLen("abcd"));
+print(len("abcd"));
 ec();ft("string Value", "42");
 var strv string;
 strv = stringValue(42);
@@ -522,3 +522,6 @@ func arFunc(ar [1]int) {
 var arF [1]int = 23;
 arFunc(arF);
 print(arF[0]);
+
+badi := 5;
+if 4 == badi - 1 ;

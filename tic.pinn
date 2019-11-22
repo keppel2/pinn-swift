@@ -2,7 +2,7 @@ EMPTY := 0;
 TIE := 3;
 PLAYER_A := 1;
 PLAYER_B := 2;
-SIZE := 3;
+SIZE := 4;
 var last_board [SIZE * SIZE]int;
 lastp := 0;
 var last_board2 [SIZE * SIZE]int;
@@ -20,7 +20,7 @@ func bHash(board [SIZE * SIZE]int) int {
     rt := 0;
     var v int;
     for v = range board {
-    rt *= 3;
+    rt *= SIZE;
     rt += v;
     }
     return rt;
@@ -154,7 +154,7 @@ func main() {
            
     var x int;
     for x = range 0:SIZE * SIZE {
-        board[x] = ar[x];
+//        board[x] = ar[x];
     }
     
     //board [coord(0, 3)] = PLAYER_A;
