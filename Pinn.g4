@@ -69,16 +69,15 @@ expr
    indexExpr
   | arrayLiteral
   | objectLiteral
-  | ('+' | '-' | '!' | '^') expr
-  | expr ('+' | '-' | '^' | BINOP) expr
+  | ('+' | '-' | '!' ) expr
+  | expr ('+' | '-' | BINOP) expr
   | expr ('==' | '!=' | '>' | '<' | '>=' | '<=' ) expr
   | expr ('&&' | '||') expr
   | callExpr
   | parenExpr 
   | expr (TWODOTS | COLON) expr
-  | (ID | FLOAT | INT | BOOL | STRING | CHAR | IOTA)
-  | expr '?' expr COLON expr;
-
+  | expr '?' expr COLON expr
+  | (ID | FLOAT | INT | BOOL | STRING ) ;
 exprList
   : expr (',' expr)* ;
 
@@ -133,7 +132,7 @@ COMMA : ',' ;
 COLON : ':' ;
 CE : ':=' ;
 IOTA : 'iota' ;
-BINOP : ('*' | '/' | '%' | '&' | '|' | '<<' | '>>' ) ;
+BINOP : ('*' | '/' | '%' ) ;
 BOOL : 'true' | 'false' ;
 ID : [a-zA-Z_]([a-zA-Z_0-9])* ;
 CHAR : '\''[a-zA-Z_0-9]'\'' ;

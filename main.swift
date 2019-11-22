@@ -28,7 +28,7 @@ let global = "glob"
 
 //readLine()
 
-let TEST = false
+let TEST = true
 let TOKENS = false
 let inFile = TEST ? "types.pinn" : "tic.pinn"
 
