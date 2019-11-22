@@ -1,6 +1,6 @@
 # Pinn is a computer language that lets you be correct.
 
-Pinn is a statically typed, imperative language for computers.
+Pinn is a statically typed, imperative language for computers.       many spaces.
 
 * Syntax taken mostly from Go.
 * Carefully chosen ideas from Swift.
@@ -50,7 +50,7 @@ _Almost all taken from Go, so much like c/Java. Conditional expression was put b
 ## statement
 * `while <expr> <block>`
   * Evaluate `expr`. If true, execute `block` and repeat this line. If false, go on.
-* `repeat <block> while <expr>`
+* `repeat <block> while <expr> ;`
   * Execute `block`. Evaluate `expr`. If true, repeat this line.
 * `return [<expr>] ;`
   * Return from function. The `expr` must match the return type, or empty if there is none. If global, there is no return type.
@@ -61,7 +61,9 @@ _Almost all taken from Go, so much like c/Java. Conditional expression was put b
 * `for <id> [, <id>] = range <expr> <block>`
   * If `id` is alone, it becomes the values of the `expr`. If a second `id` is present, it becomes the values and the first `id` are the keys. The `expr` must evaluate to an array, slice, or map. The block iterates through the elements. Note that `id1` and `id2` must be predeclared.
 * `"{" { <statement> } "}"` Block statement
-
+* `match <expr> "{" { when <expr_list> : { <statement> } } [ default : { <statement> } ] "}"` `expr` is compared to each `when` clause in order.  two spaces. one space.
+* ` ( break | continue | fallthrough ) ;`
+* ` ; ` Empty statement
 ## Variable declaration
 * `<id> <kind> [ = <expr_list> ]`
   * Declare `id` of `kind` type. Optionally initialize it.
