@@ -38,7 +38,7 @@ Most lexical elements are borrowed from Go. Later elements include support for `
 * `&& ||` Short-circuit AND and OR
 * `<id> "(" <expr_list>? ")"` Call
 * `<expr> ( ":" | "@" ) <expr>` Range generator. Both generate one through ten: `1:11 1@10`.
-* `<expr> "?" <expr> ":" <expr>` Ternary conditional. First `expr` is evaluated. If true, resolve to first `expr`. If false, resolve to second `expr`.
+* `<expr> "?" <expr> ":" <expr>` Ternary conditional. First `expr` is evaluated. If true, resolve to second `expr`. If false, resolve to third `expr`.
 * `<ID> <FLOAT> <INT> <BOOL> <STRING>`
 ## Compilation unit
 * `( <function> | <statement>)+ EOF`
