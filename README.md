@@ -28,7 +28,18 @@ Most lexical elements are borrowed from Go. Later elements include support for `
 ## Expressions
 
 * Almost all taken from Go, so much like c/Java. Conditional expression was put back in.
-
+* _From highest precedence_
+* `<id> "[" (<expr>? (":" | "@") <expr>?)? "]"` Index expression.
+* `"[" <expr_list "]"` Array literal
+* `"{" <ID> ":" <expr> { "," <ID> ":" <expr> } }` Map literal
+* `+ - !` Unary
+* `+ - * / %` Binary (simplified precedence), _string concatenation_
+* `== != < <= > >=` Comparison
+* `&& ||` Short-circuit AND and OR
+* `<id> "(" <expr_list>? ")"` Call
+* `<expr> ( ":" | "@" ) <expr>` Range generator. Both generate one through ten: `1:11 1@10`.
+* `<expr> "?" <expr> ":" <expr>` Ternary conditional. First `expr` is evaluated. If true, resolve to first `expr`. If false, resolve to second `expr`.
+* `<ID> <FLOAT> <INT> <BOOL> <STRING>`
 ## Compilation unit
 * `( <function> | <statement>)+ EOF`
 
@@ -37,8 +48,8 @@ Most lexical elements are borrowed from Go. Later elements include support for `
 
 
 ## simple-statement
-* `<id> [ "[" <expr> "]" ] = <expr>`
-* `<id> [ "[" <expr> "]" ] <op> = <expr>`
+* `<id> [ "[" <expr> "]" ] = <expr>` Simple set
+* `<id> [ "[" <expr> "]" ] <op> = <expr>` Compount set
 
 ## variable-declaration
 * `<id> <kind> [ = expr_list ]`
@@ -57,6 +68,7 @@ Most lexical elements are borrowed from Go. Later elements include support for `
   * Evaluate `expr`. If false, execute `block`. The block must relinquish control, with a `return`, `break`, or `continue`.
 * `for <id1> [, <id2>] = range <expr> <block>
   * If `id1` is alone, it becomes the values of the `expr`. If `id2` is present, it is the values and `id1` is the keys. The `expr` must evaluate to an array, slice, or map. The block iterates through the elements. Note that `id1` and `id2` must be predeclared.
+* `"{" { <statement> } "}"` block statement
   
  
 
@@ -67,12 +79,11 @@ Most lexical elements are borrowed from Go. Later elements include support for `
   * Short declaration.
 
 
-The grammar is clean of implementation language and is written in ANTLR. It has implementations in Go and Swift. The Swift implementation is more recent and at https://github.com/keppel2/pinnSwift.
+The grammar is clean of implementation language and is written in ANTLR. It has implementations in Go and Swift. The Swift implementation is more recent.
 
-# Running Go version
+# Running Go version (pinn-go here on Github)
 
-
-Get ANTLR from https://www.antlr.org/download.html.
+Get ANTLR from https://www.antlr.org/download.html .
 
 Save the following to `hello.pinn`:
 
@@ -89,7 +100,6 @@ Running ANTLR
 
 * `java -jar <path_to_antlr_jar> -Dlanguage=Go -o pparser Pinn.g4`
 
-# Elements
 ## Notation
 ```
 |  alternation
@@ -99,10 +109,10 @@ Running ANTLR
 literal  type as specified
 <production>  rule specified elsewhere
 "{" "[" ...  notation elements as literals
+```
+## Solving Tic-Tac-Toe.
 
-* Solving Tic-Tac-Toe
-
-'''
+```
 EMPTY := 0;
 TIE := 3;
 PLAYER_A := 1;
@@ -249,4 +259,4 @@ func main() {
     println ("Winner:", resultString);
 }
 main();
-'''
+```
