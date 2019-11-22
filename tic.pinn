@@ -2,27 +2,20 @@ EMPTY := 0;
 TIE := 3;
 PLAYER_A := 1;
 PLAYER_B := 2;
-SIZE := 4;
-var last_board [SIZE * SIZE]int;
-lastp := 0;
-var last_board2 [SIZE * SIZE]int;
-lastp2 := 0;
-var bHash [map]int;
-var rHash [map]int;
+SIZE := 3;
+var rHashMap [map]int;
 func coord (x int, y int) int {
 	return y * SIZE + x;
 }
 func rHash(board [SIZE * SIZE]int, player int) int {
-    return bHash(board) * 2 + (player - 1);
-
-}
-func bHash(board [SIZE * SIZE]int) int {
     rt := 0;
     var v int;
     for v = range board {
-    rt *= SIZE;
-    rt += v;
+        rt *= SIZE;
+        rt += v;
     }
+    rt *= 2;
+    rt += player - 1;
     return rt;
 }
 func printBoard (board [SIZE * SIZE]int) {
@@ -51,50 +44,36 @@ func full (board [SIZE * SIZE]int) bool {
 func line (board [SIZE * SIZE]int, x int, y int, dx int, dy int) int {
     comp := board[coord(x, y)];
     if comp == EMPTY {
-        return 0;
+        return TIE;
     }
     while x + dx < SIZE && y + dy < SIZE {
         x += dx;
         y += dy;
         if board[coord(x, y)] != comp {
-            return 0;
+            return TIE;
         }
     }
     return comp;
 }
 
 func winner (board [SIZE * SIZE]int) int {
-    hash := bHash(board);
-    if bHash[stringValue(hash)] != 0 {
-      //  return bHash[stringValue(hash)];
-    }
-    var ar[3] int;
-	var current int;
-	var a int;
-	var y int;
-
-    for a = range 0:SIZE {
-        ar[line(board, a, 0, 0, 1)]++;
-        ar[line(board, 0, a, 1, 0)]++;
-    }
-    ar[line(board, 0, 0, 1, 1)]++;
-    ar[line(board, 0, SIZE - 1, 1, -1)]++;
-
-     if ar[1] > 0 && ar[2] > 0 {
-     printBoard(board);
-    }
+	var i int;
     var rt int;
-    if ar[1] > 0 {
-        rt = 1;
-    } else if ar[2] > 0 {
-        rt = 2;
-    } else {
-        rt = TIE;
+
+    for i = range 0:SIZE {
+        rt = line(board, i, 0, 0, 1);
+        if rt != TIE
+            return rt;
+        rt = line(board, 0, i, 1, 0);
+        if rt != TIE
+            return rt;
     }
-    bHash[stringValue(hash)] = rt;
+    rt = line(board, 0, 0, 1, 1);
+    if rt != TIE
+        return rt;
+    rt = line(board, 0, SIZE - 1, 1, -1);
     return rt;
 }
-
 
 func opposite (x int) int { return x == PLAYER_A ? PLAYER_B : PLAYER_A; }
 			
@@ -103,16 +82,8 @@ func minimax (player int, board [SIZE * SIZE]int) int
 	var result int;
 	var best int = opposite(player);
 
-    //println("Player", player);
-    //printBoard(board);
-    last_board2 = last_board;
-    lastp2 = lastp;
-    last_board = board;
-    lastp = player;
 	result = winner(board);
 	if result != TIE {
-
-// printBoard(board);
 		return result;
     }
     if full(board) {
@@ -126,11 +97,11 @@ func minimax (player int, board [SIZE * SIZE]int) int
 			if board[coord(x, y)] == EMPTY {
 				board[coord(x, y)] = player;
                 strRHash = stringValue(rHash(board, player));
-                if rHash[strRHash] > 0 {
-                    result = rHash[strRHash];
+                if rHashMap[strRHash] > 0 {
+                    result = rHashMap[strRHash];
                 } else {
                     result = minimax(opposite(player), board);
-                    rHash[strRHash] = result;
+                    rHashMap[strRHash] = result;
                 }
 				if result == player {
 					return player;
@@ -154,17 +125,12 @@ func main() {
            
     var x int;
     for x = range 0:SIZE * SIZE {
-//        board[x] = ar[x];
+        board[x] = ar[x];
     }
     
-    //board [coord(0, 3)] = PLAYER_A;
-    //board [coord(1, 2)] = PLAYER_A;
-    //board [coord(2, 1)] = PLAYER_A;
-    //board [coord(3, 0)] = PLAYER_A;
     printBoard(board);
     
     var result int = minimax (PLAYER_A, board);
-   //var result int = winner (board);
    
     resultString := "";
     match result {
@@ -176,21 +142,5 @@ func main() {
             resultString = "Player B.";
     }
     println ("Winner:", resultString);
-    println ("Last examined board state.");
-    println(lastp, lastp2);
-    printBoard(last_board);
-    printBoard(last_board2);
 }
 main();
-
-/*
-Winner: Player A.
-Last examined board state.
-0 1 0
-0 1 2
-0 1 2
----
-0 1 2
-0 1 2
-1 0 2
-*/
