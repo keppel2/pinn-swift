@@ -16,7 +16,7 @@ Most lexical elements are borrowed from Go. Later elements include support for `
 
 * `int`. Always a signed 64-bit.
 * `bool`. Standard, `true` or `false`.
-* `string`. Immutable.
+* `string`. Immutable Unicode. `"string"`. `"this is a double quote:\""
 * `decimal`. Decimal.
 ## Group Types
 
@@ -69,36 +69,15 @@ Most lexical elements are borrowed from Go. Later elements include support for `
 * `for <id1> [, <id2>] = range <expr> <block>
   * If `id1` is alone, it becomes the values of the `expr`. If `id2` is present, it is the values and `id1` is the keys. The `expr` must evaluate to an array, slice, or map. The block iterates through the elements. Note that `id1` and `id2` must be predeclared.
 * `"{" { <statement> } "}"` block statement
-  
- 
 
 ## Variable declaration
 * `<id> <kind> [ = <expr_list> ]`
   * Declare `id` of `kind` type. Optionally initialize it.
 * `<id> := <expr>`
-  * Short declaration.
+  * Short declaration. The `id` is set to the type and value of expression.
 
 
 The grammar is clean of implementation language and is written in ANTLR. It has implementations in Go and Swift. The Swift implementation is more recent.
-
-# Running Go version (pinn-go here on Github)
-
-Get ANTLR from https://www.antlr.org/download.html .
-
-Save the following to `hello.pinn`:
-
-> func main ( ) {
-> 	print ("Hello, world.");
-> }
-
-Then run the ANTLR code and run `go run -f hello.pinn`. You should see:
-
-> Hello, world.
-
-Running ANTLR
--------------
-
-* `java -jar <path_to_antlr_jar> -Dlanguage=Go -o pparser Pinn.g4`
 
 ## Notation
 ```
