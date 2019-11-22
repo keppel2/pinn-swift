@@ -8,15 +8,11 @@ Pinn is a statically typed, imperative language for computers.
 _Implementations as interpreters in Antlr for Go and Swift_
 ## Specification
 
-## Lexical
-
-Most lexical elements are borrowed from Go. Later elements include support for `_` in numeric literals and binary floating point.
-
 ## Element Types
 
 * `int`. Always a signed 64-bit.
 * `bool`. Standard, `true` or `false`.
-* `string`. Immutable Unicode. `"string"`. `"this is a double quote:\""
+* `string`. Immutable Unicode. `"string"` `"this is a double quote:\""`
 * `decimal`. Decimal.
 ## Group Types
 
@@ -27,7 +23,8 @@ Most lexical elements are borrowed from Go. Later elements include support for `
 
 ## Expressions
 
-* Almost all taken from Go, so much like c/Java. Conditional expression was put back in.
+_Almost all taken from Go, so much like c/Java. Conditional expression was put back in._
+
 * _From highest precedence_
 * `<id> "[" (<expr>? (":" | "@") <expr>?)? "]"` Index expression.
 * `"[" <expr_list "]"` Array literal
@@ -39,21 +36,16 @@ Most lexical elements are borrowed from Go. Later elements include support for `
 * `<id> "(" <expr_list>? ")"` Call
 * `<expr> ( ":" | "@" ) <expr>` Range generator. Both generate one through ten: `1:11 1@10`.
 * `<expr> "?" <expr> ":" <expr>` Ternary conditional. First `expr` is evaluated. If true, resolve to second `expr`. If false, resolve to third `expr`.
-* `<ID> <FLOAT> <INT> <BOOL> <STRING>`
+* `<ID> <FLOAT> <INT> <BOOL> <STRING>` Tokens representing symbols, decimals, integers, booleans, and strings.
 ## Compilation unit
-* `( <function> | <statement>)+ EOF`
+* `( <function> | <statement>)+ <EOF>`
 
 ## block
 * `"{" { <statement> } "}"`
 
-
 ## simple-statement
 * `<id> [ "[" <expr> "]" ] = <expr>` Simple set
 * `<id> [ "[" <expr> "]" ] <op> = <expr>` Compount set
-
-## variable-declaration
-* `<id> <kind> [ = expr_list ]`
-* `<id> := <expr>`
 
 ## statement
 * `while <expr> <block>`
@@ -66,9 +58,9 @@ Most lexical elements are borrowed from Go. Later elements include support for `
   * Evaluate `expr`. If true, exectue first `statement`. If false, either move on or execute second `statement`.
 * `guard <expr> else <block>`
   * Evaluate `expr`. If false, execute `block`. The block must relinquish control, with a `return`, `break`, or `continue`.
-* `for <id1> [, <id2>] = range <expr> <block>
-  * If `id1` is alone, it becomes the values of the `expr`. If `id2` is present, it is the values and `id1` is the keys. The `expr` must evaluate to an array, slice, or map. The block iterates through the elements. Note that `id1` and `id2` must be predeclared.
-* `"{" { <statement> } "}"` block statement
+* `for <id> [, <id>] = range <expr> <block>`
+  * If `id` is alone, it becomes the values of the `expr`. If a second `id` is present, it becomes the values and the first `id` are the keys. The `expr` must evaluate to an array, slice, or map. The block iterates through the elements. Note that `id1` and `id2` must be predeclared.
+* `"{" { <statement> } "}"` Block statement
 
 ## Variable declaration
 * `<id> <kind> [ = <expr_list> ]`
@@ -81,13 +73,14 @@ The grammar is clean of implementation language and is written in ANTLR. It has 
 
 ## Notation
 ```
-|  alternation
+|   alternation
 ()  grouping
 []  option (0 or 1 times)
 {}  repetition (0 to n times)
-literal  type as specified
-<production>  rule specified elsewhere
-"{" "[" ...  notation elements as literals
+literal
+<production> rule specified elsewhere
+<TOKEN>
+"{" "[" notation elements as literals
 ```
 ## Solving Tic-Tac-Toe.
 
