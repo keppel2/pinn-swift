@@ -5,8 +5,7 @@ Pinn is a statically typed, imperative language for computers.       many spaces
 * Syntax taken mostly from Go.
 * Carefully chosen ideas from Swift.
 
-_Implementations as interpreters in Antlr for Go and Swift_
-## Specification
+_Implementations as interpreters in Antlr for Go and Swift. Current progress in Swift._
 
 ## Element Types
 
@@ -23,15 +22,13 @@ _Implementations as interpreters in Antlr for Go and Swift_
 
 ## Expressions
 
-_Almost all taken from Go, so much like c/Java. Conditional expression was put back in._
-
 * _From highest precedence_
 * `<id> "[" (<expr>? (":" | "@") <expr>?)? "]"` Index expression.
 * `"[" <expr_list "]"` Array literal
 * `"{" <ID> ":" <expr> { "," <ID> ":" <expr> } }` Map literal
 * `+ - !` Unary
 * `+ - * / %` Binary (simplified precedence), _string concatenation_
-* `== != < <= > >=` Comparison
+* `== != < <= > >=` Comparison, _string comparisons_
 * `&& ||` Short-circuit AND and OR
 * `<id> "(" <expr_list>? ")"` Call
 * `<expr> ( ":" | "@" ) <expr>` Range generator. Both generate one through ten: `1:11 1@10`.
@@ -39,15 +36,22 @@ _Almost all taken from Go, so much like c/Java. Conditional expression was put b
 * `<ID> <FLOAT> <INT> <BOOL> <STRING>` Tokens representing symbols, decimals, integers, booleans, and strings.
 ## Compilation unit
 * `( <function> | <statement>)+ <EOF>`
+## Function, `<function>`
 
+* `func <ID> "(" (<fVarDecl> { , <fVarDecl> } )? ")" <kind>? <block>`
+  * `fVarDecl := <ID> ...? <kind>`
+
+A function calls a piece of code, assigning each variable in the parameter list to each the value in the calling list. The `...` is allowed for the last parameter. It is expanded into an array carrying zero or more calling expressions.
 ## block
 * `"{" { <statement> } "}"`
 
 ## simple-statement
 * `<id> [ "[" <expr> "]" ] = <expr>` Simple set
-* `<id> [ "[" <expr> "]" ] <op> = <expr>` Compount set
-
-## statement
+* `<id> [ "[" <expr> "]" ] <op> = <expr>` Compound set
+## grammar fragments
+### `<expr_list>`
+* `<expr> { , <expr> }`
+## `<statement>`
 * `while <expr> <block>`
   * Evaluate `expr`. If true, execute `block` and repeat this line. If false, go on.
 * `repeat <block> while <expr> ;`
@@ -64,7 +68,7 @@ _Almost all taken from Go, so much like c/Java. Conditional expression was put b
 * `match <expr> "{" { when <expr_list> : { <statement> } } [ default : { <statement> } ] "}"` `expr` is compared to each `when` clause in order.  two spaces. one space.
 * ` ( break | continue | fallthrough ) ;`
 * ` ; ` Empty statement
-## Variable declaration
+## Variable declaration (`<var_decl>`)
 * `<id> <kind> [ = <expr_list> ]`
   * Declare `id` of `kind` type. Optionally initialize it.
 * `<id> := <expr>`
@@ -79,9 +83,11 @@ The grammar is clean of implementation language and is written in ANTLR. It has 
 ()  grouping
 []  option (0 or 1 times)
 {}  repetition (0 to n times)
+:=  assign to token or production on left
 literal
 <production> rule specified elsewhere
 <TOKEN>
+
 "{" "[" notation elements as literals
 ```
 ## Solving Tic-Tac-Toe.
