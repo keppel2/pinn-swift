@@ -64,8 +64,7 @@ callExpr:
 parenExpr: LPAREN expr ')';
 
 expr
-  : 
-
+  :
    indexExpr
   | arrayLiteral
   | objectLiteral
@@ -82,7 +81,7 @@ exprList
   : expr (',' expr)* ;
 
 returnStatement
-  : 'return' expr? ';' ;
+  : 'return' expr? ;
 
 ifStatement
   : 'if' expr statement ('else' statement)?;
@@ -117,7 +116,7 @@ statement
   | whStatement 
   | repeatStatement ';'
   | switchStatement
-  | returnStatement
+  | returnStatement ';'
   | foStatement
   | block
   | 'break' ';'
@@ -162,3 +161,4 @@ fragment HEX_EXPONENT : 'p' [+-]? DECIMAL_DIGITS
   | 'h' [+-]? HEX_DIGITS ;
 fragment OCTAL_DIGIT : [0-7] ;
 fragment BINARY_DIGIT : [01] ;
+
