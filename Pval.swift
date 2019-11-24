@@ -34,7 +34,7 @@ class Pval {
 //        self.init(pv.ar![a..<b])
     }
     init(_ k: Kind, _ i: Ptype? = nil) {
-        prc = pv!.prc!
+        prc = pv.prc!
         self.k = k
         switch k.gtype {
         case .gArray, .gSlice:

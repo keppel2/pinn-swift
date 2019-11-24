@@ -17,7 +17,7 @@ class Perr {
     init (_ s: String, _ p: Pval? = nil, _ p2: ParserRuleContext? = nil, _ p3: Token? = nil) {
         str = s
         pval = p
-        prc = p2 ?? pv?.prc
+        prc = p2 ?? pv.prc
         tok = p3
     }
     convenience init(_ s: String, _ p: ParserRuleContext) {

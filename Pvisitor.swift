@@ -8,6 +8,7 @@
 
 import Foundation
 import Antlr4
+
 class Pvisitor {
     static func assertPvals( _ s: [Pval], _ i: Int) {
         if s.count != i {
@@ -318,7 +319,7 @@ class Pvisitor {
     }
     static func textout(_ outStr: String) {
         print(outStr, terminator: "")
-        fh.write(Data(outStr.utf8))
+//        fh.write(Data(outStr.utf8))
     }
     
     

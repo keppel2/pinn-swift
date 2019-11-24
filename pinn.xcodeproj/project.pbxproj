@@ -38,6 +38,13 @@
 /* End PBXBuildRule section */
 
 /* Begin PBXContainerItemProxy section */
+		E223B481238A22AF005EB275 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E267395A235BC825000CF830 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E2673961235BC825000CF830;
+			remoteInfo = pinn;
+		};
 		E2B5357A238923B200554468 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E2B53576238923B200554468 /* Antlr4.xcodeproj */;
@@ -184,6 +191,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				E223B482238A22AF005EB275 /* PBXTargetDependency */,
 			);
 			name = PinnTests;
 			productName = PinnTests;
@@ -321,6 +329,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		E223B482238A22AF005EB275 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E2673961235BC825000CF830 /* pinn */;
+			targetProxy = E223B481238A22AF005EB275 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		E2488DE823892A6E00F1A336 /* Debug */ = {

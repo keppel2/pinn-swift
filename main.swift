@@ -9,69 +9,28 @@
 import Foundation
 import Antlr4
 
-let EPARAM_LENGTH = "Parameter length mismatch"
-
-let ESTATEMENT = "Wrong statement"
-let ETYPE      = "Wrong type"
-let ERANGE          = "Out of range"
-let ECASE           = "Case unimplemented"
-let EREDECLARE = "Redeclared"
-let EUNDECLARED = "Undeclared"
-let ETEST_FAIL = "Test failed"
-
-
-let global = "glob"
-//print("sleep");
-//sleep(2);
-//print("wakey");
-//
-
-//readLine()
-
-let TEST = true
-let TOKENS = false
-let inFile = TEST ? "types.pinn" : "tic.pinn"
-
-let myinput = fnToString("/tmp/\(inFile)")
-let TMP = "/tmp/pinn.out"
-FileManager.default.createFile(atPath: TMP, contents: nil)
-let fh = FileHandle(forWritingAtPath: TMP)!
-
-
-
-let parser = stringToParser(myinput)
-parser.setErrorHandler(BailErrorStrategy())
-var tree =  try? parser.file()
-let pv: Pvisitor?
-if tree == nil {
-    let parser2 = stringToParser(myinput)
-    try! parser2.file()
-    de(ETEST_FAIL)
-} else {
-    if TOKENS {
-        let stream = parser.getTokenStream() as! CommonTokenStream
-        print(stream.getTokens())
-    }
-    pv = Pvisitor()
-    pv!.visitFile(tree!)
+func parse(_ s: String) -> PinnParser.FileContext? {
+    let parser = stringToParser(s)
+    parser.setErrorHandler(BailErrorStrategy())
+    let tree = try? parser.file()
+    return tree
 }
 
+func err(_ s: String) {
+    let parser = stringToParser(s)
+    try! parser.file()
+}
 
-if (TEST) {
-    print();
-    print("----");
-    let fString = fnToString(TMP)
-    let fsplit = fString.split(separator: "\n", omittingEmptySubsequences: false)
-    if fsplit.count == 0 {
+let pv = Pvisitor()
+
+func execute(_ s: String) {
+    let myinput = fnToString("/tmp/\(s)")
+    if let tree = parse(myinput) {
+        pv.visitFile(tree)
+    } else {
+        err(myinput)
         de(ETEST_FAIL)
     }
-    for str in fsplit {
-        print(str)
-        let hashed = str.split(separator: "!")[1]
-        
-        let compare = hashed.split(separator: "#", maxSplits: 2, omittingEmptySubsequences: false)
-        if compare[0] != compare[1] {
-            de(ETEST_FAIL)
-        }
-    }
 }
+print("wot")
+execute("tic.pinn")

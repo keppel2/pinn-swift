@@ -1,7 +1,7 @@
-
+func a() {
     y := 5;
     if y == 6 - 1
         print("yes");
-        
+}
 
 
