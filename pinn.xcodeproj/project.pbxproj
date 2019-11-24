@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E2488DE623892A6E00F1A336 /* PinnTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2488DE523892A6E00F1A336 /* PinnTests.swift */; };
+		E25DA565238A657A005CB15B /* dumm.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25DA564238A657A005CB15B /* dumm.swift */; };
 		E28CB40223679F640045FA67 /* Pvisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E28CB40123679F640045FA67 /* Pvisitor.swift */; };
 		E29BEB1923808A4100969DFF /* aux.swift in Sources */ = {isa = PBXBuildFile; fileRef = E29BEB1823808A4100969DFF /* aux.swift */; };
 		E29BEB312380DFE200969DFF /* Perr.swift in Sources */ = {isa = PBXBuildFile; fileRef = E29BEB302380DFE200969DFF /* Perr.swift */; };
@@ -39,12 +39,12 @@
 /* End PBXBuildRule section */
 
 /* Begin PBXContainerItemProxy section */
-		E223B481238A22AF005EB275 /* PBXContainerItemProxy */ = {
+		E25DA577238A67D3005CB15B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = E267395A235BC825000CF830 /* Project object */;
+			containerPortal = E2B53576238923B200554468 /* Antlr4.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = E2673961235BC825000CF830;
-			remoteInfo = pinn;
+			remoteGlobalIDString = E2B534302389231700554468;
+			remoteInfo = Antlr4;
 		};
 		E2B5357A238923B200554468 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -79,9 +79,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		E2488DE323892A6E00F1A336 /* PinnTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PinnTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E2488DE523892A6E00F1A336 /* PinnTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinnTests.swift; sourceTree = "<group>"; };
-		E2488DE723892A6E00F1A336 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E25DA564238A657A005CB15B /* dumm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dumm.swift; sourceTree = "<group>"; };
 		E2673962235BC825000CF830 /* pinn */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = pinn; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2673965235BC825000CF830 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		E28CB40123679F640045FA67 /* Pvisitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pvisitor.swift; sourceTree = "<group>"; };
@@ -103,13 +101,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		E2488DE023892A6E00F1A336 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		E267395F235BC825000CF830 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -121,19 +112,11 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		E2488DE423892A6E00F1A336 /* PinnTests */ = {
-			isa = PBXGroup;
-			children = (
-				E2488DE523892A6E00F1A336 /* PinnTests.swift */,
-				E2488DE723892A6E00F1A336 /* Info.plist */,
-			);
-			path = PinnTests;
-			sourceTree = "<group>";
-		};
 		E2673959235BC825000CF830 = {
 			isa = PBXGroup;
 			children = (
 				E2D2DC032366BE3700E0CC35 /* PinnLexer.swift */,
+				E25DA564238A657A005CB15B /* dumm.swift */,
 				E2D2DC002366BE3700E0CC35 /* PinnLexerATN.swift */,
 				E28CB40423680A0B0045FA67 /* types.pinn */,
 				E2BC3DB42387733B002D9413 /* a.pinn */,
@@ -149,7 +132,6 @@
 				E2B5A282237E0FB200E91CE2 /* Kind.swift */,
 				E2D2DBFB2366B76500E0CC35 /* Pinn.g4 */,
 				E2CDE16D2363EB740065250D /* Pval.swift */,
-				E2488DE423892A6E00F1A336 /* PinnTests */,
 				E2673963235BC825000CF830 /* Products */,
 				E2B53575238923B200554468 /* Frameworks */,
 			);
@@ -159,7 +141,6 @@
 			isa = PBXGroup;
 			children = (
 				E2673962235BC825000CF830 /* pinn */,
-				E2488DE323892A6E00F1A336 /* PinnTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -183,24 +164,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E2488DE223892A6E00F1A336 /* PinnTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = E2488DEB23892A6E00F1A336 /* Build configuration list for PBXNativeTarget "PinnTests" */;
-			buildPhases = (
-				E2488DDF23892A6E00F1A336 /* Sources */,
-				E2488DE023892A6E00F1A336 /* Frameworks */,
-				E2488DE123892A6E00F1A336 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				E223B482238A22AF005EB275 /* PBXTargetDependency */,
-			);
-			name = PinnTests;
-			productName = PinnTests;
-			productReference = E2488DE323892A6E00F1A336 /* PinnTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 		E2673961235BC825000CF830 /* pinn */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E2673969235BC825000CF830 /* Build configuration list for PBXNativeTarget "pinn" */;
@@ -215,6 +178,7 @@
 				E2D2DBFE2366B86C00E0CC35 /* PBXBuildRule */,
 			);
 			dependencies = (
+				E25DA578238A67D3005CB15B /* PBXTargetDependency */,
 			);
 			name = pinn;
 			productName = pinn;
@@ -231,9 +195,6 @@
 				LastUpgradeCheck = 1120;
 				ORGANIZATIONNAME = "Ryan Keppel";
 				TargetAttributes = {
-					E2488DE223892A6E00F1A336 = {
-						CreatedOnToolsVersion = 11.2.1;
-					};
 					E2673961235BC825000CF830 = {
 						CreatedOnToolsVersion = 11.0;
 					};
@@ -259,7 +220,6 @@
 			projectRoot = "";
 			targets = (
 				E2673961235BC825000CF830 /* pinn */,
-				E2488DE223892A6E00F1A336 /* PinnTests */,
 			);
 		};
 /* End PBXProject section */
@@ -273,16 +233,6 @@
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
-
-/* Begin PBXResourcesBuildPhase section */
-		E2488DE123892A6E00F1A336 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
 		E2D2DBFF2366BA2E00E0CC35 /* ShellScript */ = {
@@ -300,19 +250,11 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\ncp *.pinn /tmp\njava -jar /usr/local/lib/antlr.jar -no-listener -Dlanguage=Swift -message-format gnu -Werror Pinn.g4\n\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n: cp *.pinn /tmp\n: java -jar /usr/local/lib/antlr.jar -no-listener -Dlanguage=Swift -message-format gnu -Werror Pinn.g4\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		E2488DDF23892A6E00F1A336 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				E2488DE623892A6E00F1A336 /* PinnTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		E267395E235BC825000CF830 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -326,6 +268,7 @@
 				E2B5A283237E0FB200E91CE2 /* Kind.swift in Sources */,
 				E28CB40223679F640045FA67 /* Pvisitor.swift in Sources */,
 				E2D2DC072366BE3700E0CC35 /* PinnLexer.swift in Sources */,
+				E25DA565238A657A005CB15B /* dumm.swift in Sources */,
 				E2AA0545237EA5E300424FCE /* protocols.swift in Sources */,
 				E2D2DC052366BE3700E0CC35 /* PinnParserATN.swift in Sources */,
 				E2D2DC062366BE3700E0CC35 /* PinnParser.swift in Sources */,
@@ -335,48 +278,14 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		E223B482238A22AF005EB275 /* PBXTargetDependency */ = {
+		E25DA578238A67D3005CB15B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = E2673961235BC825000CF830 /* pinn */;
-			targetProxy = E223B481238A22AF005EB275 /* PBXContainerItemProxy */;
+			name = Antlr4;
+			targetProxy = E25DA577238A67D3005CB15B /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		E2488DE823892A6E00F1A336 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = PinnTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = me.PinnTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-			};
-			name = Debug;
-		};
-		E2488DE923892A6E00F1A336 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = PinnTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = me.PinnTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-			};
-			name = Release;
-		};
 		E2673967235BC825000CF830 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -517,15 +426,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E2488DEB23892A6E00F1A336 /* Build configuration list for PBXNativeTarget "PinnTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				E2488DE823892A6E00F1A336 /* Debug */,
-				E2488DE923892A6E00F1A336 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		E267395D235BC825000CF830 /* Build configuration list for PBXProject "pinn" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

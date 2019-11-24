@@ -10,23 +10,52 @@ import Foundation
 import Antlr4
 
 
-
-func parse(_ s: String) -> PinnParser.FileContext? {
+func parse(_ s: String) -> (PinnParser.FileContext?, PinnParser) {
     let parser = stringToParser(s)
     parser.setErrorHandler(BailErrorStrategy())
     let tree = try? parser.file()
-    return tree
+    return (tree, parser)
 }
 
-func err(_ s: String) {
+public func err(_ s: String) {
     let parser = stringToParser(s)
     try! parser.file()
 }
 
 func execute(_ s: String) {
-    let myinput = fnToString("/tmp/\(s)")
-    if let tree = parse(myinput) {
-        pv.visitFile(tree)
+    var test = false
+    let args = ProcessInfo.processInfo.arguments
+    if args.count == 2 {
+        test = true
+    }
+
+    let myinput = fnToString("/tmp/\(test ? "types" : s).pinn")
+    let (tree, parser) = parse(myinput)
+    _ = parser
+    if tree != nil {
+        let pv = Pvisitor()
+        pv.visitFile(tree!)
+        
+        if (test) {
+            print();
+            print("----");
+          //  let fString = fnToString(TMP)
+            let fsplit = Pvisitor.printed.split(separator: "\n", omittingEmptySubsequences: false)
+            if fsplit.count == 0 {
+                de(ETEST_FAIL)
+            }
+            for str in fsplit {
+                print(str)
+                let hashed = str.split(separator: "!")[1]
+                
+                let compare = hashed.split(separator: "#", maxSplits: 2, omittingEmptySubsequences: false)
+                if compare[0] != compare[1] {
+                    de(ETEST_FAIL)
+                }
+            }
+        }
+
+        
     } else {
         err(myinput)
         de(EPARSE_FAIL)
@@ -37,7 +66,7 @@ public func writeString(_ s: String, _ f: String) {
     let fh = FileHandle(forWritingAtPath: f)!
     fh.write(Data(s.utf8))
 }
-func fnToString(_ s: String) -> String {
+public func fnToString(_ s: String) -> String {
     let fh = FileHandle(forReadingAtPath: s)!
     let data = fh.readDataToEndOfFile()
     return String(data: data, encoding: String.Encoding.utf8)!

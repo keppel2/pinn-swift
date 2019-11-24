@@ -8,8 +8,7 @@
 
 import Foundation
 import Antlr4
-
-
-let pv = Pvisitor()
+import os
 
 execute("a.pinn")
+

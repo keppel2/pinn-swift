@@ -9,7 +9,8 @@
 import Foundation
 import Antlr4
 
-class Pvisitor {
+public class Pvisitor {
+    static var printed = ""
     static func assertPvals( _ s: [Pval], _ i: Int) {
         if s.count != i {
             de(EPARAM_LENGTH)
@@ -219,7 +220,7 @@ class Pvisitor {
     func loadDebug(_ ctx:ParserRuleContext) {
         oldPrc = prc
         prc = ctx
-     //   textStack.append(ctx.getText())
+        textStack.append(ctx.getText())
         line = ctx.start!.getLine()
     }
     func popDebug() {
@@ -319,11 +320,11 @@ class Pvisitor {
     }
     static func textout(_ outStr: String) {
         print(outStr, terminator: "")
-//        fh.write(Data(outStr.utf8))
+        printed += outStr
     }
     
     
-    func visitFile(_ sctx: PinnParser.FileContext)  {
+    public func visitFile(_ sctx: PinnParser.FileContext)  {
         for child in sctx.children! {
             if let spec = child as? PinnParser.FunctionContext {
                 visitHeader(spec)
