@@ -9,16 +9,29 @@
 import Foundation
 import Antlr4
 
-let EPARAM_LENGTH = "Parameter length mismatch"
-let ESTATEMENT = "Wrong statement"
-let ETYPE      = "Wrong type"
-let ERANGE          = "Out of range"
-let ECASE           = "Case unimplemented"
-let EREDECLARE = "Redeclared"
-let EUNDECLARED = "Undeclared"
-let ETEST_FAIL = "Test failed"
 
 
+func parse(_ s: String) -> PinnParser.FileContext? {
+    let parser = stringToParser(s)
+    parser.setErrorHandler(BailErrorStrategy())
+    let tree = try? parser.file()
+    return tree
+}
+
+func err(_ s: String) {
+    let parser = stringToParser(s)
+    try! parser.file()
+}
+
+func execute(_ s: String) {
+    let myinput = fnToString("/tmp/\(s)")
+    if let tree = parse(myinput) {
+        pv.visitFile(tree)
+    } else {
+        err(myinput)
+        de(EPARSE_FAIL)
+    }
+}
 
 public func writeString(_ s: String, _ f: String) {
     let fh = FileHandle(forWritingAtPath: f)!
@@ -30,9 +43,6 @@ func fnToString(_ s: String) -> String {
     return String(data: data, encoding: String.Encoding.utf8)!
 }
 
-enum Gtype {
-    case gScalar, gArray, gMap, gSlice
-}
 
 private func _fatalError(_ s: String) -> Never {
     print(s)
@@ -51,13 +61,10 @@ func dbg() {
     _fatalError("dbg")
 }
 
-
-
 func stringToParser(_ s: String) -> PinnParser {
     let aInput = ANTLRInputStream(s)
     let lexer = PinnLexer(aInput)
     let stream = CommonTokenStream(lexer)
-    //   print(stream.getTokens())
     let parser =  try! PinnParser(stream)
     return parser
 }

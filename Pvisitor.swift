@@ -219,7 +219,7 @@ class Pvisitor {
     func loadDebug(_ ctx:ParserRuleContext) {
         oldPrc = prc
         prc = ctx
-        textStack.append(ctx.getText())
+     //   textStack.append(ctx.getText())
         line = ctx.start!.getLine()
     }
     func popDebug() {

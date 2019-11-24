@@ -10,6 +10,10 @@ import Foundation
 
 class Kind: Equatable {
     //
+    enum Gtype {
+        case gScalar, gArray, gMap, gSlice
+    }
+
     static func == (k1: Kind, k2: Kind) -> Bool {
         return k1.vtype == k2.vtype && k1.gtype == k2.gtype && k1.count == k2.count
     }
