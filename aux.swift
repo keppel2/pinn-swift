@@ -37,22 +37,22 @@ func execute(_ s: String) {
         pv.visitFile(tree!)
         
         if (test) {
-            print();
-            print("----");
-          //  let fString = fnToString(TMP)
-            let fsplit = Pvisitor.printed.split(separator: "\n", omittingEmptySubsequences: false)
-            if fsplit.count == 0 {
-                de(ETEST_FAIL)
-            }
-            for str in fsplit {
-                print(str)
-                let hashed = str.split(separator: "!")[1]
-                
-                let compare = hashed.split(separator: "#", maxSplits: 2, omittingEmptySubsequences: false)
-                if compare[0] != compare[1] {
-                    de(ETEST_FAIL)
-                }
-            }
+//            print();
+//            print("----");
+//          //  let fString = fnToString(TMP)
+//            let fsplit = Pvisitor.printed.split(separator: "\n", omittingEmptySubsequences: false)
+//            if fsplit.count == 0 {
+//                de(ETEST_FAIL)
+//            }
+//            for str in fsplit {
+//                print(str)
+//                let hashed = str.split(separator: "!")[1]
+//                
+//                let compare = hashed.split(separator: "#", maxSplits: 2, omittingEmptySubsequences: false)
+//                if compare[0] != compare[1] {
+//                    de(ETEST_FAIL)
+//                }
+//            }
         }
 
         

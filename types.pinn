@@ -1,14 +1,13 @@
-func ec() {
-    println();
-}
+//func ec() {
+//    println();
+//}
 func conc(d string, v string) string {
     return d + "!" + v + "#";
 }
-func ft(d string, v string) {
 
-
-print(conc(d, v));
-}
+//func ft(d string, v string) {
+//print(conc(d, v));
+//}
 
 func brak(s int) {
     print("<");
@@ -525,3 +524,4 @@ print(arF[0]);
 
 badi := 5;
 if 4 == badi - 1 ;
+ec();

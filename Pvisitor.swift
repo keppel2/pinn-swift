@@ -11,6 +11,10 @@ import Antlr4
 
 public class Pvisitor {
     static var printed = ""
+    static var t_explain = ""
+    static var t_compare = ""
+    static var ft = ""
+    static var li = ft.startIndex
     static func assertPvals( _ s: [Pval], _ i: Int) {
         if s.count != i {
             de(EPARAM_LENGTH)
@@ -18,7 +22,23 @@ public class Pvisitor {
     }
     let builtIns
     : [String: ([Pval]) -> Pval?] =
-        ["len": { s in assertPvals(s, 1)
+        [
+            "ft": { s in assertPvals(s, 2)
+                li = printed.endIndex
+                (t_explain, t_compare) = (s[0].get() as! String, s[1].get() as! String)
+                
+                return nil
+            },
+            "ec": { s in assertPvals(s, 0)
+                let compee = printed[li..<printed.endIndex]
+                //print(compee, "!")
+                //print(printed, "??")
+                if compee != t_compare {
+                    de(ETEST_FAIL + "," +  t_explain + ", want: " + t_compare + ", got: " + compee)
+                }
+                return nil
+            },
+            "len": { s in assertPvals(s, 1)
             if s[0].kind.gtype == .gScalar && s[0].kind.vtype == String.self {
                 return Pval((s[0].get() as! String).count)
                 }
