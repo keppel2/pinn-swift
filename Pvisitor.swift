@@ -406,6 +406,11 @@ public class Pvisitor {
     func visitKind(_ sctx: PinnParser.KindContext) -> Kind {
         loadDebug(sctx)
         defer {popDebug()}
+        if let spec = sctx.kindList() {
+            let kL = visitKindList(spec)
+            let rt = Kind(kL)
+            return rt
+        }
         let strType = sctx.TYPES()!.getText()
         let litToType: [String: Ptype.Type] = ["int": Int.self, "bool": Bool.self, "string": String.self, "decimal": Decimal.self]
         
@@ -438,7 +443,19 @@ public class Pvisitor {
         let k = visitKind(sctx.kind()!)
         return FKind(k: k, s: str, variadic: sctx.THREEDOT() != nil, prc: sctx)
     }
-    func visitList(_ sctx: PinnParser.ExprListContext) -> [Pval] {
+    func visitKindList(_ sctx: PinnParser.KindListContext) -> [Kind]
+    {
+        loadDebug(sctx)
+        defer {popDebug()}
+        
+        var rt = [Kind]()
+        for child in sctx.kind() {
+            let v = visitKind(child)
+            rt.append(v)
+        }
+        return rt
+    }
+        func visitList(_ sctx: PinnParser.ExprListContext) -> [Pval] {
         loadDebug(sctx)
         defer {popDebug()}
         

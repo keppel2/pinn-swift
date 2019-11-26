@@ -9,6 +9,5 @@
 import Foundation
 import Antlr4
 import os
-
-execute("a.pinn")
+execute("a")
 

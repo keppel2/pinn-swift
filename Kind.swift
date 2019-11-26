@@ -22,18 +22,19 @@ class Kind: Equatable {
         self.gtype = gtype
         switch gtype {
         case .gMap:
+            ade(count == nil)
             self.count = 0
         case .gScalar:
+            ade(count == nil)
             self.count = 1
-        case .gSlice, .gArray:
+        case .gSlice, .gArray, .gTuple:
             self.count = count
-        default:
-            de(ECASE)
         }
     }
     init(_ kar: [Kind]) {
         self.gtype = .gTuple
         self.count = kar.count
+        ka = kar
     }
     var ka = [Kind]()
     var vtype: Ptype.Type?
@@ -46,8 +47,13 @@ class Kind: Equatable {
         case .gMap, .gSlice:
             return gtype == k2.gtype && vtype == k2.vtype
         case .gTuple:
-            
-            de(ECASE)
+            guard k2.gtype == .gTuple else {
+                return false
+            }
+            guard k2.count == count  else {
+                return false
+            }
+            return ka.elementsEqual(k2.ka, by: { $0.kindEquivalent($1)})          
         }
     }
 }

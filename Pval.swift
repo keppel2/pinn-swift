@@ -9,10 +9,10 @@
 import Foundation
 import Antlr4
 
-class Pval: Ptype {
-    static func zeroValue() -> Ptype {
-        return Pval([Pval]())
-    }
+class Pval {
+//    static func zeroValue() -> Ptype {
+//        return Pval([Pval]())
+//    }
     
     func equal(_: Ptype) -> Bool {
         return false
@@ -33,11 +33,12 @@ class Pval: Ptype {
         ar!.sort { ($0 as! Compare).lt($1 as! Compare) }
     }
     init(_ ar: [Pval]) {
-        k = Kind(nil, .gTuple)
+        let ka = ar.map { $0.kind }
+        k = Kind(ka)
         pva = ar
     }
     convenience init(_ a: Ptype) {
-        self.init(Kind(type(of: a), .gScalar, 1), a)
+        self.init(Kind(type(of: a), .gScalar, nil), a)
     }
     
     convenience init(_ pv: Pval, _ a: Int, _ b: Int) {
@@ -52,10 +53,12 @@ class Pval: Ptype {
         case .gArray, .gSlice:
             ar = [Ptype](repeating: i ?? k.vtype!.self.zeroValue(), count: k.count!)
         case .gMap:
+            ade(i == nil)
             map = [String: Ptype]()
         case .gScalar:
             ar = [i ?? k.vtype!.self.zeroValue()]
         case .gTuple:
+            //TODO
             break
         }
     }
@@ -91,6 +94,7 @@ class Pval: Ptype {
 
 
     func get() -> Ptype {
+        ade(ar!.count == 1)
         return ar!.first!
     }
     func getKeys() -> [String] {
@@ -101,7 +105,7 @@ class Pval: Ptype {
         switch k {
         case let v1v as Int:
             if self.k.gtype == .gTuple {
-                return pva![v1v]
+                return pva![v1v].get()
             }
             return ar![v1v]
         case let v1v as String:
@@ -114,6 +118,9 @@ class Pval: Ptype {
         }
     }
     func set(_ v: Ptype) {
+        ade(kind.count == 1)
+        ade(kind.gtype == .gScalar)
+        ade(ar!.count == 1)
         guard type(of: ar!.first!) == type(of: v) else {
             de(ETYPE)
         }
@@ -121,12 +128,19 @@ class Pval: Ptype {
     }
     
     func set(_ k: Ktype, _ v: Ptype?) {
-        
+        ade(kind.gtype != .gScalar)
+        if kind.gtype == .gTuple {
+            let index = k as! Int
+            ade(pva![index].kind.vtype! == type(of:v!))
+            pva![index] = Pval(v!)
+            return
+        }
         guard v == nil || kind.vtype == type(of:v!) else {
             de(ETYPE)
         }
         switch k {
         case let v1v as Int:
+
             if kind.gtype == .gSlice && v1v == ar!.count {
                 ar!.append(v!)
                 kind.count = ar!.count

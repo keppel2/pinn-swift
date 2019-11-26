@@ -28,6 +28,7 @@ func execute(_ s: String) {
     if args.count == 2 {
         test = true
     }
+    test = true
 
     let myinput = fnToString("/tmp/\(test ? "types" : s).pinn")
     let (tree, parser) = parse(myinput)
@@ -78,6 +79,11 @@ private func _fatalError(_ s: String) -> Never {
     exit(1)
 }
 
+func ade(_ b: Bool) {
+    if !b {
+        de(EASSERT)
+    }
+}
 func de(_ me: Perr) -> Never {
     _fatalError(me.string)
 }

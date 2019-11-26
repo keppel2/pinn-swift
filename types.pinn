@@ -524,4 +524,14 @@ print(arF[0]);
 
 badi := 5;
 if 4 == badi - 1 ;
+ec();ft("Tuple", "true 42 1.5");
+tup := (42, true, "str", 1.5);
+
+print(tup[1], tup[0], tup[3]);
 ec();
+ft("Set tuple", "23 false");
+tup[0] = 23;
+tup[1] = false;
+print(tup[0], tup[1]);
+ec();
+var tup2 (int, string, bool);

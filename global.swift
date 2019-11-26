@@ -16,4 +16,5 @@ let EREDECLARE = "Redeclared"
 let EUNDECLARED = "Undeclared"
 let ETEST_FAIL = "Test failed"
 let EPARSE_FAIL = "Parse failed"
+let EASSERT = "Assertion failed"
 

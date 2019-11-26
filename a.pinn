@@ -1,6 +1,3 @@
-func a() {
-    y := 5;
-    println(y);
-}
 
-a();
+var ks (int, string, bool);
+ks = (4, "ok", 42);
