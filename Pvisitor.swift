@@ -296,7 +296,7 @@ public class Pvisitor {
         }
         for (index, v) in fh.fkinds.enumerated() {
             if v.variadic {
-                let par = Pval(Kind(v.k.vtype, .gArray, s.count - index), nil)
+                let par = Pval(Kind(v.k.vtype!, .gArray, s.count - index), nil)
                 
                 for (key, varadds) in s[index...].enumerated() {
                     if !varadds.kind.kindEquivalent(v.k) {
@@ -449,6 +449,7 @@ public class Pvisitor {
         }
         return rt
     }
+    
     func visitListCase(_ sctx: PinnParser.ExprListContext, _ v: Pval) -> Bool {
         loadDebug(sctx)
         defer {popDebug()}
@@ -501,6 +502,10 @@ public class Pvisitor {
         
         var rt: Pval?
         switch sctx {
+        case let sctx as PinnParser.TupleExprContext:
+            let el = sctx.exprList()!
+            let s = visitList(el)
+            return Pval(s)
         case let sctx as PinnParser.CallExprContext:
             var s = [Pval]()
             let str =  sctx.ID()!.getText()
@@ -519,7 +524,7 @@ public class Pvisitor {
                 
                 let (str, pv) = visitObjectPair(op)
                 if kind == nil {
-                    kind = Kind(pv.kind.vtype, .gMap)
+                    kind = Kind(pv.kind.vtype!, .gMap)
                     rt = Pval(kind!)
                 }
                 rt!.set(str, pv.get())
@@ -528,7 +533,7 @@ public class Pvisitor {
         case let sctx as PinnParser.ArrayLiteralContext:
             let el = sctx.exprList()!
             let ae = visitList(el)
-            let kind = Kind(ae.first!.kind.vtype, .gSlice, ae.count)
+            let kind = Kind(ae.first!.kind.vtype!, .gSlice, ae.count)
             rt = Pval(kind, ae.count)
             for (k, pv) in ae.enumerated() {
                 rt!.set(k, pv.get())
@@ -964,6 +969,8 @@ public class Pvisitor {
                         }
                     case .gMap:
                         de(Perr(ETYPE, sctx))
+                    case .gTuple:
+                        de(ECASE)
                     }
                     
                 } else {

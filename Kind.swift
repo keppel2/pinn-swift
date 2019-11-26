@@ -11,13 +11,13 @@ import Foundation
 class Kind: Equatable {
     //
     enum Gtype {
-        case gScalar, gArray, gMap, gSlice
+        case gScalar, gArray, gMap, gSlice, gTuple
     }
 
     static func == (k1: Kind, k2: Kind) -> Bool {
         return k1.vtype == k2.vtype && k1.gtype == k2.gtype && k1.count == k2.count
     }
-    init(_ vtype: Ptype.Type, _ gtype: Gtype, _ count: Int? = nil) {
+    init(_ vtype: Ptype.Type?, _ gtype: Gtype, _ count: Int? = nil) {
         self.vtype = vtype
         self.gtype = gtype
         switch gtype {
@@ -27,9 +27,16 @@ class Kind: Equatable {
             self.count = 1
         case .gSlice, .gArray:
             self.count = count
+        default:
+            de(ECASE)
         }
     }
-    var vtype: Ptype.Type
+    init(_ kar: [Kind]) {
+        self.gtype = .gTuple
+        self.count = kar.count
+    }
+    var ka = [Kind]()
+    var vtype: Ptype.Type?
     var gtype: Gtype
     var count: Int?
     func kindEquivalent(_ k2: Kind) -> Bool {
@@ -38,7 +45,9 @@ class Kind: Equatable {
             return self == k2
         case .gMap, .gSlice:
             return gtype == k2.gtype && vtype == k2.vtype
+        case .gTuple:
+            
+            de(ECASE)
         }
     }
-    //    }
 }

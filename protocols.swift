@@ -8,6 +8,7 @@
 
 import Foundation
 
+
 protocol Ptype {
     static func zeroValue() -> Ptype
     func equal(_: Ptype) -> Bool

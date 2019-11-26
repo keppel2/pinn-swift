@@ -24,7 +24,8 @@ varDecl
 LSQUARE : '[' ;
 LPAREN : '(' ;
 kind
-  : (LSQUARE ( MAP | SLICE | FILL | expr) ']')? TYPES ;
+  : (LSQUARE ( MAP | SLICE | FILL | expr) ']')? TYPES
+  | LPAREN kindList ')' ;
 
 MAP
  : 'map' ;
@@ -63,6 +64,8 @@ callExpr:
   ID LPAREN exprList? ')';
 parenExpr: LPAREN expr ')';
 
+tupleExpr: LPAREN exprList ')';
+
 expr
   :
    indexExpr
@@ -73,12 +76,15 @@ expr
   | expr ('==' | '!=' | '>' | '<' | '>=' | '<=' ) expr
   | expr ('&&' | '||') expr
   | callExpr
-  | parenExpr 
+  | parenExpr
+  | tupleExpr
   | expr (TWODOTS | COLON) expr
   | expr '?' expr COLON expr
   | (ID | FLOAT | INT | BOOL | STRING ) ;
 exprList
   : expr (',' expr)* ;
+kindList
+  : kind (',' kind)* ;
 
 returnStatement
   : 'return' expr? ;

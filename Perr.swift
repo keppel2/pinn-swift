@@ -30,9 +30,9 @@ class Perr {
     var string: String {
         var rt = ""
         rt += "Error: \(str)."
-        if let pv = pval {
-//            rt += "Regarding pval at line: " + pv.prc.getStart()!.getLine() + "."
-        }
+//        if let pv = pval {
+////            rt += "Regarding pval at line: " + pv.prc.getStart()!.getLine() + "."
+//        }
         if let pc = prc {
             rt += "PRC. Text \(pc.getText()). Line \(pc.getStart()!.getLine()) Col \(pc.getStart()!.getCharPositionInLine())"
         }

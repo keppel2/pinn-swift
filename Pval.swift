@@ -9,7 +9,15 @@
 import Foundation
 import Antlr4
 
-class Pval {
+class Pval: Ptype {
+    static func zeroValue() -> Ptype {
+        return Pval([Pval]())
+    }
+    
+    func equal(_: Ptype) -> Bool {
+        return false
+    }
+    
     private let k: Kind
 //    let g: Gtype
 //    let v: Ptype.Type
@@ -24,12 +32,16 @@ class Pval {
     func sort() {
         ar!.sort { ($0 as! Compare).lt($1 as! Compare) }
     }
+    init(_ ar: [Pval]) {
+        k = Kind(nil, .gTuple)
+        pva = ar
+    }
     convenience init(_ a: Ptype) {
         self.init(Kind(type(of: a), .gScalar, 1), a)
     }
     
     convenience init(_ pv: Pval, _ a: Int, _ b: Int) {
-        self.init(Kind(pv.kind.vtype, .gSlice, pv.ar!.count))
+        self.init(Kind(pv.kind.vtype!, .gSlice, pv.ar!.count))
         self.ar = Array(pv.ar![a..<b])
 //        self.init(pv.ar![a..<b])
     }
@@ -38,11 +50,13 @@ class Pval {
         self.k = k
         switch k.gtype {
         case .gArray, .gSlice:
-            ar = [Ptype](repeating: i ?? k.vtype.self.zeroValue(), count: k.count!)
+            ar = [Ptype](repeating: i ?? k.vtype!.self.zeroValue(), count: k.count!)
         case .gMap:
             map = [String: Ptype]()
         case .gScalar:
-            ar = [i ?? k.vtype.self.zeroValue()]
+            ar = [i ?? k.vtype!.self.zeroValue()]
+        case .gTuple:
+            break
         }
     }
     func equal(_ p:Pval) -> Bool {
@@ -70,6 +84,8 @@ class Pval {
                 }
             }
             return true
+        case .gTuple:
+            return false
         }
     }
 
@@ -84,10 +100,13 @@ class Pval {
     func get(_ k: Ktype) -> Ptype {
         switch k {
         case let v1v as Int:
+            if self.k.gtype == .gTuple {
+                return pva![v1v]
+            }
             return ar![v1v]
         case let v1v as String:
             if map![v1v] == nil {
-                map![v1v] = kind.vtype.zeroValue()
+                map![v1v] = kind.vtype!.zeroValue()
             }
             return map![v1v]!
         default:
@@ -151,6 +170,7 @@ class Pval {
             rt += "}"
             return rt
         case .gScalar: return String(describing: ar!.first!)
+        case .gTuple: return "tuple"
         }
     }
 
@@ -167,6 +187,8 @@ class Pval {
             rt.ar![0] = ar!.first!
         case .gMap:
             rt.map = map!
+        case .gTuple:
+            break
         }
         return rt
     }
