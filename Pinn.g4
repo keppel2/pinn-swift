@@ -19,7 +19,8 @@ fvarDecl
 
 varDecl
   : 'var' ID kind ('=' exprList)?
-  | ID CE expr ;
+  | ID CE expr
+  | LPAREN ID ( ',' ID )* ')' CE expr;
 
 LSQUARE : '[' ;
 LPAREN : '(' ;
@@ -55,7 +56,7 @@ arrayLiteral :
   LSQUARE exprList ']' ;
 
 objectPair :
-ID ':' expr ;
+STRING ':' expr ;
 
 objectLiteral :
 '{' objectPair ( ',' objectPair )* '}' ;

@@ -73,6 +73,12 @@ public func fnToString(_ s: String) -> String {
     return String(data: data, encoding: String.Encoding.utf8)!
 }
 
+func stringDequote(_ s: String) -> String {
+    var str = s
+    str.remove(at: s.startIndex)
+    str.remove(at: str.index(before: str.endIndex))
+    return str.replacingOccurrences(of: "\\\"", with: "\"")
+}
 
 private func _fatalError(_ s: String) -> Never {
     print(s)

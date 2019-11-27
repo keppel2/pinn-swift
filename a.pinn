@@ -1,3 +1,19 @@
+//(ks, ks2, ks3) := (4, true, false);
+//print(ks, ks2, ks3);
+tup := (4, "str", false);
+tup[0] += 10;
+println(tup[0]);
+tup[0]++;
+println(tup[0]);
+ar := [1, 5];
+ar[0]++;
+print(ar);
+ar[0] += 10;
+print(ar);
 
-var ks (int, string, bool);
-ks = (4, "ok", 42);
+mapp := { foo: 42, bar: 23 };
+println(mapp);
+mapp["foo"] += 10;
+println(mapp);
+mapp["foo"] ++;
+println(mapp);

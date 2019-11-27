@@ -371,7 +371,7 @@ public class Pvisitor {
         defer {popDebug()}
         let rt1: String
         let rt2: Pval
-        rt1 = sctx.ID()!.getText()
+        rt1 = stringDequote(sctx.STRING()!.getText())
         rt2 = visitPval(sctx.expr()!)!
         return (rt1, rt2)
     }
@@ -568,9 +568,7 @@ public class Pvisitor {
                 switch Self.childToToken(child) {
                 case .STRING:
                     var str = sctx.STRING()!.getText()
-                    str.remove(at: str.startIndex)
-                    str.remove(at: str.index(before: str.endIndex))
-                    let str2 = str.replacingOccurrences(of: "\\\"", with: "\"")
+                    let str2 = stringDequote(str)
                     let pv = Pval(str2)
                     rt = pv
                 case .INT:
@@ -755,16 +753,26 @@ public class Pvisitor {
                 }
             }
         case let sctx as PinnParser.CompoundSetContext:
+
             let str = sctx.ID()!.getText()
             guard let v = getPv(str) else {
                 de(Perr(EUNDECLARED, sctx))
             }
+            var lhs = v
+
+            var index: Ktype? = nil
+            if let cindex = sctx.index {
+//                index = (visitPval(cindex)!.get() as! Int)
+                index = (visitPval(cindex)!.get() as! Ktype)
+                lhs = Pval(v.get(index!))
+            }
+            
             let op = sctx.children![sctx.children!.count - 3].getText()
             let rhs = visitPval(sctx.rhs)!
-            let result = Self.doOp(v, rhs, op).get()
-            if let ictx = sctx.index {
-                let index = visitPval(ictx)!.get() as! Int
-                v.set(index, result)
+
+            let result = Self.doOp(lhs, rhs, op).get()
+            if let i = index {
+                v.set(i, result)
             } else {
                 v.set(result)
             }
@@ -956,8 +964,28 @@ public class Pvisitor {
             }
             
         case let sctx as PinnParser.VarDeclContext:
-            let str = sctx.ID()!.getText()
             let map = lfc?.m ?? fc.m
+            if sctx.LPAREN() != nil {
+                let e = visitPval(sctx.expr()!)!
+                ade(e.kind.gtype == .gTuple)
+                ade(e.kind.count! == sctx.ID().count)
+                for (k, v) in sctx.ID().enumerated() {
+                    let str = v.getText()
+                    let te = e.get(k)
+                    let newV = Pval(te)
+                    if let prev = map[str] {
+                        de(Perr(EREDECLARE, prev))
+                    }
+                    if lfc != nil {
+                        lfc!.m[str] = newV
+                    } else {
+                        fc.m[str] = newV
+                    }
+                }
+                return
+            }
+            let str = sctx.ID(0)!.getText()
+
             var newV: Pval
             if let prev = map[str] {
                 de(Perr(EREDECLARE, prev))
