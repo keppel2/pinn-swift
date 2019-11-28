@@ -63,6 +63,7 @@ class Pval {
         }
     }
     func equal(_ p:Pval) -> Bool {
+        ade(p.kind.kindEquivalent(kind))
         if p.kind != kind {
             return false
         }
@@ -70,7 +71,7 @@ class Pval {
         case .gScalar:
             return ar!.first!.equal(p.ar!.first!)
         case .gArray, .gSlice:
-            for (key, value) in p.ar!.enumerated() {
+            for (key, value) in ar!.enumerated() {
                 if !value.equal(p.ar![key]) {
                     return false
                 }
