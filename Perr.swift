@@ -26,18 +26,18 @@ class Perr {
     convenience init(_ s: String, _ t: Token) {
         self.init(s, nil, nil, t)
     }
-    
+//    static treeString() {}
     var string: String {
         var rt = ""
         rt += "Error: \(str)."
-//        if let pv = pval {
-////            rt += "Regarding pval at line: " + pv.prc.getStart()!.getLine() + "."
-//        }
+        if let pv = pval {
+            rt += "Pval. Line " + pv.prc!.getStart()!.getLine() + " Col " + pv.prc!.getStart()!.getCharPositionInLine() + "."
+        }
         if let pc = prc {
-            rt += "PRC. Text \(pc.getText()). Line \(pc.getStart()!.getLine()) Col \(pc.getStart()!.getCharPositionInLine())"
+            rt += "PRC. Text \(pc.getText()). Line \(pc.getStart()!.getLine()) Col \(pc.getStart()!.getCharPositionInLine())."
         }
         if let t = tok {
-            rt += "TOKEN \(t.getText()!). Line \(t.getLine()) Col \(t.getCharPositionInLine())"
+            rt += "TOKEN \(t.getText()!). Line \(t.getLine()) Col \(t.getCharPositionInLine())."
         }
         return rt
     }

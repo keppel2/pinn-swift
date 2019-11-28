@@ -216,7 +216,7 @@ public class Pvisitor {
             fallthrough
         case ":":
             guard rhsv - lhsv >= 0 else {
-                de(ERANGE)
+                de(Perr(ERANGE, sctx))
             }
             rt = Pval(sctx, Kind(Int.self, .gSlice, rhsv - lhsv))
             for x in lhsv..<rhsv {
@@ -253,7 +253,7 @@ public class Pvisitor {
     
     func reserveFunction(_ s: String) {
         if fkmap[s] != nil {
-            de(EREDECLARE)
+            de(EREDECLARE + s)
         }
         fkmap[s] = Fheader()
     }
@@ -265,7 +265,7 @@ public class Pvisitor {
             pvOld = fc.m.updateValue(pv, forKey: s)!
         }
         if !pvOld.kind.kindEquivalent(pv.kind) {
-            de(ETYPE)
+            de(Perr(ETYPE, pvOld, prc))
         }
         
     }
@@ -294,11 +294,11 @@ public class Pvisitor {
 
         if fh.fkinds.last != nil && fh.fkinds.last!.variadic {
             if s.count < fh.fkinds.count - 1 {
-                de(EPARAM_LENGTH)
+                de(Perr(EPARAM_LENGTH, sctx))
             }
         } else
             if s.count != fh.fkinds.count {
-                de(EPARAM_LENGTH)
+                de(Perr(EPARAM_LENGTH, sctx))
         }
         for (index, v) in fh.fkinds.enumerated() {
             if v.variadic {
@@ -306,28 +306,28 @@ public class Pvisitor {
                 
                 for (key, varadds) in s[index...].enumerated() {
                     if !varadds.kind.kindEquivalent(v.k) {
-                        de(ETYPE)
+                        de(Perr(ETYPE, sctx))
                     }
                     par.set(key, varadds.get())
                 }
                 if lfc!.m[fh.fkinds[index].s] != nil {
-                    de(EREDECLARE)
+                    de(Perr(EREDECLARE, sctx))
                 }
                 lfc!.m[fh.fkinds[index].s] = par
                 continue
             }
             if !s[index].kind.kindEquivalent(v.k) {
-                de(ETYPE)
+                de(Perr(ETYPE, sctx))
             }
-            if lfc!.m[fh.fkinds[index].s] != nil {
-                de(EREDECLARE)
+            if let pv = lfc!.m[fh.fkinds[index].s]  {
+                de(Perr(EREDECLARE, pv, sctx))
             }
             lfc!.m[fh.fkinds[index].s] = s[index]
         }
         visit(ctx.block()!)
         switch lfc!.path {
         case .pBreak, .pContinue, .pFallthrough:
-            de(ESTATEMENT)
+            de(Perr(ESTATEMENT, sctx))
         default: break
         }
         
@@ -898,16 +898,16 @@ public class Pvisitor {
                     key = getPv(sctx.ID(0)!.getText())
                     if key == nil  {
               
-                        de(Perr(EUNDECLARED, sctx.ID(0)!.getSymbol()!))
+                        de(Perr(EUNDECLARED, nil, sctx, sctx.ID(0)!.getSymbol()!))
                     }
                     value = getPv(sctx.ID(1)!.getText())
                     if value == nil {
-                        de(Perr(EUNDECLARED, sctx.ID(1)!.getSymbol()!))
+                        de(Perr(EUNDECLARED, nil, sctx, sctx.ID(1)!.getSymbol()!))
                     }
                 } else {
                     value = getPv(sctx.ID(0)!.getText())
                     if value == nil {
-                        de(Perr(EUNDECLARED, sctx.ID(0)!.getSymbol()!))
+                        de(Perr(EUNDECLARED, nil, sctx, sctx.ID(0)!.getSymbol()!))
                     }
 
                 }
@@ -978,7 +978,7 @@ public class Pvisitor {
                     let te = e.get(k)
                     let newV = Pval(sctx, te)
                     if let prev = map[str] {
-                        de(Perr(EREDECLARE, prev))
+                        de(Perr(EREDECLARE, prev, sctx))
                     }
                     if lfc != nil {
                         lfc!.m[str] = newV
@@ -992,7 +992,7 @@ public class Pvisitor {
 
             var newV: Pval
             if let prev = map[str] {
-                de(Perr(EREDECLARE, prev))
+                de(Perr(EREDECLARE, prev, sctx))
             }
             if sctx.CE() != nil {
                 newV = visitPval(sctx.expr()!)!

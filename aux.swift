@@ -28,7 +28,7 @@ func execute(_ s: String) {
     if args.count == 2 {
         test = true
     }
-    test = true
+    
 
     let myinput = fnToString("/tmp/\(test ? "types" : s).pinn")
     let (tree, parser) = parse(myinput)

@@ -8,11 +8,13 @@
 
 import Foundation
 
-
-protocol Ptype {
+protocol Atype {
+}
+protocol Ptype: Atype {
     static func zeroValue() -> Ptype
     func equal(_: Ptype) -> Bool
 }
+
 protocol Ktype {}
 
 protocol Plus: Ptype {

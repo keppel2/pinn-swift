@@ -9,10 +9,10 @@
 import Foundation
 import Antlr4
 
-class Pval {
-//    static func zeroValue() -> Ptype {
-//        return Pval([Pval]())
-//    }
+class Pval: Ptype {
+    static func zeroValue() -> Ptype {
+        return Pval(nil, [Pval]())
+    }
     
     func equal(_: Ptype) -> Bool {
         return false
@@ -26,13 +26,13 @@ class Pval {
     
     private var ar: [Ptype]?
     private var map: [String: Ptype]?
-    let prc: ParserRuleContext
+    let prc: ParserRuleContext?
 //    let pv = Pvisitor
     var k2: Kind?
     func sort() {
         ar!.sort { ($0 as! Compare).lt($1 as! Compare) }
     }
-    init(_ c: ParserRuleContext, _ ar: [Pval]) {
+    init(_ c: ParserRuleContext?, _ ar: [Pval]) {
         prc = c
         let ka = ar.map { $0.kind }
         k = Kind(ka)
@@ -59,14 +59,19 @@ class Pval {
         case .gScalar:
             ar = [i ?? k.vtype!.self.zeroValue()]
         case .gTuple:
+            ade(i == nil)
+            pva = [Pval]()
+            for x in k.ka {
+                pva!.append(Pval(c, x))
+            }
             break
         }
     }
     func equal(_ p:Pval) -> Bool {
         ade(p.kind.kindEquivalent(kind))
-        if p.kind != kind {
-            return false
-        }
+//        if p.kind != kind {
+//            return false
+//        }
         switch kind.gtype {
         case .gScalar:
             return ar!.first!.equal(p.ar!.first!)
@@ -139,7 +144,7 @@ class Pval {
         if kind.gtype == .gTuple {
             let index = k as! Int
             ade(pva![index].kind.vtype! == type(of:v!))
-            pva![index] = Pval(prc, v!)
+            pva![index] = Pval(prc!, v!)
             return
         }
         guard v == nil || kind.vtype == type(of:v!) else {
@@ -212,7 +217,7 @@ class Pval {
     }
     
     func clone() -> Pval {
-        let rt = Pval(prc, kind)
+        let rt = Pval(prc!, kind)
         switch kind.gtype {
         case .gArray, .gSlice:
             rt.ar = ar!

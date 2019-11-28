@@ -1,3 +1,11 @@
 
-(x, y) := (10, "ab");
-print(x, y);
+tup := (5, (true, "b"));
+println(tup);
+//debug();
+
+var tup2 (int, (bool, string));
+println(tup2);
+tup10 := tup2[1];
+//println(tup10[0]);
+//print(tup2[1][0])
+//print(tup2);
