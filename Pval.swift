@@ -127,7 +127,11 @@ class Pval {
         ar![0] = v
     }
     
-    func set(_ k: Ktype, _ v: Ptype?) {
+    func set(_ k: Ktype?, _ v: Ptype?) {
+        if k == nil {
+            set(v!)
+            return
+        }
         ade(kind.gtype != .gScalar)
         if kind.gtype == .gTuple {
             let index = k as! Int
@@ -181,10 +185,22 @@ class Pval {
                 }
                 rt += key + ":" + String(describing: value)
             }
+            
             rt += "}"
             return rt
         case .gScalar: return String(describing: ar!.first!)
-        case .gTuple: return "tuple"
+        case .gTuple:
+            var rt = ""
+            rt += "("
+            if let f = pva!.first?.get() {
+                rt += String(describing: f)
+                for v in pva![1...] {
+                    rt += " " + String(describing: v.get())
+                }
+            }
+
+            rt += ")"
+            return rt
         }
     }
 
@@ -202,7 +218,8 @@ class Pval {
         case .gMap:
             rt.map = map!
         case .gTuple:
-            break
+            rt.pva = pva
+            
         }
         return rt
     }

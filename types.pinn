@@ -54,10 +54,10 @@ ec();ft("Short declaration", "true");
 shortBool := true;
 print(shortBool);
 
-ec();ft("Create map", "{answer:true}");
+ec();ft("Create map", "{answer:true} true false");
 var newMap [map]bool;
 newMap["answer"] = true;
-print(newMap);
+print(newMap, key(newMap, "answer"), key(newMap, "not"));
 
 ec();ft("Create slice", "[777]");
 var newSlice [slice]int;
@@ -521,13 +521,34 @@ func arFunc(ar [1]int) {
 var arF [1]int = 23;
 arFunc(arF);
 print(arF[0]);
+ec();ft("Slice shares in call", "[201 101]");
+func slFunc(s [slice]int) {
+    s[0] = 201;
+}
+var slf [slice]int;
+slf = [23, 101];
+slFunc(slf);
+print(slf);
+ec();ft("Map shares in call", "{aap:101}");
+func mFunc(m [map]int) {
+    m["aap"] = 101;
+}
+mapShare := { "aap": 42};
+mFunc(mapShare);
+print(mapShare);
 
-badi := 5;
-if 4 == badi - 1 ;
-ec();ft("Tuple", "true 42 1.5");
+ec();ft("Tuple copies in call", "(42 7)");
+func mTup(t (int, int)) {
+    t[0] = 301;
+}
+tupShare := (42, 7);
+mTup(tupShare);
+print(tupShare);
+
+ec();ft("Tuple", "true 42 1.5 (42 true str 1.5)");
 tup := (42, true, "str", 1.5);
 
-print(tup[1], tup[0], tup[3]);
+print(tup[1], tup[0], tup[3], tup);
 ec();
 ft("Set tuple", "23 false");
 tup[0] = 23;

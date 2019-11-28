@@ -74,6 +74,9 @@ public class Pvisitor {
                 s[0].set(s[1].get() as! String, nil)
                 return nil
             },
+            "key": { s in assertPvals(s, 2)
+                return Pval(s[0].getKeys().contains(s[1].get() as! String))
+            },
             "debug": { s in assertPvals(s, 0)
                 dbg()
                 return nil
@@ -226,7 +229,7 @@ public class Pvisitor {
         return rt
     }
 
-    var textStack = [String]()
+    var texts = [String]()
     var line = -1
     var prc: ParserRuleContext?
     var oldPrc: ParserRuleContext?
@@ -240,11 +243,11 @@ public class Pvisitor {
     func loadDebug(_ ctx:ParserRuleContext) {
         oldPrc = prc
         prc = ctx
-        textStack.append(ctx.getText())
+        texts.append(ctx.getText())
         line = ctx.start!.getLine()
     }
     func popDebug() {
-        textStack.removeLast()
+        texts.removeLast()
         prc = oldPrc
     }
     
@@ -281,6 +284,9 @@ public class Pvisitor {
         var rt: Pval?
         let fh = fkmap[str]!
         guard let ctx = fh.funcContext else {
+            if str == "ec" {
+             //   fc = Fc()
+            }
             return builtIns[str]!(s)
         }
         let oldfc = lfc
@@ -591,7 +597,8 @@ public class Pvisitor {
                     guard let pv = getPv(str) else {
                         de(Perr(EUNDECLARED, sctx))
                     }
-                    if pv.kind.gtype == .gMap {
+                    rt = pv
+                    if pv.kind.gtype == .gMap || pv.kind.gtype == .gSlice {
                         rt = pv
                     } else {
                         rt = pv.clone()
@@ -758,24 +765,21 @@ public class Pvisitor {
             guard let v = getPv(str) else {
                 de(Perr(EUNDECLARED, sctx))
             }
-            var lhs = v
-
-            var index: Ktype? = nil
+            let lhs: Pval
+            var index: Ktype?
             if let cindex = sctx.index {
-//                index = (visitPval(cindex)!.get() as! Int)
                 index = (visitPval(cindex)!.get() as! Ktype)
                 lhs = Pval(v.get(index!))
+            } else {
+                lhs = v
             }
             
             let op = sctx.children![sctx.children!.count - 3].getText()
             let rhs = visitPval(sctx.rhs)!
 
             let result = Self.doOp(lhs, rhs, op).get()
-            if let i = index {
-                v.set(i, result)
-            } else {
-                v.set(result)
-            }
+
+            v.set(index, result)
         case let sctx as PinnParser.StatementContext:
             if let e = sctx.expr() {
                 _ = visitPval(e)
