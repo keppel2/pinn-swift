@@ -26,28 +26,29 @@ class Pval {
     
     private var ar: [Ptype]?
     private var map: [String: Ptype]?
-//    let prc: ParserRuleContext?
+    let prc: ParserRuleContext
 //    let pv = Pvisitor
     var k2: Kind?
     func sort() {
         ar!.sort { ($0 as! Compare).lt($1 as! Compare) }
     }
-    init(_ ar: [Pval]) {
+    init(_ c: ParserRuleContext, _ ar: [Pval]) {
+        prc = c
         let ka = ar.map { $0.kind }
         k = Kind(ka)
         pva = ar
     }
-    convenience init(_ a: Ptype) {
-        self.init(Kind(type(of: a), .gScalar, nil), a)
+    convenience init(_ c: ParserRuleContext, _ a: Ptype) {
+        self.init(c, Kind(type(of: a), .gScalar, nil), a)
     }
     
-    convenience init(_ pv: Pval, _ a: Int, _ b: Int) {
-        self.init(Kind(pv.kind.vtype!, .gSlice, pv.ar!.count))
+    convenience init( _ c: ParserRuleContext, _ pv: Pval, _ a: Int, _ b: Int) {
+        self.init(c, Kind(pv.kind.vtype!, .gSlice, pv.ar!.count), nil)
         self.ar = Array(pv.ar![a..<b])
 //        self.init(pv.ar![a..<b])
     }
-    init(_ k: Kind, _ i: Ptype? = nil) {
-//        prc = pv.prc!
+    init( _ c: ParserRuleContext, _ k: Kind, _ i: Ptype? = nil) {
+        prc = c
         self.k = k
         switch k.gtype {
         case .gArray, .gSlice:
@@ -58,7 +59,6 @@ class Pval {
         case .gScalar:
             ar = [i ?? k.vtype!.self.zeroValue()]
         case .gTuple:
-            //TODO
             break
         }
     }
@@ -71,13 +71,15 @@ class Pval {
         case .gScalar:
             return ar!.first!.equal(p.ar!.first!)
         case .gArray, .gSlice:
-            for (key, value) in ar!.enumerated() {
-                if !value.equal(p.ar![key]) {
-                    return false
-                }
-            }
-            return true
+            return ar!.elementsEqual(p.ar!, by: { $0.equal($1)})
+//            for (key, value) in ar!.enumerated() {
+//                if !value.equal(p.ar![key]) {
+//                    return false
+//                }
+//            }
+//            return true
         case .gMap:
+            
             
             for (key, value) in p.map! {
                 if map![key] == nil {
@@ -89,7 +91,7 @@ class Pval {
             }
             return true
         case .gTuple:
-            return false
+                        return pva!.elementsEqual(p.pva!, by: { $0.equal($1)})
         }
     }
 
@@ -137,7 +139,7 @@ class Pval {
         if kind.gtype == .gTuple {
             let index = k as! Int
             ade(pva![index].kind.vtype! == type(of:v!))
-            pva![index] = Pval(v!)
+            pva![index] = Pval(prc, v!)
             return
         }
         guard v == nil || kind.vtype == type(of:v!) else {
@@ -196,7 +198,7 @@ class Pval {
             if let f = pva!.first?.get() {
                 rt += String(describing: f)
                 for v in pva![1...] {
-                    rt += " " + String(describing: v.get())
+                    rt += " " + v.string//String(describing: v.get())
                 }
             }
 
@@ -210,7 +212,7 @@ class Pval {
     }
     
     func clone() -> Pval {
-        let rt = Pval(kind)
+        let rt = Pval(prc, kind)
         switch kind.gtype {
         case .gArray, .gSlice:
             rt.ar = ar!
