@@ -48,9 +48,6 @@ simpleStatement
   : pset
   | ID (LSQUARE expr ']')? DOUBLEOP ;
 
-indexExpr :
-  ID LSQUARE first=expr? (TWODOTS | COLON) second=expr? ']' 
-  | ID LSQUARE expr ']' ;
   
 arrayLiteral :
   LSQUARE exprList ']' ;
@@ -67,12 +64,16 @@ parenExpr: LPAREN expr ')';
 
 tupleExpr: LPAREN exprList ')';
 
+unaryExpr:
+   ('+' | '-' | '!' ) expr ;
+
 expr
   :
-   indexExpr
+   expr LSQUARE first=expr? (TWODOTS | COLON) second=expr? ']'
+  | expr LSQUARE expr ']'
   | arrayLiteral
   | objectLiteral
-  | ('+' | '-' | '!' ) expr
+  | unaryExpr
   | expr ('+' | '-' | BINOP) expr
   | expr ('==' | '!=' | '>' | '<' | '>=' | '<=' ) expr
   | expr ('&&' | '||') expr

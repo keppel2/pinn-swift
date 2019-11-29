@@ -526,6 +526,36 @@ public class Pvisitor {
         
         var rt: Pval?
         switch sctx {
+        case let sctx as PinnParser.UnaryExprContext:
+            
+    
+            switch Self.childToText(sctx.getChild(0)!) {
+            case "!":
+                guard let e = visitPval(sctx.expr()!)!.get() as? Bool else {
+                    de(Perr(ETYPE, sctx))
+                }
+                rt = Pval(sctx, !e)
+                break
+            case "-":
+                guard let e = visitPval(sctx.expr()!)!.get() as? Negate else {
+                    de(Perr(ETYPE, sctx))
+                }
+                rt = Pval(sctx, e.neg())
+                break
+            case "+":
+                
+                guard let e = visitPval(sctx.expr()!)!.get() as? Int else {
+                                        de(Perr(ETYPE, sctx))
+                }
+                rt = Pval(sctx, e)
+                break
+                
+                
+            default:
+                de(Perr(ECASE, sctx))
+            }
+            
+        
         case let sctx as PinnParser.TupleExprContext:
             let el = sctx.exprList()!
             let s = visitList(el)
@@ -609,9 +639,43 @@ public class Pvisitor {
                 }
                 break
             }
+            if sctx.LSQUARE() != nil {
+                   let v = visitPval(sctx.expr(0)!)!
+                                        if (sctx.TWODOTS() != nil || sctx.COLON() != nil) {
+                                            var lhsv = 0
+                                            if let lh = sctx.first {
+                                                lhsv = visitPval(lh)!.get() as! Int
+                                            }
+                                            var rhsv = v.kind.count!
+                                            if let rh = sctx.second {
+                                                rhsv = visitPval(rh)!.get() as! Int
+                                            }
+                                            if (sctx.TWODOTS() != nil) {
+                                                rhsv+=1
+                                            }
+
+                                            rt = Pval(sctx, v, lhsv, rhsv)
+                                            
+                                            
+                                            return rt
+                                    
+                                    }
+
+                                    
+                                    
+
+                //                    guard let v =  getPv(e) else {
+                //                        de(Perr(EUNDECLARED, sctx))
+                //                    }
+                                    let e2 = visitPval(sctx.expr(1)!)!.get() as! Ktype
+                                    
+                                    let v2 = v.get(e2)
+                                    rt = Pval.wrapped(sctx, v2)
+                                    return rt
+            }
             if sctx.expr().count == 2 {
                 let op = Self.childToText(sctx.getChild(1)!)
-                
+
                 let lhs = visitPval(sctx.expr(0)!)!
                 
                 if op == "&&" {
@@ -659,62 +723,7 @@ public class Pvisitor {
                 }
                 break
             }
-            
-            
-            switch Self.childToText(sctx.getChild(0)!) {
-            case "!":
-                guard let e = visitPval(sctx.expr(0)!)!.get() as? Bool else {
-                    de(Perr(ETYPE, sctx))
-                }
-                rt = Pval(sctx, !e)
-                break
-            case "-":
-                guard let e = visitPval(sctx.expr(0)!)!.get() as? Negate else {
-                    de(Perr(ETYPE, sctx))
-                }
-                rt = Pval(sctx, e.neg())
-                break
-            case "+":
-                
-                guard let e = visitPval(sctx.expr(0)!)!.get() as? Int else {
-                                        de(Perr(ETYPE, sctx))
-                }
-                rt = Pval(sctx, e)
-                break
-                
-                
-            default:
-                de(Perr(ECASE, sctx))
-            }
-            
-            
 
-        case let sctx as PinnParser.IndexExprContext:
-            guard let v =  getPv(sctx.ID()!.getText()) else {
-                de(Perr(EUNDECLARED, sctx))
-            }
-            if (sctx.TWODOTS() != nil || sctx.COLON() != nil) {
-                var lhsv = 0
-                if let lh = sctx.first {
-                    lhsv = visitPval(lh)!.get() as! Int
-                }
-                var rhsv = v.kind.count!
-                if let rh = sctx.second {
-                    rhsv = visitPval(rh)!.get() as! Int
-                }
-                if (sctx.TWODOTS() != nil) {
-                    rhsv+=1
-                }
-
-                rt = Pval(sctx, v, lhsv, rhsv)
-                
-                
-                break
-            }
-            let e = visitPval(sctx.expr(0)!)!
-            let x = e.get()
-            let v2 = v.get(x as! Ktype)
-            rt = Pval.wrapped(sctx, v2)
             
         default:
             //            let schild = ctx.getChild(0) as! ParserRuleContext

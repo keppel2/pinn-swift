@@ -11,9 +11,6 @@ import Antlr4
 
 class Pval: Atype {
 
-    func equal(_: Atype) -> Bool {
-        return false
-    }
     private let k: Kind
     private var ar: [Atype]?
     private var map: [String: Atype]?
@@ -63,7 +60,10 @@ class Pval: Atype {
             break
         }
     }
-    func equal(_ p:Pval) -> Bool {
+    func equal(_ p:Atype) -> Bool {
+        guard let p = p as? Pval else {
+            de(ETYPE)
+        }
         ade(p.kind.kindEquivalent(kind))
 //        if p.kind != kind {
 //            return false

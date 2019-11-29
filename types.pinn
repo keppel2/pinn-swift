@@ -592,9 +592,12 @@ var mrz [map]int;
 print(mrz["a"]);
 print(",", key(mrz, "a"));
 
-ec();ft("Tuple equals", "true false");
+ec();
+
+ft("Tuple equals", "true false");
 teTup := (5, "aap", false);
 teTup2 := (5, "aap", false);
 teTup3 := (23, "aap", false);
 print(teTup == teTup2, teTup == teTup3);
 ec();
+
