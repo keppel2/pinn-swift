@@ -587,7 +587,12 @@ meMap3 := {"noot": 5};
 meMap4 := {"aap": 32};
 print(meMap1 == meMap2, meMap1 == meMap3, meMap1 == meMap4);
 ec();
-ft("Tuple equals", "true false");
+ft("Map returns zero value with no key", "0, false");
+var mrz [map]int;
+print(mrz["a"]);
+print(",", key(mrz, "a"));
+
+ec();ft("Tuple equals", "true false");
 teTup := (5, "aap", false);
 teTup2 := (5, "aap", false);
 teTup3 := (23, "aap", false);
