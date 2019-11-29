@@ -9,21 +9,21 @@
 import Foundation
 import Antlr4
 
-class Pval: Ptype {
-    static func zeroValue() -> Ptype {
-        return Pval(nil, [Pval]())
-    }
-    func equal(_: Ptype) -> Bool {
+class Pval: Atype {
+
+    func equal(_: Atype) -> Bool {
         return false
     }
-    
     private let k: Kind
-    
- //   private var pva: [Pval]?
-    
-    private var ar: [Ptype]?
-    private var map: [String: Ptype]?
+    private var ar: [Atype]?
+    private var map: [String: Atype]?
     let prc: ParserRuleContext?
+    static func wrapped(_ c: ParserRuleContext, _ a: Atype) -> Pval {
+        if a is Pval {
+            return a as! Pval
+        }
+        return Pval(c, a as! Ptype)
+    }
 
     func sort() {
         ar!.sort { ($0 as! Compare).lt($1 as! Compare) }
@@ -100,13 +100,13 @@ class Pval: Ptype {
     func get() -> Ptype {
         ade(kind.gtype == .gScalar)
         ade(ar!.count == 1)
-        return ar!.first!
+        return ar!.first! as! Ptype
     }
     func getKeys() -> [String] {
         return [String](map!.keys)
 
     }
-    func get(_ k: Ktype) -> Ptype {
+    func get(_ k: Ktype) -> Atype {
         switch k {
         case let v1v as Int:
             if self.k.gtype == .gTuple {
@@ -119,7 +119,12 @@ class Pval: Ptype {
             return ar![v1v]
         case let v1v as String:
             if map![v1v] == nil {
-                map![v1v] = kind.vtype!.zeroValue()
+                if kind.vtype == nil {
+                    let pv = Pval(prc!, Kind(kind.ka!))
+                    return pv
+                } else {
+                return kind.vtype!.zeroValue()
+                }
             }
             return map![v1v]!
         default:

@@ -714,11 +714,7 @@ public class Pvisitor {
             let e = visitPval(sctx.expr(0)!)!
             let x = e.get()
             let v2 = v.get(x as! Ktype)
-            if v.kind.gtype != .gTuple {
-            rt = Pval(sctx, v2)
-            } else {
-                rt = Pval(sctx, v2)
-            }
+            rt = Pval.wrapped(sctx, v2)
             
         default:
             //            let schild = ctx.getChild(0) as! ParserRuleContext
@@ -774,7 +770,7 @@ public class Pvisitor {
             var index: Ktype?
             if let cindex = sctx.index {
                 index = (visitPval(cindex)!.get() as! Ktype)
-                lhs = Pval(sctx, v.get(index!))
+                lhs = Pval(sctx, v.get(index!) as! Ptype)
             } else {
                 lhs = v
             }
@@ -922,7 +918,7 @@ public class Pvisitor {
                 switch ranger.kind.gtype {
                 case .gSlice, .gArray:
                     for x in 0..<ranger.kind.count! {
-                        value!.set(ranger.get(x))
+                        value!.set(ranger.get(x) as! Ptype)
                         key?.set(x)
                         
                         visit(sctx.block()!)
@@ -934,7 +930,7 @@ public class Pvisitor {
                     let keys = ranger.getKeys()
                     for mkey in keys {
                         key?.set(mkey)
-                        value!.set(ranger.get(mkey))
+                        value!.set(ranger.get(mkey) as! Ptype)
                         visit(sctx.block()!)
                         if cfc.toEndBlock() {
                             break
@@ -981,7 +977,7 @@ public class Pvisitor {
                 for (k, v) in sctx.ID().enumerated() {
                     let str = v.getText()
                     let te = e.get(k)
-                    let newV = Pval(sctx, te)
+                    let newV = Pval.wrapped(sctx, te)
                     if let prev = map[str] {
                         de(Perr(EREDECLARE, prev, sctx))
                     }

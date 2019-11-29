@@ -8,11 +8,12 @@
 
 import Foundation
 
-protocol Atype {    
+protocol Atype {
+    func equal(_: Atype) -> Bool
 }
 protocol Ptype: Atype {
     static func zeroValue() -> Ptype
-    func equal(_: Ptype) -> Bool
+
 }
 
 protocol Ktype {}
@@ -73,7 +74,7 @@ extension Decimal: Ptype, Plus, Compare, Arith, Negate {
         return x
     }
 
-    func equal(_ a: Ptype) -> Bool {
+    func equal(_ a: Atype) -> Bool {
         return self == a as! Self
     }
 }
@@ -98,7 +99,7 @@ extension Int: Ptype, Ktype, Plus, Compare, Negate, Arith {
         return x
     }
     
-    func equal(_ a: Ptype) -> Bool {
+    func equal(_ a: Atype) -> Bool {
         return self == a as! Self
     }
     
@@ -121,7 +122,7 @@ extension Int: Ptype, Ktype, Plus, Compare, Negate, Arith {
 }
 extension Bool: Ptype, Ktype {
     static func zeroValue() -> Ptype { return false }
-    func equal(_ a: Ptype) -> Bool {
+    func equal(_ a: Atype) -> Bool {
         return self == a as! Self
     }
 }
@@ -141,7 +142,7 @@ extension String: Ptype, Ktype, Plus, Compare {
         let x = self + (a as! String)
         return x
     }
-    func equal(_ a: Ptype) -> Bool {
+    func equal(_ a: Atype) -> Bool {
         return self == a as! Self
     }
 }
