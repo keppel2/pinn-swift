@@ -13,22 +13,18 @@ class Pval: Ptype {
     static func zeroValue() -> Ptype {
         return Pval(nil, [Pval]())
     }
-    
     func equal(_: Ptype) -> Bool {
         return false
     }
     
     private let k: Kind
-//    let g: Gtype
-//    let v: Ptype.Type
     
-    private var pva: [Pval]?
+ //   private var pva: [Pval]?
     
     private var ar: [Ptype]?
     private var map: [String: Ptype]?
     let prc: ParserRuleContext?
-//    let pv = Pvisitor
-    var k2: Kind?
+
     func sort() {
         ar!.sort { ($0 as! Compare).lt($1 as! Compare) }
     }
@@ -36,7 +32,7 @@ class Pval: Ptype {
         prc = c
         let ka = ar.map { $0.kind }
         k = Kind(ka)
-        pva = ar
+        self.ar = ar
     }
     convenience init(_ c: ParserRuleContext, _ a: Ptype) {
         self.init(c, Kind(type(of: a), .gScalar, nil), a)
@@ -60,9 +56,9 @@ class Pval: Ptype {
             ar = [i ?? k.vtype!.self.zeroValue()]
         case .gTuple:
             ade(i == nil)
-            pva = [Pval]()
-            for x in k.ka {
-                pva!.append(Pval(c, x))
+            ar = [Pval]()
+            for x in k.ka! {
+                ar!.append(Pval(c, x))
             }
             break
         }
@@ -96,12 +92,13 @@ class Pval: Ptype {
             }
             return true
         case .gTuple:
-                        return pva!.elementsEqual(p.pva!, by: { $0.equal($1)})
+                        return ar!.elementsEqual(p.ar!, by: { $0.equal($1)})
         }
     }
 
 
     func get() -> Ptype {
+        ade(kind.gtype == .gScalar)
         ade(ar!.count == 1)
         return ar!.first!
     }
@@ -113,7 +110,11 @@ class Pval: Ptype {
         switch k {
         case let v1v as Int:
             if self.k.gtype == .gTuple {
-                return pva![v1v].get()
+                let pv = ar![v1v] as! Pval
+                if pv.kind.gtype == .gScalar {
+                    return pv.get()
+                }
+                return pv
             }
             return ar![v1v]
         case let v1v as String:
@@ -143,8 +144,8 @@ class Pval: Ptype {
         ade(kind.gtype != .gScalar)
         if kind.gtype == .gTuple {
             let index = k as! Int
-            ade(pva![index].kind.vtype! == type(of:v!))
-            pva![index] = Pval(prc!, v!)
+//            ade(ar![index].kind.vtype! == type(of:v!))
+            ar![index] = Pval(prc!, v!)
             return
         }
         guard v == nil || kind.vtype == type(of:v!) else {
@@ -200,10 +201,11 @@ class Pval: Ptype {
         case .gTuple:
             var rt = ""
             rt += "("
-            if let f = pva!.first?.get() {
-                rt += String(describing: f)
-                for v in pva![1...] {
-                    rt += " " + v.string//String(describing: v.get())
+            if let pv = ar!.first {
+                let pvv = pv as! Pval
+                rt += pvv.string
+                for pv2 in ar![1...] {
+                    rt += " " + (pv2 as! Pval).string//String(describing: v.get())
                 }
             }
 
@@ -226,7 +228,7 @@ class Pval: Ptype {
         case .gMap:
             rt.map = map!
         case .gTuple:
-            rt.pva = pva
+            rt.ar = ar!
             
         }
         return rt

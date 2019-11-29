@@ -1,11 +1,6 @@
-
-tup := (5, (true, "b"));
-println(tup);
-//debug();
-
-var tup2 (int, (bool, string));
-println(tup2);
-tup10 := tup2[1];
-//println(tup10[0]);
-//print(tup2[1][0])
-//print(tup2);
+deep := ("a", true, (5, 1.5, ("more", 42, "aap")));
+println(deep);
+var deep2 (int);
+println(deep2);
+var deep3 (int, bool, (int, bool, int));
+println(deep3);

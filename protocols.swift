@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol Atype {
+protocol Atype {    
 }
 protocol Ptype: Atype {
     static func zeroValue() -> Ptype

@@ -9,7 +9,6 @@
 import Foundation
 
 class Kind {
-    //
     enum Gtype {
         case gScalar, gArray, gMap, gSlice, gTuple
     }
@@ -37,7 +36,7 @@ class Kind {
         self.count = kar.count
         ka = kar
     }
-    var ka = [Kind]()
+    var ka: [Kind]?
     var vtype: Ptype.Type?
     var gtype: Gtype
     var count: Int?
@@ -54,7 +53,7 @@ class Kind {
             guard k2.count == count  else {
                 return false
             }
-            return ka.elementsEqual(k2.ka, by: { $0.kindEquivalent($1)})          
+            return ka!.elementsEqual(k2.ka!, by: { $0.kindEquivalent($1)})          
         }
     }
 }

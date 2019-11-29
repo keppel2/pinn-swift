@@ -24,6 +24,7 @@ public class Pvisitor {
     : [String: (ParserRuleContext, [Pval]) -> Pval?] =
         [
             "ft": { sctx, s in assertPvals(s, 2)
+                print("--", sctx.getStart()!.getLine())
                 li = printed.endIndex
                 (t_explain, t_compare) = (s[0].get() as! String, s[1].get() as! String)
                 
@@ -713,7 +714,11 @@ public class Pvisitor {
             let e = visitPval(sctx.expr(0)!)!
             let x = e.get()
             let v2 = v.get(x as! Ktype)
+            if v.kind.gtype != .gTuple {
             rt = Pval(sctx, v2)
+            } else {
+                rt = Pval(sctx, v2)
+            }
             
         default:
             //            let schild = ctx.getChild(0) as! ParserRuleContext
