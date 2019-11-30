@@ -1,3 +1,2 @@
-var newArray [3]string;
-newArray[1] = "aap";
-print(newArray[1]);
+print(1+ 4);
+print( 5 == 3);

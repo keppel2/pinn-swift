@@ -9,10 +9,11 @@
 import Foundation
 
 protocol Atype {
-    func equal(_: Atype) -> Bool
 }
-protocol Ptype: Atype {
+
+protocol Ptype {
     static func zeroValue() -> Ptype
+    func equal(_: Ptype) -> Bool
 
 }
 
@@ -36,7 +37,8 @@ protocol Compare: Ptype {
 }
 
 extension Decimal: Ptype, Plus, Compare, Arith, Negate {
-   
+
+
     func lt(_ a: Compare) -> Bool {
         let x = self < a as! Self
         return x
@@ -74,7 +76,7 @@ extension Decimal: Ptype, Plus, Compare, Arith, Negate {
         return x
     }
 
-    func equal(_ a: Atype) -> Bool {
+    func equal(_ a: Ptype) -> Bool {
         return self == a as! Self
     }
 }
@@ -99,7 +101,7 @@ extension Int: Ptype, Ktype, Plus, Compare, Negate, Arith {
         return x
     }
     
-    func equal(_ a: Atype) -> Bool {
+    func equal(_ a: Ptype) -> Bool {
         return self == a as! Self
     }
     
@@ -122,7 +124,7 @@ extension Int: Ptype, Ktype, Plus, Compare, Negate, Arith {
 }
 extension Bool: Ptype, Ktype {
     static func zeroValue() -> Ptype { return false }
-    func equal(_ a: Atype) -> Bool {
+    func equal(_ a: Ptype) -> Bool {
         return self == a as! Self
     }
 }
@@ -142,7 +144,7 @@ extension String: Ptype, Ktype, Plus, Compare {
         let x = self + (a as! String)
         return x
     }
-    func equal(_ a: Atype) -> Bool {
+    func equal(_ a: Ptype) -> Bool {
         return self == a as! Self
     }
 }
