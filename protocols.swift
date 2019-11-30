@@ -11,6 +11,8 @@ import Foundation
 protocol Atype {
     func clone() -> Atype
     func equal(_: Atype) -> Bool
+    func akind() -> Kind
+    func string() -> String
 }
 
 protocol Ptype {

@@ -13,22 +13,50 @@ class Kind {
         case gScalar, gArray, gMap, gSlice, gTuple
     }
 
+    /*
     func equal(_ k2: Kind) -> Bool {
-        ade(gtype != .gTuple && k2.gtype != .gTuple)
+        if vtype == nil {
+            return ka!.elementsEqual(k2.ka!, by: {$0.equal($1)})
+        }
         return vtype == k2.vtype && gtype == k2.gtype && count == k2.count
     }
-    init(_ vtype: Ptype.Type?, _ gtype: Gtype, _ count: Int? = nil) {
+ */
+    
+    init(_ vtype: Ptype.Type, _ gtype: Gtype? = nil, _ count: Int? = nil) {
         self.vtype = vtype
-        self.gtype = gtype
-        switch gtype {
+        self.gtype = gtype ?? .gScalar
+        switch gtype! {
         case .gMap:
             ade(count == nil)
             self.count = 0
         case .gScalar:
             ade(count == nil)
             self.count = 1
-        case .gSlice, .gArray, .gTuple:
-            self.count = count
+        case .gSlice, .gArray:
+            self.count = count!
+        case .gTuple:
+            de(ECASE)
+        }
+    }
+//    init(kind: Kind, _ gtype: Gtype, _ count: Int? = nil) {
+//        self.gtype = gtype
+//        switch gtype {
+//        case .gScalar, .gTuple:
+//            de(ECASE)
+//        }
+//    }
+    init(_ k: Kind, _ gtype: Gtype, _ count: Int? = nil) {
+        self.gtype = gtype
+        switch gtype {
+        case .gScalar, .gTuple:
+            de(ECASE)
+        case .gMap:
+            ade(count == nil)
+            self.count = 0
+            self.k = k
+        case .gArray, .gSlice:
+            self.count = count!
+            self.k = k
         }
     }
     init(_ kar: [Kind]) {
@@ -37,23 +65,36 @@ class Kind {
         ka = kar
     }
     var ka: [Kind]?
+    var k: Kind?
     var vtype: Ptype.Type?
     var gtype: Gtype
-    var count: Int?
+    var count: Int
+
+    
+    
     func kindEquivalent(_ k2: Kind) -> Bool {
-        switch gtype {
-        case .gArray, .gScalar:
-            return self.equal(k2)
-        case .gMap, .gSlice:
-            return gtype == k2.gtype && vtype == k2.vtype
-        case .gTuple:
-            guard k2.gtype == .gTuple else {
-                return false
-            }
-            guard k2.count == count  else {
-                return false
-            }
-            return ka!.elementsEqual(k2.ka!, by: { $0.kindEquivalent($1)})          
-        }
+        return true
+//        if let v = vtype {
+//            switch gtype {
+//            case .gArray, .gScalar:
+//                return v == k2.vtype! && gtype == k2.gtype && count == k2.count
+//            case .gMap, .gSlice:
+//                return gtype == k2.gtype && v == k2.vtype!
+//            case .gTuple:
+//                de(ECASE)
+//            }
+//        }
+//        if let ki = k {
+//            switch gtype {
+//            case .gArray:
+//                return ki.kindEquivalent(k2.k!) && gtype == k2.gtype && count == k2.count
+//            case .gMap, .gSlice:
+//                return ki.kindEquivalent(k2.k!) && gtype == k2.gtype
+//            case .gTuple, .gScalar:
+//                de(ECASE)
+//            }
+//        }
+//
+//        return ka!.elementsEqual(k2.ka!, by: {$0.kindEquivalent($1)})
     }
 }

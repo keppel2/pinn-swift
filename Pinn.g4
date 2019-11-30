@@ -18,14 +18,14 @@ fvarDecl
   : ID THREEDOT? kind ;
 
 varDecl
-  : 'var' ID kind ('=' exprList)?
+  : 'var' ID kind
   | ID CE expr
   | LPAREN ID ( ',' ID )* ')' CE expr;
 
 LSQUARE : '[' ;
 LPAREN : '(' ;
 kind
-  : (LSQUARE ( MAP | SLICE | FILL | expr) ']')? TYPES
+  : (LSQUARE ( MAP | SLICE | expr) ']')? TYPES
   | LPAREN kindList ')' ;
 
 MAP
@@ -33,9 +33,6 @@ MAP
 
 SLICE
  : 'slice' ;
-
-FILL
- : 'array' ;
 
 TYPES
   : ('int' | 'bool' |'string' | 'decimal'

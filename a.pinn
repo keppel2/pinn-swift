@@ -1,2 +1,2 @@
-print(1+ 4);
-print( 5 == 3);
+tupar := [(1, "jljlj"), (10, "abb")];
+print(tupar);
