@@ -608,4 +608,12 @@ teTup2 := (5, "aap", false);
 teTup3 := (23, "aap", false);
 print(teTup == teTup2, teTup == teTup3);
 ec();
-
+/* -- Fix lvalues
+ft("Global ar", "");
+gar := [1, 5];
+func garf() {
+    gar = [10, 12];
+}
+println(gar);
+ec();
+*/
