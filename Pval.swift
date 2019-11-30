@@ -17,6 +17,12 @@ class Pwrap: Atype {
     func unwrap() -> Ptype {
         return wrapped
     }
+    func clone() -> Atype {
+        return Pwrap(wrapped)
+    }
+    func equal(_ a: Atype) -> Bool {
+        return unwrap().equal((a as! Pwrap).unwrap())
+    }
 }
 
 class Pval: Atype {
@@ -33,7 +39,12 @@ class Pval: Atype {
     }
 
     func sort() {
-//        ar!.sort { ($0 as! Compare).lt($1 as! Compare) }
+
+        ar!.sort {
+            let lhs = ($0 as! Pwrap).unwrap() as! Compare
+            let rhs = ($1 as! Pwrap).unwrap() as! Compare
+            return lhs.lt(rhs)
+        }
     }
     init(_ c: ParserRuleContext?, _ ar: [Pval]) {
         prc = c
@@ -50,9 +61,8 @@ class Pval: Atype {
         ar = [w]
     }
     convenience init( _ c: ParserRuleContext, _ pv: Pval, _ a: Int, _ b: Int) {
-        self.init(c, Kind(pv.kind.vtype!, .gSlice, pv.ar!.count), nil)
+        self.init(c, Kind(pv.kind.vtype!, .gSlice, pv.ar!.count))
         self.ar = Array(pv.ar![a..<b])
-//        self.init(pv.ar![a..<b])
     }
     init( _ c: ParserRuleContext, _ k: Kind, _ i: Ptype? = nil) {
         prc = c
@@ -74,31 +84,28 @@ class Pval: Atype {
             break
         }
     }
-    func equal(_ p: Pval) -> Bool {
+    func equal(_ p: Atype) -> Bool {
 
-//        guard let p = p as? Pval else {
-//            de(ETYPE)
-//        }
+        guard let p = p as? Pval else {
+            de(ETYPE)
+        }
         ade(p.kind.kindEquivalent(kind))
 
         switch kind.gtype {
         case .gScalar:
-            return get().unwrap().equal(p.get().unwrap())
-//        case .gArray, .gSlice:
-//            return ar!.elementsEqual(p.ar!, by: { $0.equal($1)})
-//        case .gMap:
-//            for (key, value) in p.map! {
-//                if map![key] == nil {
-//                    return false
-//                }
-//                if !value.equal(map![key]!) {
-//                    return false
-//                }
-//            }
-//            return true
-//        case .gTuple:
-//                        return ar!.elementsEqual(p.ar!, by: { $0.equal($1)})
-
+            return get().equal(p.get())
+        case .gArray, .gSlice, .gTuple:
+            return ar!.elementsEqual(p.ar!, by: {$0.equal($1)})
+        case .gMap:
+            for (key, value) in p.map! {
+                if map![key] == nil {
+                    return false
+                }
+                if !value.equal(map![key]!) {
+                    return false
+                }
+            }
+            return true
         default: break
         }
         return false
@@ -234,22 +241,20 @@ class Pval: Atype {
     
     var kind: Kind { return k
     }
-//
-//    func clone() -> Pval {
-//        let rt = Pval(prc!, kind)
-//        switch kind.gtype {
-//        case .gArray, .gSlice:
-//            rt.ar = ar!
-//        case .gScalar:
-//            rt.ar![0] = ar!.first!
-//        case .gMap:
-//            rt.map = map!
-//        case .gTuple:
-//            rt.ar = ar!
-//
-//        }
-//        return rt
-//    }
+
+    func clone() -> Atype {
+        if kind.gtype == .gScalar {
+            return Pval(prc!, self.get().unwrap())
+        }
+        let rt = Pval(prc!, kind)
+        switch kind.gtype {
+        case .gArray, .gTuple:
+            rt.ar = ar!.map { $0.clone() }
+        case .gMap, .gSlice, .gScalar:
+            de(ECASE)
+        }
+        return rt
+    }
 }
 
 

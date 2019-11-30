@@ -501,13 +501,13 @@ DA := 1.1;
 DB := 5.5;
 ec();ft("decimal + - * /", "6.6 -4.4 6.05 0.2");
 print(DA + DB, DA - DB, DA * DB, DA / DB);
-/*
+
 ec();ft("Slice Sort", "[1 4 32 45 101]");
 
 toSort := [4, 45, 1, 101, 32];
 sorted := sort(toSort);
 print(sorted);
-*/
+
 ec();ft("Global int in header", "3");
 GLOB := 3;
 func giih(ar [GLOB]bool) {
@@ -524,7 +524,7 @@ var arF [1]int = 23;
 arFunc(arF);
 print(arF[0]);
 
-/*
+
 ec();ft("Slice shares in call", "[201 101]");
 func slFunc(s [slice]int) {
     s[0] = 201;
@@ -534,7 +534,7 @@ slf = [23, 101];
 slFunc(slf);
 print(slf);
 ec();
-*/
+
 ft("Map shares in call", "{aap:101}");
 func mFunc(m [map]int) {
     m["aap"] = 101;
@@ -582,7 +582,6 @@ pfT[0]--;
 pfM["aaa"]--;
 print(pfA[0], pfT[0], pfM["aaa"]);
 ec();
-
 ft("Compound equals", "true false");
 ceAr1 := [1, 5, 23];
 ceAr2 := [1, 5, 23];
@@ -596,6 +595,7 @@ meMap3 := {"noot": 5};
 meMap4 := {"aap": 32};
 print(meMap1 == meMap2, meMap1 == meMap3, meMap1 == meMap4);
 ec();
+
 ft("Map returns zero value with no key", "0, false");
 var mrz [map]int;
 print(mrz["a"]);
@@ -603,24 +603,37 @@ print(",", key(mrz, "a"));
 
 ec();
 
+
 ft("Tuple equals", "true false");
 teTup := (5, "aap", false);
 teTup2 := (5, "aap", false);
 teTup3 := (23, "aap", false);
 print(teTup == teTup2, teTup == teTup3);
 ec();
-/* -- Fix lvalues
-ft("Global ar", "");
+ft("Global ar", "[1 5]");
 gar := [1, 5];
 func garf() {
     gar = [10, 12];
 }
-println(gar);
+print(gar);
 ec();
-*/
-fc("Short declaration copies integer", "5 5,10 5");
+ft("Short declaration copies integer", "5 5,10 5");
 sdci1 := 5;
 sdci2 := sdci1;
-print(sdci1, sdci2, ",");
+print(sdci1, sdci2);
+print(",");
 sdci1 = 10;
 print(sdci1, sdci2);
+ec();
+/*
+ft("Slicing shares", "");
+ssAr1 := [1, 10, 101, 202];
+ssAr2 := ssAr1[1@2];
+ssAr2[0] = 777;
+print(ssAr1);
+print(",");
+print(ssAr2);
+ec();
+
+
+*/

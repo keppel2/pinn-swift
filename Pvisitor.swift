@@ -669,12 +669,11 @@ public class Pvisitor {
                 guard let pv = getPv(str) else {
                     de(Perr(EUNDECLARED, sctx))
                 }
-                rt = pv
-//                if pv.kind.gtype == .gMap || pv.kind.gtype == .gSlice {
-//                    rt = pv
-//                } else {
-//                    rt = pv.clone()
-//                }
+                if pv.kind.gtype == .gMap || pv.kind.gtype == .gSlice {
+                    rt = pv
+                } else {
+                    rt = pv.clone() as! Pval
+                }
             default:
                 de(Perr(ECASE, sctx))
             }
@@ -786,7 +785,7 @@ public class Pvisitor {
             var index: Ktype?
             if let cindex = sctx.index {
                 index = (visitPval(cindex)!.get().unwrap() as! Ktype)
-                lhs = Pval(sctx, v.get(index!) as! Ptype)
+                lhs = Pval(sctx, (v.get(index!) as! Pwrap).unwrap())
             } else {
                 lhs = v
             }
@@ -836,7 +835,7 @@ public class Pvisitor {
                 
                 if let e = sctx.expr() {
                     let ev = visitPval(e)!.get().unwrap()
-                    let lhsv = v.get(ev as! Ktype) as! Int
+                    let lhsv = (v.get(ev as! Ktype) as! Pwrap).unwrap() as! Int
                     v.set(ev as! Ktype, lhsv + rhsv)
                     break
                 }
