@@ -49,40 +49,31 @@ simpleStatement
   | ID (LSQUARE expr ']')? DOUBLEOP ;
 
   
-arrayLiteral :
-  LSQUARE exprList ']' ;
+
 
 objectPair :
 STRING ':' expr ;
 
-objectLiteral :
-'{' objectPair ( ',' objectPair )* '}' ;
 
-callExpr:
-  ID LPAREN exprList? ')';
-parenExpr: LPAREN expr ')';
 
-tupleExpr: LPAREN exprList ')';
+  
 
-unaryExpr:
-   ('+' | '-' | '!' ) expr ;
 
 expr
   :
-   expr LSQUARE first=expr? (TWODOTS | COLON) second=expr? ']'
-  | expr LSQUARE expr ']'
-  | arrayLiteral
-  | objectLiteral
-  | unaryExpr
-  | expr ('+' | '-' | BINOP) expr
-  | expr ('==' | '!=' | '>' | '<' | '>=' | '<=' ) expr
-  | expr ('&&' | '||') expr
-  | callExpr
-  | parenExpr
-  | tupleExpr
-  | expr (TWODOTS | COLON) expr
-  | expr '?' expr COLON expr
-  | (ID | FLOAT | INT | BOOL | STRING ) ;
+
+   expr LSQUARE ( first=expr? (TWODOTS | COLON) second=expr? | expr) ']' #indexExpr
+  |   LSQUARE exprList ']' #arrayLiteral
+  | '{' objectPair ( ',' objectPair )* '}' #objectLiteral
+  |    ('+' | '-' | '!' ) expr #unaryExpr
+  | expr ( ('+' | '-' | BINOP) | ('==' | '!=' | '>' | '<' | '>=' | '<=' ) | ('&&' | '||') ) expr #binaryExpr
+  |   ID LPAREN exprList? ')' #callExpr
+  | LPAREN expr ')' #parenExpr
+  |  LPAREN exprList ')' #tupleExpr
+  | expr (TWODOTS | COLON) expr #rangeExpr
+  | expr '?' expr COLON expr #conditionalExpr
+  | (ID | FLOAT | INT | BOOL | STRING ) #literalExpr ;
+  
 exprList
   : expr (',' expr)* ;
 kindList

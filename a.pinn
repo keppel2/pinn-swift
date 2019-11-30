@@ -1,2 +1,3 @@
-tup := (1, (3, 5));
-print(tup[1][0]);
+var newArray [3]string;
+newArray[1] = "aap";
+print(newArray[1]);
