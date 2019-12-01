@@ -993,7 +993,7 @@ public class Pvisitor {
             
         case let sctx as PinnParser.VarDeclContext:
             let map = lfc?.m ?? fc.m
-            /*
+            
             if sctx.LPAREN() != nil {
                 let e = visitPval(sctx.expr()!)!
                 ade(e.kind.gtype == .gTuple)
@@ -1001,19 +1001,18 @@ public class Pvisitor {
                 for (k, v) in sctx.ID().enumerated() {
                     let str = v.getText()
                     let te = e.get(k)
-                    let newV = Pval.wrapped(sctx, te)
                     if let prev = map[str] {
                         de(Perr(EREDECLARE, prev, sctx))
                     }
                     if lfc != nil {
-                        lfc!.m[str] = newV
+                        lfc!.m[str] = te
                     } else {
-                        fc.m[str] = newV
+                        fc.m[str] = te
                     }
                 }
                 return
             }
- */
+ 
             let str = sctx.ID(0)!.getText()
             
             var newV: Pval
