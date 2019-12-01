@@ -20,7 +20,7 @@ public class Pvisitor {
             de(EPARAM_LENGTH)
         }
     }
-    let litToType: [String: Ptype.Type] = ["int": Int.self, "bool": Bool.self, "string": String.self, "decimal": Decimal.self]
+    let litToType: [String: Ptype.Type] = ["int": Int.self, "bool": Bool.self, "string": String.self, "decimal": Decimal.self, "self": Nil.self]
     let builtIns
         : [String: (ParserRuleContext, [Pval]) -> Pval?] =
         [
@@ -685,6 +685,9 @@ public class Pvisitor {
                 let d = Decimal(string: str)!
                 let pv = Pval(sctx, d)
                 rt = pv
+            case .NIL:
+                let pv = Pval(sctx, Nil())
+                rt = pv
             case .BOOL:
                 let str = sctx.BOOL()!.getText()
                 let x = Bool(str)!
@@ -832,6 +835,7 @@ public class Pvisitor {
             }
             
         case let sctx as PinnParser.DoubleSetContext:
+            
             let lh = visitPval(sctx.lExpr()!)!
                 let rhsv: Int
                 switch sctx.DOUBLEOP()!.getText() {

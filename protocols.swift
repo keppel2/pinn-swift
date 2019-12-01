@@ -40,6 +40,13 @@ protocol Compare: Ptype {
     func gt(_: Compare) -> Bool
 }
 
+struct Nil: Ptype {
+    static func zeroValue() -> Ptype { return Nil() }
+    func equal(_ a: Ptype) -> Bool {
+        return a is Nil
+    }
+}
+
 extension Decimal: Ptype, Plus, Compare, Arith, Negate {
 
 

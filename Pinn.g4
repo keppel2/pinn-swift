@@ -36,7 +36,7 @@ SLICE
  : 'slice' ;
 
 TYPES
-  : ('int' | 'bool' |'string' | 'decimal'
+  : ('int' | 'bool' |'string' | 'decimal' | 'self'
    ) ;
 
 DOUBLEOP
@@ -55,7 +55,8 @@ objectPair :
 STRING ':' expr ;
 
 
-
+dummy:
+'$$$' ;
   
 
 
@@ -74,7 +75,7 @@ expr
   |  LPAREN exprList ')' #tupleExpr
   | expr (TWODOTS | COLON) expr #rangeExpr
   | expr '?' expr COLON expr #conditionalExpr
-  | (ID | FLOAT | INT | BOOL | STRING ) #literalExpr ;
+  | (ID | FLOAT | INT | BOOL | STRING | NIL ) #literalExpr ;
   
 exprList
   : expr (',' expr)* ;
@@ -125,6 +126,7 @@ statement
   | 'fallthrough' ';'
   | ';' ;
 
+NIL : 'nil' ;
 COMMA : ',' ;
 COLON : ':' ;
 CE : ':=' ;
