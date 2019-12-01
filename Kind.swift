@@ -22,21 +22,10 @@ class Kind {
     }
  */
     
-    init(_ vtype: Ptype.Type, _ gtype: Gtype? = nil, _ count: Int? = nil) {
+    init(_ vtype: Ptype.Type) {
         self.vtype = vtype
-        self.gtype = gtype ?? .gScalar
-        switch gtype! {
-        case .gMap:
-            ade(count == nil)
-            self.count = 0
-        case .gScalar:
-            ade(count == nil)
-            self.count = 1
-        case .gSlice, .gArray:
-            self.count = count!
-        case .gTuple:
-            de(ECASE)
-        }
+        self.gtype = .gScalar
+        self.count = 1
     }
 //    init(kind: Kind, _ gtype: Gtype, _ count: Int? = nil) {
 //        self.gtype = gtype

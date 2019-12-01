@@ -82,10 +82,10 @@ public class Pvisitor {
                 dbg()
                 return nil
             },
-            "sort": { sctx, s in assertPvals(s, 1)
-                s[0].sort()
-                return s[0]
-            },
+//            "sort": { sctx, s in assertPvals(s, 1)
+//                s[0].sort()
+//                return s[0]
+//            },
             "sleep": { sctx, s in assertPvals(s, 1)
                 sleep(UInt32(s[0].get().unwrap() as! Int))
                 return nil
@@ -219,9 +219,9 @@ public class Pvisitor {
             guard rhsv - lhsv >= 0 else {
                 de(Perr(ERANGE, sctx))
             }
-            rt = Pval(sctx, Kind(Int.self, .gSlice, rhsv - lhsv))
+            rt = Pval(sctx, Kind(Kind(Int.self), .gSlice, rhsv - lhsv))
             for x in lhsv..<rhsv {
-                rt.set(x - lhsv, Pwrap(x))
+                rt.set(x - lhsv, Pval(sctx, x))
             }
             
         default:
@@ -303,13 +303,13 @@ public class Pvisitor {
         }
         for (index, v) in fh.fkinds.enumerated() {
             if v.variadic {
-                let par = Pval(ctx, Kind(v.k.vtype!, .gArray, s.count - index), nil)
+                let par = Pval(ctx, Kind(Kind(v.k.vtype!), .gArray, s.count - index), nil)
                 
                 for (key, varadds) in s[index...].enumerated() {
                     if !varadds.kind.kindEquivalent(v.k) {
                         de(Perr(ETYPE, sctx))
                     }
-                    par.set(key, varadds.getAtype())
+                    par.set(key, varadds)
                 }
                 if lfc!.m[fh.fkinds[index].s] != nil {
                     de(Perr(EREDECLARE, sctx))
@@ -424,19 +424,19 @@ public class Pvisitor {
         let vtype = litToType[strType]!
         let rt: Kind
         if sctx.MAP() != nil {
-            rt = Kind(vtype, .gMap)
+            rt = Kind(Kind(vtype), .gMap)
             //        } else if sctx.SLICE() != nil {
             //            rt = Kind(vtype: vtype, gtype: .gSlice, count: 0)
             //
         } else if sctx.SLICE() != nil {
-            rt = Kind(vtype, .gSlice, 0)
+            rt = Kind(Kind(vtype), .gSlice, 0)
         }
         else if let e = sctx.expr() {
             let v = visitPval(e)!
             let x = v.get().unwrap() as! Int
-            rt = Kind(vtype, .gArray, x)
+            rt = Kind(Kind(vtype), .gArray, x)
         } else {
-            rt = Kind(vtype, .gScalar)
+            rt = Kind(vtype)
         }
         return rt
     }
@@ -617,7 +617,7 @@ public class Pvisitor {
                 
                 let (str, pv) = visitObjectPair(op)
                 if kind == nil {
-                    kind = Kind(pv.kind.vtype!, .gMap)
+                    kind = Kind(Kind(pv.kind.vtype!), .gMap)
                     rt = Pval(sctx, kind!)
                 }
                 rt!.set(str, pv)
@@ -629,13 +629,13 @@ public class Pvisitor {
             let aeFirstk = ae.first!.kind
             let kind: Kind
             if let aek = aeFirstk.vtype {
-                kind = Kind(aek, .gSlice, ae.count)
+                kind = Kind(Kind(aek), .gSlice, ae.count)
             } else {
                 kind = Kind(aeFirstk.k!, .gSlice, aeFirstk.count)
             }
             rt = Pval(sctx, kind, ae.count)
             for (k, pv) in ae.enumerated() {
-                rt!.set(k, pv.getAtype())
+                rt!.set(k, pv)
             }
             return rt
         //            rt = Pval(sctx, Kind(vtyp
@@ -789,7 +789,7 @@ public class Pvisitor {
             var index: Ktype?
             if let cindex = sctx.index {
                 index = (visitPval(cindex)!.get().unwrap() as! Ktype)
-                lhs = Pval(sctx, (v.get(index!) as! Pwrap).unwrap())
+                lhs = Pval(sctx, v.get(index!).get())
             } else {
                 lhs = v
             }
@@ -801,7 +801,7 @@ public class Pvisitor {
             if index == nil {
                 v.set(result)
             } else {
-                v.set(index!, Pwrap(result))
+                v.set(index!, Pval(sctx, result))
             }
         case let sctx as PinnParser.StatementContext:
             if let e = sctx.expr() {
@@ -842,8 +842,8 @@ public class Pvisitor {
                 
                 if let e = sctx.expr() {
                     let ev = visitPval(e)!.get().unwrap()
-                    let lhsv = (v.get(ev as! Ktype) as! Pwrap).unwrap() as! Int
-                    v.set(ev as! Ktype, Pwrap(lhsv + rhsv))
+                    let lhsv = v.get(ev as! Ktype).get().unwrap() as! Int
+                    v.set(ev as! Ktype, Pval(sctx, lhsv + rhsv))
                     break
                 }
                 let lhsv = v.get().unwrap() as! Int
@@ -874,7 +874,7 @@ public class Pvisitor {
             if sctx.expr().count == 2 {
                 let key = visitPval(sctx.expr(0)!)!.get().unwrap()
                 let value = visitPval(sctx.expr(1)!)!.get().unwrap()
-                v.set(key as! Ktype, Pwrap(value))
+                v.set(key as! Ktype, Pval(sctx, value))
             } else {
                 
                 let e = visitPval(sctx.expr(0)!)!
@@ -940,7 +940,7 @@ public class Pvisitor {
                 switch ranger.kind.gtype {
                 case .gSlice, .gArray:
                     for x in 0..<ranger.kind.count {
-                        value!.set((ranger.get(x) as! Pwrap).unwrap())
+                        value!.set(ranger.get(x).get().unwrap())
                         key?.set(x)
                         
                         visit(sctx.block()!)
@@ -952,7 +952,7 @@ public class Pvisitor {
                     let keys = ranger.getKeys()
                     for mkey in keys {
                         key?.set(mkey)
-                        value!.set((ranger.get(mkey) as! Pwrap).unwrap())
+                        value!.set(ranger.get(mkey).get().unwrap())
                         visit(sctx.block()!)
                         if cfc.toEndBlock() {
                             break

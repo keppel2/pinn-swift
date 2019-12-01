@@ -507,13 +507,16 @@ DB := 5.5;
 ec();ft("decimal + - * /", "6.6 -4.4 6.05 0.2");
 print(DA + DB, DA - DB, DA * DB, DA / DB);
 
-ec();ft("Slice Sort", "[1 4 32 45 101]");
+ec();
+/*ft("Slice Sort", "[1 4 32 45 101]");
 
 toSort := [4, 45, 1, 101, 32];
 sorted := sort(toSort);
 print(sorted);
 
-ec();ft("Global int in header", "3");
+ec();
+*/
+ft("Global int in header", "3");
 GLOB := 3;
 func giih(ar [GLOB]bool) {
     print(len(ar));
@@ -525,7 +528,8 @@ ec();ft("Array copies in call", "23");
 func arFunc(ar [1]int) {
     ar[0] = 42;
 }
-arF := [23];
+var arF[1]int;
+arF[0] = 23;
 arFunc(arF);
 print(arF[0]);
 
