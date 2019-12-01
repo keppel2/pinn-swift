@@ -32,23 +32,42 @@ fileprivate class Pwrap {
 class Pval {
 
 
-    private var k: Kind
+    private var k: Kind!
     private var se: Pwrap?
     private var ar: [Pval]?
     private var map: [String: Pval]?
     let prc: ParserRuleContext?
+    
+    private func append(_ pv: Pval) {
+        ade(k.gtype == .gSlice)
+        ar!.append(pv)
+        kind.count = ar!.count
+    }
+    
+    private func addKey(_ s: String, _ pv: Pval) {
+        ade(k.gtype == .gMap)
+        map![s] = pv
+        kind.count = map!.count
+    }
 
-    init(_ c: ParserRuleContext?, _ ar: [Pval]) {
-        prc = c
+    convenience init(_ c: ParserRuleContext?, _ ar: [Pval], _ k: Kind) {
+        self.init(c)
+        self.k = k
+        self.ar = ar
+    }
+        
+    convenience init(_ c: ParserRuleContext?, _ ar: [Pval]) {
+        self.init(c)
         let ka = ar.map { $0.kind }
         k = Kind(ka)
         self.ar = ar
     }
+
     convenience init(_ c: ParserRuleContext?, _ a: Ptype) {
         self.init(c, Pwrap(a))
     }
-    fileprivate init( _ c: ParserRuleContext?, _ w: Pwrap) {
-        prc = c
+    convenience fileprivate init( _ c: ParserRuleContext?, _ w: Pwrap) {
+        self.init(c)
         k = Kind(type(of: w.unwrap()))
         se = w
     }
@@ -56,8 +75,11 @@ class Pval {
         self.init(c, Kind(Kind(pv.kind.k!.vtype!), .gSlice, b - a))
         self.ar = Array(pv.ar![a..<b])
     }
-    init( _ c: ParserRuleContext?, _ k: Kind) {
+    init(_ c: ParserRuleContext?) {
         prc = c
+    }
+    convenience init( _ c: ParserRuleContext?, _ k: Kind) {
+        self.init(c)
         self.k = k
         switch k.gtype {
         case .gArray, .gSlice:
@@ -112,21 +134,23 @@ class Pval {
         return [String](map!.keys)
 
     }
+    
+    private func getNewChild() -> Pval {
+        return Pval(prc, kind.k!)
+    }
     func get(_ k: Ktype, _ lh: Bool = false) -> Pval {
         switch k {
         case let v1v as Int:
             if lh && kind.gtype == .gSlice && v1v == ar!.count {
-                ar!.append(Pval(prc, kind.k!))
-                kind.count = ar!.count
+                append(getNewChild())
             }
             return ar![v1v]
         case let v1v as String:
             if map![v1v] == nil {
                 if lh {
-                    map![v1v] = Pval(prc, kind.k!)
-                    kind.count = map!.count
+                    addKey(v1v, getNewChild())
                 } else {
-                return Pval(prc, kind.k!)
+                return getNewChild()
                 }
             }
             return map![v1v]!
@@ -165,14 +189,12 @@ class Pval {
         case let v1v as Int:
 
             if kind.gtype == .gSlice && v1v == ar!.count {
-                ar!.append(v!)
-                kind.count = ar!.count
+                append(v!)
             } else {
                 ar![v1v] = v!
             }
         case let v1v as String:
-                map![v1v] = v!
-            kind.count = map!.count
+            addKey(v1v, v!)
         default:
             de(ECASE)
         }
@@ -227,26 +249,18 @@ class Pval {
     var kind: Kind { return k
     }
 
-    func clone() -> Pval {
-        if kind.gtype == .gScalar {
-            return Pval(prc, get().clone())
-        }
-        let rt = Pval(prc, kind)
-        switch kind.gtype {
-        case .gArray, .gTuple:
-            rt.ar = ar!.map { $0.clone() }
-        case .gMap, .gSlice, .gScalar:
-            de(ECASE)
-        }
-        return rt
-    }
     func cloneIf() -> Pval {
-        if kind.gtype == .gMap || kind.gtype == .gSlice {
+        switch kind.gtype {
+        case .gScalar:
+            return Pval(prc, get().clone())
+        case .gArray, .gTuple:
+             return Pval(prc, ar!.map { $0.cloneIf() }, kind)
+            
+        case .gMap, .gSlice:
             return self
-        } else {
-            return self.clone()
         }
     }
+
 }
 
 

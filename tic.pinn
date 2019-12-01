@@ -80,7 +80,7 @@ func opposite (x int) int { return x == PLAYER_A ? PLAYER_B : PLAYER_A; }
 func minimax (player int, board [SIZE * SIZE]int) int
 {
 	var result int;
-	var best int = opposite(player);
+	best := opposite(player);
 
 	result = winner(board);
 	if result != TIE {
@@ -130,7 +130,7 @@ func main() {
     
     printBoard(board);
     
-    var result int = minimax (PLAYER_A, board);
+    result := minimax (PLAYER_A, board);
    
     resultString := "";
     match result {

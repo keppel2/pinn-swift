@@ -147,22 +147,24 @@ public class Pvisitor {
         return nil
         
     }
+
     static func doOp(_ lhs: Pval, _ rhs: Pval, _ str: String, _ sctx: ParserRuleContext) -> Pval {
         let rt: Pval
         switch str {
         case "+":
-            let lh = lhs.getUnwrap() as! Plus
-            let rh = rhs.getUnwrap() as! Plus
+            let lh: Plus = tryCast(lhs)
+            let rh: Plus = tryCast(rhs)
             rt = Pval(sctx, lh.plus(rh))
             return rt
         case "-", "*", "/":
-            let lh = lhs.getUnwrap() as! Arith
-            let rh = rhs.getUnwrap() as! Arith
+            let lh: Arith = tryCast(lhs)
+            let rh: Arith = tryCast(rhs)
             rt = Pval(sctx, lh.arith(rh, str))
             return rt
         case "<", "<=", ">", ">=":
-            let lh = lhs.getUnwrap() as! Compare
-            let rh = rhs.getUnwrap() as! Compare
+            let lh: Compare = tryCast(lhs)
+            let rh: Compare = tryCast(rhs)
+
             let result: Bool
             switch str {
                 
@@ -179,8 +181,9 @@ public class Pvisitor {
             return Pval(sctx, result)
         default: break
         }
-        let lhsv = lhs.getUnwrap() as! Int
-        var rhsv = rhs.getUnwrap() as! Int
+        
+        let lhsv: Int = tryCast(lhs)
+        var rhsv: Int = tryCast(rhs)
         switch str {
         case "-":
             rt = Pval(sctx, lhsv - rhsv)
@@ -240,11 +243,11 @@ public class Pvisitor {
     func loadDebug(_ ctx:ParserRuleContext) {
         oldPrc = prc
         prc = ctx
-        texts.append(ctx.getText())
+//        texts.append(ctx.getText())
         line = ctx.start!.getLine()
     }
     func popDebug() {
-        texts.removeLast()
+//        texts.removeLast()
         prc = oldPrc
     }
     
@@ -425,15 +428,12 @@ public class Pvisitor {
         let rt: Kind
         if sctx.MAP() != nil {
             rt = Kind(kind, .gMap)
-            //        } else if sctx.SLICE() != nil {
-            //            rt = Kind(vtype: vtype, gtype: .gSlice, count: 0)
-            //
         } else if sctx.SLICE() != nil {
             rt = Kind(kind, .gSlice, 0)
         }
         else {
             let v = visitPval(sctx.expr()!)!
-            let x = v.getUnwrap() as! Int
+            let x: Int = tryCast(v)
             rt = Kind(kind, .gArray, x)
         }
         return rt
@@ -529,49 +529,61 @@ public class Pvisitor {
             }
             var cv = v
             for e in sctx.expr() {
-                let kt = visitPval(e)!.getUnwrap() as! Ktype
+                let kt: Ktype = tryCast(visitPval(e)!)
                 cv = cv.get(kt, true)
             }
             return cv
-        case let sctx as PinnParser.BinaryExprContext:
-            
+        case let sctx as PinnParser.IntExprContext:
             let op = Self.childToText(sctx.getChild(1)!)
+              let lhs = visitPval(sctx.expr(0)!)!
+       let rhs = visitPval(sctx.expr(1)!)!
+                        rt = Self.doOp(lhs, rhs, op, sctx)
             
+            
+            
+            case let sctx as PinnParser.CompExprContext:
+                 let op = Self.childToText(sctx.getChild(1)!)
+                   let lhs = visitPval(sctx.expr(0)!)!
+            let rhs = visitPval(sctx.expr(1)!)!
+                 if op == "==" {
+                      rt = Pval(sctx, lhs.equal(rhs))
+                      break
+                  }
+                  if op == "!=" {
+                      rt = Pval(sctx, !lhs.equal(rhs))
+                      break
+                  }
+                             rt = Self.doOp(lhs, rhs, op, sctx)
+                 
+            
+                case let sctx as PinnParser.BoolExprContext:
+
+            let op = Self.childToText(sctx.getChild(1)!)
             let lhs = visitPval(sctx.expr(0)!)!
-            
             if op == "&&" {
-                let lhsv = lhs.getUnwrap() as! Bool
+                let lhsv: Bool = tryCast(lhs)
                 if !lhsv {
                     rt = Pval(sctx, false)
                     break
                 }
                 else {
-                    rt = Pval(sctx, visitPval(sctx.expr(1)!)!.getUnwrap() as! Bool)
+                    rt = Pval(sctx, visitPval(sctx.expr(1)!)!.getUnwrap())
                     break
                 }
             }
             if op == "||" {
-                let lhsv = lhs.getUnwrap() as! Bool
+                let lhsv: Bool = tryCast(lhs)
                 if lhsv {
                     rt = Pval(sctx, true)
                     break
                 }
                 else {
-                    rt = Pval(sctx, visitPval(sctx.expr(1)!)!.getUnwrap() as! Bool)
+                    rt = Pval(sctx, visitPval(sctx.expr(1)!)!.getUnwrap())
                     break
                 }
             }
-            let rhs = visitPval(sctx.expr(1)!)!
-            if op == "==" {
-                rt = Pval(sctx, lhs.equal(rhs))
-                break
-            }
-            if op == "!=" {
-                rt = Pval(sctx, !lhs.equal(rhs))
-                break
-            }
-            
-            rt = Self.doOp(lhs, rhs, op, sctx)
+     
+ 
         case let sctx as PinnParser.UnaryExprContext:
             
             
@@ -694,7 +706,7 @@ public class Pvisitor {
             
         case let sctx as PinnParser.ConditionalExprContext:
             
-            let b = visitPval(sctx.expr(0)!)!.getUnwrap() as! Bool
+            let b: Bool = tryCast(visitPval(sctx.expr(0)!)!)
             if b {
                 rt = visitPval(sctx.expr(1)!)!
             } else {
@@ -711,13 +723,14 @@ public class Pvisitor {
             
             let v = visitPval(sctx.expr(0)!)!
             if (sctx.TWODOTS() != nil || sctx.COLON() != nil) {
+                
                 var lhsv = 0
                 if let lh = sctx.first {
-                    lhsv = visitPval(lh)!.getUnwrap() as! Int
+                    lhsv = tryCast(visitPval(lh)!)
                 }
                 var rhsv = v.kind.count
                 if let rh = sctx.second {
-                    rhsv = visitPval(rh)!.getUnwrap() as! Int
+                    rhsv = tryCast(visitPval(rh)!)
                 }
                 if (sctx.TWODOTS() != nil) {
                     rhsv+=1

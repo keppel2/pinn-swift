@@ -66,7 +66,9 @@ expr
   |   LSQUARE exprList ']' #arrayLiteral
   | '{' objectPair ( ',' objectPair )* '}' #objectLiteral
   |    ('+' | '-' | '!' ) expr #unaryExpr
-  | expr ( ('+' | '-' | BINOP) | ('==' | '!=' | '>' | '<' | '>=' | '<=' ) | ('&&' | '||') ) expr #binaryExpr
+  | expr ('+' | '-' | BINOP) expr #intExpr
+  | expr ('==' | '!=' | '>' | '<' | '>=' | '<=' ) expr #compExpr
+  | expr ('&&' | '||') expr #boolExpr
   |   ID LPAREN exprList? ')' #callExpr
   | LPAREN expr ')' #parenExpr
   |  LPAREN exprList ')' #tupleExpr

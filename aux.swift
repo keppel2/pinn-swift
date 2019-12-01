@@ -84,7 +84,12 @@ private func _fatalError(_ s: String) -> Never {
     print(s)
     exit(1)
 }
-
+func tryCast<T> (_ pv: Pval) -> T {
+    if !(pv.getUnwrap() is T) {
+        de(Perr(ETYPE, pv))
+    }
+    return pv.getUnwrap() as! T
+}
 func ade(_ b: Bool) {
     if !b {
         de(EASSERT)

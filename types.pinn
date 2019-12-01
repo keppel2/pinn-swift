@@ -427,9 +427,16 @@ ec();ft("7, 3. + - * / %", "10 4 21 2 1");
 A := 7;
 B := 3;
 print(A + B, A - B, A * B, A / B, A % B );
-ec();ft("Eq, not eq, lt, gt", "false true false true");
+ec();
+ft("Eq, not eq, lt, gt", "false true false true");
 print (A == B, A != B, A < B, A > B);
-ec();ft("<= and >=", "true false true false");
+ec();
+ft("Order", "false");
+print(true && 10 < 2 + 1 );
+ec();
+
+
+ft("<= and >=", "true false true false");
 print (5 <= 5, 6 <= 5, 5 >= 5, 4 >= 5);
 SA := "bar";
 SB := "foo";
@@ -660,8 +667,13 @@ mdt[1][0] = true;
 print(mdt);
 ec();
 
-ft("Multi-dimensional tuple set compound type", "");
+ft("Multi-dimensional tuple set compound type", "([0 0 42 0 0] (true 202))");
 var mdt2 ([5]int, (bool, int));
 mdt[1] = (true, 202);
 print(mdt);
+ec();
+
+ft("Deeply nested type", "[(false 0 {}) (false 0 {}) (false 0 {})]");
+var dnt [3](bool, int, [map](int, string));
+print(dnt);
 ec();

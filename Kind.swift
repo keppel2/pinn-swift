@@ -49,7 +49,6 @@ class Kind {
     
     
     func kindEquivalent(_ k2: Kind) -> Bool {
-        return true
         if let v = vtype {
             ade(gtype == .gScalar && k2.gtype == .gScalar)
             return v == k2.vtype!
