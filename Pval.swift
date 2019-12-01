@@ -36,7 +36,7 @@ class Pval {
     private var se: Pwrap?
     private var ar: [Pval]?
     private var map: [String: Pval]?
-    let prc: ParserRuleContext?
+    var prc: ParserRuleContext?
     
     private func append(_ pv: Pval) {
         ade(k.gtype == .gSlice)
@@ -166,6 +166,7 @@ class Pval {
         self.se = v.se
         self.ar = v.ar
         self.map = v.map
+        self.prc = v.prc
     }
     
     func set(_ k: Ktype, _ v: Pval?) {

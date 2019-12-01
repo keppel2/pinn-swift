@@ -516,7 +516,7 @@ public class Pvisitor {
         return rt
     }
     
-    func visitPval(_ sctx: ParserRuleContext) -> Pval? {
+    func visitPval(_ sctx: ParserRuleContext) -> Pval! {
         loadDebug(sctx)
         defer {popDebug()}
         
@@ -864,7 +864,8 @@ public class Pvisitor {
         case let sctx as PinnParser.IfStatementContext:
             
             let v = visitPval(sctx.expr()!)!
-            if v.getUnwrap() as! Bool {
+            let b: Bool = tryCast(v)
+            if b {
                 visit(sctx.statement(0)!)
             } else if let s2 = sctx.statement(1) {
                 visit(s2)
@@ -877,7 +878,7 @@ public class Pvisitor {
                     break
                 }
                 let v = visitPval(sctx.expr()!)!
-                b = v.getUnwrap() as! Bool
+                b = tryCast(v)
                 
             }
         case let sctx as PinnParser.WhStatementContext:
@@ -948,13 +949,13 @@ public class Pvisitor {
                 if sctx.fss != nil {
                     visit(sctx.fss)
             }
-            var v = visitPval(sctx.expr()!)!
-            while v.getUnwrap() as! Bool {
+            var v: Bool = tryCast(visitPval(sctx.expr()!)!)
+            while v {
                 visit(sctx.block()!)
                 
                 if  cfc.toEndBlock() {break}
                 visit(sctx.sss)
-                v = visitPval(sctx.expr()!)!
+                v = tryCast(visitPval(sctx.expr()!)!)
                 
             }
         case let sctx as PinnParser.GuardStatementContext:
