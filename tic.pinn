@@ -4,59 +4,66 @@ PLAYER_A := 1;
 PLAYER_B := 2;
 SIZE := 3;
 var rHashMap [map]int;
-func coord (x int, y int) int {
-	return y * SIZE + x;
-}
-func rHash(board [SIZE * SIZE]int, player int) int {
+
+func rHash(board [SIZE][SIZE]int, player int) int {
     rt := 0;
     var v int;
-    for v = range board {
-        rt *= SIZE;
-        rt += v;
+    var x int;
+    var y int;
+    for x = range 0:SIZE {
+        for y = range 0:SIZE {
+            v = board[x][y];
+            rt *= SIZE;
+            rt += v;
+        }
     }
     rt *= 2;
     rt += player - 1;
     return rt;
 }
-func printBoard (board [SIZE * SIZE]int) {
+func printBoard (board [SIZE][SIZE]int) {
 	var y int;
 	var x int;
 	for y = range 0:SIZE {
-        print (board[coord(0, y)]);
+        print (board[0][y]);
 		for x = range 1:SIZE {
         print (" ");
-        print (board[coord(x, y)]);
+        print (board[x][y]);
 		}
         println();
 	}
 	println ("---");
 }
-func full (board [SIZE * SIZE]int) bool {
-    var e int;
-    for e = range 0:SIZE * SIZE {
-        if board[e] == EMPTY {
-            return false;
+
+func full (board [SIZE][SIZE]int) bool {
+    var x int;
+    var y int;
+    for x = range 0:SIZE {
+        for y = range 0:SIZE {
+            if board[x][y] == EMPTY {
+                return false;
+            }
         }
     }
     return true;
 }
 
-func line (board [SIZE * SIZE]int, x int, y int, dx int, dy int) int {
-    comp := board[coord(x, y)];
+func line (board [SIZE][SIZE]int, x int, y int, dx int, dy int) int {
+    comp := board[x][y];
     if comp == EMPTY {
         return TIE;
     }
     while x + dx < SIZE && y + dy < SIZE {
         x += dx;
         y += dy;
-        if board[coord(x, y)] != comp {
+        if board[x][y] != comp {
             return TIE;
         }
     }
     return comp;
 }
 
-func winner (board [SIZE * SIZE]int) int {
+func winner (board [SIZE][SIZE]int) int {
 	var i int;
     var rt int;
 
@@ -77,7 +84,7 @@ func winner (board [SIZE * SIZE]int) int {
 
 func opposite (x int) int { return x == PLAYER_A ? PLAYER_B : PLAYER_A; }
 			
-func minimax (player int, board [SIZE * SIZE]int) int
+func minimax (player int, board [SIZE][SIZE]int) int
 {
 	var result int;
 	best := opposite(player);
@@ -94,8 +101,8 @@ func minimax (player int, board [SIZE * SIZE]int) int
     var strRHash string;
 	for x = range 0:SIZE {
 		for y = range 0:SIZE {
-			if board[coord(x, y)] == EMPTY {
-				board[coord(x, y)] = player;
+			if board[x][y] == EMPTY {
+				board[x][y] = player;
                 strRHash = stringValue(rHash(board, player));
                 if rHashMap[strRHash] > 0 {
                     result = rHashMap[strRHash];
@@ -109,7 +116,7 @@ func minimax (player int, board [SIZE * SIZE]int) int
 				if result == TIE {
 					best = TIE;
 				}
-				board[coord(x, y)] = EMPTY;
+				board[x][y] = EMPTY;
 			}
 		}
 	}
@@ -117,8 +124,9 @@ func minimax (player int, board [SIZE * SIZE]int) int
 }
 
 func main() {
-    var    board [SIZE * SIZE]int;
+    var    board [SIZE][SIZE]int;
     println("Initial board");
+/*
     ar := [0, 0, 0,
            0, 0, 0,
            0, 0, 0];
@@ -127,7 +135,8 @@ func main() {
     for x = range 0:SIZE * SIZE {
         board[x] = ar[x];
     }
-    
+  */
+//  board[1][1] = 1;
     printBoard(board);
     
     result := minimax (PLAYER_A, board);
