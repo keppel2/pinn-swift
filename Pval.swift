@@ -90,9 +90,6 @@ class Pval {
     }
     func equal(_ p: Pval) -> Bool {
 
-//        guard let p = p as? Pval else {
-//            de(ETYPE)
-//        }
         ade(p.kind.kindEquivalent(kind))
 
         switch kind.gtype {
@@ -110,9 +107,9 @@ class Pval {
                 }
             }
             return true
-        default: break
+
         }
-        return false
+
     }
 
 
@@ -233,7 +230,7 @@ class Pval {
             var rt = ""
             rt += "("
             if let pv = ar!.first {
-                let pvv = pv as! Pval
+                let pvv = pv
                 rt += pvv.string()
                 for pv2 in ar![1...] {
                     rt += " " + pv2.string()

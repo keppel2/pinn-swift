@@ -1,1 +1,2 @@
 var comp [2][3]int;
+comp[1][2] = 5;

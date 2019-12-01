@@ -652,7 +652,7 @@ public class Pvisitor {
             
             switch Self.childToToken(child) {
             case .STRING:
-                var str = sctx.STRING()!.getText()
+                let str = sctx.STRING()!.getText()
                 let str2 = stringDequote(str)
                 let pv = Pval(sctx, str2)
                 rt = pv
@@ -729,12 +729,8 @@ public class Pvisitor {
             
             let e2 = visitPval(sctx.expr(1)!)!.get().unwrap() as! Ktype
             
-            let v2 = v.get(e2)
-            if v2 is Pval {
-                rt = v2 as! Pval
-            } else {
-                rt = Pval(sctx, v2 as! Pwrap)
-            }
+            rt = v.get(e2)
+               
             
             case let sctx as PinnParser.ExprContext:
                 rt = visitPval(sctx.getChild(0) as! ParserRuleContext)
