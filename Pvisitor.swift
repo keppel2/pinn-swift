@@ -516,7 +516,7 @@ public class Pvisitor {
         return rt
     }
     
-    func visitPval(_ sctx: ParserRuleContext) -> Pval! {
+    func visitPval(_ sctx: ParserRuleContext) -> Pval? {
         loadDebug(sctx)
         defer {popDebug()}
         
@@ -743,9 +743,10 @@ public class Pvisitor {
                 
             }
             
-            let e2 = visitPval(sctx.expr(1)!)!.getUnwrap() as! Ktype
+            let e2 = visitPval(sctx.expr(1)!)!
+            let i: Ktype = tryCast(e2)
             
-            rt = v.get(e2)
+            rt = v.get(i)
                
             
             case let sctx as PinnParser.ExprContext:
@@ -839,8 +840,8 @@ public class Pvisitor {
                 default:
                     de(Perr(ECASE, nil, sctx))
                 }
-                
-                lh.setPV(Pval(sctx, lh.getUnwrap() as! Int + rhsv))
+            let lhsv: Int = tryCast(lh)
+                lh.setPV(Pval(sctx, lhsv + rhsv))
         case let sctx as PinnParser.ReturnStatementContext:
             cfc.path = .pExiting
             if let e = sctx.expr() {
@@ -884,11 +885,12 @@ public class Pvisitor {
         case let sctx as PinnParser.WhStatementContext:
             
             var v = visitPval(sctx.expr()!)!
-            
-            while v.getUnwrap() as! Bool {
+            var b: Bool = tryCast(v)
+            while b {
                 visit(sctx.block()!)
                 if  cfc.toEndBlock() {break}
                 v = visitPval(sctx.expr()!)!
+                b = tryCast(v)
             }
         case let sctx as PinnParser.FoStatementContext:
             if sctx.RANGE() != nil {
@@ -960,7 +962,8 @@ public class Pvisitor {
             }
         case let sctx as PinnParser.GuardStatementContext:
             let v = visitPval(sctx.expr()!)!
-            if !(v.getUnwrap() as! Bool) {
+            let b: Bool = tryCast(v)
+            if !b {
                 visit(sctx.block()!)
                 if cfc.path == .pNormal {
                     de(Perr(ESTATEMENT, sctx))
