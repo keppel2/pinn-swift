@@ -677,7 +677,7 @@ public class Pvisitor {
                 if pv.kind.gtype == .gMap || pv.kind.gtype == .gSlice {
                     rt = pv
                 } else {
-                    rt = pv.clone() as! Pval
+                    rt = pv.clone()
                 }
             default:
                 de(Perr(ECASE, sctx))
@@ -790,7 +790,7 @@ public class Pvisitor {
             var index: Ktype?
             if let cindex = sctx.index {
                 index = (visitPval(cindex)!.get().unwrap() as! Ktype)
-                lhs = Pval(sctx, v.get(index!).get())
+                lhs = v.get(index!)
             } else {
                 lhs = v
             }
@@ -800,7 +800,7 @@ public class Pvisitor {
             
             let result = Self.doOp(lhs, rhs, op, sctx).get().unwrap()
             if index == nil {
-                v.set(result)
+                v.setPV(Pval(sctx, result))
             } else {
                 v.set(index!, Pval(sctx, result))
             }
@@ -848,7 +848,7 @@ public class Pvisitor {
                     break
                 }
                 let lhsv = v.get().unwrap() as! Int
-                v.set(lhsv + rhsv)
+                v.setPV(Pval(sctx, lhsv + rhsv))
                 break
             }
             visit(sctx.getChild(0) as! ParserRuleContext)
@@ -873,16 +873,16 @@ public class Pvisitor {
                 de(Perr(EUNDECLARED, sctx))
             }
             if sctx.expr().count == 2 {
-                let key = visitPval(sctx.expr(0)!)!.get().unwrap()
-                let value = visitPval(sctx.expr(1)!)!.get().unwrap()
-                v.set(key as! Ktype, Pval(sctx, value))
+                let key = visitPval(sctx.expr(0)!)!.get().unwrap() as! Ktype
+                let value = visitPval(sctx.expr(1)!)!
+                v.set(key, value)
             } else {
                 
                 let e = visitPval(sctx.expr(0)!)!
                 if e.kind.gtype == .gScalar {
-                    
-                    v.set(e.get().unwrap())
+                    v.setPV(e)
                 } else {
+                    
                     putPv(str, e)
                 }
             }
@@ -941,8 +941,8 @@ public class Pvisitor {
                 switch ranger.kind.gtype {
                 case .gSlice, .gArray:
                     for x in 0..<ranger.kind.count {
-                        value!.set(ranger.get(x).get().unwrap())
-                        key?.set(x)
+                        value!.setPV(ranger.get(x))
+                        key?.setPV(Pval(sctx, x))
                         
                         visit(sctx.block()!)
                         if cfc.toEndBlock() {
@@ -952,8 +952,8 @@ public class Pvisitor {
                 case .gMap:
                     let keys = ranger.getKeys()
                     for mkey in keys {
-                        key?.set(mkey)
-                        value!.set(ranger.get(mkey).get().unwrap())
+                        key?.setPV(Pval(sctx, mkey))
+                        value!.setPV(ranger.get(mkey))
                         visit(sctx.block()!)
                         if cfc.toEndBlock() {
                             break

@@ -39,7 +39,7 @@ class Pval {
         return kind
     }
 
-    private let k: Kind
+    private var k: Kind
     private var se: Pwrap?
     private var ar: [Pval]?
     private var map: [String: Pval]?
@@ -153,14 +153,22 @@ class Pval {
             de(ECASE)
         }
     }
-    func set(_ v: Ptype) {
-        ade(kind.count == 1)
-        ade(kind.gtype == .gScalar)
-        ade(se != nil)
-        guard kind.vtype! == type(of: v) else {
-            de(ETYPE)
-        }
-        se = Pwrap(v)
+//    func set(_ v: Ptype) {
+//        ade(kind.count == 1)
+//        ade(kind.gtype == .gScalar)
+//        ade(se != nil)
+//        guard kind.vtype! == type(of: v) else {
+//            de(ETYPE)
+//        }
+//        se = Pwrap(v)
+//    }
+    
+    func setPV(_ v : Pval) {
+        ade(kind.kindEquivalent(v.kind))
+        self.k = v.kind
+        self.se = v.se
+        self.ar = v.ar
+        self.map = v.map
     }
     
     func set(_ k: Ktype, _ v: Pval?) {
