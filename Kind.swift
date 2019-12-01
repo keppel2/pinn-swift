@@ -62,8 +62,9 @@ class Kind {
     
     
     func kindEquivalent(_ k2: Kind) -> Bool {
-        return true
-//        if let v = vtype {
+        if let v = vtype {
+            ade(gtype == .gScalar && k2.gtype == .gScalar)
+            return v == k2.vtype!
 //            switch gtype {
 //            case .gArray, .gScalar:
 //                return v == k2.vtype! && gtype == k2.gtype && count == k2.count
@@ -72,18 +73,18 @@ class Kind {
 //            case .gTuple:
 //                de(ECASE)
 //            }
-//        }
-//        if let ki = k {
-//            switch gtype {
-//            case .gArray:
-//                return ki.kindEquivalent(k2.k!) && gtype == k2.gtype && count == k2.count
-//            case .gMap, .gSlice:
-//                return ki.kindEquivalent(k2.k!) && gtype == k2.gtype
-//            case .gTuple, .gScalar:
-//                de(ECASE)
-//            }
-//        }
-//
-//        return ka!.elementsEqual(k2.ka!, by: {$0.kindEquivalent($1)})
+        }
+        if let ki = k {
+            switch gtype {
+            case .gArray:
+                return ki.kindEquivalent(k2.k!) && gtype == k2.gtype && count == k2.count
+            case .gMap, .gSlice:
+                return ki.kindEquivalent(k2.k!) && gtype == k2.gtype
+            case .gTuple, .gScalar:
+                de(ECASE)
+            }
+        }
+
+        return ka!.elementsEqual(k2.ka!, by: {$0.kindEquivalent($1)})
     }
 }

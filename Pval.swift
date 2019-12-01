@@ -157,7 +157,7 @@ class Pval {
         ade(kind.count == 1)
         ade(kind.gtype == .gScalar)
         ade(se != nil)
-        guard kind.vtype == type(of: v) else {
+        guard kind.vtype! == type(of: v) else {
             de(ETYPE)
         }
         se = Pwrap(v)
@@ -168,18 +168,17 @@ class Pval {
             map![k as! String] = nil
             return
         }
+        ade(kind.gtype != .gScalar)
         
-        /*
-        if let vt = kind.vtype {
-            ade(vt == v!.akind().vtype)
-        } else if let vk = kind.k {
-            ade(vk.kindEquivalent((v as! Pval).kind))
+        if let vk = kind.k {
+            ade(kind.gtype != .gTuple)
+            ade(vk.kindEquivalent(v!.kind))
         } else {
+            ade(kind.gtype == .gTuple)
             let kt = kind.ka![k as! Int]
-            
-//            ade(kind.ka![k as! Int].kindEquivalent((v as! Pvv!.kind))
+            ade(kt.kindEquivalent(v!.kind))
         }
- */
+ 
         switch k {
         case let v1v as Int:
 

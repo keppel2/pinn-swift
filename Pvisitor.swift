@@ -617,7 +617,7 @@ public class Pvisitor {
                 
                 let (str, pv) = visitObjectPair(op)
                 if kind == nil {
-                    kind = Kind(Kind(pv.kind.vtype!), .gMap)
+                    kind = Kind(pv.kind, .gMap)
                     rt = Pval(sctx, kind!)
                 }
                 rt!.set(str, pv)
@@ -627,12 +627,13 @@ public class Pvisitor {
             let el = sctx.exprList()!
             let ae = visitList(el)
             let aeFirstk = ae.first!.kind
-            let kind: Kind
-            if let aek = aeFirstk.vtype {
-                kind = Kind(Kind(aek), .gSlice, ae.count)
-            } else {
-                kind = Kind(aeFirstk.k!, .gSlice, aeFirstk.count)
-            }
+//            let kind: Kind
+//            if let aek = aeFirstk.vtype {
+//                kind = Kind(Kind(aek), .gSlice, ae.count)
+//            } else {
+//                kind = Kind(aeFirstk.k!, .gSlice, aeFirstk.count)
+//            }
+            let kind = Kind(aeFirstk, .gSlice, ae.count)
             rt = Pval(sctx, kind, ae.count)
             for (k, pv) in ae.enumerated() {
                 rt!.set(k, pv)

@@ -1,2 +1,2 @@
-tupar := [(1, "jljlj"), (10, "abb")];
+tupar := [ [ [5], [1] ], [ [23], [true] ] ];
 print(tupar);
