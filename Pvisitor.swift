@@ -303,7 +303,7 @@ public class Pvisitor {
         }
         for (index, v) in fh.fkinds.enumerated() {
             if v.variadic {
-                let par = Pval(ctx, Kind(Kind(v.k.vtype!), .gArray, s.count - index), nil)
+                let par = Pval(ctx, Kind(v.k, .gArray, s.count - index))
                 
                 for (key, varadds) in s[index...].enumerated() {
                     if !varadds.kind.kindEquivalent(v.k) {
@@ -410,6 +410,8 @@ public class Pvisitor {
         }
         fkmap[sctx.ID()!.getText()] = Fheader(funcContext: sctx, kind: k, fkinds: fkinds)
     }
+    let litToType: [String: Ptype.Type] = ["int": Int.self, "bool": Bool.self, "string": String.self, "decimal": Decimal.self]
+
     func visitKind(_ sctx: PinnParser.KindContext) -> Kind {
         loadDebug(sctx)
         defer {popDebug()}
@@ -418,25 +420,25 @@ public class Pvisitor {
             let rt = Kind(kL)
             return rt
         }
-        let strType = sctx.TYPES()!.getText()
-        let litToType: [String: Ptype.Type] = ["int": Int.self, "bool": Bool.self, "string": String.self, "decimal": Decimal.self]
-        
-        let vtype = litToType[strType]!
+        if let type = sctx.TYPES() {
+            let strType = type.getText()
+            let vtype = litToType[strType]!
+            return Kind(vtype)
+        }
+        let kind = visitKind(sctx.kind()!)
         let rt: Kind
         if sctx.MAP() != nil {
-            rt = Kind(Kind(vtype), .gMap)
+            rt = Kind(kind, .gMap)
             //        } else if sctx.SLICE() != nil {
             //            rt = Kind(vtype: vtype, gtype: .gSlice, count: 0)
             //
         } else if sctx.SLICE() != nil {
-            rt = Kind(Kind(vtype), .gSlice, 0)
+            rt = Kind(kind, .gSlice, 0)
         }
-        else if let e = sctx.expr() {
-            let v = visitPval(e)!
+        else {
+            let v = visitPval(sctx.expr()!)!
             let x = v.get().unwrap() as! Int
-            rt = Kind(Kind(vtype), .gArray, x)
-        } else {
-            rt = Kind(vtype)
+            rt = Kind(kind, .gArray, x)
         }
         return rt
     }
@@ -634,7 +636,7 @@ public class Pvisitor {
 //                kind = Kind(aeFirstk.k!, .gSlice, aeFirstk.count)
 //            }
             let kind = Kind(aeFirstk, .gSlice, ae.count)
-            rt = Pval(sctx, kind, ae.count)
+            rt = Pval(sctx, kind)
             for (k, pv) in ae.enumerated() {
                 rt!.set(k, pv)
             }

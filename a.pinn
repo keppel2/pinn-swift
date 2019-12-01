@@ -1,2 +1,1 @@
-compound := [[1, 4]];
-compound[0] = [23, 42];
+var comp [2][3]int;

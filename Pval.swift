@@ -23,9 +23,7 @@ class Pwrap {
     func equal(_ a: Pwrap) -> Bool {
         return unwrap().equal(a.unwrap())
     }
-    func akind() -> Kind {
-        return Kind(type(of: wrapped))
-    }
+
     func string() -> String {
         return String(describing: wrapped)
     }
@@ -72,19 +70,17 @@ class Pval {
         self.init(c, Kind(Kind(pv.kind.k!.vtype!), .gSlice, b - a))
         self.ar = Array(pv.ar![a..<b])
     }
-    init( _ c: ParserRuleContext?, _ k: Kind, _ i: Ptype? = nil) {
+    init( _ c: ParserRuleContext?, _ k: Kind) {
         prc = c
         self.k = k
         switch k.gtype {
         case .gArray, .gSlice:
-            ar = [Pval](repeating: Pval(c, i ?? k.k!.vtype!.self.zeroValue()), count: k.count)
+            ar = [Pval](repeating: Pval(c, k.k!), count: k.count)
         case .gMap:
-            ade(i == nil)
             map = [String: Pval]()
         case .gScalar:
-            se = Pwrap(i ?? k.vtype!.self.zeroValue())
+            se = Pwrap(k.vtype!.self.zeroValue())
         case .gTuple:
-            ade(i == nil)
             ar = [Pval]()
             for x in k.ka! {
                 ar!.append(Pval(c, x))
@@ -255,9 +251,9 @@ class Pval {
 
     func clone() -> Pval {
         if kind.gtype == .gScalar {
-            return Pval(prc!, get().clone())
+            return Pval(prc, get().clone())
         }
-        let rt = Pval(prc!, kind)
+        let rt = Pval(prc, kind)
         switch kind.gtype {
         case .gArray, .gTuple:
             rt.ar = ar!.map { $0.clone() }

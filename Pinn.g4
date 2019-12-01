@@ -25,7 +25,8 @@ varDecl
 LSQUARE : '[' ;
 LPAREN : '(' ;
 kind
-  : (LSQUARE ( MAP | SLICE | expr) ']')? TYPES
+  : TYPES
+  | (LSQUARE ( MAP | SLICE | expr) ']') kind
   | LPAREN kindList ')' ;
 
 MAP
