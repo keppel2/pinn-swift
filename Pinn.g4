@@ -43,11 +43,13 @@ DOUBLEOP
   : '++' | '--' ;
 
 simpleStatement
-  : pset
-  | ID (LSQUARE expr ']')? DOUBLEOP ;
+  : lExpr '=' expr #simpleSet
+  | lExpr ('+' | '-' | '^' | BINOP) '=' expr #compoundSet
+  | lExpr DOUBLEOP #doubleSet ;
 
   
-
+lExpr
+  : ID (LSQUARE expr ']')* ;
 
 objectPair :
 STRING ':' expr ;
@@ -120,9 +122,6 @@ statement
   | 'continue' ';'
   | 'fallthrough' ';'
   | ';' ;
-pset
-  : ID (LSQUARE expr ']')? '=' expr #simpleSet
-  | ID (LSQUARE index=expr ']')? ('+' | '-' | '^' | BINOP) '=' rhs=expr #compoundSet ;
 
 COMMA : ',' ;
 COLON : ':' ;

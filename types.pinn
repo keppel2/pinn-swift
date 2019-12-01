@@ -489,14 +489,16 @@ print(intMap);
 ec();ft("len array", "3 7");
 lenAr := [1, 22, 42];
 print(len(lenAr), len(101@107));
-ec();ft("map length", "<0><1><2>");
+ec();
+ft("map length", "<0><1><2>");
 var boolMap [map]bool;
 brak(len(boolMap));
 boolMap["aap"] = true;
 brak(len(boolMap));
 boolMap["noot"] = true;
 brak(len(boolMap));
-ec();ft("string length", "4");
+ec();
+ft("string length", "4");
 print(len("abcd"));
 ec();ft("string Value", "42");
 var strv string;
@@ -634,8 +636,8 @@ print(",");
 sdci1 = 10;
 print(sdci1, sdci2);
 ec();
-/*
-ft("Slicing shares", "");
+
+ft("Slicing shares", "[1 777 101 202],[777 101]");
 ssAr1 := [1, 10, 101, 202];
 ssAr2 := ssAr1[1@2];
 ssAr2[0] = 777;
@@ -643,4 +645,23 @@ print(ssAr1);
 print(",");
 print(ssAr2);
 ec();
-*/
+
+ft("Multi-dimensional array of int", "[[0 0 0] [0 0 42]]");
+var mda [2][3]int;
+mda[1][2] = 42;
+print(mda);
+ec();
+
+ft("Multi-dimensional tuple", "([0 0 42 0 0] (true 101))");
+var mdt ([5]int, (bool, int));
+mdt[0][2] = 42;
+mdt[1][1] = 101;
+mdt[1][0] = true;
+print(mdt);
+ec();
+
+ft("Multi-dimensional tuple set compound type", "");
+var mdt2 ([5]int, (bool, int));
+mdt[1] = (true, 202);
+print(mdt);
+ec();

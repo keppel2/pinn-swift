@@ -9,7 +9,7 @@
 import Foundation
 import Antlr4
 
-class Pwrap {
+fileprivate class Pwrap {
     private var wrapped: Ptype
     init(_ p: Ptype) {
         wrapped = p
@@ -30,12 +30,7 @@ class Pwrap {
 }
 
 class Pval {
-//    func getAtype() -> Atype {
-//        return se ?? self
-//    }
-    func akind() -> Kind {
-        return kind
-    }
+
 
     private var k: Kind
     private var se: Pwrap?
@@ -43,15 +38,6 @@ class Pval {
     private var map: [String: Pval]?
     let prc: ParserRuleContext?
 
-
-//    func sort() {
-//
-//        ar!.sort {
-//            let lhs = ($0 as! Pwrap).unwrap() as! Compare
-//            let rhs = ($1 as! Pwrap).unwrap() as! Compare
-//            return lhs.lt(rhs)
-//        }
-//    }
     init(_ c: ParserRuleContext?, _ ar: [Pval]) {
         prc = c
         let ka = ar.map { $0.kind }
@@ -61,7 +47,7 @@ class Pval {
     convenience init(_ c: ParserRuleContext?, _ a: Ptype) {
         self.init(c, Pwrap(a))
     }
-    init( _ c: ParserRuleContext?, _ w: Pwrap) {
+    fileprivate init( _ c: ParserRuleContext?, _ w: Pwrap) {
         prc = c
         k = Kind(type(of: w.unwrap()))
         se = w
@@ -75,7 +61,10 @@ class Pval {
         self.k = k
         switch k.gtype {
         case .gArray, .gSlice:
-            ar = [Pval](repeating: Pval(c, k.k!), count: k.count)
+            ar = [Pval]()
+            for _ in 0..<k.count {
+                ar!.append(Pval(c, k.k!))
+            }
         case .gMap:
             map = [String: Pval]()
         case .gScalar:
@@ -112,8 +101,10 @@ class Pval {
 
     }
 
-
-    func get() -> Pwrap {
+    func getUnwrap() -> Ptype {
+        return get().unwrap()
+    }
+    private func get() -> Pwrap {
         ade(kind.gtype == .gScalar)
         return (se!)
     }
@@ -121,24 +112,21 @@ class Pval {
         return [String](map!.keys)
 
     }
-    func get(_ k: Ktype) -> Pval {
+    func get(_ k: Ktype, _ lh: Bool = false) -> Pval {
         switch k {
         case let v1v as Int:
-            if self.k.gtype == .gTuple {
-                let pv = ar![v1v]
-                if pv.kind.gtype == .gScalar {
-                    return Pval(prc, pv.get())
-                }
-                return pv
+            if lh && kind.gtype == .gSlice && v1v == ar!.count {
+                ar!.append(Pval(prc, kind.k!))
+                kind.count = ar!.count
             }
             return ar![v1v]
         case let v1v as String:
             if map![v1v] == nil {
-                if kind.vtype == nil {
-                    let pv = Pval(prc!, Kind(kind.k!.vtype!))
-                    return pv
+                if lh {
+                    map![v1v] = Pval(prc, kind.k!)
+                    kind.count = map!.count
                 } else {
-                return Pval(prc, kind.vtype!.zeroValue())
+                return Pval(prc, kind.k!)
                 }
             }
             return map![v1v]!
@@ -146,15 +134,7 @@ class Pval {
             de(ECASE)
         }
     }
-//    func set(_ v: Ptype) {
-//        ade(kind.count == 1)
-//        ade(kind.gtype == .gScalar)
-//        ade(se != nil)
-//        guard kind.vtype! == type(of: v) else {
-//            de(ETYPE)
-//        }
-//        se = Pwrap(v)
-//    }
+
     
     func setPV(_ v : Pval) {
         ade(kind.kindEquivalent(v.kind))
@@ -167,6 +147,7 @@ class Pval {
     func set(_ k: Ktype, _ v: Pval?) {
         if v == nil{
             map![k as! String] = nil
+            kind.count = map!.count
             return
         }
         ade(kind.gtype != .gScalar)
@@ -258,6 +239,13 @@ class Pval {
             de(ECASE)
         }
         return rt
+    }
+    func cloneIf() -> Pval {
+        if kind.gtype == .gMap || kind.gtype == .gSlice {
+            return self
+        } else {
+            return self.clone()
+        }
     }
 }
 

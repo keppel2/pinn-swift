@@ -20,13 +20,14 @@ public class Pvisitor {
             de(EPARAM_LENGTH)
         }
     }
+    let litToType: [String: Ptype.Type] = ["int": Int.self, "bool": Bool.self, "string": String.self, "decimal": Decimal.self]
     let builtIns
         : [String: (ParserRuleContext, [Pval]) -> Pval?] =
         [
             "ft": { sctx, s in assertPvals(s, 2)
                 print("--", sctx.getStart()!.getLine())
                 li = printed.endIndex
-                (t_explain, t_compare) = (s[0].get().unwrap() as! String, s[1].get().unwrap() as! String)
+                (t_explain, t_compare) = (s[0].getUnwrap() as! String, s[1].getUnwrap() as! String)
                 
                 return nil
             },
@@ -41,7 +42,7 @@ public class Pvisitor {
             },
             "len": { sctx, s in assertPvals(s, 1)
                 if s[0].kind.gtype == .gScalar && s[0].kind.vtype == String.self {
-                    return Pval(sctx, (s[0].get().unwrap() as! String).count)
+                    return Pval(sctx, (s[0].getUnwrap() as! String).count)
                 }
                 return Pval(sctx, s[0].kind.count)},
             "stringValue":
@@ -64,19 +65,19 @@ public class Pvisitor {
                 return Pval(sctx, readLine()!)
             },
             "printH": { sctx, s in assertPvals(s, 1)
-                Pvisitor.textout(String(s[0].get().unwrap() as! Int, radix: 16, uppercase: false))
+                Pvisitor.textout(String(s[0].getUnwrap() as! Int, radix: 16, uppercase: false))
                 return nil
             },
             "printB": { sctx, s in assertPvals(s, 1)
-                Pvisitor.textout(String(s[0].get().unwrap() as! Int, radix: 2, uppercase: false))
+                Pvisitor.textout(String(s[0].getUnwrap() as! Int, radix: 2, uppercase: false))
                 return nil
             },
             "delete": { sctx, s in assertPvals(s, 2)
-                s[0].set(s[1].get().unwrap() as! String, nil)
+                s[0].set(s[1].getUnwrap() as! String, nil)
                 return nil
             },
             "key": { sctx, s in assertPvals(s, 2)
-                return Pval(sctx, s[0].getKeys().contains(s[1].get().unwrap() as! String))
+                return Pval(sctx, s[0].getKeys().contains(s[1].getUnwrap() as! String))
             },
             "debug": { sctx, s in assertPvals(s, 0)
                 dbg()
@@ -87,7 +88,7 @@ public class Pvisitor {
 //                return s[0]
 //            },
             "sleep": { sctx, s in assertPvals(s, 1)
-                sleep(UInt32(s[0].get().unwrap() as! Int))
+                sleep(UInt32(s[0].getUnwrap() as! Int))
                 return nil
             }
     ]
@@ -129,16 +130,11 @@ public class Pvisitor {
     var fc = Fc()
     var lfc: Fc?
     var fkmap = [String:Fheader]()
-    
-    //    var stack = [ParserRuleContext]()
-    
-    
     struct Fheader {
         var funcContext: PinnParser.FunctionContext?
         var kind: Kind?
         var fkinds = [FKind]()
     }
-    
     func getPv(_ s: String)  -> Pval?  {
         for m in [lfc?.m, fc.m] {
             if m == nil {
@@ -155,18 +151,18 @@ public class Pvisitor {
         let rt: Pval
         switch str {
         case "+":
-            let lh = lhs.get().unwrap() as! Plus
-            let rh = rhs.get().unwrap() as! Plus
+            let lh = lhs.getUnwrap() as! Plus
+            let rh = rhs.getUnwrap() as! Plus
             rt = Pval(sctx, lh.plus(rh))
             return rt
         case "-", "*", "/":
-            let lh = lhs.get().unwrap() as! Arith
-            let rh = rhs.get().unwrap() as! Arith
+            let lh = lhs.getUnwrap() as! Arith
+            let rh = rhs.getUnwrap() as! Arith
             rt = Pval(sctx, lh.arith(rh, str))
             return rt
         case "<", "<=", ">", ">=":
-            let lh = lhs.get().unwrap() as! Compare
-            let rh = rhs.get().unwrap() as! Compare
+            let lh = lhs.getUnwrap() as! Compare
+            let rh = rhs.getUnwrap() as! Compare
             let result: Bool
             switch str {
                 
@@ -183,8 +179,8 @@ public class Pvisitor {
             return Pval(sctx, result)
         default: break
         }
-        let lhsv = lhs.get().unwrap() as! Int
-        var rhsv = rhs.get().unwrap() as! Int
+        let lhsv = lhs.getUnwrap() as! Int
+        var rhsv = rhs.getUnwrap() as! Int
         switch str {
         case "-":
             rt = Pval(sctx, lhsv - rhsv)
@@ -410,7 +406,7 @@ public class Pvisitor {
         }
         fkmap[sctx.ID()!.getText()] = Fheader(funcContext: sctx, kind: k, fkinds: fkinds)
     }
-    let litToType: [String: Ptype.Type] = ["int": Int.self, "bool": Bool.self, "string": String.self, "decimal": Decimal.self]
+
 
     func visitKind(_ sctx: PinnParser.KindContext) -> Kind {
         loadDebug(sctx)
@@ -437,7 +433,7 @@ public class Pvisitor {
         }
         else {
             let v = visitPval(sctx.expr()!)!
-            let x = v.get().unwrap() as! Int
+            let x = v.getUnwrap() as! Int
             rt = Kind(kind, .gArray, x)
         }
         return rt
@@ -526,6 +522,17 @@ public class Pvisitor {
         
         var rt: Pval?
         switch sctx {
+        case let sctx as PinnParser.LExprContext:
+            let str =  sctx.ID()!.getText()
+            guard let v = getPv(str) else {
+                de(Perr(EUNDECLARED, sctx))
+            }
+            var cv = v
+            for e in sctx.expr() {
+                let kt = visitPval(e)!.getUnwrap() as! Ktype
+                cv = cv.get(kt, true)
+            }
+            return cv
         case let sctx as PinnParser.BinaryExprContext:
             
             let op = Self.childToText(sctx.getChild(1)!)
@@ -533,24 +540,24 @@ public class Pvisitor {
             let lhs = visitPval(sctx.expr(0)!)!
             
             if op == "&&" {
-                let lhsv = lhs.get().unwrap() as! Bool
+                let lhsv = lhs.getUnwrap() as! Bool
                 if !lhsv {
                     rt = Pval(sctx, false)
                     break
                 }
                 else {
-                    rt = Pval(sctx, visitPval(sctx.expr(1)!)!.get().unwrap() as! Bool)
+                    rt = Pval(sctx, visitPval(sctx.expr(1)!)!.getUnwrap() as! Bool)
                     break
                 }
             }
             if op == "||" {
-                let lhsv = lhs.get().unwrap() as! Bool
+                let lhsv = lhs.getUnwrap() as! Bool
                 if lhsv {
                     rt = Pval(sctx, true)
                     break
                 }
                 else {
-                    rt = Pval(sctx, visitPval(sctx.expr(1)!)!.get().unwrap() as! Bool)
+                    rt = Pval(sctx, visitPval(sctx.expr(1)!)!.getUnwrap() as! Bool)
                     break
                 }
             }
@@ -570,20 +577,20 @@ public class Pvisitor {
             
             switch Self.childToText(sctx.getChild(0)!) {
             case "!":
-                guard let e = visitPval(sctx.expr()!)!.get().unwrap() as? Bool else {
+                guard let e = visitPval(sctx.expr()!)!.getUnwrap() as? Bool else {
                     de(Perr(ETYPE, sctx))
                 }
                 rt = Pval(sctx, !e)
                 break
             case "-":
-                guard let e = visitPval(sctx.expr()!)!.get().unwrap() as? Negate else {
+                guard let e = visitPval(sctx.expr()!)!.getUnwrap() as? Negate else {
                     de(Perr(ETYPE, sctx))
                 }
                 rt = Pval(sctx, e.neg())
                 break
             case "+":
                 
-                guard let e = visitPval(sctx.expr()!)!.get().unwrap() as? Int else {
+                guard let e = visitPval(sctx.expr()!)!.getUnwrap() as? Int else {
                     de(Perr(ETYPE, sctx))
                 }
                 rt = Pval(sctx, e)
@@ -676,11 +683,7 @@ public class Pvisitor {
                 guard let pv = getPv(str) else {
                     de(Perr(EUNDECLARED, sctx))
                 }
-                if pv.kind.gtype == .gMap || pv.kind.gtype == .gSlice {
-                    rt = pv
-                } else {
-                    rt = pv.clone()
-                }
+                rt = pv.cloneIf()
             default:
                 de(Perr(ECASE, sctx))
             }
@@ -691,7 +694,7 @@ public class Pvisitor {
             
         case let sctx as PinnParser.ConditionalExprContext:
             
-            let b = visitPval(sctx.expr(0)!)!.get().unwrap() as! Bool
+            let b = visitPval(sctx.expr(0)!)!.getUnwrap() as! Bool
             if b {
                 rt = visitPval(sctx.expr(1)!)!
             } else {
@@ -710,11 +713,11 @@ public class Pvisitor {
             if (sctx.TWODOTS() != nil || sctx.COLON() != nil) {
                 var lhsv = 0
                 if let lh = sctx.first {
-                    lhsv = visitPval(lh)!.get().unwrap() as! Int
+                    lhsv = visitPval(lh)!.getUnwrap() as! Int
                 }
                 var rhsv = v.kind.count
                 if let rh = sctx.second {
-                    rhsv = visitPval(rh)!.get().unwrap() as! Int
+                    rhsv = visitPval(rh)!.getUnwrap() as! Int
                 }
                 if (sctx.TWODOTS() != nil) {
                     rhsv+=1
@@ -727,7 +730,7 @@ public class Pvisitor {
                 
             }
             
-            let e2 = visitPval(sctx.expr(1)!)!.get().unwrap() as! Ktype
+            let e2 = visitPval(sctx.expr(1)!)!.getUnwrap() as! Ktype
             
             rt = v.get(e2)
                
@@ -779,29 +782,17 @@ public class Pvisitor {
                 }
             }
         case let sctx as PinnParser.CompoundSetContext:
+
+                let lh = visitPval(sctx.lExpr()!)!
+                let rh = visitPval(sctx.expr()!)!
+//                lh.setPV(rh)
+
+                let op = sctx.children![sctx.children!.count - 3].getText()
+
             
-            let str = sctx.ID()!.getText()
-            guard let v = getPv(str) else {
-                de(Perr(EUNDECLARED, sctx))
-            }
-            let lhs: Pval
-            var index: Ktype?
-            if let cindex = sctx.index {
-                index = (visitPval(cindex)!.get().unwrap() as! Ktype)
-                lhs = v.get(index!)
-            } else {
-                lhs = v
-            }
-            
-            let op = sctx.children![sctx.children!.count - 3].getText()
-            let rhs = visitPval(sctx.rhs)!
-            
-            let result = Self.doOp(lhs, rhs, op, sctx).get().unwrap()
-            if index == nil {
-                v.setPV(Pval(sctx, result))
-            } else {
-                v.set(index!, Pval(sctx, result))
-            }
+                let result = Self.doOp(lh, rh, op, sctx)
+                lh.setPV(result)
+        
         case let sctx as PinnParser.StatementContext:
             if let e = sctx.expr() {
                 _ = visitPval(e)
@@ -826,30 +817,17 @@ public class Pvisitor {
                 de(Perr(ECASE, nil, sctx))
             }
             
-        case let sctx as PinnParser.SimpleStatementContext:
-            
-            if let str = sctx.ID()?.getText() {
-                guard let v = getPv(str) else {
-                    de(Perr(EUNDECLARED, sctx))
-                }
+        case let sctx as PinnParser.DoubleSetContext:
+            let lh = visitPval(sctx.lExpr()!)!
                 let rhsv: Int
                 switch sctx.DOUBLEOP()!.getText() {
                 case "++": rhsv = 1
                 case "--": rhsv = -1
                 default:
-                    de(Perr(ECASE, nil, sctx))}
-                
-                if let e = sctx.expr() {
-                    let ev = visitPval(e)!.get().unwrap()
-                    let lhsv = v.get(ev as! Ktype).get().unwrap() as! Int
-                    v.set(ev as! Ktype, Pval(sctx, lhsv + rhsv))
-                    break
+                    de(Perr(ECASE, nil, sctx))
                 }
-                let lhsv = v.get().unwrap() as! Int
-                v.setPV(Pval(sctx, lhsv + rhsv))
-                break
-            }
-            visit(sctx.getChild(0) as! ParserRuleContext)
+                
+                lh.setPV(Pval(sctx, lh.getUnwrap() as! Int + rhsv))
         case let sctx as PinnParser.ReturnStatementContext:
             cfc.path = .pExiting
             if let e = sctx.expr() {
@@ -866,28 +844,14 @@ public class Pvisitor {
                 }
             }
         case let sctx as PinnParser.SimpleSetContext:
-            let str = sctx.ID()!.getText()
-            guard let v = getPv(str) else {
-                de(Perr(EUNDECLARED, sctx))
-            }
-            if sctx.expr().count == 2 {
-                let key = visitPval(sctx.expr(0)!)!.get().unwrap() as! Ktype
-                let value = visitPval(sctx.expr(1)!)!
-                v.set(key, value)
-            } else {
-                
-                let e = visitPval(sctx.expr(0)!)!
-                if e.kind.gtype == .gScalar {
-                    v.setPV(e)
-                } else {
-                    
-                    putPv(str, e)
-                }
-            }
+            let lh = visitPval(sctx.lExpr()!)!
+            let rh = visitPval(sctx.expr()!)!
+            lh.setPV(rh)            
+
         case let sctx as PinnParser.IfStatementContext:
             
             let v = visitPval(sctx.expr()!)!
-            if v.get().unwrap() as! Bool {
+            if v.getUnwrap() as! Bool {
                 visit(sctx.statement(0)!)
             } else if let s2 = sctx.statement(1) {
                 visit(s2)
@@ -900,14 +864,14 @@ public class Pvisitor {
                     break
                 }
                 let v = visitPval(sctx.expr()!)!
-                b = v.get().unwrap() as! Bool
+                b = v.getUnwrap() as! Bool
                 
             }
         case let sctx as PinnParser.WhStatementContext:
             
             var v = visitPval(sctx.expr()!)!
             
-            while v.get().unwrap() as! Bool {
+            while v.getUnwrap() as! Bool {
                 visit(sctx.block()!)
                 if  cfc.toEndBlock() {break}
                 v = visitPval(sctx.expr()!)!
@@ -972,7 +936,7 @@ public class Pvisitor {
                     visit(sctx.fss)
             }
             var v = visitPval(sctx.expr()!)!
-            while v.get().unwrap() as! Bool {
+            while v.getUnwrap() as! Bool {
                 visit(sctx.block()!)
                 
                 if  cfc.toEndBlock() {break}
@@ -982,7 +946,7 @@ public class Pvisitor {
             }
         case let sctx as PinnParser.GuardStatementContext:
             let v = visitPval(sctx.expr()!)!
-            if !(v.get().unwrap() as! Bool) {
+            if !(v.getUnwrap() as! Bool) {
                 visit(sctx.block()!)
                 if cfc.path == .pNormal {
                     de(Perr(ESTATEMENT, sctx))
