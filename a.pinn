@@ -1,5 +1,2 @@
-ll := (5, nil);
-print(ll);
-
-ll[1] = (10, nil);
+var inked: (int, *(int));
 

@@ -658,10 +658,11 @@ public class Pvisitor {
 //                kind = Kind(aeFirstk.k!, .gSlice, aeFirstk.count)
 //            }
             let kind = Kind(aeFirstk, .gSlice, ae.count)
-            rt = Pval(sctx, kind)
-            for (k, pv) in ae.enumerated() {
-                rt!.set(k, pv)
-            }
+            rt = Pval(sctx, ae, kind)
+//            rt = Pval(sctx, kind)
+//            for (k, pv) in ae.enumerated() {
+//                rt!.set(k, pv)
+//            }
             return rt
         //            rt = Pval(sctx, Kind(vtyp
         case let sctx as PinnParser.LiteralExprContext:
