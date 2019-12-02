@@ -20,14 +20,16 @@ public class Pvisitor {
             de(EPARAM_LENGTH)
         }
     }
-    let litToType: [String: Ptype.Type] = ["int": Int.self, "bool": Bool.self, "string": String.self, "decimal": Decimal.self, "self": Nil.self]
+    let litToType: [String: Ptype.Type] = ["int": Int.self, "bool": Bool.self, "string": String.self, "decimal": Decimal.self]
     let builtIns
         : [String: (ParserRuleContext, [Pval]) -> Pval?] =
         [
             "ft": { sctx, s in assertPvals(s, 2)
                 print("--", sctx.getStart()!.getLine())
                 li = printed.endIndex
-                (t_explain, t_compare) = (s[0].getUnwrap() as! String, s[1].getUnwrap() as! String)
+                let s1: String = tryCast(s[0])
+                let s2: String = tryCast(s[1])
+                (t_explain, t_compare) = (s1, s2)
                 
                 return nil
             },
@@ -77,7 +79,8 @@ public class Pvisitor {
                 return nil
             },
             "key": { sctx, s in assertPvals(s, 2)
-                return Pval(sctx, s[0].getKeys().contains(s[1].getUnwrap() as! String))
+                let str: String = tryCast(s[1])
+                return Pval(sctx, s[0].getKeys().contains(str))
             },
             "debug": { sctx, s in assertPvals(s, 0)
                 dbg()
@@ -685,9 +688,9 @@ public class Pvisitor {
                 let d = Decimal(string: str)!
                 let pv = Pval(sctx, d)
                 rt = pv
-            case .NIL:
-                let pv = Pval(sctx, Nil())
-                rt = pv
+//            case .NIL:
+//                let pv = Pval(sctx, Nil())
+//                rt = pv
             case .BOOL:
                 let str = sctx.BOOL()!.getText()
                 let x = Bool(str)!

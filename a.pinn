@@ -1,2 +1,5 @@
-n := nil;
-print(n);
+ll := (5, nil);
+print(ll);
+
+ll[1] = (10, nil);
+
