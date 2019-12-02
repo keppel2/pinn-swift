@@ -22,8 +22,8 @@ open class PinnLexer: Lexer {
             T__27=28, T__28=29, T__29=30, T__30=31, T__31=32, T__32=33, 
             T__33=34, T__34=35, TWODOTS=36, THREEDOT=37, LSQUARE=38, LPAREN=39, 
             MAP=40, SLICE=41, TYPES=42, DOUBLEOP=43, RANGE=44, NIL=45, COMMA=46, 
-            COLON=47, CE=48, IOTA=49, BINOP=50, BOOL=51, ID=52, CHAR=53, 
-            INT=54, FLOAT=55, WS=56, STRING=57
+            COLON=47, CE=48, IOTA=49, BINOP=50, AST=51, BOOL=52, ID=53, 
+            CHAR=54, INT=55, FLOAT=56, WS=57, STRING=58
 
 	public
 	static let channelNames: [String] = [
@@ -43,7 +43,7 @@ open class PinnLexer: Lexer {
 		"T__25", "T__26", "T__27", "T__28", "T__29", "T__30", "T__31", "T__32", 
 		"T__33", "T__34", "TWODOTS", "THREEDOT", "LSQUARE", "LPAREN", "MAP", "SLICE", 
 		"TYPES", "DOUBLEOP", "RANGE", "NIL", "COMMA", "COLON", "CE", "IOTA", "BINOP", 
-		"BOOL", "ID", "CHAR", "INT", "FLOAT", "WS", "STRING", "DECIMAL_DIGIT", 
+		"AST", "BOOL", "ID", "CHAR", "INT", "FLOAT", "WS", "STRING", "DECIMAL_DIGIT", 
 		"DECIMAL_DIGITS", "DECIMAL_EXPONENT", "HEX_DIGIT", "HEX_DIGITS", "HEX_MANTISSA", 
 		"HEX_EXPONENT", "OCTAL_DIGIT", "BINARY_DIGIT"
 	]
@@ -54,14 +54,14 @@ open class PinnLexer: Lexer {
 		"'||'", "'?'", "'return'", "'if'", "'else'", "'guard'", "'while'", "'repeat'", 
 		"'for'", "';'", "'when'", "'match'", "'default'", "'break'", "'continue'", 
 		"'fallthrough'", "'@'", "'...'", "'['", "'('", "'map'", "'slice'", nil, 
-		nil, "'range'", "'nil'", "','", "':'", "':='", "'iota'"
+		nil, "'range'", "'nil'", "','", "':'", "':='", "'iota'", nil, "'*'"
 	]
 	private static let _SYMBOLIC_NAMES: [String?] = [
 		nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, 
 		nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, 
 		nil, nil, nil, nil, nil, nil, nil, nil, "TWODOTS", "THREEDOT", "LSQUARE", 
 		"LPAREN", "MAP", "SLICE", "TYPES", "DOUBLEOP", "RANGE", "NIL", "COMMA", 
-		"COLON", "CE", "IOTA", "BINOP", "BOOL", "ID", "CHAR", "INT", "FLOAT", 
+		"COLON", "CE", "IOTA", "BINOP", "AST", "BOOL", "ID", "CHAR", "INT", "FLOAT", 
 		"WS", "STRING"
 	]
 	public

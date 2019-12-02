@@ -217,6 +217,8 @@ enum Contents {
                 }
                 con = Contents.multi(arWrap(ar))
                 break
+            case .gPointer:
+                break
             }
         }
         func equal(_ p: Pval) -> Bool {

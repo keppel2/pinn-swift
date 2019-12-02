@@ -10,7 +10,7 @@ import Foundation
 
 class Kind {
     enum Gtype {
-        case gScalar, gArray, gMap, gSlice, gTuple
+        case gScalar, gArray, gMap, gSlice, gTuple, gPointer
     }
 
     
@@ -23,7 +23,7 @@ class Kind {
     init(_ k: Kind, _ gtype: Gtype, _ count: Int? = nil) {
         self.gtype = gtype
         switch gtype {
-        case .gScalar, .gTuple:
+        case .gScalar, .gTuple, .gPointer:
             de(ECASE)
         case .gMap:
             ade(count == nil)
@@ -59,7 +59,7 @@ class Kind {
                 return ki.kindEquivalent(k2.k!) && gtype == k2.gtype && count == k2.count
             case .gMap, .gSlice:
                 return ki.kindEquivalent(k2.k!) && gtype == k2.gtype
-            case .gTuple, .gScalar:
+            case .gTuple, .gScalar, .gPointer:
                 de(ECASE)
             }
         }

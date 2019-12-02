@@ -1,2 +1,1 @@
-var inked: (int, *(int));
-
+print(2 / 5);

@@ -27,7 +27,7 @@ LPAREN : '(' ;
 kind
   : TYPES
   | (LSQUARE ( MAP | SLICE | expr) ']') kind
-  | LPAREN kindList ')' ;
+  |  LPAREN kindList ')' ;
 
 MAP
  : 'map' ;
@@ -130,7 +130,9 @@ COMMA : ',' ;
 COLON : ':' ;
 CE : ':=' ;
 IOTA : 'iota' ;
-BINOP : ('*' | '/' | '%' ) ;
+BINOP : (AST | '/' | '%' ) ;
+AST: '*' ;
+
 BOOL : 'true' | 'false' ;
 ID : [a-zA-Z_]([a-zA-Z_0-9])* ;
 CHAR : '\''[a-zA-Z_0-9]'\'' ;
