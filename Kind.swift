@@ -9,9 +9,7 @@
 import Foundation
 
 class Kind {
-    enum Gtype {
-        case gScalar, gArray, gMap, gSlice, gTuple, gPointer
-    }
+
 
     
     init(_ vtype: Ptype.Type) {
@@ -20,11 +18,16 @@ class Kind {
         self.count = 1
     }
 
-    init(_ k: Kind, _ gtype: Gtype, _ count: Int? = nil) {
+    init(_ k: Kind?, _ gtype: Gtype, _ count: Int? = nil) {
         self.gtype = gtype
         switch gtype {
-        case .gScalar, .gTuple, .gPointer:
+        case .gScalar, .gTuple:
             de(ECASE)
+        case .gPointer:
+            ade(k == nil)
+            ade(count == nil)
+            
+            self.count = 0
         case .gMap:
             ade(count == nil)
             self.count = 0
@@ -34,9 +37,16 @@ class Kind {
             self.k = k
         }
     }
-    init(_ kar: [Kind]) {
-        self.gtype = .gTuple
+    init(_ karin: [Kind]) {
+        gtype = .gTuple
+        var kar = karin
         self.count = kar.count
+                    for (k, v) in kar.enumerated() {
+                        if v.vtype == Nil.self  {
+                            gtype = .gPointer
+                            kar[k] = self
+                        }
+                    }
         ka = kar
     }
     
@@ -49,6 +59,10 @@ class Kind {
     
     
     func kindEquivalent(_ k2: Kind) -> Bool {
+//        return true
+        if gtype == .gPointer {
+            return k2.gtype == self.gtype
+        }
         if let v = vtype {
             ade(gtype == .gScalar && k2.gtype == .gScalar)
             return v == k2.vtype!
@@ -64,6 +78,12 @@ class Kind {
             }
         }
 
-        return ka!.elementsEqual(k2.ka!, by: {$0.kindEquivalent($1)})
+        return ka!.elementsEqual(k2.ka!, by: {
+//            if $0 == nil && $1 == nil {
+//                return true
+//            }
+            return $0.kindEquivalent($1)
+            
+        })
     }
 }

@@ -19,3 +19,6 @@ let EPARSE_FAIL = "Parse failed"
 let EASSERT = "Assertion failed"
 let EUI = "Unimplemented"
 
+enum Gtype {
+    case gScalar, gArray, gMap, gSlice, gTuple, gPointer
+}

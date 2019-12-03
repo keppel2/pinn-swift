@@ -1,1 +1,6 @@
-print(2 / 5);
+var st (int, self);
+print(st);
+st  = (5, nil);
+print(st);
+st[1] = (10, nil);
+print(st);

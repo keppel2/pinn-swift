@@ -82,7 +82,8 @@ func stringDequote(_ s: String) -> String {
 
 private func _fatalError(_ s: String) -> Never {
     print(s)
-    exit(1)
+    fatalError()
+//    exit(1)
 }
 func tryCast<T> (_ pv: Pval) -> T {
     if !(pv.getUnwrap() is T) {

@@ -36,7 +36,7 @@ SLICE
  : 'slice' ;
 
 TYPES
-  : ('int' | 'bool' |'string' | 'decimal' ) ;
+  : ('int' | 'bool' |'string' | 'decimal' | 'self' ) ;
 
 DOUBLEOP
   : '++' | '--' ;

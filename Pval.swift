@@ -48,14 +48,13 @@ enum Contents {
     case map(maWrap)
     func setCon(_ k: Ktype? = nil, _ v: Pval? = nil) {
         switch self{
-        case .multi(var pv):
+        case .multi(let pv):
             if k == nil {
                 pv.ar.append(v!)
             } else {
                 pv.ar[k as! Int] = v!
-            print("hi")
             }
-        case .map(var ma):
+        case .map(let ma):
             ma.ma[k as! String] = v
         case .single:
             de(ECASE)
@@ -113,16 +112,7 @@ enum Contents {
             }
         }
         
-//        func append(_ pv: Pval, _ k: String? = nil) {
-//            switch self {
-//            case .multi(var ar):
-//                ar.append(pv)
-//            case .map(var map):
-//                map[k!] = pv
-//            case.single:
-//                de(ECASE)
-//            }
-//        }
+
         func count() -> Int {
             switch self {
             case .multi(let ar):
@@ -140,37 +130,26 @@ enum Contents {
     class Pval {
         
         
-        private var k: Kind!
-        var con: Contents!
+        private var k: Kind
+        var con: Contents
         var prc: ParserRuleContext?
         
-//        private func append(_ pv: Pval) {
-//            ade(k.gtype == .gSlice)
-//            con.append(pv)
-//            kind.count = con.count()
-//        }
-//
-//        private func addKey(_ s: String, _ pv: Pval) {
-//            ade(k.gtype == .gMap)
-//            con.append(pv, s)
-//            kind.count = con.count()
-//        }
-//
-        convenience init(_ c: ParserRuleContext?, _ ar: [Pval], _ k: Kind) {
-            self.init(c)
+
+        init(_ c: ParserRuleContext?, _ ar: [Pval], _ k: Kind) {
+                        prc = c
             self.k = k
             self.con = .multi(arWrap(ar))
         }
         
-        convenience init(_ c: ParserRuleContext?, _ ar: [Pval]) {
-            self.init(c)
+        init(_ c: ParserRuleContext?, _ ar: [Pval]) {
+                        prc = c
             let ka = ar.map { $0.kind }
             k = Kind(ka)
             self.con = .multi(arWrap(ar))
         }
         
-        convenience init(_ c: ParserRuleContext?, _ a: Ptype) {
-            self.init(c)
+        init(_ c: ParserRuleContext?, _ a: Ptype) {
+                        prc = c
             let w = Pwrap(a)
             k = Kind(type(of: w.unwrap()))
                self.con = .single(w)
@@ -180,12 +159,7 @@ enum Contents {
             self.init(c, Kind(Kind(pv.kind.k!.vtype!), .gSlice, b - a))
             self.con = .multi(arWrap(pv.con.getSlice(a, b)))
         }
-        init(_ c: ParserRuleContext?) {
-            prc = c
-//            con = .single(getNewChild())
-        }
-        
-        
+
         
         func conset(_ k: Ktype? = nil, _ p: Pval? = nil) {
             con.setCon(k, p)
@@ -193,8 +167,8 @@ enum Contents {
         }
         
         
-        convenience init( _ c: ParserRuleContext?, _ k: Kind) {
-            self.init(c)
+        init( _ c: ParserRuleContext?, _ k: Kind) {
+                        prc = c
             self.k = k
             switch k.gtype {
             case .gArray, .gSlice:
@@ -207,6 +181,8 @@ enum Contents {
             case .gMap:
                 let m = [String: Pval]()
                 con = Contents.map(maWrap(m))
+            case .gPointer:
+                con = Contents.single(Pwrap(Nil()))
             case .gScalar:
                 let se = Pwrap(k.vtype!.self.zeroValue())
                 con = Contents.single(se)
@@ -216,8 +192,6 @@ enum Contents {
                     ar.append(Pval(c, x))
                 }
                 con = Contents.multi(arWrap(ar))
-                break
-            case .gPointer:
                 break
             }
         }
@@ -318,14 +292,14 @@ enum Contents {
                 
                 
                 var rt = ""
-                rt += kind.gtype == .gTuple ? "(" : "["
+                rt += kind.gtype == .gTuple || kind.gtype == .gPointer ? "(" : "["
                 if ar.ar.count > 0 {
                     rt += ar.ar.first!.string()
                     for v in ar.ar[1...] {
                         rt += " " + v.string()
                     }
                 }
-                rt += kind.gtype == .gTuple ? ")" : "]"
+                rt += kind.gtype == .gTuple || kind.gtype == .gPointer ? ")" : "]"
                 
 
                 return rt
@@ -342,8 +316,6 @@ enum Contents {
                 rt += "}"
                 return rt
 
-            case .none:
-                de(ECASE)
             }
         }
         
@@ -366,8 +338,6 @@ enum Contents {
                 
             case .map:
                 return self
-            case .none:
-                de(ECASE)
             }
         }
 }

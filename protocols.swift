@@ -41,7 +41,7 @@ protocol Compare: Ptype {
 }
 
 struct Nil: Ptype {
-    static func zeroValue() -> Ptype { return Nil() }
+    static func zeroValue() -> Ptype { de(ECASE) }
     func equal(_ a: Ptype) -> Bool {
         return a is Nil
     }
