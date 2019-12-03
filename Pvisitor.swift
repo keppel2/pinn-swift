@@ -43,7 +43,7 @@ public class Pvisitor {
                 return nil
             },
             "len": { sctx, s in assertPvals(s, 1)
-                if s[0].kind.gtype == .gScalar && s[0].kind.vtype == String.self {
+                if s[0].kind.gtype == .gScalar && s[0].kind.ke.getVt() == String.self {
                     return Pval(sctx, (s[0].getUnwrap() as! String).count)
                 }
                 return Pval(sctx, s[0].kind.count)},

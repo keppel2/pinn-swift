@@ -61,26 +61,22 @@ enum Contents {
         }
     }
     func getPw() -> Pwrap {
-        switch self {
-        case .single(let pw):
+        if case .single(let pw) = self {
             return pw
-        default: de(ECASE)
         }
+        de(ECASE)
     }
         func getAr() -> [Pval] {
-            switch self {
-            case .multi(let ar):
+            if case .multi(let ar) = self {
                 return ar.ar
-            default: de(ECASE)
             }
+            de(ECASE)
         }
         func getMap() -> [String: Pval] {
-            switch self {
-            case .map(let map):
+            if case .map(let map) = self {
                 return map.ma
-                
-            default: de(ECASE)
             }
+            de(ECASE)
         }
         
         func equal(_ co: Contents) -> Bool {
@@ -156,7 +152,7 @@ enum Contents {
         }
         
         convenience init( _ c: ParserRuleContext?, _ pv: Pval, _ a: Int, _ b: Int) {
-            self.init(c, Kind(Kind(pv.kind.k!.vtype!), .gSlice, b - a))
+            self.init(c, Kind(Kind(pv.kind.ke.getK().ke.getVt()), .gSlice, b - a))
             self.con = .multi(arWrap(pv.con.getSlice(a, b)))
         }
 
@@ -175,7 +171,7 @@ enum Contents {
                 
                 var ar = [Pval]()
                 for _ in 0..<k.count {
-                    ar.append(Pval(c, k.k!))
+                    ar.append(Pval(c, k.ke.getK()))
                 }
                 con = Contents.multi(arWrap(ar))
             case .gMap:
@@ -184,11 +180,11 @@ enum Contents {
             case .gPointer:
                 con = Contents.single(Pwrap(Nil()))
             case .gScalar:
-                let se = Pwrap(k.vtype!.self.zeroValue())
+                let se = Pwrap(k.ke.getVt().self.zeroValue())
                 con = Contents.single(se)
             case .gTuple:
                 var ar = [Pval]()
-                for x in k.ka! {
+                for x in k.ke.getKm() {
                     ar.append(Pval(c, x))
                 }
                 con = Contents.multi(arWrap(ar))
@@ -214,7 +210,7 @@ enum Contents {
         }
         
         private func getNewChild() -> Pval {
-            return Pval(prc, kind.k!)
+            return Pval(prc, kind.ke.getK())
         }
         func get(_ k: Ktype, _ lh: Bool = false) -> Pval {
             switch k {
@@ -257,15 +253,20 @@ enum Contents {
 //                return
 //            }
             ade(kind.gtype != .gScalar)
-            
-            if let vk = kind.k {
+            switch kind.ke {
+            case .k(let ki):
                 ade(kind.gtype != .gTuple)
-                ade(vk.kindEquivalent(v!.kind))
-            } else {
+                ade(ki.kindEquivalent(v!.kind))
+            case .km(let km):
                 ade(kind.gtype == .gTuple)
-                let kt = kind.ka![k as! Int]
-                ade(kt.kindEquivalent(v!.kind))
+                let kt = km[k as! Int]
+                ade(kt.kindEquivalent(v!.kind.ke.getK()))
+            default: de(ECASE)
             }
+
+
+
+   
             switch k {
             case let v1v as Int:
                 if kind.gtype == .gSlice && v1v == con.count() {
