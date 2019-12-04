@@ -29,23 +29,30 @@ class Pwrap {
     }
 }
 
-class arWrap {
-    var ar: [Pval]
-    init(_ a: [Pval]) {
-        ar = a
-    }
-}
-class maWrap {
-    var ma: [String: Pval]
-    init(_ m: [String: Pval]) {
-        ma = m
+class Wrap <T> {
+    var e: T
+    init(_ x: T) {
+        e = x
     }
 }
 
+//class arWrap {
+//    var ar: [Pval]
+//    init(_ a: [Pval]) {
+//        ar = a
+//    }
+//}
+//class maWrap {
+//    var ma: [String: Pval]
+//    init(_ m: [String: Pval]) {
+//        ma = m
+//    }
+//}
+
 enum Contents {
     case single(Pwrap)
-    case multi(arWrap)
-    case map(maWrap)
+    case multi(Wrap<[Pval]>)
+    case map(Wrap<[String: Pval]>)
     init(_ c: Contents) {
         switch c {
 
@@ -61,12 +68,12 @@ enum Contents {
         switch self{
         case .multi(let pv):
             if k == nil {
-                pv.ar.append(v!)
+                pv.e.append(v!)
             } else {
-                pv.ar[k as! Int] = v!
+                pv.e[k as! Int] = v!
             }
         case .map(let ma):
-            ma.ma[k as! String] = v
+            ma.e[k as! String] = v
         case .single:
             de(ECASE)
         }
@@ -79,13 +86,13 @@ enum Contents {
     }
         func getAr() -> [Pval] {
             if case .multi(let ar) = self {
-                return ar.ar
+                return ar.e
             }
             de(ECASE)
         }
         func getMap() -> [String: Pval] {
             if case .map(let map) = self {
-                return map.ma
+                return map.e
             }
             de(ECASE)
         }
@@ -95,10 +102,10 @@ enum Contents {
             case .single(let pw):
                 return pw.equal(co.getPw())
             case .multi(let ar):
-                return ar.ar.elementsEqual(co.getAr(), by: {$0.equal($1)})
+                return ar.e.elementsEqual(co.getAr(), by: {$0.equal($1)})
             case .map(let map):
                 let omap = co.getMap()
-                for (key, value) in map.ma {
+                for (key, value) in map.e {
                     if omap[key] == nil {
                         return false
                     }
@@ -114,7 +121,7 @@ enum Contents {
         func getSlice(_ a: Int, _ b: Int) -> [Pval] {
             switch self {
             case .multi(let pvs):
-                return Array(pvs.ar[a..<b])
+                return Array(pvs.e[a..<b])
             default: de(ECASE)
             }
         }
@@ -123,9 +130,9 @@ enum Contents {
         func count() -> Int {
             switch self {
             case .multi(let ar):
-                return ar.ar.count
+                return ar.e.count
             case .map(let map):
-                return map.ma.count
+                return map.e.count
             case.single:
                 return 1
             }
@@ -153,7 +160,7 @@ enum Contents {
         init(_ c: ParserRuleContext?, _ ar: [Pval], _ k: Kind) {
                         prc = c
             self.k = k
-            self.con = .multi(arWrap(ar))
+            self.con = .multi(Wrap(ar))
         }
         
         init(_ c: ParserRuleContext?, _ ar: [Pval]) {
@@ -168,7 +175,7 @@ enum Contents {
                     }
                 }
             }
-            self.con = .multi(arWrap(ar))
+            self.con = .multi(Wrap(ar))
 
         }
         
@@ -181,7 +188,7 @@ enum Contents {
         
         convenience init( _ c: ParserRuleContext?, _ pv: Pval, _ a: Int, _ b: Int) {
             self.init(c, Kind(Kind(pv.kind.ke.getK().ke.getVt()), .gSlice, b - a))
-            self.con = .multi(arWrap(pv.con.getSlice(a, b)))
+            self.con = .multi(Wrap(pv.con.getSlice(a, b)))
         }
 
         
@@ -201,10 +208,10 @@ enum Contents {
                 for _ in 0..<k.count {
                     ar.append(Pval(c, k.ke.getK()))
                 }
-                con = Contents.multi(arWrap(ar))
+                con = Contents.multi(Wrap(ar))
             case .gMap:
                 let m = [String: Pval]()
-                con = Contents.map(maWrap(m))
+                con = Contents.map(Wrap(m))
             case .gPointer:
                 con = Contents.single(Pwrap(Nil()))
             case .gScalar:
@@ -215,7 +222,7 @@ enum Contents {
                 for x in k.ke.getKm() {
                     ar.append(Pval(c, x))
                 }
-                con = Contents.multi(arWrap(ar))
+                con = Contents.multi(Wrap(ar))
                 break
             }
         }
@@ -329,9 +336,9 @@ enum Contents {
                 
                 var rt = ""
                 rt += kind.gtype == .gTuple || kind.gtype == .gPointer ? "(" : "["
-                if ar.ar.count > 0 {
-                    rt += ar.ar.first!.string()
-                    for v in ar.ar[1...] {
+                if ar.e.count > 0 {
+                    rt += ar.e.first!.string()
+                    for v in ar.e[1...] {
                         rt += " " + v.string()
                     }
                 }
@@ -342,7 +349,7 @@ enum Contents {
             case .map(let map):
                 var rt = ""
                 rt += "{"
-                for (key, value) in map.ma {
+                for (key, value) in map.e {
                     if rt != "{" {
                         rt += " "
                     }
@@ -370,7 +377,7 @@ enum Contents {
                 
                 if kind.gtype == .gSlice || kind.gtype == .gPointer {
                     return self}
-                return Pval(prc, ar.ar.map { $0.cloneIf() }, kind)
+                return Pval(prc, ar.e.map { $0.cloneIf() }, kind)
                 
             case .map:
                 return self
