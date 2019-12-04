@@ -710,5 +710,3 @@ for i = range [1, 5, 10, 2, 3] {
 print(depthString(bst));
 
 ec();
-println();
-println(bst);

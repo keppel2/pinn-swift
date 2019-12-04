@@ -317,7 +317,16 @@ class Pval {
             }
             
             
-    
+    func stringOrLetter() -> String {
+                if kind.isPointer() {
+                    if e.con.isNull() {
+                        return "E"
+                    } else {
+                        return "P"
+                    }
+                }
+        return string(false)
+    }
     func string(_ follow: Bool) -> String {
 //        if kind.isPointer() && !follow {
 //            if e.con.isNull() {
@@ -336,16 +345,17 @@ class Pval {
                     var rt = ""
                     rt += kind.gtype == .gTuple || kind.gtype == .gPointer ? "(" : "["
                     if ar.w.count > 0 {
-//                        if kind.isPointer() && !follow {
-//                            if e.con.isNull() {
-//                                return "E"
-//                            } else {
-//                                return "P"
-//                            }
-//                        }
+                        if follow {
                         rt += ar.w.first!.string(follow)
                         for v in ar.w[1...] {
                             rt += " " + v.string(follow)
+                        }
+                        } else {
+                            rt += ar.w.first!.stringOrLetter()
+                            for v in ar.w[1...] {
+                                rt += " " + v.stringOrLetter()
+                            }
+
                         }
                     }
                     rt += kind.gtype == .gTuple || kind.gtype == .gPointer ? ")" : "]"
