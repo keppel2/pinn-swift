@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E25DA565238A657A005CB15B /* dumm.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25DA564238A657A005CB15B /* dumm.swift */; };
 		E28CB40223679F640045FA67 /* Pvisitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E28CB40123679F640045FA67 /* Pvisitor.swift */; };
 		E29BEB1923808A4100969DFF /* aux.swift in Sources */ = {isa = PBXBuildFile; fileRef = E29BEB1823808A4100969DFF /* aux.swift */; };
 		E29BEB312380DFE200969DFF /* Perr.swift in Sources */ = {isa = PBXBuildFile; fileRef = E29BEB302380DFE200969DFF /* Perr.swift */; };
@@ -79,7 +78,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		E25DA564238A657A005CB15B /* dumm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dumm.swift; sourceTree = "<group>"; };
 		E2673962235BC825000CF830 /* pinn */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = pinn; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2673965235BC825000CF830 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		E28CB40123679F640045FA67 /* Pvisitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pvisitor.swift; sourceTree = "<group>"; };
@@ -116,7 +114,6 @@
 			isa = PBXGroup;
 			children = (
 				E2D2DC032366BE3700E0CC35 /* PinnLexer.swift */,
-				E25DA564238A657A005CB15B /* dumm.swift */,
 				E2D2DC002366BE3700E0CC35 /* PinnLexerATN.swift */,
 				E28CB40423680A0B0045FA67 /* types.pinn */,
 				E2BC3DB42387733B002D9413 /* a.pinn */,
@@ -268,7 +265,6 @@
 				E2B5A283237E0FB200E91CE2 /* Kind.swift in Sources */,
 				E28CB40223679F640045FA67 /* Pvisitor.swift in Sources */,
 				E2D2DC072366BE3700E0CC35 /* PinnLexer.swift in Sources */,
-				E25DA565238A657A005CB15B /* dumm.swift in Sources */,
 				E2AA0545237EA5E300424FCE /* protocols.swift in Sources */,
 				E2D2DC052366BE3700E0CC35 /* PinnParserATN.swift in Sources */,
 				E2D2DC062366BE3700E0CC35 /* PinnParser.swift in Sources */,
