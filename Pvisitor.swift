@@ -24,6 +24,10 @@ public class Pvisitor {
     let builtIns
         : [String: (ParserRuleContext, [Pval]) -> Pval?] =
         [
+            "exit": { sctx, s in
+                assertPvals(s, 0)
+                exit(0)
+            },
             "xam": { sctx, s in
                 let xa = s[0]
                 return nil
@@ -696,7 +700,7 @@ public class Pvisitor {
                 let pv = Pval(sctx, d)
                 rt = pv
             case .NIL:
-                let pv = Pval(sctx, Nil())
+                let pv = Pval(sctx, Nil(nil))
                 rt = pv
             case .BOOL:
                 let str = sctx.BOOL()!.getText()
@@ -1016,7 +1020,7 @@ public class Pvisitor {
                 de(Perr(EREDECLARE, prev, sctx))
             }
             if sctx.CE() != nil {
-                newV = visitPval(sctx.expr()!)!
+                newV = Pval(visitPval(sctx.expr()!)!)
             } else {
                 let k = visitKind(sctx.kind()!)
                     newV = Pval(sctx, k)

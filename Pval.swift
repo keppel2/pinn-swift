@@ -139,248 +139,261 @@ enum Contents {
         }
 }
 
+class Pval {
+    var e: Pvalp
     
-//class Pvalp {
-//    private var k: Kind
-//    var con: Contents
-//    var prc: ParserRuleContext?
-//}
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      
+            init(_ p: Pval) {
+                e = p.e
+            }
+            
+            init(_ c: ParserRuleContext?, _ ar: [Pval], _ k: Kind) {
+                e = Pvalp(k, .multi(Wrap(ar)), c)
+            }
+            
+            init(_ c: ParserRuleContext?, _ ar: [Pval]) {
+  //                          prc = c
+                let mar = ar
+                let ka = ar.map { $0.kind }
+                let k = Kind(ka)
+                for (key, value) in mar.enumerated() {
+                    if case .vt(let vt) = value.kind.ke {
+                        if vt == Nil.self {
+                            mar[key].e.k = k
+                        }
+                    }
+                }
+                e = Pvalp(k, .multi(Wrap(ar)), c)
+            }
+            
+            init(_ c: ParserRuleContext?, _ a: Ptype) {
+                let w = Pwrap(a)
+                let k = Kind(type(of: w.unwrap()))
+                e = Pvalp(k, .single(w), c)
+            }
+            
+            convenience init( _ c: ParserRuleContext?, _ pv: Pval, _ a: Int, _ b: Int) {
+                self.init(c, Kind(Kind(pv.kind.ke.getK().ke.getVt()), .gSlice, b - a))
+                e.con = .multi(Wrap(pv.e.con.getSlice(a, b)))
+            }
 
-    class Pval {
-        private var k: Kind
+            
+            func conset(_ k: Ktype? = nil, _ p: Pval? = nil) {
+                e.con.setCon(k, p)
+                self.e.k.count = e.con.count()
+            }
+            
+            
+            init( _ c: ParserRuleContext?, _ k: Kind) {
+                switch k.gtype {
+                case .gArray, .gSlice:
+                    
+                    var ar = [Pval]()
+                    for _ in 0..<k.count {
+                        ar.append(Pval(c, k.ke.getK()))
+                    }
+                    e = Pvalp(k, Contents.multi(Wrap(ar)), c)
+                case .gMap:
+                    let m = [String: Pval]()
+                                        e = Pvalp(k, Contents.map(Wrap(m)), c)
+
+                case .gPointer:
+                                        e = Pvalp(k, Contents.single(Pwrap(Nil(nil))), c)
+                case .gScalar:
+                    let se = Pwrap(k.ke.getVt().self.zeroValue())
+                                        e = Pvalp(k, Contents.single(se), c)
+                case .gTuple:
+                    var ar = [Pval]()
+                    for x in k.ke.getKm() {
+                        ar.append(Pval(c, x))
+                    }
+                                        e = Pvalp(k, Contents.multi(Wrap(ar)), c)
+                    break
+                }
+            }
+            func equal(_ p: Pval) -> Bool {
+                
+                ade(p.kind.kindEquivalent(kind, true))
+                if kind.isNil() && p.kind.isPointer() {
+                    return false
+                }
+                if kind.isPointer() && p.kind.isNil() {
+                    return false
+                }
+                return e.con.equal(p.e.con)
+            }
+            
+            func getUnwrap() -> Ptype {
+                return get().unwrap()
+            }
+            private func get() -> Pwrap {
+                ade(kind.gtype == .gScalar)
+                return e.con.getPw()
+            }
+            
+            func getKeys() -> [String] {
+                return [String](e.con.getMap().keys)
+            }
+            
+            private func getNewChild() -> Pval {
+                return Pval(e.prc, kind.ke.getK())
+            }
+            func get(_ k: Ktype, _ lh: Bool = false) -> Pval {
+                switch k {
+                case let v1v as Int:
+                    if lh && kind.gtype == .gSlice && v1v == e.con.count() {
+                        conset(nil, getNewChild())
+                                              
+                    }
+                    return e.con.getAr()[v1v]
+                case let v1v as String:
+                    if e.con.getMap()[v1v] == nil {
+                        if lh {
+                            conset(v1v, getNewChild())
+                           
+    //                        addKey(v1v, getNewChild())
+                        } else {
+                            return getNewChild()
+                        }
+                    }
+                    return e.con.getMap()[v1v]!
+                default:
+                    de(ECASE)
+                }
+            }
+            
+            
+            func setPV(_ v : Pval) {
+                ade(kind.kindEquivalent(v.kind, true))
+                e = v.e
+            }
+            
+            func set(_ k: Ktype, _ v: Pval?) {
+                if v == nil {
+                    conset(k as! String, nil)
+                    return
+                }
+    //                map![k as! String] = nil
+    //                kind.count = map!.count
+    //                return
+    //            }
+                ade(kind.gtype != .gScalar)
+                switch kind.ke {
+                case .k(let ki):
+    //                ade(kind.gtype != .gTuple)
+                    ade(ki.kindEquivalent(v!.kind, true))
+                case .km(let km):
+     //               ade(kind.gtype == .gTuple)
+                    let kt = km[k as! Int]
+                    ade(kt.kindEquivalent(v!.kind.ke.getK(), true))
+                default: de(ECASE)
+                }
+
+
+
+       
+                switch k {
+                case let v1v as Int:
+                    if kind.gtype == .gSlice && v1v == e.con.count() {
+                        conset(nil, v!)
+     
+                    } else {
+                        conset(v1v, v!)
+                    }
+                case let v1v as String:
+                    conset(v1v, v)
+                default:
+                    de(ECASE)
+                }
+            }
+            
+            
+            
+            func string() -> String {
+                switch e.con {
+                case .single(let pw):
+                    return pw.string()
+                case .multi(let ar):
+                    
+                    
+                    
+                    var rt = ""
+                    rt += kind.gtype == .gTuple || kind.gtype == .gPointer ? "(" : "["
+                    if ar.e.count > 0 {
+                        rt += ar.e.first!.string()
+                        for v in ar.e[1...] {
+                            rt += " " + v.string()
+                        }
+                    }
+                    rt += kind.gtype == .gTuple || kind.gtype == .gPointer ? ")" : "]"
+                    
+
+                    return rt
+                case .map(let map):
+                    var rt = ""
+                    rt += "{"
+                    for (key, value) in map.e {
+                        if rt != "{" {
+                            rt += " "
+                        }
+                        rt += key + ":" + value.string()
+                    }
+                    
+                    rt += "}"
+                    return rt
+
+                }
+            }
+            
+            
+    var kind: Kind { return e.k
+            }
+            
+            func cloneIf() -> Pval {
+                
+                
+                
+                switch e.con {
+                case .single(let pw):
+                    return Pval(e.prc, pw.clone().unwrap())
+                case .multi(let ar):
+                    
+                    if kind.gtype == .gSlice || kind.gtype == .gPointer {
+                        return self}
+                    return Pval(e.prc, ar.e.map { $0.cloneIf() }, kind)
+                    
+                case .map:
+                    return self
+                }
+            }
+    }
+
+    
+    
+    
+    
+    
+    
+
+
+    class Pvalp {
+        var k: Kind
         var con: Contents
         var prc: ParserRuleContext?
-        
-        init(_ p: Pval) {
-            k = p.kind
-            con = p.con
-            prc = p.prc
-        }
-        
-        init(_ c: ParserRuleContext?, _ ar: [Pval], _ k: Kind) {
-                        prc = c
+        init(_ k: Kind, _ con: Contents, _ prc: ParserRuleContext?) {
             self.k = k
-            self.con = .multi(Wrap(ar))
+            self.con = con
+            self.prc = prc
         }
-        
-        init(_ c: ParserRuleContext?, _ ar: [Pval]) {
-                        prc = c
-            let mar = ar
-            let ka = ar.map { $0.kind }
-            k = Kind(ka)
-            for (key, value) in mar.enumerated() {
-                if case .vt(let vt) = value.kind.ke {
-                    if vt == Nil.self {
-                        mar[key].k = k
-                    }
-                }
-            }
-            self.con = .multi(Wrap(ar))
-
-        }
-        
-        init(_ c: ParserRuleContext?, _ a: Ptype) {
-                        prc = c
-            let w = Pwrap(a)
-            k = Kind(type(of: w.unwrap()))
-               self.con = .single(w)
-        }
-        
-        convenience init( _ c: ParserRuleContext?, _ pv: Pval, _ a: Int, _ b: Int) {
-            self.init(c, Kind(Kind(pv.kind.ke.getK().ke.getVt()), .gSlice, b - a))
-            self.con = .multi(Wrap(pv.con.getSlice(a, b)))
-        }
-
-        
-        func conset(_ k: Ktype? = nil, _ p: Pval? = nil) {
-            con.setCon(k, p)
-            self.k.count = con.count()
-        }
-        
-        
-        init( _ c: ParserRuleContext?, _ k: Kind) {
-                        prc = c
-            self.k = k
-            switch k.gtype {
-            case .gArray, .gSlice:
-                
-                var ar = [Pval]()
-                for _ in 0..<k.count {
-                    ar.append(Pval(c, k.ke.getK()))
-                }
-                con = Contents.multi(Wrap(ar))
-            case .gMap:
-                let m = [String: Pval]()
-                con = Contents.map(Wrap(m))
-            case .gPointer:
-                con = Contents.single(Pwrap(Nil()))
-            case .gScalar:
-                let se = Pwrap(k.ke.getVt().self.zeroValue())
-                con = Contents.single(se)
-            case .gTuple:
-                var ar = [Pval]()
-                for x in k.ke.getKm() {
-                    ar.append(Pval(c, x))
-                }
-                con = Contents.multi(Wrap(ar))
-                break
-            }
-        }
-        func equal(_ p: Pval) -> Bool {
-            
-            ade(p.kind.kindEquivalent(kind, true))
-            if kind.isNil() && p.kind.isPointer() {
-                return false
-            }
-            if kind.isPointer() && p.kind.isNil() {
-                return false
-            }
-            return con.equal(p.con)
-        }
-        
-        func getUnwrap() -> Ptype {
-            return get().unwrap()
-        }
-        private func get() -> Pwrap {
-            ade(kind.gtype == .gScalar)
-            return con.getPw()
-        }
-        
-        func getKeys() -> [String] {
-            return [String](con.getMap().keys)
-        }
-        
-        private func getNewChild() -> Pval {
-            return Pval(prc, kind.ke.getK())
-        }
-        func get(_ k: Ktype, _ lh: Bool = false) -> Pval {
-            switch k {
-            case let v1v as Int:
-                if lh && kind.gtype == .gSlice && v1v == con.count() {
-                    conset(nil, getNewChild())
-                                          
-                }
-                return con.getAr()[v1v]
-            case let v1v as String:
-                if con.getMap()[v1v] == nil {
-                    if lh {
-                        conset(v1v, getNewChild())
-                       
-//                        addKey(v1v, getNewChild())
-                    } else {
-                        return getNewChild()
-                    }
-                }
-                return con.getMap()[v1v]!
-            default:
-                de(ECASE)
-            }
-        }
-        
-        
-        func setPV(_ v : Pval) {
-            ade(kind.kindEquivalent(v.kind, true))
-            self.k = v.k
-            self.con = v.con
-            self.prc = v.prc
-        }
-        
-        func set(_ k: Ktype, _ v: Pval?) {
-            if v == nil {
-                conset(k as! String, nil)
-                return
-            }
-//                map![k as! String] = nil
-//                kind.count = map!.count
-//                return
-//            }
-            ade(kind.gtype != .gScalar)
-            switch kind.ke {
-            case .k(let ki):
-//                ade(kind.gtype != .gTuple)
-                ade(ki.kindEquivalent(v!.kind, true))
-            case .km(let km):
- //               ade(kind.gtype == .gTuple)
-                let kt = km[k as! Int]
-                ade(kt.kindEquivalent(v!.kind.ke.getK(), true))
-            default: de(ECASE)
-            }
-
-
-
-   
-            switch k {
-            case let v1v as Int:
-                if kind.gtype == .gSlice && v1v == con.count() {
-                    conset(nil, v!)
- 
-                } else {
-                    conset(v1v, v!)
-                }
-            case let v1v as String:
-                conset(v1v, v)
-            default:
-                de(ECASE)
-            }
-        }
-        
-        
-        
-        func string() -> String {
-            switch con {
-            case .single(let pw):
-                return pw.string()
-            case .multi(let ar):
-                
-                
-                
-                var rt = ""
-                rt += kind.gtype == .gTuple || kind.gtype == .gPointer ? "(" : "["
-                if ar.e.count > 0 {
-                    rt += ar.e.first!.string()
-                    for v in ar.e[1...] {
-                        rt += " " + v.string()
-                    }
-                }
-                rt += kind.gtype == .gTuple || kind.gtype == .gPointer ? ")" : "]"
-                
-
-                return rt
-            case .map(let map):
-                var rt = ""
-                rt += "{"
-                for (key, value) in map.e {
-                    if rt != "{" {
-                        rt += " "
-                    }
-                    rt += key + ":" + value.string()
-                }
-                
-                rt += "}"
-                return rt
-
-            }
-        }
-        
-        
-        var kind: Kind { return k
-        }
-        
-        func cloneIf() -> Pval {
-            
-            
-            
-            switch con {
-            case .single(let pw):
-                return Pval(prc, pw.clone().unwrap())
-            case .multi(let ar):
-                
-                if kind.gtype == .gSlice || kind.gtype == .gPointer {
-                    return self}
-                return Pval(prc, ar.e.map { $0.cloneIf() }, kind)
-                
-            case .map:
-                return self
-            }
-        }
-}
+    }
+      
