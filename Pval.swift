@@ -46,6 +46,17 @@ enum Contents {
     case single(Pwrap)
     case multi(arWrap)
     case map(maWrap)
+    init(_ c: Contents) {
+        switch c {
+
+            case .multi(let pv):
+                self = .multi(pv)
+            case .map(let ma):
+                self = .map(ma)
+            case .single(let s):
+                self = .single(s)
+            }
+    }
     func setCon(_ k: Ktype? = nil, _ v: Pval? = nil) {
         switch self{
         case .multi(let pv):
@@ -122,15 +133,23 @@ enum Contents {
 }
 
     
-    
+//class Pvalp {
+//    private var k: Kind
+//    var con: Contents
+//    var prc: ParserRuleContext?
+//}
+
     class Pval {
-        
-        
         private var k: Kind
         var con: Contents
         var prc: ParserRuleContext?
         
-
+        init(_ p: Pval) {
+            k = p.kind
+            con = p.con
+            prc = p.prc
+        }
+        
         init(_ c: ParserRuleContext?, _ ar: [Pval], _ k: Kind) {
                         prc = c
             self.k = k
@@ -139,9 +158,18 @@ enum Contents {
         
         init(_ c: ParserRuleContext?, _ ar: [Pval]) {
                         prc = c
+            let mar = ar
             let ka = ar.map { $0.kind }
             k = Kind(ka)
+            for (key, value) in mar.enumerated() {
+                if case .vt(let vt) = value.kind.ke {
+                    if vt == Nil.self {
+                        mar[key].k = k
+                    }
+                }
+            }
             self.con = .multi(arWrap(ar))
+
         }
         
         init(_ c: ParserRuleContext?, _ a: Ptype) {
@@ -193,7 +221,13 @@ enum Contents {
         }
         func equal(_ p: Pval) -> Bool {
             
-            ade(p.kind.kindEquivalent(kind))
+            ade(p.kind.kindEquivalent(kind, true))
+            if kind.isNil() && p.kind.isPointer() {
+                return false
+            }
+            if kind.isPointer() && p.kind.isNil() {
+                return false
+            }
             return con.equal(p.con)
         }
         
@@ -238,7 +272,8 @@ enum Contents {
         
         
         func setPV(_ v : Pval) {
-            ade(kind.kindEquivalent(v.kind))
+            ade(kind.kindEquivalent(v.kind, true))
+            self.k = v.k
             self.con = v.con
             self.prc = v.prc
         }
@@ -255,12 +290,12 @@ enum Contents {
             ade(kind.gtype != .gScalar)
             switch kind.ke {
             case .k(let ki):
-                ade(kind.gtype != .gTuple)
-                ade(ki.kindEquivalent(v!.kind))
+//                ade(kind.gtype != .gTuple)
+                ade(ki.kindEquivalent(v!.kind, true))
             case .km(let km):
-                ade(kind.gtype == .gTuple)
+ //               ade(kind.gtype == .gTuple)
                 let kt = km[k as! Int]
-                ade(kt.kindEquivalent(v!.kind.ke.getK()))
+                ade(kt.kindEquivalent(v!.kind.ke.getK(), true))
             default: de(ECASE)
             }
 
@@ -333,7 +368,7 @@ enum Contents {
                 return Pval(prc, pw.clone().unwrap())
             case .multi(let ar):
                 
-                if kind.gtype == .gSlice {
+                if kind.gtype == .gSlice || kind.gtype == .gPointer {
                     return self}
                 return Pval(prc, ar.ar.map { $0.cloneIf() }, kind)
                 

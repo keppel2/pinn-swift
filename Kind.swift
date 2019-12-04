@@ -52,14 +52,14 @@ class Kind {
     init(_ k: Kind?, _ gtype: Gtype, _ count: Int? = nil) {
         self.gtype = gtype
         switch gtype {
-        case .gScalar, .gTuple:
+        case .gScalar, .gTuple, .gPointer:
             de(ECASE)
-        case .gPointer:
-            ade(k == nil)
-            ade(count == nil)
-            self.count = 0
-            ke = .vt(Nil.self)
-            
+//        case .gPointer:
+//            ade(k == nil)
+//            ade(count == nil)
+//            self.count = 0
+//            ke = .vt(Nil.self)
+//
         case .gMap:
             ade(count == nil)
             self.count = 0
@@ -75,13 +75,13 @@ class Kind {
         self.count = kar.count
         ke = .vt(Nil.self)
                     for (k, v) in kar.enumerated() {
-                        if v.gtype == .gPointer {
                             if case .vt(let vt) = v.ke {
-                                ade(vt == Nil.self)
-
+                                if vt == Nil.self {
+                                    kar[k] = self
+                                }
+                                gtype = .gPointer
+                                
                             }
-                            kar[k] = self
-                        }
                     }
         ke = .km(kar)
     }
@@ -89,13 +89,20 @@ class Kind {
   
     var gtype: Gtype
     var count: Int
-
+    func isNil() -> Bool {
+        return gtype == .gScalar && ke.getVt() == Nil.self
+    }
+    func isPointer() -> Bool {
+        return gtype == .gPointer
+    }
     
-    
-    func kindEquivalent(_ k2: Kind) -> Bool {
+    func kindEquivalent(_ k2: Kind, _ sg: Bool ) -> Bool {
 //        return true
-        if gtype == .gPointer {
-            return k2.gtype == self.gtype
+        if isNil() && k2.isPointer() || isPointer() && k2.isNil() {
+            return true
+        }
+        if gtype == .gPointer && !sg{
+            return gtype == k2.gtype
         }
         switch ke {
         case .vt(let vt):
@@ -104,15 +111,15 @@ class Kind {
         case .k(let k):
             switch gtype {
             case .gArray:
-                return k.kindEquivalent(k2.ke.getK()) && gtype == k2.gtype && count == k2.count
+                return k.kindEquivalent(k2.ke.getK(), true) && gtype == k2.gtype && count == k2.count
             case .gMap, .gSlice:
-                return k.kindEquivalent(k2.ke.getK()) && gtype == k2.gtype
+                return k.kindEquivalent(k2.ke.getK(), true) && gtype == k2.gtype
             case .gTuple, .gScalar, .gPointer:
                 de(ECASE)
             }
         case .km(let km):
             return km.elementsEqual(k2.ke.getKm(), by: {
-                    return $0.kindEquivalent($1)
+                    return $0.kindEquivalent($1, false)
             })
         }
     }

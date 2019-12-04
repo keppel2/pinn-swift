@@ -40,11 +40,15 @@ protocol Compare: Ptype {
     func gt(_: Compare) -> Bool
 }
 
-struct Nil: Ptype {
-    static func zeroValue() -> Ptype { de(ECASE) }
+struct Nil: Ptype, CustomStringConvertible {
+    var description: String { return "N"}
+    
+    static func zeroValue() -> Ptype { Nil() }
     func equal(_ a: Ptype) -> Bool {
         return a is Nil
     }
+    
+    
 }
 
 extension Decimal: Ptype, Plus, Compare, Arith, Negate {

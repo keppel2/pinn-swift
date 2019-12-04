@@ -24,6 +24,10 @@ public class Pvisitor {
     let builtIns
         : [String: (ParserRuleContext, [Pval]) -> Pval?] =
         [
+            "xam": { sctx, s in
+                let xa = s[0]
+                return nil
+            },
             "ft": { sctx, s in assertPvals(s, 2)
                 print("--", sctx.getStart()!.getLine())
                 li = printed.endIndex
@@ -83,7 +87,7 @@ public class Pvisitor {
                 return Pval(sctx, s[0].getKeys().contains(str))
             },
             "debug": { sctx, s in assertPvals(s, 0)
-                dbg()
+             //   dbg()
                 return nil
             },
 //            "sort": { sctx, s in assertPvals(s, 1)
@@ -260,6 +264,7 @@ public class Pvisitor {
         }
         fkmap[s] = Fheader()
     }
+/*
     func putPv(_ s: String, _ pv: Pval) {
         let pvOld: Pval
         if lfc?.m[s] != nil {
@@ -267,11 +272,12 @@ public class Pvisitor {
         } else {
             pvOld = fc.m.updateValue(pv, forKey: s)!
         }
-        if !pvOld.kind.kindEquivalent(pv.kind) {
+        if !pvOld.kind.kindEquivalent(pv.kind, true) {
             de(Perr(ETYPE, pvOld, prc))
         }
         
     }
+ */
     private static func printSpace(_ sa: [String]) -> String {
         var rt = ""
         guard sa.count > 0 else {
@@ -308,7 +314,7 @@ public class Pvisitor {
                 let par = Pval(ctx, Kind(v.k, .gArray, s.count - index))
                 
                 for (key, varadds) in s[index...].enumerated() {
-                    if !varadds.kind.kindEquivalent(v.k) {
+                    if !varadds.kind.kindEquivalent(v.k, true) {
                         de(Perr(ETYPE, sctx))
                     }
                     par.set(key, varadds)
@@ -319,7 +325,7 @@ public class Pvisitor {
                 lfc!.m[fh.fkinds[index].s] = par
                 continue
             }
-            if !s[index].kind.kindEquivalent(v.k) {
+            if !s[index].kind.kindEquivalent(v.k, true) {
                 de(Perr(ETYPE, sctx))
             }
             if let pv = lfc!.m[fh.fkinds[index].s]  {
@@ -339,7 +345,7 @@ public class Pvisitor {
             
         }
         else {
-            if !lfc!.rt!.kind.kindEquivalent(fh.kind!) {
+            if !lfc!.rt!.kind.kindEquivalent(fh.kind!, true) {
                 de(ETYPE)
             }
         }
@@ -868,6 +874,9 @@ public class Pvisitor {
         case let sctx as PinnParser.SimpleSetContext:
             let lh = visitPval(sctx.lExpr()!)!
             let rh = visitPval(sctx.expr()!)!
+            
+            
+            
             lh.setPV(rh)            
 
         case let sctx as PinnParser.IfStatementContext:
