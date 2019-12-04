@@ -77,9 +77,10 @@ class Kind {
                     for (k, v) in kar.enumerated() {
                             if case .vt(let vt) = v.ke {
                                 if vt == Nil.self {
+                                    gtype = .gPointer
                                     kar[k] = self
                                 }
-                                gtype = .gPointer
+
                                 
                             }
                     }
