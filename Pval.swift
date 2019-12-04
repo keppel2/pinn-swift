@@ -30,9 +30,9 @@ class Pwrap {
 }
 
 class Wrap <T> {
-    var e: T
+    var w: T
     init(_ x: T) {
-        e = x
+        w = x
     }
 }
 
@@ -68,12 +68,12 @@ enum Contents {
         switch self{
         case .multi(let pv):
             if k == nil {
-                pv.e.append(v!)
+                pv.w.append(v!)
             } else {
-                pv.e[k as! Int] = v!
+                pv.w[k as! Int] = v!
             }
         case .map(let ma):
-            ma.e[k as! String] = v
+            ma.w[k as! String] = v
         case .single:
             de(ECASE)
         }
@@ -86,26 +86,34 @@ enum Contents {
     }
         func getAr() -> [Pval] {
             if case .multi(let ar) = self {
-                return ar.e
+                return ar.w
             }
             de(ECASE)
         }
         func getMap() -> [String: Pval] {
             if case .map(let map) = self {
-                return map.e
+                return map.w
             }
             de(ECASE)
         }
-        
+    func isNull() -> Bool {
+        return equal(Contents.single(Pwrap(Nil())))
+    }
         func equal(_ co: Contents) -> Bool {
             switch self {
             case .single(let pw):
+                if case .multi(let _) = co {
+                    return false
+                }
                 return pw.equal(co.getPw())
             case .multi(let ar):
-                return ar.e.elementsEqual(co.getAr(), by: {$0.equal($1)})
+                if case .single(let _) = co {
+                    return false
+                }
+                return ar.w.elementsEqual(co.getAr(), by: {$0.equal($1)})
             case .map(let map):
                 let omap = co.getMap()
-                for (key, value) in map.e {
+                for (key, value) in map.w {
                     if omap[key] == nil {
                         return false
                     }
@@ -121,7 +129,7 @@ enum Contents {
         func getSlice(_ a: Int, _ b: Int) -> [Pval] {
             switch self {
             case .multi(let pvs):
-                return Array(pvs.e[a..<b])
+                return Array(pvs.w[a..<b])
             default: de(ECASE)
             }
         }
@@ -130,9 +138,9 @@ enum Contents {
         func count() -> Int {
             switch self {
             case .multi(let ar):
-                return ar.e.count
+                return ar.w.count
             case .map(let map):
-                return map.e.count
+                return map.w.count
             case.single:
                 return 1
             }
@@ -141,10 +149,6 @@ enum Contents {
 
 class Pval {
     var e: Pvalp
-    
-    
-    
-    
     
     
     
@@ -208,7 +212,7 @@ class Pval {
                                         e = Pvalp(k, Contents.map(Wrap(m)), c)
 
                 case .gPointer:
-                                        e = Pvalp(k, Contents.single(Pwrap(Nil(nil))), c)
+                                        e = Pvalp(k, Contents.single(Pwrap(Nil())), c)
                 case .gScalar:
                     let se = Pwrap(k.ke.getVt().self.zeroValue())
                                         e = Pvalp(k, Contents.single(se), c)
@@ -224,12 +228,6 @@ class Pval {
             func equal(_ p: Pval) -> Bool {
                 
                 ade(p.kind.kindEquivalent(kind, true))
-                if kind.isNil() && p.kind.isPointer() {
-                    return false
-                }
-                if kind.isPointer() && p.kind.isNil() {
-                    return false
-                }
                 return e.con.equal(p.e.con)
             }
             
@@ -275,6 +273,7 @@ class Pval {
             
             func setPV(_ v : Pval) {
                 ade(kind.kindEquivalent(v.kind, true))
+                
                 e = v.e
             }
             
@@ -318,8 +317,15 @@ class Pval {
             }
             
             
-            
-            func string() -> String {
+    
+    func string(_ follow: Bool) -> String {
+//        if kind.isPointer() && !follow {
+//            if e.con.isNull() {
+//                return "E"
+//            } else {
+//                return "P"
+//            }
+//        }
                 switch e.con {
                 case .single(let pw):
                     return pw.string()
@@ -329,10 +335,17 @@ class Pval {
                     
                     var rt = ""
                     rt += kind.gtype == .gTuple || kind.gtype == .gPointer ? "(" : "["
-                    if ar.e.count > 0 {
-                        rt += ar.e.first!.string()
-                        for v in ar.e[1...] {
-                            rt += " " + v.string()
+                    if ar.w.count > 0 {
+//                        if kind.isPointer() && !follow {
+//                            if e.con.isNull() {
+//                                return "E"
+//                            } else {
+//                                return "P"
+//                            }
+//                        }
+                        rt += ar.w.first!.string(follow)
+                        for v in ar.w[1...] {
+                            rt += " " + v.string(follow)
                         }
                     }
                     rt += kind.gtype == .gTuple || kind.gtype == .gPointer ? ")" : "]"
@@ -342,11 +355,11 @@ class Pval {
                 case .map(let map):
                     var rt = ""
                     rt += "{"
-                    for (key, value) in map.e {
+                    for (key, value) in map.w {
                         if rt != "{" {
                             rt += " "
                         }
-                        rt += key + ":" + value.string()
+                        rt += key + ":" + value.string(follow)
                     }
                     
                     rt += "}"
@@ -369,11 +382,11 @@ class Pval {
                 case .multi(let ar):
                     
                     if kind.gtype == .gSlice || kind.gtype == .gPointer {
-                        return self}
-                    return Pval(e.prc, ar.e.map { $0.cloneIf() }, kind)
+                        return Pval(self)}
+                    return Pval(e.prc, ar.w.map { $0.cloneIf() }, kind)
                     
                 case .map:
-                    return self
+                    return Pval(self)
                 }
             }
     }

@@ -57,16 +57,20 @@ public class Pvisitor {
                 return Pval(sctx, s[0].kind.count)},
             "stringValue":
                 { sctx, s in assertPvals(s, 1)
-                    return Pval(sctx, s[0].string()) },
+                    return Pval(sctx, s[0].string(false)) },
+            "depthString":
+                {sctx, s in assertPvals(s, 1)
+                            return Pval(sctx, s[0].string(true))
+            },
             "print":
                 {sctx, s in
-                    let rt = Pvisitor.printSpace(s.map {$0.string()})
+                    let rt = Pvisitor.printSpace(s.map {$0.string(false)})
                     Pvisitor.textout(rt)
                     return nil
             },
             "println":
                 {sctx, s in
-                    var rt = Pvisitor.printSpace(s.map {$0.string()})
+                    var rt = Pvisitor.printSpace(s.map {$0.string(false)})
                     Pvisitor.textout(rt + "\n")
                     return nil
             },
@@ -91,7 +95,7 @@ public class Pvisitor {
                 return Pval(sctx, s[0].getKeys().contains(str))
             },
             "debug": { sctx, s in assertPvals(s, 0)
-             //   dbg()
+                dbg()
                 return nil
             },
 //            "sort": { sctx, s in assertPvals(s, 1)
@@ -326,7 +330,7 @@ public class Pvisitor {
                 if lfc!.m[fh.fkinds[index].s] != nil {
                     de(Perr(EREDECLARE, sctx))
                 }
-                lfc!.m[fh.fkinds[index].s] = par
+                lfc!.m[fh.fkinds[index].s] = Pval(par)
                 continue
             }
             if !s[index].kind.kindEquivalent(v.k, true) {
@@ -335,7 +339,7 @@ public class Pvisitor {
             if let pv = lfc!.m[fh.fkinds[index].s]  {
                 de(Perr(EREDECLARE, pv, sctx))
             }
-            lfc!.m[fh.fkinds[index].s] = s[index]
+            lfc!.m[fh.fkinds[index].s] = Pval(s[index])
         }
         visit(ctx.block()!)
         switch lfc!.path {
@@ -700,7 +704,7 @@ public class Pvisitor {
                 let pv = Pval(sctx, d)
                 rt = pv
             case .NIL:
-                let pv = Pval(sctx, Nil(nil))
+                let pv = Pval(sctx, Nil())
                 rt = pv
             case .BOOL:
                 let str = sctx.BOOL()!.getText()
@@ -913,6 +917,13 @@ public class Pvisitor {
                 v = visitPval(sctx.expr()!)!
                 b = tryCast(v)
             }
+            case let sctx as PinnParser.LoopStatementContext:
+                
+                 while true {
+                    visit(sctx.block()!)
+                    if  cfc.toEndBlock() {break}
+                }
+
         case let sctx as PinnParser.FoStatementContext:
             if sctx.RANGE() != nil {
                 var key: Pval?

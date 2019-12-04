@@ -92,6 +92,9 @@ guardStatement
 
 whStatement
   : 'while' expr block ;
+  
+loopStatement
+  : 'loop' block ;
 
 repeatStatement
   : 'repeat' block 'while' expr ;
@@ -116,6 +119,7 @@ statement
   | guardStatement
   | whStatement 
   | repeatStatement ';'
+  | loopStatement
   | switchStatement
   | returnStatement ';'
   | foStatement

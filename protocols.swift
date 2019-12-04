@@ -42,11 +42,8 @@ protocol Compare: Ptype {
 
 struct Nil: Ptype, CustomStringConvertible {
     var description: String { return "N"}
-    var n: Pvalp?
-    init(_ pva: Pvalp?) {
-        n = pva
-    }
-    static func zeroValue() -> Ptype { Nil(nil) }
+
+    static func zeroValue() -> Ptype { Nil() }
     func equal(_ a: Ptype) -> Bool {
         return a is Nil
     }

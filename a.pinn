@@ -1,22 +1,2 @@
-
-bst := (nil, 17, nil);
-
-
-
-var i int;
-var cur (self, int, self);
-
-for i = range [1, 5, 10, 2, 3] {
-    cur = bst;
-println(bst);
-
-    while cur != nil {
-        if i < cur[1] {
-            cur = cur[0];
-        } else {
-            cur = cur[2];
-        }
-    }
-    cur = (nil, i, nil);
-}
-
+n := nil;
+println(n);
