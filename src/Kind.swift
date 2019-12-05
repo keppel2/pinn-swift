@@ -14,24 +14,25 @@ enum Kinde {
     case k(Kind)
     case km([Kind])
     
-    func getVt() -> Ptype.Type {
+    func getVt() -> Ptype.Type? {
         if case .vt(let pw) = self {
             return pw
         }
-        de(ECASE)
+        return nil
     }
-        func getK() -> Kind {
+        func getK() -> Kind? {
             if case .k(let ar) = self {
                 return ar
             }
-            de(ECASE)
+            return nil
         }
-        func getKm() -> [Kind] {
+        func getKm() -> [Kind]? {
             if case .km(let map) = self {
                 return map
             }
-            de(ECASE)
-        }
+            return nil
+            
+    }
     
     
     
@@ -98,9 +99,12 @@ class Kind {
     }
     
     func kindEquivalent(_ k2: Kind, _ sg: Bool ) -> Bool {
-//        return true
+
         if isNil() && k2.isPointer() || isPointer() && k2.isNil() {
             return true
+        }
+        if gtype != k2.gtype {
+            return false
         }
         if gtype == .gPointer && !sg{
             return gtype == k2.gtype
@@ -108,18 +112,22 @@ class Kind {
         switch ke {
         case .vt(let vt):
             ade(gtype == .gScalar && k2.gtype == .gScalar)
-            return vt == k2.ke.getVt()
+            
+            return k2.ke.getVt() != nil && vt == k2.ke.getVt()!
         case .k(let k):
+            if k2.ke.getK() == nil {
+                return false
+            }
             switch gtype {
             case .gArray:
-                return k.kindEquivalent(k2.ke.getK(), true) && gtype == k2.gtype && count == k2.count
+                return k.kindEquivalent(k2.ke.getK()!, true) && count == k2.count
             case .gMap, .gSlice:
-                return k.kindEquivalent(k2.ke.getK(), true) && gtype == k2.gtype
+                return k.kindEquivalent(k2.ke.getK()!, true)
             case .gTuple, .gScalar, .gPointer:
                 de(ECASE)
             }
         case .km(let km):
-            return km.elementsEqual(k2.ke.getKm(), by: {
+            return k2.ke.getKm() != nil && km.elementsEqual(k2.ke.getKm()!, by: {
                     return $0.kindEquivalent($1, false)
             })
         }

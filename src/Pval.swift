@@ -179,7 +179,7 @@ class Pval {
             }
             
             convenience init( _ c: ParserRuleContext?, _ pv: Pval, _ a: Int, _ b: Int) {
-                self.init(c, Kind(Kind(pv.kind.ke.getK().ke.getVt()), .gSlice, b - a))
+                self.init(c, Kind(Kind(pv.kind.ke.getK()!.ke.getVt()!), .gSlice, b - a))
                 e.con = .multi(Wrap(pv.e.con.getSlice(a, b)))
             }
 
@@ -196,7 +196,7 @@ class Pval {
                     
                     var ar = [Pval]()
                     for _ in 0..<k.count {
-                        ar.append(Pval(c, k.ke.getK()))
+                        ar.append(Pval(c, k.ke.getK()!))
                     }
                     e = Pvalp(k, Contents.multi(Wrap(ar)), c)
                 case .gMap:
@@ -206,11 +206,11 @@ class Pval {
                 case .gPointer:
                                         e = Pvalp(k, Contents.single(Pwrap(Nil())), c)
                 case .gScalar:
-                    let se = Pwrap(k.ke.getVt().self.zeroValue())
+                    let se = Pwrap(k.ke.getVt()!.self.zeroValue())
                                         e = Pvalp(k, Contents.single(se), c)
                 case .gTuple:
                     var ar = [Pval]()
-                    for x in k.ke.getKm() {
+                    for x in k.ke.getKm()! {
                         ar.append(Pval(c, x))
                     }
                                         e = Pvalp(k, Contents.multi(Wrap(ar)), c)
@@ -238,7 +238,7 @@ class Pval {
             }
             
             private func getNewChild() -> Pval {
-                return Pval(e.prc, kind.ke.getK())
+                return Pval(e.prc, kind.ke.getK()!)
             }
             func get(_ k: Ktype, _ lh: Bool = false) -> Pval {
                 switch k {
@@ -266,7 +266,10 @@ class Pval {
             
             
             func setPV(_ v : Pval) {
-                ade(kind.kindEquivalent(v.kind, true))
+                if !kind.kindEquivalent(v.kind, true) {
+                    de(Perr(ETYPE, v))
+                }
+//                ade(kind.kindEquivalent(v.kind, true))
                 
                 e = v.e
             }
@@ -289,7 +292,7 @@ class Pval {
                 case .km(let km):
      //               ade(kind.gtype == .gTuple)
                     let kt = km[k as! Int]
-                    ade(kt.kindEquivalent(v!.kind.ke.getK(), true))
+                    ade(kt.kindEquivalent(v!.kind.ke.getK()!, true))
                 default: de(ECASE)
                 }
 

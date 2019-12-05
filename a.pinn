@@ -1,2 +1,2 @@
-println();
-a := (5, nil, *(1, nil nil));
+a := @();
+print(a);

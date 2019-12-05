@@ -22,15 +22,12 @@ public func err(_ s: String) {
     try! parser.file()
 }
 
-func execute(_ s: String) {
+func execute() {
     var test = false
     let args = ProcessInfo.processInfo.arguments
-    if args.count == 2 {
-        test = true
-    }
-    
+    let s = args[1]
 
-    let myinput = fnToString("/tmp/\(test ? "types" : s).pinn")
+    let myinput = fnToString(s)//"/tmp/\(test ? "types" : s).pinn")
     let (tree, parser) = parse(myinput)
     _ = parser
     if tree != nil {
