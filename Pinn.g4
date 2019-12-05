@@ -38,8 +38,6 @@ SLICE
 TYPES
   : ('int' | 'bool' |'string' | 'decimal' | 'self' ) ;
 
-DOUBLEOP
-  : '++' | '--' ;
 
 simpleStatement
   : lExpr '=' expr #simpleSet
@@ -61,7 +59,6 @@ dummy:
 
 expr
   :
-
    expr LSQUARE ( first=expr? (TWODOTS | COLON) second=expr? | expr) ']' #indexExpr
   |   LSQUARE exprList ']' #arrayLiteral
   | '{' objectPair ( ',' objectPair )* '}' #objectLiteral
@@ -70,7 +67,7 @@ expr
   | expr ('==' | '!=' | '>' | '<' | '>=' | '<=' ) expr #compExpr
   | expr ('&&' | '||') expr #boolExpr
   |   ID LPAREN exprList? ')' #callExpr
-  | LPAREN expr ')' #parenExpr
+  | AST? LPAREN expr ')' #parenExpr
   |  LPAREN exprList ')' #tupleExpr
   | expr (TWODOTS | COLON) expr #rangeExpr
   | expr '?' expr COLON expr #conditionalExpr
@@ -99,7 +96,6 @@ loopStatement
 repeatStatement
   : 'repeat' block 'while' expr ;
 
-RANGE : 'range' ;
 
 foStatement
   : 'for' (varDecl | fss=simpleStatement)? ';' expr ';' sss=simpleStatement block
@@ -135,9 +131,14 @@ COLON : ':' ;
 CE : ':=' ;
 IOTA : 'iota' ;
 BINOP : (AST | '/' | '%' ) ;
-AST: '*' ;
+
+DOUBLEOP
+: '++' | '--' ;
+
+RANGE : 'range' ;
 
 BOOL : 'true' | 'false' ;
+AST: '*' ;
 ID : [a-zA-Z_]([a-zA-Z_0-9])* ;
 CHAR : '\''[a-zA-Z_0-9]'\'' ;
 INT : '0'

@@ -1,7 +1,2 @@
-
-
-nested := ([(5, nil), ["aap", "noot"], { "key": (10, false)}], 101);
-nested[0][0][1] = (23, nil);
-nested[0][2]["yek"] = (20, true);
-print(depthString(nested), ",");
-
+println();
+a := (5, nil, *(1, nil nil));

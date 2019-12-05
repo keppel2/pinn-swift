@@ -21,9 +21,9 @@ open class PinnLexer: Lexer {
             T__21=22, T__22=23, T__23=24, T__24=25, T__25=26, T__26=27, 
             T__27=28, T__28=29, T__29=30, T__30=31, T__31=32, T__32=33, 
             T__33=34, T__34=35, T__35=36, TWODOTS=37, THREEDOT=38, LSQUARE=39, 
-            LPAREN=40, MAP=41, SLICE=42, TYPES=43, DOUBLEOP=44, RANGE=45, 
-            NIL=46, COMMA=47, COLON=48, CE=49, IOTA=50, BINOP=51, AST=52, 
-            BOOL=53, ID=54, CHAR=55, INT=56, FLOAT=57, WS=58, STRING=59
+            LPAREN=40, MAP=41, SLICE=42, TYPES=43, NIL=44, COMMA=45, COLON=46, 
+            CE=47, IOTA=48, BINOP=49, DOUBLEOP=50, RANGE=51, BOOL=52, AST=53, 
+            ID=54, CHAR=55, INT=56, FLOAT=57, WS=58, STRING=59
 
 	public
 	static let channelNames: [String] = [
@@ -42,8 +42,8 @@ open class PinnLexer: Lexer {
 		"T__17", "T__18", "T__19", "T__20", "T__21", "T__22", "T__23", "T__24", 
 		"T__25", "T__26", "T__27", "T__28", "T__29", "T__30", "T__31", "T__32", 
 		"T__33", "T__34", "T__35", "TWODOTS", "THREEDOT", "LSQUARE", "LPAREN", 
-		"MAP", "SLICE", "TYPES", "DOUBLEOP", "RANGE", "NIL", "COMMA", "COLON", 
-		"CE", "IOTA", "BINOP", "AST", "BOOL", "ID", "CHAR", "INT", "FLOAT", "WS", 
+		"MAP", "SLICE", "TYPES", "NIL", "COMMA", "COLON", "CE", "IOTA", "BINOP", 
+		"DOUBLEOP", "RANGE", "BOOL", "AST", "ID", "CHAR", "INT", "FLOAT", "WS", 
 		"STRING", "DECIMAL_DIGIT", "DECIMAL_DIGITS", "DECIMAL_EXPONENT", "HEX_DIGIT", 
 		"HEX_DIGITS", "HEX_MANTISSA", "HEX_EXPONENT", "OCTAL_DIGIT", "BINARY_DIGIT"
 	]
@@ -54,15 +54,15 @@ open class PinnLexer: Lexer {
 		"'||'", "'?'", "'return'", "'if'", "'else'", "'guard'", "'while'", "'loop'", 
 		"'repeat'", "'for'", "';'", "'when'", "'match'", "'default'", "'break'", 
 		"'continue'", "'fallthrough'", "'@'", "'...'", "'['", "'('", "'map'", 
-		"'slice'", nil, nil, "'range'", "'nil'", "','", "':'", "':='", "'iota'", 
+		"'slice'", nil, "'nil'", "','", "':'", "':='", "'iota'", nil, nil, "'range'", 
 		nil, "'*'"
 	]
 	private static let _SYMBOLIC_NAMES: [String?] = [
 		nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, 
 		nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, 
 		nil, nil, nil, nil, nil, nil, nil, nil, nil, "TWODOTS", "THREEDOT", "LSQUARE", 
-		"LPAREN", "MAP", "SLICE", "TYPES", "DOUBLEOP", "RANGE", "NIL", "COMMA", 
-		"COLON", "CE", "IOTA", "BINOP", "AST", "BOOL", "ID", "CHAR", "INT", "FLOAT", 
+		"LPAREN", "MAP", "SLICE", "TYPES", "NIL", "COMMA", "COLON", "CE", "IOTA", 
+		"BINOP", "DOUBLEOP", "RANGE", "BOOL", "AST", "ID", "CHAR", "INT", "FLOAT", 
 		"WS", "STRING"
 	]
 	public
