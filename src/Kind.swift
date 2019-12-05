@@ -76,13 +76,12 @@ class Kind {
         self.count = kar.count
         ke = .vt(Nil.self)
                     for (k, v) in kar.enumerated() {
-                            if case .vt(let vt) = v.ke {
-                                if vt == Nil.self {
+                        if gtype == .gPointer && v.isPointer() {
+                            de(ETYPE)
+                        }
+                        if v.isNil() {
                                     gtype = .gPointer
-                                    kar[k] = self
-                                }
-
-                                
+                                    kar[k] = self                                
                             }
                     }
         ke = .km(kar)
@@ -91,24 +90,28 @@ class Kind {
   
     var gtype: Gtype
     var count: Int
+    func isOneNil() -> Bool {
+        return ke.getVt() == Nil.self
+    }
     func isNil() -> Bool {
-        return gtype == .gScalar && ke.getVt() == Nil.self
+        return gtype == .gScalar && isOneNil()
     }
     func isPointer() -> Bool {
         return gtype == .gPointer
     }
     
     func kindEquivalent(_ k2: Kind, _ sg: Bool ) -> Bool {
-
-        if isNil() && k2.isPointer() || isPointer() && k2.isNil() {
+        ade(sg == true)
+        
+        if isOneNil() && k2.isPointer() || isPointer() && k2.isOneNil() {
             return true
         }
         if gtype != k2.gtype {
             return false
         }
-        if gtype == .gPointer && !sg{
-            return gtype == k2.gtype
-        }
+//        if gtype == .gPointer && !sg && self === k2{
+//            return gtype == k2.gtype
+//        }
         switch ke {
         case .vt(let vt):
             ade(gtype == .gScalar && k2.gtype == .gScalar)
@@ -128,7 +131,10 @@ class Kind {
             }
         case .km(let km):
             return k2.ke.getKm() != nil && km.elementsEqual(k2.ke.getKm()!, by: {
-                    return $0.kindEquivalent($1, false)
+                if self === $0 && k2 === $1 {
+                    return true
+                }
+                    return $0.kindEquivalent($1, true)
             })
         }
     }

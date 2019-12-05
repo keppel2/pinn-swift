@@ -102,12 +102,14 @@ enum Contents {
         func equal(_ co: Contents) -> Bool {
             switch self {
             case .single(let pw):
-                if case .multi(let _) = co {
+                if case .multi(let x) = co {
+                    _ = x
                     return false
                 }
                 return pw.equal(co.getPw())
             case .multi(let ar):
-                if case .single(let _) = co {
+                if case .single(let x) = co {
+                    _ = x
                     return false
                 }
                 return ar.w.elementsEqual(co.getAr(), by: {$0.equal($1)})

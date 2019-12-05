@@ -15,6 +15,7 @@ public class Pvisitor {
     static var t_compare = ""
     static var ft = ""
     static var li = ft.startIndex
+    static var gpv = Pvisitor()
     static func assertPvals( _ s: [Pval], _ i: Int) {
         if s.count != i {
             de(EPARAM_LENGTH)
@@ -28,9 +29,10 @@ public class Pvisitor {
                 assertPvals(s, 0)
                 exit(0)
             },
-            "xam": { sctx, s in
-                let xa = s[0]
-                return nil
+            "xam": { sctx, s in assertPvals(s, 1)
+                let str: String = tryCast(s[0])
+                let xa = gpv.getPv(str)
+                fatalError()
             },
             "ft": { sctx, s in assertPvals(s, 2)
                 print("--", sctx.getStart()!.getLine())

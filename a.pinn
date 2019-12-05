@@ -1,2 +1,4 @@
-a := @();
-print(a);
+var tup (self, (self, int));
+tup = (nil, nil);
+tup[1] = @(nil, 5);
+//xam("tup");

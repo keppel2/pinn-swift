@@ -23,7 +23,7 @@ public func err(_ s: String) {
 }
 
 func execute() {
-    var test = false
+    let test = false
     let args = ProcessInfo.processInfo.arguments
     let s = args[1]
 
@@ -32,6 +32,7 @@ func execute() {
     _ = parser
     if tree != nil {
         let pv = Pvisitor()
+        Pvisitor.gpv = pv
         pv.visitFile(tree!)
         
         if (test) {
