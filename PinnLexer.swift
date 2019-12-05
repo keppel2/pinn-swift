@@ -20,10 +20,10 @@ open class PinnLexer: Lexer {
             T__15=16, T__16=17, T__17=18, T__18=19, T__19=20, T__20=21, 
             T__21=22, T__22=23, T__23=24, T__24=25, T__25=26, T__26=27, 
             T__27=28, T__28=29, T__29=30, T__30=31, T__31=32, T__32=33, 
-            T__33=34, T__34=35, T__35=36, TWODOTS=37, THREEDOT=38, LSQUARE=39, 
-            LPAREN=40, MAP=41, SLICE=42, TYPES=43, NIL=44, COMMA=45, COLON=46, 
-            CE=47, IOTA=48, BINOP=49, DOUBLEOP=50, RANGE=51, BOOL=52, AST=53, 
-            ID=54, CHAR=55, INT=56, FLOAT=57, WS=58, STRING=59
+            T__33=34, T__34=35, LSQUARE=36, LPAREN=37, MAP=38, SLICE=39, 
+            TYPES=40, NIL=41, COMMA=42, COLON=43, CE=44, IOTA=45, BINOP=46, 
+            DOUBLEOP=47, RANGE=48, BOOL=49, AST=50, THREEDOT=51, TWODOTS=52, 
+            ID=53, CHAR=54, INT=55, FLOAT=56, WS=57, STRING=58
 
 	public
 	static let channelNames: [String] = [
@@ -41,29 +41,28 @@ open class PinnLexer: Lexer {
 		"T__9", "T__10", "T__11", "T__12", "T__13", "T__14", "T__15", "T__16", 
 		"T__17", "T__18", "T__19", "T__20", "T__21", "T__22", "T__23", "T__24", 
 		"T__25", "T__26", "T__27", "T__28", "T__29", "T__30", "T__31", "T__32", 
-		"T__33", "T__34", "T__35", "TWODOTS", "THREEDOT", "LSQUARE", "LPAREN", 
-		"MAP", "SLICE", "TYPES", "NIL", "COMMA", "COLON", "CE", "IOTA", "BINOP", 
-		"DOUBLEOP", "RANGE", "BOOL", "AST", "ID", "CHAR", "INT", "FLOAT", "WS", 
-		"STRING", "DECIMAL_DIGIT", "DECIMAL_DIGITS", "DECIMAL_EXPONENT", "HEX_DIGIT", 
-		"HEX_DIGITS", "HEX_MANTISSA", "HEX_EXPONENT", "OCTAL_DIGIT", "BINARY_DIGIT"
+		"T__33", "T__34", "LSQUARE", "LPAREN", "MAP", "SLICE", "TYPES", "NIL", 
+		"COMMA", "COLON", "CE", "IOTA", "BINOP", "DOUBLEOP", "RANGE", "BOOL", 
+		"AST", "THREEDOT", "TWODOTS", "ID", "CHAR", "INT", "FLOAT", "WS", "STRING", 
+		"DECIMAL_DIGIT", "DECIMAL_DIGITS", "DECIMAL_EXPONENT", "HEX_DIGIT", "HEX_DIGITS", 
+		"HEX_MANTISSA", "HEX_EXPONENT", "OCTAL_DIGIT", "BINARY_DIGIT"
 	]
 
 	private static let _LITERAL_NAMES: [String?] = [
 		nil, "'func'", "')'", "'{'", "'}'", "'var'", "']'", "'='", "'+'", "'-'", 
-		"'^'", "'$$$'", "'!'", "'=='", "'!='", "'>'", "'<'", "'>='", "'<='", "'&&'", 
-		"'||'", "'?'", "'return'", "'if'", "'else'", "'guard'", "'while'", "'loop'", 
-		"'repeat'", "'for'", "';'", "'when'", "'match'", "'default'", "'break'", 
-		"'continue'", "'fallthrough'", "'@'", "'...'", "'['", "'('", "'map'", 
-		"'slice'", nil, "'nil'", "','", "':'", "':='", "'iota'", nil, nil, "'range'", 
-		nil, "'*'"
+		"'^'", "'!'", "'=='", "'!='", "'>'", "'<'", "'>='", "'<='", "'&&'", "'||'", 
+		"'?'", "'return'", "'if'", "'else'", "'guard'", "'while'", "'loop'", "'repeat'", 
+		"'for'", "';'", "'when'", "'match'", "'default'", "'break'", "'continue'", 
+		"'fallthrough'", "'['", "'('", "'map'", "'slice'", nil, "'nil'", "','", 
+		"':'", "':='", "'iota'", nil, nil, "'range'", nil, "'*'", "'...'", "'@'"
 	]
 	private static let _SYMBOLIC_NAMES: [String?] = [
 		nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, 
 		nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, 
-		nil, nil, nil, nil, nil, nil, nil, nil, nil, "TWODOTS", "THREEDOT", "LSQUARE", 
-		"LPAREN", "MAP", "SLICE", "TYPES", "NIL", "COMMA", "COLON", "CE", "IOTA", 
-		"BINOP", "DOUBLEOP", "RANGE", "BOOL", "AST", "ID", "CHAR", "INT", "FLOAT", 
-		"WS", "STRING"
+		nil, nil, nil, nil, nil, nil, nil, nil, "LSQUARE", "LPAREN", "MAP", "SLICE", 
+		"TYPES", "NIL", "COMMA", "COLON", "CE", "IOTA", "BINOP", "DOUBLEOP", "RANGE", 
+		"BOOL", "AST", "THREEDOT", "TWODOTS", "ID", "CHAR", "INT", "FLOAT", "WS", 
+		"STRING"
 	]
 	public
 	static let VOCABULARY = Vocabulary(_LITERAL_NAMES, _SYMBOLIC_NAMES)

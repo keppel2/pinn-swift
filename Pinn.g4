@@ -1,6 +1,6 @@
 grammar Pinn;
 
-TWODOTS : '@' ;
+
 
 file : ( function | statement )+ EOF ;
 
@@ -12,8 +12,7 @@ testRule
 
 block
   : '{' statement* '}' ;
-THREEDOT
-  : '...' ;
+
 fvarDecl
   : ID THREEDOT? kind ;
 
@@ -38,24 +37,16 @@ SLICE
 TYPES
   : ('int' | 'bool' |'string' | 'decimal' | 'self' ) ;
 
-
 simpleStatement
   : lExpr '=' expr #simpleSet
   | lExpr ('+' | '-' | '^' | BINOP) '=' expr #compoundSet
   | lExpr DOUBLEOP #doubleSet ;
 
-  
 lExpr
   : ID (LSQUARE expr ']')* ;
 
 objectPair :
 STRING ':' expr ;
-
-
-dummy:
-'$$$' ;
-  
-
 
 expr
   :
@@ -139,6 +130,10 @@ RANGE : 'range' ;
 
 BOOL : 'true' | 'false' ;
 AST: '*' ;
+THREEDOT
+: '...' ;
+TWODOTS : '@' ;
+
 ID : [a-zA-Z_]([a-zA-Z_0-9])* ;
 CHAR : '\''[a-zA-Z_0-9]'\'' ;
 INT : '0'
