@@ -87,12 +87,14 @@ public class Pvisitor {
                 return nil
             },
             "delete": { sctx, s in assertPvals(s, 2)
-                s[0].set(s[1].getUnwrap() as! Ktype, nil)
-                return nil
+                let kt: String = tryCast(s[1])
+                let rt = s[0].hasKey(kt)
+                s[0].set(kt, nil)
+                return Pval(sctx, rt)
             },
             "key": { sctx, s in assertPvals(s, 2)
                 let str: String = tryCast(s[1])
-                return Pval(sctx, s[0].getKeys().contains(str))
+                return Pval(sctx, s[0].hasKey(str))
             },
             "debug": { sctx, s in assertPvals(s, 0)
                 dbg()
@@ -103,7 +105,8 @@ public class Pvisitor {
 //                return s[0]
 //            },
             "sleep": { sctx, s in assertPvals(s, 1)
-                sleep(UInt32(s[0].getUnwrap() as! Int))
+                let x: Int = tryCast(s[0])
+                sleep(UInt32(x))
                 return nil
             }
     ]
@@ -166,6 +169,11 @@ public class Pvisitor {
     static func doOp(_ lhs: Pval, _ rhs: Pval, _ str: String, _ sctx: ParserRuleContext) -> Pval {
         let rt: Pval
         switch str {
+        case "==":
+            return Pval(sctx, lhs.equal(rhs))
+        case "!=":
+            return Pval(sctx, !lhs.equal(rhs))
+
         case "+":
             let lh: Plus = tryCast(lhs)
             let rh: Plus = tryCast(rhs)
@@ -562,14 +570,6 @@ public class Pvisitor {
                  let op = Self.childToText(sctx.getChild(1)!)
                    let lhs = visitPval(sctx.expr(0)!)!
             let rhs = visitPval(sctx.expr(1)!)!
-                 if op == "==" {
-                      rt = Pval(sctx, lhs.equal(rhs))
-                      break
-                  }
-                  if op == "!=" {
-                      rt = Pval(sctx, !lhs.equal(rhs))
-                      break
-                  }
                              rt = Self.doOp(lhs, rhs, op, sctx)
                  
             

@@ -149,14 +149,6 @@ enum Contents {
 
 class Pval {
     var e: Pvalp
-    
-    
-    
-    
-    
-    
-    
-      
             init(_ p: Pval) {
                 e = p.e
             }
@@ -238,7 +230,9 @@ class Pval {
                 ade(kind.gtype == .gScalar)
                 return e.con.getPw()
             }
-            
+    func hasKey(_ s: String) -> Bool {
+        return e.con.getMap()[s] != nil
+    }
             func getKeys() -> [String] {
                 return [String](e.con.getMap().keys)
             }
@@ -276,7 +270,8 @@ class Pval {
                 
                 e = v.e
             }
-            
+    
+
             func set(_ k: Ktype, _ v: Pval?) {
                 if v == nil {
                     conset(k as! String, nil)
@@ -328,13 +323,6 @@ class Pval {
         return string(false)
     }
     func string(_ follow: Bool) -> String {
-//        if kind.isPointer() && !follow {
-//            if e.con.isNull() {
-//                return "E"
-//            } else {
-//                return "P"
-//            }
-//        }
                 switch e.con {
                 case .single(let pw):
                     return pw.string()
@@ -345,7 +333,7 @@ class Pval {
                     var rt = ""
                     rt += kind.gtype == .gTuple || kind.gtype == .gPointer ? "(" : "["
                     if ar.w.count > 0 {
-                        if follow {
+                        if follow || kind.gtype != .gPointer {
                         rt += ar.w.first!.string(follow)
                         for v in ar.w[1...] {
                             rt += " " + v.string(follow)
@@ -365,11 +353,13 @@ class Pval {
                 case .map(let map):
                     var rt = ""
                     rt += "{"
-                    for (key, value) in map.w {
+                    var keys = getKeys()
+                    keys.sort()
+                    for key in keys {
                         if rt != "{" {
                             rt += " "
                         }
-                        rt += key + ":" + value.string(follow)
+                        rt += key + ":" + map.w[key]!.string(follow)
                     }
                     
                     rt += "}"

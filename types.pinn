@@ -487,14 +487,17 @@ ec();ft("printB", "111");
 printB(7);
 ec();ft("printH", "1e");
 printH(30);
-ec();ft("delete", "{foo:42}{}");
+ec();
+ft("delete", "{aap:101 foo:42}true false{aap:101}");
 var intMap [map]int;
 intMap["foo"] = 42;
+intMap["aap"] = 101;
 print(intMap);
-delete(intMap, "foo");
-delete(intMap, "bar");
+print(delete(intMap, "foo"), "");
+print(delete(intMap, "bar"));
 print(intMap);
-ec();ft("len array", "3 7");
+ec();
+ft("len array", "3 7");
 lenAr := [1, 22, 42];
 print(len(lenAr), len(101@107));
 ec();
@@ -709,4 +712,37 @@ for i = range [1, 5, 10, 2, 3] {
 }
 print(depthString(bst));
 
+ec();
+ft("Depth-first search", "1 ,2 ,3 ,5 ,7 ,10 ,");
+func dfs(node  (self, int, self)) {
+    if node == nil {
+        return;
+    }
+        dfs(node[0]);
+        print(node[1], ",");
+        dfs(node[2]);
+}
+dfs(bst);
+ft("Linked list", "(5 (8 (23 N)))");
+var LL (int, self);
+LL = (5, nil);
+base := LL;
+
+LL[1] = (8, nil);
+
+LL = LL[1];
+LL[1] = (23, nil);
+print(depthString(base));
+ec();
+ft("Doubly linked list", "(P 7 P)(E 5 P)(E 5 P)");
+var dll (self, int, self);
+dll = (nil, 5, nil);
+base7 := dll;
+dll[2] = (dll, 7, nil);
+dll = dll[2];
+dll[2] = (dll, 1, nil);
+dll = dll[2];
+print(base7[2]);
+print(base7[2][0]);
+print(base7[2][2][0][0]);
 ec();
