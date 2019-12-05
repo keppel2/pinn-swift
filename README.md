@@ -1,9 +1,15 @@
 # Pinn is a computer language that lets you be correct.
 
-Pinn is a statically typed, imperative language for computers.       many spaces.
+Pinn is a statically typed, imperative language for computers.
 
 * Syntax taken mostly from Go.
 * Carefully chosen ideas from Swift.
+
+# Running.
+
+* `clone` this repository with `--recurse-submodules`.
+  * `git clone --recurse-submodules https://github.com/keppel2/pinn`.
+  * `git run pinn tic.pinn`.
 
 _Implementations as interpreters in Antlr for Go and Swift. Current progress in Swift._
 
@@ -13,12 +19,15 @@ _Implementations as interpreters in Antlr for Go and Swift. Current progress in 
 * `bool`. Standard, `true` or `false`.
 * `string`. Immutable Unicode. `"string"` `"this is a double quote:\""`
 * `decimal`. Decimal.
+* `nil`. Pointer to nothing.
 ## Group Types
 
 * _Scalar_ is a single element.
 * `map`. A map produces a unique _value_ for each _key_. The key is always a string. Like Go, a missing string returns the zero value for an element.
-* `array`. An array is a group of elements with a constant size. It is only produced in a variable declaration.
-* `slice`. A slice is an array that can be grown. It can be produced by variable declaration, slicing, and ranges.
+* `array`. An array is a group of elements with a constant size. It is only produced in a specific variable declaration.
+* `slice`. A slice is an array that can be grown. It can be produced by variable declaration, slicing, and ranges. It shares storage with other slices of the same data.
+* `tuple`. A tuple is a group of elements with a constant size and possibly different type.
+* `pointer`. A pointer is a tuple with one or more references to itself. These references are of type `self`, and can be either `nil` or a pointer to a different copy with the same type as itself.
 
 ## Expressions
 
@@ -51,6 +60,15 @@ A function calls a piece of code, assigning each variable in the parameter list 
 ## grammar fragments
 ### `<expr_list>`
 * `<expr> { , <expr> }`
+### `Left expression, <LExpr>`
+* `<id> ( [ <expr> ] )*`
+  * A left-expression can be assigned a value.
+### `<kind>`
+* ` int | bool | string | decimal | self`
+* `"[" (map | slice | <expr>) "]" <kind>`
+* `"(" <kind> ( , <kind>)* ")"`
+
+
 ## `<statement>`
 * `while <expr> <block>`
   * Evaluate `expr`. If true, execute `block` and repeat this line. If false, go on.
