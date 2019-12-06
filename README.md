@@ -7,9 +7,7 @@ Pinn is a statically typed, imperative language for computers.
 
 # Running.
 
-* `clone` this repository with `--recurse-submodules`.
-  * `git clone --recurse-submodules https://github.com/keppel2/pinn`.
-  * `git run pinn tic.pinn`.
+* `swift run pinn tic.pinn`.
 
 _Implementations as interpreters in Antlr for Go and Swift. Current progress in Swift._
 
