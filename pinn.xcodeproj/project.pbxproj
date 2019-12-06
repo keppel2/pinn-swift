@@ -61,6 +61,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E22C2FA62399FD9E007AD1D5 /* Antlr4-swift */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Antlr4-swift"; sourceTree = "<group>"; };
 		E2673962235BC825000CF830 /* pinn */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = pinn; sourceTree = BUILT_PRODUCTS_DIR; };
 		E28CB40423680A0B0045FA67 /* types.pinn */ = {isa = PBXFileReference; lastKnownFileType = text; path = types.pinn; sourceTree = "<group>"; };
 		E2B531382398E3500041751D /* PinnParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PinnParser.swift; path = src/PinnParser.swift; sourceTree = "<group>"; };
@@ -78,7 +79,6 @@
 		E2BC3DB42387733B002D9413 /* a.pinn */ = {isa = PBXFileReference; lastKnownFileType = text; path = a.pinn; sourceTree = "<group>"; };
 		E2C2CCED2382412100C6D2A2 /* tic.pinn */ = {isa = PBXFileReference; lastKnownFileType = text; path = tic.pinn; sourceTree = "<group>"; };
 		E2D2DBFB2366B76500E0CC35 /* Pinn.g4 */ = {isa = PBXFileReference; lastKnownFileType = text; path = Pinn.g4; sourceTree = "<group>"; };
-		E2E3BB8E2398DD7600AB9A98 /* Swift */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Swift; path = antlr4/runtime/Swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +96,7 @@
 		E2673959235BC825000CF830 = {
 			isa = PBXGroup;
 			children = (
+				E22C2FA62399FD9E007AD1D5 /* Antlr4-swift */,
 				E2B5313E2398E3500041751D /* aux.swift */,
 				E2B531432398E3500041751D /* global.swift */,
 				E2B5313A2398E3500041751D /* Kind.swift */,
@@ -108,7 +109,6 @@
 				E2B5313B2398E3500041751D /* protocols.swift */,
 				E2B5313F2398E3500041751D /* Pval.swift */,
 				E2B5313C2398E3500041751D /* Pvisitor.swift */,
-				E2E3BB8E2398DD7600AB9A98 /* Swift */,
 				E28CB40423680A0B0045FA67 /* types.pinn */,
 				E2BC3DB42387733B002D9413 /* a.pinn */,
 				E2C2CCED2382412100C6D2A2 /* tic.pinn */,
