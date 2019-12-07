@@ -7,7 +7,7 @@ let package = Package(
     name: "pinn",
     dependencies: [
         // Dependencies declare other packages that this package depends on.
-        .package(path: "antlr4/runtime/Swift")
+        .package(path: "Antlr4-swift")
         // .package(url: /* package url */, from: "1.0.0"),
     ],
     targets: [
