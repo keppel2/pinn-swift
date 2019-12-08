@@ -81,11 +81,13 @@ public class Pvisitor {
                 return Pval(sctx, readLine()!)
             },
             "printH": { sctx, s in assertPvals(s, 1)
-                Pvisitor.textout(String(s[0].getUnwrap() as! Int, radix: 16, uppercase: false))
+                let x: Int = tryCast(s[0])
+                Pvisitor.textout(String(x, radix: 16, uppercase: false))
                 return nil
             },
             "printB": { sctx, s in assertPvals(s, 1)
-                Pvisitor.textout(String(s[0].getUnwrap() as! Int, radix: 2, uppercase: false))
+                let x: Int = tryCast(s[0])
+                Pvisitor.textout(String(x, radix: 2, uppercase: false))
                 return nil
             },
             "delete": { sctx, s in assertPvals(s, 2)
@@ -167,7 +169,6 @@ public class Pvisitor {
         return nil
         
     }
-
     static func doOp(_ lhs: Pval, _ rhs: Pval, _ str: String, _ sctx: ParserRuleContext) -> Pval {
         let rt: Pval
         switch str {
@@ -179,16 +180,26 @@ public class Pvisitor {
         case "+":
             let lh: Plus = tryCast(lhs)
             let rh: Plus = tryCast(rhs)
+            if !pEq(lh, rh) {
+                de(Perr(ETYPE, rhs))
+            }
             rt = Pval(sctx, lh.plus(rh))
             return rt
         case "-", "*", "/":
             let lh: Arith = tryCast(lhs)
             let rh: Arith = tryCast(rhs)
+            if !pEq(lh, rh) {
+                de(Perr(ETYPE, rhs))
+            }
+
             rt = Pval(sctx, lh.arith(rh, str))
             return rt
         case "<", "<=", ">", ">=":
             let lh: Compare = tryCast(lhs)
             let rh: Compare = tryCast(rhs)
+            if !pEq(lh, rh) {
+                de(Perr(ETYPE, rhs))
+            }
 
             let result: Bool
             switch str {

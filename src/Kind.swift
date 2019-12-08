@@ -81,6 +81,7 @@ class Kind {
                         }
                         if v.isNil() {
                                     gtype = .gPointer
+                                    
                                     kar[k] = self                                
                             }
                     }

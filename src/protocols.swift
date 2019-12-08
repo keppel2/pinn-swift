@@ -34,7 +34,9 @@ protocol Negate: Ptype {
 protocol Arith: Ptype {
     func arith(_: Arith, _: String) -> Arith
 }
-
+func pEq(_ a: Ptype, _ b: Ptype) -> Bool {
+    return type(of:a) == type(of:b)
+}
 protocol Compare: Ptype {
     func lt(_: Compare) -> Bool
     func gt(_: Compare) -> Bool

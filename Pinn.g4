@@ -1,7 +1,5 @@
 grammar Pinn;
 
-
-
 file : ( function | statement )+ EOF ;
 
 function
@@ -58,8 +56,8 @@ expr
   | expr ('==' | '!=' | '>' | '<' | '>=' | '<=' ) expr #compExpr
   | expr ('&&' | '||') expr #boolExpr
   |   ID LPAREN exprList? ')' #callExpr
-  | AST? LPAREN expr ')' #parenExpr
-  |  '@'? LPAREN exprList ')' #tupleExpr
+  |  LPAREN expr ')' #parenExpr
+  |  AST? LPAREN exprList ')' #tupleExpr
   | expr (TWODOTS | COLON) expr #rangeExpr
   | expr '?' expr COLON expr #conditionalExpr
   | (ID | FLOAT | INT | BOOL | STRING | NIL ) #literalExpr ;

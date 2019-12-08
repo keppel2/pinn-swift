@@ -407,7 +407,7 @@ class Pval {
     class Pvalp {
         var k: Kind
         var con: Contents
-        var prc: ParserRuleContext?
+        let prc: ParserRuleContext?
         init(_ k: Kind, _ con: Contents, _ prc: ParserRuleContext?) {
             self.k = k
             self.con = con
