@@ -454,7 +454,7 @@ public class Pvisitor {
         defer {popDebug()}
         if let spec = sctx.kindList() {
             let kL = visitKindList(spec)
-            let rt = Kind(kL)
+            let rt = Kind(sctx, kL)
             return rt
         }
         if let type = sctx.TYPES() {

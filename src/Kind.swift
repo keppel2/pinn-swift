@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Antlr4
 
 
 enum Kinde {
@@ -70,21 +71,38 @@ class Kind {
             ke = .k(k!)
         }
     }
-    init(_ ka: [Kind]) {
+    init(_ c: ParserRuleContext?, _ ka: [Kind]) {
         gtype = .gTuple
         var kar = ka
         self.count = kar.count
         ke = .vt(Nil.self)
-                    for (k, v) in kar.enumerated() {
-                        if gtype == .gPointer && v.isPointer() {
-                            de(ETYPE)
+                    for v in kar {
+//                        if gtype == .gPointer && v.isPointer() {
+//                            de(ETYPE)
+//                        }
+                        if v.isPointer() {
+                            gtype = .gPointer
                         }
                         if v.isNil() {
                                     gtype = .gPointer
-                                    
-                                    kar[k] = self                                
+                            v.gtype = .gPointer
+
+                            //                                    kar[k] = self
                             }
                     }
+        if gtype == .gPointer {
+            for (k, v) in kar.enumerated() {
+                if v.isPointer() {
+                    if !v.isOneNil() {
+                        uade(c, kar.elementsEqual(v.ke.getKm()!, by: {$0.kindEquivalent($1, true)}))
+                    }
+                    kar[k] = self
+                    
+                }
+            }
+
+            
+        }
         ke = .km(kar)
     }
     var ke: Kinde

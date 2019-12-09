@@ -76,6 +76,12 @@ func tryCast<T> (_ pv: Pval) -> T {
     return pv.getUnwrap() as! T
 }
 
+func uade(_ c: ParserRuleContext?, _ b: Bool) {
+    if !b {
+        de(Perr(EASSERT, c))
+    }
+}
+
 func ade(_ b: Bool) {
     if !b {
         de(EASSERT)

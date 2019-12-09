@@ -20,7 +20,7 @@ class Perr {
         prc = p2 //?? pv.prc
         tok = p3
     }
-    convenience init(_ s: String, _ p: ParserRuleContext) {
+    convenience init(_ s: String, _ p: ParserRuleContext?) {
         self.init(s, nil, p, nil)
     }
     convenience init(_ s: String, _ t: Token) {

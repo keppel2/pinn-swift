@@ -163,7 +163,7 @@ class Pval {
   //                          prc = c
                 let mar = ar
                 let ka = ar.map { $0.kind }
-                let k = Kind(ka)
+                let k = Kind(c, ka)
                 for (key, value) in mar.enumerated() {
                     if case .vt(let vt) = value.kind.ke {
                         if vt == Nil.self {
