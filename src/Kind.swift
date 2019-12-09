@@ -13,7 +13,7 @@ import Antlr4
     
 class Kind {
 
-    enum Kinde {
+    private enum Kinde {
         case vt(Ptype.Type)
         case k(Kind)
         case km([Kind])
@@ -37,13 +37,7 @@ class Kind {
                 return nil
                 
         }
-        
-        
-        
-        
     }
-
-
     
     init(_ vtype: Ptype.Type) {
         ke = .vt(vtype)
@@ -56,12 +50,6 @@ class Kind {
         switch gtype {
         case .gScalar, .gTuple, .gPointer:
             de(ECASE)
-//        case .gPointer:
-//            ade(k == nil)
-//            ade(count == nil)
-//            self.count = 0
-//            ke = .vt(Nil.self)
-//
         case .gMap:
             ade(count == nil)
             self.count = 0
@@ -77,17 +65,13 @@ class Kind {
         self.count = kar.count
         ke = .vt(Nil.self)
                     for v in kar {
-//                        if gtype == .gPointer && v.isPointer() {
-//                            de(ETYPE)
-//                        }
+
                         if v.isPointer() {
                             gtype = .gPointer
                         }
                         if v.isNil() {
                                     gtype = .gPointer
                             v.gtype = .gPointer
-
-                            //                                    kar[k] = self
                             }
                     }
         if gtype == .gPointer {
@@ -105,18 +89,37 @@ class Kind {
         }
         ke = .km(kar)
     }
-    var ke: Kinde
+    private var ke: Kinde
   
     var gtype: Gtype
     var count: Int
-    private func isOneNil() -> Bool {
+    func cKind() -> Kind {
+        switch ke {
+            case .vt(let vt):
+                return Kind(vt)
+            case .k(let k):
+                return k
+        default:
+            de(ECASE)
+        }
+    }
+    func tKind() -> Ptype.Type {
+        return ke.getVt()!
+    }
+    func aKind() -> [Kind] {
+        return ke.getKm()!
+    }
+    func isOneNil() -> Bool {
         return ke.getVt() == Nil.self
     }
-    private func isNil() -> Bool {
+    func isNil() -> Bool {
         return gtype == .gScalar && isOneNil()
     }
     func isPointer() -> Bool {
         return gtype == .gPointer
+    }
+    func isType(_ p: Ptype.Type) -> Bool {
+        return gtype == .gScalar && ke.getVt()! == p
     }
     
     func kindEquivalent(_ k2: Kind, _ sg: Bool ) -> Bool {

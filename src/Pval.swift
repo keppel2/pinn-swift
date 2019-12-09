@@ -15,7 +15,7 @@ class Pval {
     
 
     class Pvalp {
-        var k: Kind
+        fileprivate var k: Kind
         fileprivate var con: Contents
         let prc: ParserRuleContext?
         fileprivate init(_ k: Kind, _ con: Contents, _ prc: ParserRuleContext?) {
@@ -169,11 +169,9 @@ class Pval {
                 let ka = ar.map { $0.kind }
                 let k = Kind(c, ka)
                 for (key, value) in mar.enumerated() {
-                    if case .vt(let vt) = value.kind.ke {
-                        if vt == Nil.self {
+                    if value.kind.isNil() {
                             mar[key].e.k = k
                         }
-                    }
                 }
                 e = Pvalp(k, .multi(Wrap(ar)), c)
             }
@@ -185,7 +183,7 @@ class Pval {
             }
             
             convenience init( _ c: ParserRuleContext?, _ pv: Pval, _ a: Int, _ b: Int) {
-                self.init(c, Kind(Kind(pv.kind.ke.getK()!.ke.getVt()!), .gSlice, b - a))
+                self.init(c, Kind(pv.kind.cKind(), .gSlice, b - a))
                 e.con = .multi(Wrap(pv.e.con.getSlice(a, b)))
             }
 
@@ -202,7 +200,7 @@ class Pval {
                     
                     var ar = [Pval]()
                     for _ in 0..<k.count {
-                        ar.append(Pval(c, k.ke.getK()!))
+                        ar.append(Pval(c, k.cKind()))
                     }
                     e = Pvalp(k, Contents.multi(Wrap(ar)), c)
                 case .gMap:
@@ -212,11 +210,11 @@ class Pval {
                 case .gPointer:
                                         e = Pvalp(k, Contents.single(Pwrap(Nil())), c)
                 case .gScalar:
-                    let se = Pwrap(k.ke.getVt()!.self.zeroValue())
+                    let se = Pwrap(k.tKind().self.zeroValue())
                                         e = Pvalp(k, Contents.single(se), c)
                 case .gTuple:
                     var ar = [Pval]()
-                    for x in k.ke.getKm()! {
+                    for x in k.aKind() {
                         ar.append(Pval(c, x))
                     }
                                         e = Pvalp(k, Contents.multi(Wrap(ar)), c)
@@ -244,7 +242,7 @@ class Pval {
             }
             
             private func getNewChild() -> Pval {
-                return Pval(e.prc, kind.ke.getK()!)
+                return Pval(e.prc, kind.cKind())
             }
             func get(_ k: Ktype, _ lh: Bool = false) -> Pval {
                 switch k {
@@ -286,20 +284,15 @@ class Pval {
                     conset(k as! String, nil)
                     return
                 }
-    //                map![k as! String] = nil
-    //                kind.count = map!.count
-    //                return
-    //            }
+
                 ade(kind.gtype != .gScalar)
-                switch kind.ke {
-                case .k(let ki):
-    //                ade(kind.gtype != .gTuple)
-                    ade(ki.kindEquivalent(v!.kind, true))
-                case .km(let km):
-     //               ade(kind.gtype == .gTuple)
-                    let kt = km[k as! Int]
-                    ade(kt.kindEquivalent(v!.kind.ke.getK()!, true))
-                default: de(ECASE)
+ 
+                switch kind.gtype {
+                case .gArray, .gSlice, .gMap:
+                    ade(kind.cKind().kindEquivalent(v!.kind.cKind(), true))
+                default:
+                    let index = k as! Int
+                    ade(kind.aKind()[index].kindEquivalent(v!.kind.aKind()[index], true))
                 }
 
 
