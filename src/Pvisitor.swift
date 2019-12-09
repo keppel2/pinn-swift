@@ -9,98 +9,98 @@
 import Foundation
 import Antlr4
 
-public class Pvisitor {
-    static var printed = ""
-    static var t_explain = ""
-    static var t_compare = ""
-    static var ft = ""
-    static var li = ft.startIndex
-    static var gpv = Pvisitor()
-    static func assertPvals( _ s: [Pval], _ i: Int) {
+class Pvisitor {
+    private var printed = ""
+    private var t_explain = ""
+    private var t_compare = ""
+    private var ft = ""
+    private var li = "".startIndex
+
+    private static func assertPvals( _ s: [Pval], _ i: Int) {
         if s.count != i {
             de(EPARAM_LENGTH)
         }
     }
-    let litToType: [String: Ptype.Type] = ["int": Int.self, "bool": Bool.self, "string": String.self, "decimal": Decimal.self, "self": Nil.self]
-    let builtIns
-        : [String: (ParserRuleContext, [Pval]) -> Pval?] =
+    private let litToType: [String: Ptype.Type] = ["int": Int.self, "bool": Bool.self, "string": String.self, "decimal": Decimal.self, "self": Nil.self]
+    private let builtIns
+        : [String: (ParserRuleContext, Pvisitor, [Pval]) -> Pval?] =
         [
-            "exit": { sctx, s in
+            "exit": { sctx, pv, s in
                 assertPvals(s, 0)
                 exit(0)
             },
-            "xam": { sctx, s in assertPvals(s, 1)
+            "xam": { sctx, pv, s in assertPvals(s, 1)
                 let str: String = tryCast(s[0])
-                let xa = gpv.getPv(str)
+                let xa = pv.getPv(str)
                 fatalError()
             },
-            "ft": { sctx, s in assertPvals(s, 2)
+            "ft": { sctx, pv, s in assertPvals(s, 2)
                 print("--", sctx.getStart()!.getLine())
-                li = printed.endIndex
+                pv.li = pv.printed.endIndex
                 let s1: String = tryCast(s[0])
                 let s2: String = tryCast(s[1])
-                (t_explain, t_compare) = (s1, s2)
+                (pv.t_explain, pv.t_compare) = (s1, s2)
                 
                 return nil
             },
-            "ec": { sctx, s in assertPvals(s, 0)
-                let compee = printed[li..<printed.endIndex]
+            "ec": { sctx, pv, s in assertPvals(s, 0)
+                let compee = pv.printed[pv.li..<pv.printed.endIndex]
                 //print(compee, "!")
                 //print(printed, "??")
-                if compee != t_compare {
-                    de(Perr(ETEST_FAIL + "," +  t_explain + ", want: " + t_compare + ", got: " + compee, sctx))
+                if compee != pv.t_compare {
+                    de(Perr(ETEST_FAIL + "," +  pv.t_explain + ", want: " + pv.t_compare + ", got: " + compee, sctx))
                 }
                 return nil
             },
-            "len": { sctx, s in assertPvals(s, 1)
+            "len": { sctx, pv, s in assertPvals(s, 1)
                 if s[0].kind.gtype == .gScalar && s[0].kind.ke.getVt() == String.self {
                     return Pval(sctx, (s[0].getUnwrap() as! String).count)
                 }
                 return Pval(sctx, s[0].kind.count)},
             "stringValue":
-                { sctx, s in assertPvals(s, 1)
+                { sctx, pv, s in assertPvals(s, 1)
                     return Pval(sctx, s[0].string(false)) },
             "depthString":
-                {sctx, s in assertPvals(s, 1)
+                {sctx, pv, s in assertPvals(s, 1)
                             return Pval(sctx, s[0].string(true))
             },
             "print":
-                {sctx, s in
+                {sctx, pv, s in
                     let rt = Pvisitor.printSpace(s.map {$0.string(false)})
-                    Pvisitor.textout(rt)
+                    pv.textout(rt)
                     return nil
             },
             "println":
-                {sctx, s in
+                {sctx, pv, s in
                     var rt = Pvisitor.printSpace(s.map {$0.string(false)})
-                    Pvisitor.textout(rt + "\n")
+                    pv.textout(rt + "\n")
                     return nil
             },
             "readLine": {
-                sctx, s in assertPvals(s, 0)
+                sctx, pv, s in assertPvals(s, 0)
                 return Pval(sctx, readLine()!)
             },
-            "printH": { sctx, s in assertPvals(s, 1)
+            "printH": { sctx, pv, s in assertPvals(s, 1)
                 let x: Int = tryCast(s[0])
-                Pvisitor.textout(String(x, radix: 16, uppercase: false))
+                pv.textout(String(x, radix: 16, uppercase: false))
                 return nil
             },
-            "printB": { sctx, s in assertPvals(s, 1)
+            "printB": { sctx, pv, s in assertPvals(s, 1)
                 let x: Int = tryCast(s[0])
-                Pvisitor.textout(String(x, radix: 2, uppercase: false))
+                pv.textout(String(x, radix: 2, uppercase: false))
                 return nil
             },
-            "delete": { sctx, s in assertPvals(s, 2)
+            "delete": { sctx, pv, s in assertPvals(s, 2)
                 let kt: String = tryCast(s[1])
                 let rt = s[0].hasKey(kt)
                 s[0].set(kt, nil)
                 return Pval(sctx, rt)
             },
-            "key": { sctx, s in assertPvals(s, 2)
+            "key": { sctx, pv, s in assertPvals(s, 2)
                 let str: String = tryCast(s[1])
                 return Pval(sctx, s[0].hasKey(str))
             },
-            "debug": { sctx, s in assertPvals(s, 0)
+            "debug": { sctx, pv, s in assertPvals(s, 0)
                 dbg()
                 return nil
             },
@@ -108,24 +108,24 @@ public class Pvisitor {
 //                s[0].sort()
 //                return s[0]
 //            },
-            "sleep": { sctx, s in assertPvals(s, 1)
+            "sleep": { sctx, pv, s in assertPvals(s, 1)
                 let x: Int = tryCast(s[0])
                 sleep(UInt32(x))
                 return nil
             }
     ]
-    enum Path {
+    private enum Path {
         case pNormal, pExiting, pBreak, pContinue, pFallthrough
     }
     
     
-    struct FKind {
+    private struct FKind {
         var k: Kind
         var s: String
         var variadic = false
         var prc: ParserRuleContext
     }
-    class Fc {
+    private class Fc {
         var m = [String: Pval]()
         var rt: Pval?
         var path = Path.pNormal
@@ -148,16 +148,16 @@ public class Pvisitor {
         }
         
     }
-    var cfc: Fc {return lfc ?? fc}
-    var fc = Fc()
-    var lfc: Fc?
-    var fkmap = [String:Fheader]()
-    struct Fheader {
+    private var cfc: Fc {return lfc ?? fc}
+    private var fc = Fc()
+    private var lfc: Fc?
+    private var fkmap = [String:Fheader]()
+    private struct Fheader {
         var funcContext: PinnParser.FunctionContext?
         var kind: Kind?
         var fkinds = [FKind]()
     }
-    func getPv(_ s: String)  -> Pval?  {
+    private func getPv(_ s: String)  -> Pval?  {
         for m in [lfc?.m, fc.m] {
             if m == nil {
                 continue
@@ -169,7 +169,7 @@ public class Pvisitor {
         return nil
         
     }
-    static func doOp(_ lhs: Pval, _ rhs: Pval, _ str: String, _ sctx: ParserRuleContext) -> Pval {
+    private static func doOp(_ lhs: Pval, _ rhs: Pval, _ str: String, _ sctx: ParserRuleContext) -> Pval {
         let rt: Pval
         switch str {
         case "==":
@@ -265,48 +265,34 @@ public class Pvisitor {
         return rt
     }
     
-    var texts = [String]()
-    var line = -1
-    var prc: ParserRuleContext?
-    var oldPrc: ParserRuleContext?
-    var pline: Int { return prc!.getStart()!.getLine()}
-    static func childToToken(_ child: Tree) -> PinnParser.Tokens {
+    private var texts = [String]()
+    private var line = -1
+    private var prc: ParserRuleContext?
+    private var oldPrc: ParserRuleContext?
+    private var pline: Int { return prc!.getStart()!.getLine()}
+    private static func childToToken(_ child: Tree) -> PinnParser.Tokens {
         return PinnParser.Tokens(rawValue: (child as! TerminalNode).getSymbol()!.getType())!
     }
-    static func childToText(_ child: Tree) -> String {
+    private static func childToText(_ child: Tree) -> String {
         return (child as! TerminalNode).getText()
     }
-    func loadDebug(_ ctx:ParserRuleContext) {
+    private func loadDebug(_ ctx:ParserRuleContext) {
         oldPrc = prc
         prc = ctx
 //        texts.append(ctx.getText())
         line = ctx.start!.getLine()
     }
-    func popDebug() {
+    private func popDebug() {
 //        texts.removeLast()
         prc = oldPrc
     }
     
-    func reserveFunction(_ s: String) {
+    private func reserveFunction(_ s: String) {
         if fkmap[s] != nil {
             de(EREDECLARE + s)
         }
         fkmap[s] = Fheader()
     }
-/*
-    func putPv(_ s: String, _ pv: Pval) {
-        let pvOld: Pval
-        if lfc?.m[s] != nil {
-            pvOld = lfc!.m.updateValue(pv, forKey: s)!
-        } else {
-            pvOld = fc.m.updateValue(pv, forKey: s)!
-        }
-        if !pvOld.kind.kindEquivalent(pv.kind, true) {
-            de(Perr(ETYPE, pvOld, prc))
-        }
-        
-    }
- */
     private static func printSpace(_ sa: [String]) -> String {
         var rt = ""
         guard sa.count > 0 else {
@@ -318,14 +304,14 @@ public class Pvisitor {
         }
         return rt
     }
-    func callFunction(_ sctx: ParserRuleContext, _ str: String, _ s: [Pval])  -> Pval? {
+    private func callFunction(_ sctx: ParserRuleContext, _ str: String, _ s: [Pval])  -> Pval? {
         var rt: Pval?
         let fh = fkmap[str]!
         guard let ctx = fh.funcContext else {
             if str == "ec" {
                 //   fc = Fc()
             }
-            return builtIns[str]!(sctx, s)
+            return builtIns[str]!(sctx, self, s)
         }
         let oldfc = lfc
         lfc = Fc()
@@ -382,7 +368,7 @@ public class Pvisitor {
         lfc = oldfc
         return rt
     }
-    static func textout(_ outStr: String) {
+    private func textout(_ outStr: String) {
         print(outStr, terminator: "")
         printed += outStr
     }
@@ -410,7 +396,7 @@ public class Pvisitor {
         }
     }
     
-    func visitObjectPair(_ sctx: PinnParser.ObjectPairContext) -> (String, Pval) {
+    private func visitObjectPair(_ sctx: PinnParser.ObjectPairContext) -> (String, Pval) {
         loadDebug(sctx)
         defer {popDebug()}
         let rt1: String
@@ -420,7 +406,7 @@ public class Pvisitor {
         return (rt1, rt2)
     }
     
-    func visitHeader(_ sctx:PinnParser.FunctionContext )  {
+    private func visitHeader(_ sctx:PinnParser.FunctionContext )  {
         loadDebug(sctx)
         defer {popDebug()}
         if fkmap[sctx.ID()!.getText()] != nil {
@@ -449,7 +435,7 @@ public class Pvisitor {
     }
 
 
-    func visitKind(_ sctx: PinnParser.KindContext) -> Kind {
+    private func visitKind(_ sctx: PinnParser.KindContext) -> Kind {
         loadDebug(sctx)
         defer {popDebug()}
         if let spec = sctx.kindList() {
@@ -476,7 +462,7 @@ public class Pvisitor {
         }
         return rt
     }
-    func visitFKind(_ sctx: PinnParser.FvarDeclContext) -> FKind {
+    private func visitFKind(_ sctx: PinnParser.FvarDeclContext) -> FKind {
         loadDebug(sctx)
         defer {popDebug()}
         
@@ -484,7 +470,7 @@ public class Pvisitor {
         let k = visitKind(sctx.kind()!)
         return FKind(k: k, s: str, variadic: sctx.THREEDOT() != nil, prc: sctx)
     }
-    func visitKindList(_ sctx: PinnParser.KindListContext) -> [Kind]
+    private func visitKindList(_ sctx: PinnParser.KindListContext) -> [Kind]
     {
         loadDebug(sctx)
         defer {popDebug()}
@@ -496,7 +482,7 @@ public class Pvisitor {
         }
         return rt
     }
-    func visitList(_ sctx: PinnParser.ExprListContext) -> [Pval] {
+    private func visitList(_ sctx: PinnParser.ExprListContext) -> [Pval] {
         loadDebug(sctx)
         defer {popDebug()}
         
@@ -508,7 +494,7 @@ public class Pvisitor {
         return rt
     }
     
-    func visitListCase(_ sctx: PinnParser.ExprListContext, _ v: Pval) -> Bool {
+    private func visitListCase(_ sctx: PinnParser.ExprListContext, _ v: Pval) -> Bool {
         loadDebug(sctx)
         defer {popDebug()}
         
@@ -524,7 +510,7 @@ public class Pvisitor {
     }
     
     
-    func visitCase(_ sctx: PinnParser.CaseStatementContext, _ v: Pval) -> Bool {
+    private func visitCase(_ sctx: PinnParser.CaseStatementContext, _ v: Pval) -> Bool {
         loadDebug(sctx)
         defer {popDebug()}
         var rt = false
@@ -554,7 +540,7 @@ public class Pvisitor {
         return rt
     }
     
-    func visitPval(_ sctx: ParserRuleContext) -> Pval? {
+    private func visitPval(_ sctx: ParserRuleContext) -> Pval? {
         loadDebug(sctx)
         defer {popDebug()}
         
@@ -793,7 +779,7 @@ public class Pvisitor {
         return rt
     }
     
-    func visit(_ sctx: ParserRuleContext)
+    private func visit(_ sctx: ParserRuleContext)
     {
         loadDebug(sctx)
         defer {popDebug()}

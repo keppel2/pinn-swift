@@ -10,38 +10,38 @@ import Foundation
 import Antlr4
 
 
-enum Kinde {
-    case vt(Ptype.Type)
-    case k(Kind)
-    case km([Kind])
-    
-    func getVt() -> Ptype.Type? {
-        if case .vt(let pw) = self {
-            return pw
-        }
-        return nil
-    }
-        func getK() -> Kind? {
-            if case .k(let ar) = self {
-                return ar
-            }
-            return nil
-        }
-        func getKm() -> [Kind]? {
-            if case .km(let map) = self {
-                return map
-            }
-            return nil
-            
-    }
-    
-    
-    
-    
-}
-
     
 class Kind {
+
+    enum Kinde {
+        case vt(Ptype.Type)
+        case k(Kind)
+        case km([Kind])
+        
+        func getVt() -> Ptype.Type? {
+            if case .vt(let pw) = self {
+                return pw
+            }
+            return nil
+        }
+            func getK() -> Kind? {
+                if case .k(let ar) = self {
+                    return ar
+                }
+                return nil
+            }
+            func getKm() -> [Kind]? {
+                if case .km(let map) = self {
+                    return map
+                }
+                return nil
+                
+        }
+        
+        
+        
+        
+    }
 
 
     
@@ -109,10 +109,10 @@ class Kind {
   
     var gtype: Gtype
     var count: Int
-    func isOneNil() -> Bool {
+    private func isOneNil() -> Bool {
         return ke.getVt() == Nil.self
     }
-    func isNil() -> Bool {
+    private func isNil() -> Bool {
         return gtype == .gScalar && isOneNil()
     }
     func isPointer() -> Bool {
