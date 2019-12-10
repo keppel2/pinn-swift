@@ -223,7 +223,7 @@ class Pval {
             }
             func equal(_ p: Pval) -> Bool {
                 
-                ade(p.kind.kindEquivalent(kind, true))
+                ade(p.kind.kindEquivalent(kind))
                 return e.con.equal(p.e.con)
             }
             
@@ -269,13 +269,12 @@ class Pval {
             }
             
             
-            func setPV(_ v : Pval) {
-                if !kind.kindEquivalent(v.kind, true) {
-                    de(Perr(ETYPE, v))
+            func setPV(_ v : Pval) -> Perr? {
+                if !kind.kindEquivalent(v.kind) {
+                    return Perr(ETYPE, v)
                 }
-//                ade(kind.kindEquivalent(v.kind, true))
-                
                 e = v.e
+                return nil
             }
     
 
@@ -289,10 +288,10 @@ class Pval {
  
                 switch kind.gtype {
                 case .gArray, .gSlice, .gMap:
-                    ade(kind.cKind().kindEquivalent(v!.kind.cKind(), true))
+                    ade(kind.cKind().kindEquivalent(v!.kind.cKind()))
                 default:
                     let index = k as! Int
-                    ade(kind.aKind()[index].kindEquivalent(v!.kind.aKind()[index], true))
+                    ade(kind.aKind()[index].kindEquivalent(v!.kind.aKind()[index]))
                 }
 
 

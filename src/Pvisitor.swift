@@ -329,7 +329,7 @@ class Pvisitor {
                 let par = Pval(ctx, Kind(v.k, .gArray, s.count - index))
                 
                 for (key, varadds) in s[index...].enumerated() {
-                    if !varadds.kind.kindEquivalent(v.k, true) {
+                    if !varadds.kind.kindEquivalent(v.k) {
                         de(Perr(ETYPE, sctx))
                     }
                     par.set(key, varadds)
@@ -340,7 +340,7 @@ class Pvisitor {
                 lfc!.m[fh.fkinds[index].s] = Pval(par)
                 continue
             }
-            if !s[index].kind.kindEquivalent(v.k, true) {
+            if !s[index].kind.kindEquivalent(v.k) {
                 de(Perr(ETYPE, sctx))
             }
             if let pv = lfc!.m[fh.fkinds[index].s]  {
@@ -360,7 +360,7 @@ class Pvisitor {
             
         }
         else {
-            if !lfc!.rt!.kind.kindEquivalent(fh.kind!, true) {
+            if !lfc!.rt!.kind.kindEquivalent(fh.kind!) {
                 de(ETYPE)
             }
         }
@@ -374,13 +374,14 @@ class Pvisitor {
     }
     
     
-    public func visitFile(_ sctx: PinnParser.FileContext)  {
+    public func visitFile(_ sctx: PinnParser.FileContext) -> Perr? {
+        var rt: Perr? = nil
         for child in sctx.children! {
             if let spec = child as? PinnParser.FunctionContext {
                 visitHeader(spec)
             } else {
                 if let spec = child as? PinnParser.StatementContext {
-                    visit(spec)
+                    rt = visit(spec)
                     switch fc.path {
                     case .pBreak, .pContinue, .pFallthrough:
                         de(Perr(ESTATEMENT, nil, sctx))
@@ -394,6 +395,7 @@ class Pvisitor {
                 }
             }
         }
+        return rt
     }
     
     private func visitObjectPair(_ sctx: PinnParser.ObjectPairContext) -> (String, Pval) {
@@ -779,11 +781,11 @@ class Pvisitor {
         return rt
     }
     
-    private func visit(_ sctx: ParserRuleContext)
+    private func visit(_ sctx: ParserRuleContext) -> Perr?
     {
         loadDebug(sctx)
         defer {popDebug()}
-        
+        var rt: Perr? = nil
         switch sctx {
         case let sctx as PinnParser.SwitchStatementContext:
             let v = visitPval(sctx.expr()!)!
@@ -834,7 +836,7 @@ class Pvisitor {
             }
             let c0 = sctx.getChild(0)!
             if let child = c0 as? ParserRuleContext {
-                visit(child)
+                rt = visit(child)
                 break
             }
             switch Self.childToText(c0) {
@@ -870,7 +872,7 @@ class Pvisitor {
             }
         case let sctx as PinnParser.BlockContext:
             for child in sctx.statement() {
-                visit(child)
+                rt = visit(child)
                 if cfc.path == .pFallthrough {
                     de(Perr(ESTATEMENT, sctx))
                 }
@@ -881,10 +883,7 @@ class Pvisitor {
         case let sctx as PinnParser.SimpleSetContext:
             let lh = visitPval(sctx.lExpr()!)!
             let rh = visitPval(sctx.expr()!)!
-            
-            
-            
-            lh.setPV(rh)            
+            return lh.setPV(rh)
 
         case let sctx as PinnParser.IfStatementContext:
             
@@ -1020,7 +1019,7 @@ class Pvisitor {
                         fc.m[str] = te
                     }
                 }
-                return
+                return nil
             }
  
             let str = sctx.ID(0)!.getText()
@@ -1043,6 +1042,7 @@ class Pvisitor {
             
         default: break
         }
+        return rt
     }
     init() {
         for str in builtIns.keys {

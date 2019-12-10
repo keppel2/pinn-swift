@@ -78,7 +78,7 @@ class Kind {
             for (k, v) in kar.enumerated() {
                 if v.isPointer() {
                     if !v.isOneNil() {
-                        uade(c, kar.elementsEqual(v.ke.getKm()!, by: {$0.kindEquivalent($1, true)}))
+                        uade(c, kar.elementsEqual(v.ke.getKm()!, by: {$0.kindEquivalent($1)}))
                     }
                     kar[k] = self
                     
@@ -122,8 +122,7 @@ class Kind {
         return gtype == .gScalar && ke.getVt()! == p
     }
     
-    func kindEquivalent(_ k2: Kind, _ sg: Bool ) -> Bool {
-        ade(sg == true)
+    func kindEquivalent(_ k2: Kind) -> Bool {
         
         if isOneNil() && k2.isPointer() || isPointer() && k2.isOneNil() {
             return true
@@ -145,9 +144,9 @@ class Kind {
             }
             switch gtype {
             case .gArray:
-                return k.kindEquivalent(k2.ke.getK()!, true) && count == k2.count
+                return k.kindEquivalent(k2.ke.getK()!) && count == k2.count
             case .gMap, .gSlice:
-                return k.kindEquivalent(k2.ke.getK()!, true)
+                return k.kindEquivalent(k2.ke.getK()!)
             case .gTuple, .gScalar, .gPointer:
                 de(ECASE)
             }
@@ -156,7 +155,7 @@ class Kind {
                 if self === $0 && k2 === $1 {
                     return true
                 }
-                    return $0.kindEquivalent($1, true)
+                    return $0.kindEquivalent($1)
             })
         }
     }

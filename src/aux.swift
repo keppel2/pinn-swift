@@ -32,8 +32,8 @@ func execute() {
     _ = parser
     if tree != nil {
         let pv = Pvisitor()
-        pv.visitFile(tree!)
-        
+        let perr = pv.visitFile(tree!)
+        print(perr?.string)
         if (test) {
 
         }

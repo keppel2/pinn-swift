@@ -1,4 +1,2 @@
-tup := (5, nil, (10, nil, nil));
-println(depthString(tup));
-tup2 := (5, (20, nil, nil, nil), nil);
-println(depthString(tup2));
+a := 5;
+a = "abc";
