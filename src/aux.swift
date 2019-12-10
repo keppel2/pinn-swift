@@ -9,16 +9,16 @@
 import Foundation
 import Antlr4
 
-func exe(_ s: String, _ shouldFail: Bool) throws {
+func exe(_ s: String, _ failReason: String? = nil) throws {
        let (tree, parser) = parse(s)
         _ = parser
 
     if tree != nil {
             let pv = Pvisitor()
 
-        if shouldFail {
+        if let fr = failReason {
             if (try? pv.visitFile(tree!)) != nil {
-                throw Perr(ETEST_FAIL + ", expected to fail.\n" + s)
+                throw Perr(ETEST_FAIL + ", expected to fail: " + fr + "\n" + s)
             }
         } else {
             try pv.visitFile(tree!)
@@ -45,7 +45,7 @@ func execute() throws {
     test = s == "-t"
 
     let myinput = fnToString(test ? "/tmp/types.pinn" : s)
-    try exe(myinput, false)
+    try exe(myinput)
     if (test) {
         print()
         
@@ -60,13 +60,13 @@ func execute() throws {
         a := 5;
         a = false;
         """
-        , true)
+        , "Assign bool to int")
         try exe(
         """
         a := 5;
         a = "abc";
         """
-        , true)
+        , "Assign string to int")
 
 
         
