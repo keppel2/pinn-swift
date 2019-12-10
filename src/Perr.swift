@@ -9,7 +9,7 @@
 import Foundation
 import Antlr4
 
-class Perr {
+class Perr : Error {
     let str: String
     var pval: Pval?
     var prc: ParserRuleContext?

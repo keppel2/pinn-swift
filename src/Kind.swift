@@ -59,7 +59,7 @@ class Kind {
             ke = .k(k!)
         }
     }
-    init(_ c: ParserRuleContext?, _ ka: [Kind]) {
+    init(_ c: ParserRuleContext?, _ ka: [Kind]) throws {
         gtype = .gTuple
         var kar = ka
         self.count = kar.count
@@ -78,7 +78,9 @@ class Kind {
             for (k, v) in kar.enumerated() {
                 if v.isPointer() {
                     if !v.isOneNil() {
-                        uade(c, kar.elementsEqual(v.ke.getKm()!, by: {$0.kindEquivalent($1)}))
+                        if !kar.elementsEqual(v.ke.getKm()!, by: {$0.kindEquivalent($1)}) {
+                            throw Perr(ETYPE)
+                        }
                     }
                     kar[k] = self
                     

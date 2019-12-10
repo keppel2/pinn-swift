@@ -52,7 +52,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "/tmp/types.pinn"
+            argument = "-t"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

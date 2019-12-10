@@ -9,7 +9,26 @@
 import Foundation
 import Antlr4
 
+func exe(_ s: String, _ shouldFail: Bool) throws {
+       let (tree, parser) = parse(s)
+        _ = parser
 
+    if tree != nil {
+            let pv = Pvisitor()
+
+        if shouldFail {
+            if (try? pv.visitFile(tree!)) != nil {
+                throw Perr(ETEST_FAIL + ", expected to fail.\n" + s)
+            }
+        } else {
+            try pv.visitFile(tree!)
+        }
+    } else {
+        let parser = stringToParser(s)
+        try parser.file()
+        throw Perr(EPARSE_FAIL)
+    }
+}
 func parse(_ s: String) -> (PinnParser.FileContext?, PinnParser) {
     let parser = stringToParser(s)
     parser.setErrorHandler(BailErrorStrategy())
@@ -17,32 +36,49 @@ func parse(_ s: String) -> (PinnParser.FileContext?, PinnParser) {
     return (tree, parser)
 }
 
-public func err(_ s: String) {
-    let parser = stringToParser(s)
-    try! parser.file()
-}
 
-func execute() {
-    let test = false
+
+var test = false
+func execute() throws {
     let args = ProcessInfo.processInfo.arguments
     let s = args[1]
+    test = s == "-t"
 
-    let myinput = fnToString(s)//"/tmp/\(test ? "types" : s).pinn")
-    let (tree, parser) = parse(myinput)
-    _ = parser
-    if tree != nil {
-        let pv = Pvisitor()
-        let perr = pv.visitFile(tree!)
-        print(perr?.string)
-        if (test) {
+    let myinput = fnToString(test ? "/tmp/types.pinn" : s)
+    try exe(myinput, false)
+    if (test) {
+        print()
+        
+        
+        
+        
+        
+        
 
-        }
+        try exe(
+        """
+        a := 5;
+        a = false;
+        """
+        , true)
+        try exe(
+        """
+        a := 5;
+        a = "abc";
+        """
+        , true)
+
 
         
-    } else {
-        err(myinput)
-        print(EPARSE_FAIL)
-//        de(EPARSE_FAIL)
+        
+        
+        
+        
+        
+        
+        
+        
+        
     }
 }
 
@@ -68,23 +104,23 @@ private func _fatalError(_ s: String) -> Never {
     fatalError()
 //    exit(1)
 }
-func tryCast<T> (_ pv: Pval) -> T {
+func tryCast<T> (_ pv: Pval) throws -> T {
     if !(pv.getUnwrap() is T) {
-        de(Perr(ETYPE, pv))
+        throw Perr(ETYPE, pv)
     }
     return pv.getUnwrap() as! T
 }
 
-func uade(_ c: ParserRuleContext?, _ b: Bool) {
-    if !b {
-        de(Perr(EASSERT, c))
-    }
-}
+
 
 func ade(_ b: Bool) {
     if !b {
         de(EASSERT)
     }
+}
+
+func aden() -> Never{
+    de(EASSERT)
 }
 func de(_ me: Perr) -> Never {
     _fatalError(me.string)

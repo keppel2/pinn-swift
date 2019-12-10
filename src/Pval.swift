@@ -163,11 +163,11 @@ class Pval {
                 e = Pvalp(k, .multi(Wrap(ar)), c)
             }
             
-            init(_ c: ParserRuleContext?, _ ar: [Pval]) {
+            init(_ c: ParserRuleContext?, _ ar: [Pval]) throws {
   //                          prc = c
                 let mar = ar
                 let ka = ar.map { $0.kind }
-                let k = Kind(c, ka)
+                let k = try Kind(c, ka)
                 for (key, value) in mar.enumerated() {
                     if value.kind.isNil() {
                             mar[key].e.k = k
@@ -269,12 +269,11 @@ class Pval {
             }
             
             
-            func setPV(_ v : Pval) -> Perr? {
+            func setPV(_ v : Pval) throws {
                 if !kind.kindEquivalent(v.kind) {
-                    return Perr(ETYPE, v)
+                        throw Perr(ETYPE, v)
                 }
                 e = v.e
-                return nil
             }
     
 
