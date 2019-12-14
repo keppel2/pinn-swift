@@ -339,7 +339,7 @@ class Pvisitor {
                 if lfc!.m[fh.fkinds[index].s] != nil {
                     throw Perr(EREDECLARE, sctx)
                 }
-                lfc!.m[fh.fkinds[index].s] = Pval(par)
+                lfc!.m[fh.fkinds[index].s] = par//Pval(par)
                 continue
             }
             if !s[index].kind.kindEquivalent(v.k) {
@@ -357,13 +357,16 @@ class Pvisitor {
         default: break
         }
         
-        if lfc!.rt == nil && fh.kind == nil
-        {
-            
-        }
-        else {
-            if !lfc!.rt!.kind.kindEquivalent(fh.kind!) {
-                de(ETYPE)
+        if let k = fh.kind {
+            guard let rp = lfc!.rt else {
+                throw Perr(ETYPE, sctx)
+            }
+            if !k.kindEquivalent(rp.kind) {
+                throw Perr(ETYPE, sctx)
+            }
+        } else {
+            if lfc!.rt != nil {
+                throw Perr(ETYPE, sctx)
             }
         }
         rt = lfc!.rt
@@ -386,10 +389,10 @@ class Pvisitor {
                     try visit(spec)
                     switch fc.path {
                     case .pBreak, .pContinue, .pFallthrough:
-                        throw Perr(ESTATEMENT, nil, sctx)
+                        throw Perr(ESTATEMENT, sctx)
                     case .pExiting:
                         if fc.rt != nil {
-                            de(ETYPE)
+                            throw Perr(ETYPE, sctx)
                         }
                     case .pNormal: break
                         
@@ -1014,20 +1017,23 @@ class Pvisitor {
  
             let str = sctx.ID(0)!.getText()
             
-            var newV: Pval
+            var newV: Pval?
             if let prev = map[str] {
                 throw Perr(EREDECLARE, prev, sctx)
             }
             if sctx.CE() != nil {
-                newV = Pval(try visitPval(sctx.expr()!)!)
+                newV = try visitPval(sctx.expr()!)
+                if newV == nil {
+                    throw Perr(ENIL, sctx)
+                }
             } else {
                 let k = try visitKind(sctx.kind()!)
                     newV = Pval(sctx, k)
             }
             if lfc != nil {
-                lfc!.m[str] = newV
+                lfc!.m[str] = newV!
             } else {
-                fc.m[str] = newV
+                fc.m[str] = newV!
             }
             
         default: break

@@ -12,8 +12,35 @@ let negTest = [
     func f() int {return 42;}
     """),
 ("Call undeclared function", """
-func f() {};
+func f() {}
 g();
+"""),
+("Send parameter to function without any", """
+func f() {}
+x := f(5);
+"""),
+("Send no parameter to function with one", """
+func f(i int) {}
+x := f();
+"""),
+("Send bad parameter to function with one", """
+func f(i int) {}
+x := f("abc");
+"""),
+("Use void return", """
+func f() {}
+x := f();
+"""),
+("Return int when no return parameter specified", """
+func f() { return 5; }
+f();
+"""),
+("Return int in global context", """
+return 42;
+"""),
+("Mix up parameters to function", """
+func f(i int, s string) {}
+x := f("abc", 10);
 """),
 ("Wrong type assignment from short declaration", """
 x := 0;
@@ -56,6 +83,11 @@ s[3] = 42;
 var m[map]int;
 m[23] = 42;
 """),
+("Index slice by string", """
+s := [1, 4];
+s["a"];
+"""),
+
 ("Delete a non-map", """
 var x int;
 delete(x, "k");

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+let ENIL = "Unexpected nil"
 let EPARAM_LENGTH = "Parameter length mismatch"
 let ESTATEMENT = "Wrong statement"
 let ETYPE      = "Wrong type"
