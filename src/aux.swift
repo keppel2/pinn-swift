@@ -9,7 +9,7 @@
 import Foundation
 import Antlr4
 //var gtree: PinnParser.FileContext? = nil
-var gparser: PinnParser? = nil
+
 func exe(_ s: String, _ failReason: String? = nil) throws {
        let (tree, parser) = parse(s)
        gparser = parser
@@ -39,7 +39,7 @@ func parse(_ s: String) -> (PinnParser.FileContext?, PinnParser) {
 
 
 
-var test = false
+
 func execute() throws  {
     let args = ProcessInfo.processInfo.arguments
     let s = args[1]
@@ -111,6 +111,10 @@ func de(_ s: String = "") -> Never {
 func dbg() {
     _fatalError("dbg")
 }
+enum Gtype {
+    case gScalar, gArray, gMap, gSlice, gTuple, gPointer
+}
+
 class Wrap <T> {
     var w: T
     init(_ x: T) {
@@ -135,121 +139,4 @@ struct Nil: Ptype, CustomStringConvertible {
     func equal(_ a: Ptype) -> Bool {
         return a is Nil
     }
-    
-    
 }
-
-extension Decimal: Ptype, Plus, Compare, Arith, Negate {
-
-
-    func lt(_ a: Compare) -> Bool {
-        let x = self < a as! Self
-        return x
-    }
-    
-    func gt(_ a: Compare) -> Bool {
-        let x = self > a as! Self
-        return x
-    }
-    
-    static func zeroValue() -> Ptype { return Decimal.init() }
-    
-    func neg() -> Negate {
-        let x = 0 - self
-        return x
-    }
-    
-    func plus(_ a: Plus) -> Plus {
-        let x = self + (a as! Self)
-        return x
-    }
-    func arith(_ a: Arith, _ s: String) -> Arith {
-        let lhv = self
-        let rhv = a as! Self
-        let x: Self
-        switch s {
-        case "-":
-            x = lhv - rhv
-        case "*":
-            x = lhv * rhv
-        case "/":
-            x = lhv / rhv
-        default: de(ECASE)
-        }
-        return x
-    }
-
-    func equal(_ a: Ptype) -> Bool {
-        return self == a as! Self
-    }
-}
-extension Int: Ptype, Ktype, Plus, Compare, Negate, Arith {
-    func lt(_ a: Compare) -> Bool {
-        let x = self < a as! Self
-        return x
-    }
-    
-    func gt(_ a: Compare) -> Bool {
-        let x = self > a as! Self
-        return x
-    }
-    
-    static func zeroValue() -> Ptype { return 0 }
-    func plus(_ a: Plus) -> Plus {
-        let x = self + (a as! Self)
-        return x
-    }
-    func neg() -> Negate {
-        let x = 0 - self
-        return x
-    }
-    
-    func equal(_ a: Ptype) -> Bool {
-        return self == a as! Self
-    }
-    
-    func arith(_ a: Arith, _ s: String) -> Arith {
-        let lhv = self
-        let rhv = a as! Self
-        let x: Self
-        switch s {
-        case "-":
-            x = lhv - rhv
-        case "*":
-            x = lhv * rhv
-        case "/":
-            x = lhv / rhv
-        default: de(ECASE)
-        }
-        return x
-    }
-    
-}
-extension Bool: Ptype, Ktype {
-    static func zeroValue() -> Ptype { return false }
-    func equal(_ a: Ptype) -> Bool {
-        return self == a as! Self
-    }
-}
-extension String: Ptype, Ktype, Plus, Compare {
-    
-    func lt(_ a: Compare) -> Bool {
-        let x = self < a as! Self
-        return x
-    }
-    
-    func gt(_ a: Compare) -> Bool {
-        let x = self > a as! Self
-        return x
-    }
-    static func zeroValue() -> Ptype { return "" }
-    func plus(_ a: Plus) -> Plus {
-        let x = self + (a as! String)
-        return x
-    }
-    func equal(_ a: Ptype) -> Bool {
-        return self == a as! Self
-    }
-}
-
-

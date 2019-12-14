@@ -7,6 +7,8 @@
 //
 
 import Foundation
+var test = false
+var gparser: PinnParser? = nil
 let ENIL = "Unexpected nil"
 let EPARAM_LENGTH = "Parameter length mismatch"
 let ESTATEMENT = "Wrong statement"
@@ -20,6 +22,3 @@ let EPARSE_FAIL = "Parse failed"
 let EASSERT = "Assertion failed (unexpected error)"
 let EUI = "Unimplemented"
 
-enum Gtype {
-    case gScalar, gArray, gMap, gSlice, gTuple, gPointer
-}

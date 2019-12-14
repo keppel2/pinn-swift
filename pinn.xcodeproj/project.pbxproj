@@ -22,6 +22,7 @@
 		E2B5314F2398E3500041751D /* global.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B531432398E3500041751D /* global.swift */; };
 		E2E3BB912398DDA200AB9A98 /* Antlr4 in Frameworks */ = {isa = PBXBuildFile; productRef = E2E3BB902398DDA200AB9A98 /* Antlr4 */; };
 		E2E3BB922398DDA200AB9A98 /* Antlr4 in Embed Frameworks */ = {isa = PBXBuildFile; productRef = E2E3BB902398DDA200AB9A98 /* Antlr4 */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		E2E6B45E23A4CD1300BE7758 /* extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E6B45D23A4CD1300BE7758 /* extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -81,6 +82,7 @@
 		E2BC3DB42387733B002D9413 /* a.pinn */ = {isa = PBXFileReference; lastKnownFileType = text; path = a.pinn; sourceTree = "<group>"; };
 		E2C2CCED2382412100C6D2A2 /* tic.pinn */ = {isa = PBXFileReference; lastKnownFileType = text; path = tic.pinn; sourceTree = "<group>"; };
 		E2D2DBFB2366B76500E0CC35 /* Pinn.g4 */ = {isa = PBXFileReference; lastKnownFileType = text; path = Pinn.g4; sourceTree = "<group>"; };
+		E2E6B45D23A4CD1300BE7758 /* extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = extensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +103,7 @@
 				E27B67D023A221AA009B8503 /* Neg.swift */,
 				E22C2FA62399FD9E007AD1D5 /* Antlr4-swift */,
 				E2B5313E2398E3500041751D /* aux.swift */,
+				E2E6B45D23A4CD1300BE7758 /* extensions.swift */,
 				E2B531432398E3500041751D /* global.swift */,
 				E2B5313A2398E3500041751D /* Kind.swift */,
 				E2B531422398E3500041751D /* main.swift */,
@@ -224,6 +227,7 @@
 				E2B5314F2398E3500041751D /* global.swift in Sources */,
 				E2B5314B2398E3500041751D /* Pval.swift in Sources */,
 				E27B67D123A221AA009B8503 /* Neg.swift in Sources */,
+				E2E6B45E23A4CD1300BE7758 /* extensions.swift in Sources */,
 				E2B531442398E3500041751D /* PinnParser.swift in Sources */,
 				E2B531482398E3500041751D /* Pvisitor.swift in Sources */,
 				E2B531492398E3500041751D /* Perr.swift in Sources */,

@@ -9,8 +9,6 @@
 import Foundation
 import Antlr4
 
-
-    
 class Kind {
 
     private enum Kinde {

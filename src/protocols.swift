@@ -6,15 +6,11 @@
 //  Copyright © 2019 Ryan Keppel. All rights reserved.
 //
 
-import Foundation
-
 
 protocol Ptype {
     static func zeroValue() -> Ptype
     func equal(_: Ptype) -> Bool
-
 }
-
 protocol Ktype {}
 
 protocol Plus: Ptype {

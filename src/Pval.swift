@@ -399,9 +399,6 @@ class Pval {
             }
             
             func cloneIf() throws -> Pval {
-                
-                
-                
                 switch e.con {
                 case .single(let pw):
                     return Pval(e.prc, pw.clone().unwrap())
