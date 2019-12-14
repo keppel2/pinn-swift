@@ -38,6 +38,9 @@ f();
 ("Return int in global context", """
 return 42;
 """),
+("Return string in global context", """
+return "aap";
+"""),
 ("Mix up parameters to function", """
 func f(i int, s string) {}
 x := f("abc", 10);
@@ -46,6 +49,32 @@ x := f("abc", 10);
 x := 0;
 x = true;
 """),
+("Wrong type assignment from short declaration", """
+x := [1, 5];
+y := ["aap", "noot"];
+y = x;
+"""),
+("Wrong type assignment from short declaration", """
+x := [1, 5];
+var y [2]int;
+y = x;
+"""),
+("Wrong type assignment defined types", """
+var x [1]int;
+var y [2]int;
+y = x;
+"""),
+("Wrong type assignment defined types", """
+var x [2]int;
+var y [2]string;
+y = x;
+"""),
+("Wrong type assignment defined types", """
+var x (int, int);
+var y [2]int;
+y = x;
+"""),
+
 ("Wrong type get from short declaration", """
 x := 0;
 y := true;
