@@ -8,12 +8,13 @@
 
 import Foundation
 import Antlr4
-
+//var gtree: PinnParser.FileContext? = nil
+var gparser: PinnParser? = nil
 func exe(_ s: String, _ failReason: String? = nil) throws {
        let (tree, parser) = parse(s)
-        _ = parser
-
+       gparser = parser
     if tree != nil {
+//        gtree = tree
             let pv = Pvisitor()
 
         if let fr = failReason {
@@ -39,7 +40,7 @@ func parse(_ s: String) -> (PinnParser.FileContext?, PinnParser) {
 
 
 var test = false
-func execute() throws {
+func execute() throws  {
     let args = ProcessInfo.processInfo.arguments
     let s = args[1]
     test = s == "-t"
@@ -48,32 +49,9 @@ func execute() throws {
     try exe(myinput)
     if (test) {
         print()
-        
-        
-        
-        
-        
-        
-
-        try exe(
-        """
-        a := 5;
-        a = false;
-        """
-        , "Assign bool to int")
-        try exe(
-        """
-        a := 5;
-        a = "abc";
-        """
-        , "Assign string to int")
-
-
-        
-        
-        
-        
-        
+        for ts in negTest {
+            try exe(ts.1, ts.0)
+        }
         
         
         

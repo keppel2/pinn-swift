@@ -92,13 +92,13 @@ class Pvisitor {
             },
             "delete": { sctx, pv, s in try assertPvals(s, 2)
                 let kt: String = try tryCast(s[1])
-                let rt = s[0].hasKey(kt)
-                s[0].set(kt, nil)
+                let rt = try s[0].hasKey(kt)
+                try s[0].set(kt, nil)
                 return Pval(sctx, rt)
             },
             "key": { sctx, pv, s in try assertPvals(s, 2)
                 let str: String = try tryCast(s[1])
-                return Pval(sctx, s[0].hasKey(str))
+                return Pval(sctx, try s[0].hasKey(str))
             },
             "debug": { sctx, pv, s in try assertPvals(s, 0)
                 dbg()
@@ -256,7 +256,7 @@ class Pvisitor {
             }
             rt = Pval(sctx, Kind(Kind(Int.self), .gSlice, rhsv - lhsv))
             for x in lhsv..<rhsv {
-                rt.set(x - lhsv, Pval(sctx, x))
+                try rt.set(x - lhsv, Pval(sctx, x))
             }
             
         default:
@@ -306,7 +306,9 @@ class Pvisitor {
     }
     private func callFunction(_ sctx: ParserRuleContext, _ str: String, _ s: [Pval]) throws -> Pval? {
         var rt: Pval?
-        let fh = fkmap[str]!
+        guard let fh = fkmap[str] else {
+            throw Perr(EUNDECLARED, sctx)
+        }
         guard let ctx = fh.funcContext else {
             if str == "ec" {
                 //   fc = Fc()
@@ -332,7 +334,7 @@ class Pvisitor {
                     if !varadds.kind.kindEquivalent(v.k) {
                         throw Perr(ETYPE, sctx)
                     }
-                    par.set(key, varadds)
+                    try par.set(key, varadds)
                 }
                 if lfc!.m[fh.fkinds[index].s] != nil {
                     throw Perr(EREDECLARE, sctx)
@@ -555,7 +557,7 @@ class Pvisitor {
             var cv = v
             for e in sctx.expr() {
                 let kt: Ktype = try tryCast(try visitPval(e)!)
-                cv = cv.get(kt, true)
+                cv = try cv.get(kt, true)
             }
             return cv
         case let sctx as PinnParser.IntExprContext:
@@ -659,7 +661,7 @@ class Pvisitor {
                     kind = Kind(pv.kind, .gMap)
                     rt = Pval(sctx, kind!)
                 }
-                rt!.set(str, pv)
+                try rt!.set(str, pv)
             }
         //            let kind = Kind(vtype: list.first!.1)
         case let sctx as PinnParser.ArrayLiteralContext:
@@ -668,7 +670,7 @@ class Pvisitor {
             let aeFirstk = ae.first!.kind
 
             let kind = Kind(aeFirstk, .gSlice, ae.count)
-            rt = Pval(sctx, ae, kind)
+            rt = try Pval(sctx, ae, kind)
 
             return rt
 
@@ -705,7 +707,7 @@ class Pvisitor {
                 guard let pv = getPv(str) else {
                     throw Perr(EUNDECLARED, sctx)
                 }
-                rt = pv.cloneIf()
+                rt = try pv.cloneIf()
             default:
                 aden()
             }
@@ -756,7 +758,7 @@ class Pvisitor {
             let e2 = try visitPval(sctx.expr(1)!)!
             let i: Ktype = try tryCast(e2)
             
-            rt = v.get(i)
+            rt = try v.get(i)
                
             
             case let sctx as PinnParser.ExprContext:
@@ -773,6 +775,7 @@ class Pvisitor {
     {
         loadDebug(sctx)
         defer {popDebug()}
+//        throw Perr("tst", sctx)
         switch sctx {
         case let sctx as PinnParser.SwitchStatementContext:
             let v = try visitPval(sctx.expr()!)!
@@ -996,7 +999,7 @@ class Pvisitor {
                 ade(e.kind.count == sctx.ID().count)
                 for (k, v) in sctx.ID().enumerated() {
                     let str = v.getText()
-                    let te = e.get(k)
+                    let te = try e.get(k)
                     if let prev = map[str] {
                         throw Perr(EREDECLARE, prev, sctx)
                     }

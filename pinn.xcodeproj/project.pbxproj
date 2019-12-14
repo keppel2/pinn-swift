@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E27B67D123A221AA009B8503 /* Neg.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27B67D023A221AA009B8503 /* Neg.swift */; };
 		E2B531442398E3500041751D /* PinnParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B531382398E3500041751D /* PinnParser.swift */; };
 		E2B531452398E3500041751D /* PinnParserATN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B531392398E3500041751D /* PinnParserATN.swift */; };
 		E2B531462398E3500041751D /* Kind.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B5313A2398E3500041751D /* Kind.swift */; };
@@ -63,6 +64,7 @@
 /* Begin PBXFileReference section */
 		E22C2FA62399FD9E007AD1D5 /* Antlr4-swift */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Antlr4-swift"; sourceTree = "<group>"; };
 		E2673962235BC825000CF830 /* pinn */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = pinn; sourceTree = BUILT_PRODUCTS_DIR; };
+		E27B67D023A221AA009B8503 /* Neg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Neg.swift; sourceTree = "<group>"; };
 		E28CB40423680A0B0045FA67 /* types.pinn */ = {isa = PBXFileReference; lastKnownFileType = text; path = types.pinn; sourceTree = "<group>"; };
 		E2B531382398E3500041751D /* PinnParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PinnParser.swift; path = src/PinnParser.swift; sourceTree = "<group>"; };
 		E2B531392398E3500041751D /* PinnParserATN.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PinnParserATN.swift; path = src/PinnParserATN.swift; sourceTree = "<group>"; };
@@ -96,6 +98,7 @@
 		E2673959235BC825000CF830 = {
 			isa = PBXGroup;
 			children = (
+				E27B67D023A221AA009B8503 /* Neg.swift */,
 				E22C2FA62399FD9E007AD1D5 /* Antlr4-swift */,
 				E2B5313E2398E3500041751D /* aux.swift */,
 				E2B531432398E3500041751D /* global.swift */,
@@ -220,6 +223,7 @@
 			files = (
 				E2B5314F2398E3500041751D /* global.swift in Sources */,
 				E2B5314B2398E3500041751D /* Pval.swift in Sources */,
+				E27B67D123A221AA009B8503 /* Neg.swift in Sources */,
 				E2B531442398E3500041751D /* PinnParser.swift in Sources */,
 				E2B531482398E3500041751D /* Pvisitor.swift in Sources */,
 				E2B531492398E3500041751D /* Perr.swift in Sources */,

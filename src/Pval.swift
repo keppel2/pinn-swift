@@ -159,7 +159,12 @@ class Pval {
                 e = p.e
             }
             
-            init(_ c: ParserRuleContext?, _ ar: [Pval], _ k: Kind) {
+            init(_ c: ParserRuleContext?, _ ar: [Pval], _ k: Kind) throws {
+                for v in ar {
+                    if !v.kind.kindEquivalent(k.cKind()) {
+                        throw Perr(ETYPE, c)
+                    }
+                }
                 e = Pvalp(k, .multi(Wrap(ar)), c)
             }
             
@@ -234,7 +239,10 @@ class Pval {
                 ade(kind.gtype == .gScalar)
                 return e.con.getPw()
             }
-    func hasKey(_ s: String) -> Bool {
+    func hasKey(_ s: String) throws -> Bool {
+        if kind.gtype != .gMap {
+            throw Perr(ETYPE, self)
+        }
         return e.con.getMap()[s] != nil
     }
             func getKeys() -> [String] {
@@ -244,15 +252,27 @@ class Pval {
             private func getNewChild() -> Pval {
                 return Pval(e.prc, kind.cKind())
             }
-            func get(_ k: Ktype, _ lh: Bool = false) -> Pval {
+            func get(_ k: Ktype, _ lh: Bool = false) throws -> Pval {
                 switch k {
                 case let v1v as Int:
-                    if lh && kind.gtype == .gSlice && v1v == e.con.count() {
-                        conset(nil, getNewChild())
-                                              
+                    switch kind.gtype {
+                    case .gSlice:
+                        if lh && v1v == e.con.count() {
+                            conset(nil, getNewChild())
+                        }
+                        fallthrough
+                    case .gArray, .gTuple, .gPointer:
+                        if !e.con.getAr().indices.contains(v1v) {
+                            throw Perr(ERANGE, self)
+                        }
+                        return e.con.getAr()[v1v]
+                    default:
+                        throw Perr(ETYPE, self)
                     }
-                    return e.con.getAr()[v1v]
                 case let v1v as String:
+                    if kind.gtype != .gMap {
+                        throw Perr(ETYPE, self)
+                    }
                     if e.con.getMap()[v1v] == nil {
                         if lh {
                             conset(v1v, getNewChild())
@@ -277,7 +297,7 @@ class Pval {
             }
     
 
-            func set(_ k: Ktype, _ v: Pval?) {
+            func set(_ k: Ktype, _ v: Pval?) throws {
                 if v == nil {
                     conset(k as! String, nil)
                     return
@@ -287,10 +307,16 @@ class Pval {
  
                 switch kind.gtype {
                 case .gArray, .gSlice, .gMap:
-                    ade(kind.cKind().kindEquivalent(v!.kind.cKind()))
+                    
+                    if !kind.cKind().kindEquivalent(v!.kind.cKind()) {
+                        throw Perr(ETYPE, self)
+                    }
                 default:
                     let index = k as! Int
-                    ade(kind.aKind()[index].kindEquivalent(v!.kind.aKind()[index]))
+                    
+                    if !kind.aKind()[index].kindEquivalent(v!.kind.aKind()[index]) {
+                        throw Perr(ETYPE, self)
+                    }
                 }
 
 
@@ -372,7 +398,7 @@ class Pval {
     var kind: Kind { return e.k
             }
             
-            func cloneIf() -> Pval {
+            func cloneIf() throws -> Pval {
                 
                 
                 
@@ -383,8 +409,11 @@ class Pval {
                     
                     if kind.gtype == .gSlice || kind.gtype == .gPointer {
                         return Pval(self)}
-                    return Pval(e.prc, ar.w.map { $0.cloneIf() }, kind)
-                    
+                    if kind.gtype == .gArray {
+                    return try Pval(e.prc, ar.w.map { try $0.cloneIf() }, kind)
+                    } else {
+                        return try Pval(e.prc, ar.w.map {try $0.cloneIf()})
+                    }
                 case .map:
                     return Pval(self)
                 }
