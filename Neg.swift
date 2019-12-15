@@ -137,8 +137,18 @@ s := [4, 1, true];
 ("Slice literal with an int and a tuple of 2 ints", """
 s := [5, (1, 3)];
 """),
-
-
+("Pointer", """
+s := (10, nil);
+s = (false, nil);
+"""),
+("Pointer", """
+s := (10, nil);
+s[1] = (42, 1);
+"""),
+//("Pointer", """
+//s := (4, nil);
+//s[1] = (true, nil);
+//"""),
 
 
 

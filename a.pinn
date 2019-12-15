@@ -1,1 +1,3 @@
-s := [5, (1, 3)];
+  cur := (nil, 42, nil);
+  //xam("cur");
+                cur[0] = (nil, 101, nil);

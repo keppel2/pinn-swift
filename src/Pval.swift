@@ -172,13 +172,13 @@ class Pval {
   //                          prc = c
                 let mar = ar
                 let ka = ar.map { $0.kind }
-                let k = try Kind(c, ka)
+                let k = try Kind(ka)
                 for (key, value) in mar.enumerated() {
-                    if value.kind.isNil() {
+                    if value.kind.isOneNil() {
                             mar[key].e.k = k
                         }
                 }
-                e = Pvalp(k, .multi(Wrap(ar)), c)
+                e = Pvalp(k, .multi(Wrap(mar)), c)
             }
             
             init(_ c: ParserRuleContext?, _ a: Ptype) {

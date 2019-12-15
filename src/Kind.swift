@@ -10,7 +10,7 @@ import Foundation
 import Antlr4
 
 class Kind {
-
+    
     private enum Kinde {
         case vt(Ptype.Type)
         case k(Kind)
@@ -22,18 +22,18 @@ class Kind {
             }
             return nil
         }
-            func getK() -> Kind? {
-                if case .k(let ar) = self {
-                    return ar
-                }
-                return nil
+        func getK() -> Kind? {
+            if case .k(let ar) = self {
+                return ar
             }
-            func getKm() -> [Kind]? {
-                if case .km(let map) = self {
-                    return map
-                }
-                return nil
-                
+            return nil
+        }
+        func getKm() -> [Kind]? {
+            if case .km(let map) = self {
+                return map
+            }
+            return nil
+            
         }
     }
     
@@ -41,8 +41,23 @@ class Kind {
         ke = .vt(vtype)
         gtype = .gScalar
         count = 1
+        self.assert()
     }
-
+    func assert() {
+        switch gtype {
+        case .gScalar:
+            ade(ke.getVt() != nil)
+            ade(count == 1)
+        case .gArray, .gSlice, .gMap:
+            ade(ke.getK() != nil)
+        case .gTuple, .gPointer:
+            ade(ke.getKm() != nil)
+//            for k in ke.getKm()! {
+//                k.assert()
+//            }
+        }
+    }
+    
     init(_ k: Kind?, _ gtype: Gtype, _ count: Int? = nil) {
         self.gtype = gtype
         switch gtype {
@@ -56,22 +71,22 @@ class Kind {
             self.count = count!
             ke = .k(k!)
         }
+        self.assert()
     }
-    init(_ c: ParserRuleContext?, _ ka: [Kind]) throws {
+    init(_ ka: [Kind]) throws {
         gtype = .gTuple
         var kar = ka
         self.count = kar.count
         ke = .vt(Nil.self)
-                    for v in kar {
-
-                        if v.isPointer() {
-                            gtype = .gPointer
-                        }
-                        if v.isNil() {
-                                    gtype = .gPointer
-                            v.gtype = .gPointer
-                            }
-                    }
+        for v in kar {
+            if v.isPointer() {
+                gtype = .gPointer
+            }
+            if v.isNil() {
+                gtype = .gPointer
+                v.gtype = .gPointer
+            }
+        }
         if gtype == .gPointer {
             for (k, v) in kar.enumerated() {
                 if v.isPointer() {
@@ -84,21 +99,22 @@ class Kind {
                     
                 }
             }
-
+            
             
         }
         ke = .km(kar)
+        self.assert()
     }
     private var ke: Kinde
-  
+    
     var gtype: Gtype
     var count: Int
     func cKind() -> Kind {
         switch ke {
-            case .vt(let vt):
-                return Kind(vt)
-            case .k(let k):
-                return k
+        case .vt(let vt):
+            return Kind(vt)
+        case .k(let k):
+            return k
         default:
             de(ECASE)
         }
@@ -123,16 +139,13 @@ class Kind {
     }
     
     func kindEquivalent(_ k2: Kind) -> Bool {
-        
+        //     if isNil() && k2.isPointer() || isPointer() && k2.isNil() {
         if isOneNil() && k2.isPointer() || isPointer() && k2.isOneNil() {
             return true
         }
         if gtype != k2.gtype {
             return false
         }
-//        if gtype == .gPointer && !sg && self === k2{
-//            return gtype == k2.gtype
-//        }
         switch ke {
         case .vt(let vt):
             ade(gtype == .gScalar && k2.gtype == .gScalar)
@@ -155,7 +168,7 @@ class Kind {
                 if self === $0 && k2 === $1 {
                     return true
                 }
-                    return $0.kindEquivalent($1)
+                return $0.kindEquivalent($1)
             })
         }
     }

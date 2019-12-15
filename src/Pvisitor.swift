@@ -34,6 +34,11 @@ class Pvisitor {
                 let xa = pv.getPv(str)
                 fatalError()
             },
+//            "xv": { sctx, pv, s in try assertPvals(s, 1)
+//                
+//                let xa = pv.getPv(str)
+//                fatalError()
+//            },
             "ft": { sctx, pv, s in try assertPvals(s, 2)
                 print("--", sctx.getStart()!.getLine())
                 pv.li = pv.printed.endIndex
@@ -446,7 +451,7 @@ class Pvisitor {
         defer {popDebug()}
         if let spec = sctx.kindList() {
             let kL = try visitKindList(spec)
-            let rt = try Kind(sctx, kL)
+            let rt = try Kind(kL)
             return rt
         }
         if let type = sctx.TYPES() {
