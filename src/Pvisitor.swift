@@ -7,13 +7,14 @@ class Pvisitor {
     private var t_compare = ""
     private var ft = ""
     private var li = "".startIndex
-    private var cfc: Fc {return lfc ?? fc}
+
     private var fc = Fc()
     private var lfc: Fc?
     private var fkmap = [String:Fheader]()
     private var line = -1
     private var prc: ParserRuleContext?
     private var oldPrc: ParserRuleContext?
+    private var cfc: Fc {return lfc ?? fc}
     init() {
         for str in builtIns.keys {
             reserveFunction(str)
