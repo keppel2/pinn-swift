@@ -1,10 +1,4 @@
-//
-//  Error.swift
-//  pinn
-//
-//  Created by Ryan Keppel on 11/16/19.
-//  Copyright © 2019 Ryan Keppel. All rights reserved.
-//
+
 
 import Foundation
 import Antlr4
@@ -26,7 +20,6 @@ class Perr : Error {
     convenience init(_ s: String, _ t: Token) {
         self.init(s, nil, nil, t)
     }
-//    static treeString() {}
     var string: String {
         var rt = ""
         rt += "Error: \(str)."

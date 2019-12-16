@@ -1,11 +1,3 @@
-//
-//  extensions.swift
-//  pinn
-//
-//  Created by Ryan Keppel on 12/13/19.
-//  Copyright © 2019 Ryan Keppel. All rights reserved.
-//
-
 import Foundation
 extension Bool: Ptype, Ktype {
     static func zeroValue() -> Ptype { return false }

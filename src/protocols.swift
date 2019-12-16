@@ -1,11 +1,3 @@
-//
-//  protocols.swift
-//  pinn
-//
-//  Created by Ryan Keppel on 11/15/19.
-//  Copyright © 2019 Ryan Keppel. All rights reserved.
-//
-
 
 protocol Ptype {
     static func zeroValue() -> Ptype

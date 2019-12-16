@@ -1,22 +1,14 @@
-//
-//  aux.swift
-//  pinn
-//
-//  Created by Ryan Keppel on 11/16/19.
-//  Copyright © 2019 Ryan Keppel. All rights reserved.
-//
-
 import Foundation
 import Antlr4
 //var gtree: PinnParser.FileContext? = nil
 
 func exe(_ s: String, _ failReason: String? = nil) throws {
-       let (tree, parser) = parse(s)
-       gparser = parser
+    let (tree, parser) = parse(s)
+    gparser = parser
     if tree != nil {
-//        gtree = tree
-            let pv = Pvisitor()
-
+        //        gtree = tree
+        let pv = Pvisitor()
+        
         if let fr = failReason {
             if (try? pv.visitFile(tree!)) != nil {
                 throw Perr(ETEST_FAIL + ", expected to fail: " + fr + "\n" + s)
@@ -44,7 +36,7 @@ func execute() throws  {
     let args = ProcessInfo.processInfo.arguments
     let s = args[1]
     test = s == "-t"
-
+    
     let myinput = fnToString(test ? "/tmp/types.pinn" : s)
     try exe(myinput)
     if (test) {
@@ -80,7 +72,7 @@ func stringDequote(_ s: String) -> String {
 private func _fatalError(_ s: String) -> Never {
     print(s)
     fatalError()
-//    exit(1)
+    //    exit(1)
 }
 func tryCast<T> (_ pv: Pval) throws -> T {
     if !(pv.getUnwrap() is T) {
@@ -134,7 +126,7 @@ func pEq(_ a: Ptype, _ b: Ptype) -> Bool {
 
 struct Nil: Ptype, CustomStringConvertible {
     var description: String { return "N"}
-
+    
     static func zeroValue() -> Ptype { Nil() }
     func equal(_ a: Ptype) -> Bool {
         return a is Nil

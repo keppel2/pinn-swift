@@ -1,63 +1,11 @@
-//
-//  Kind.swift
-//  pinn
-//
-//  Created by Ryan Keppel on 11/14/19.
-//  Copyright © 2019 Ryan Keppel. All rights reserved.
-//
 
 import Foundation
 import Antlr4
 
 class Kind {
-    
-    private enum Kinde {
-        case vt(Ptype.Type)
-        case k(Kind)
-        case km([Kind])
-        
-        func getVt() -> Ptype.Type? {
-            if case .vt(let pw) = self {
-                return pw
-            }
-            return nil
-        }
-        func getK() -> Kind? {
-            if case .k(let ar) = self {
-                return ar
-            }
-            return nil
-        }
-        func getKm() -> [Kind]? {
-            if case .km(let map) = self {
-                return map
-            }
-            return nil
-            
-        }
-    }
-    
-    init(_ vtype: Ptype.Type) {
-        ke = .vt(vtype)
-        gtype = .gScalar
-        count = 1
-        self.assert()
-    }
-    func assert() {
-        switch gtype {
-        case .gScalar:
-            ade(ke.getVt() != nil)
-            ade(count == 1)
-        case .gArray, .gSlice, .gMap:
-            ade(ke.getK() != nil)
-        case .gTuple, .gPointer:
-            ade(ke.getKm() != nil)
-//            for k in ke.getKm()! {
-//                k.assert()
-//            }
-        }
-    }
-    
+    private var ke: Kinde
+    var gtype: Gtype
+    var count: Int
     init(_ k: Kind?, _ gtype: Gtype, _ count: Int? = nil) {
         self.gtype = gtype
         switch gtype {
@@ -105,10 +53,55 @@ class Kind {
         ke = .km(kar)
         self.assert()
     }
-    private var ke: Kinde
+
+    private enum Kinde {
+        case vt(Ptype.Type)
+        case k(Kind)
+        case km([Kind])
+        
+        func getVt() -> Ptype.Type? {
+            if case .vt(let pw) = self {
+                return pw
+            }
+            return nil
+        }
+        func getK() -> Kind? {
+            if case .k(let ar) = self {
+                return ar
+            }
+            return nil
+        }
+        func getKm() -> [Kind]? {
+            if case .km(let map) = self {
+                return map
+            }
+            return nil
+            
+        }
+    }
     
-    var gtype: Gtype
-    var count: Int
+    init(_ vtype: Ptype.Type) {
+        ke = .vt(vtype)
+        gtype = .gScalar
+        count = 1
+        self.assert()
+    }
+    func assert() {
+        switch gtype {
+        case .gScalar:
+            ade(ke.getVt() != nil)
+            ade(count == 1)
+        case .gArray, .gSlice, .gMap:
+            ade(ke.getK() != nil)
+        case .gTuple, .gPointer:
+            ade(ke.getKm() != nil)
+//            for k in ke.getKm()! {
+//                k.assert()
+//            }
+        }
+    }
+    
+
     func cKind() -> Kind {
         switch ke {
         case .vt(let vt):

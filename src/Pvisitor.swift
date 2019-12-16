@@ -1,11 +1,3 @@
-//
-//  Pvisitor.swift
-//  pinn
-//
-//  Created by Ryan Keppel on 10/28/19.
-//  Copyright © 2019 Ryan Keppel. All rights reserved.
-//
-
 import Foundation
 import Antlr4
 
@@ -15,12 +7,19 @@ class Pvisitor {
     private var t_compare = ""
     private var ft = ""
     private var li = "".startIndex
-
-    private static func assertPvals( _ s: [Pval], _ i: Int) throws {
-        if s.count != i {
-            throw Perr(EPARAM_LENGTH)
+    private var cfc: Fc {return lfc ?? fc}
+    private var fc = Fc()
+    private var lfc: Fc?
+    private var fkmap = [String:Fheader]()
+    private var line = -1
+    private var prc: ParserRuleContext?
+    private var oldPrc: ParserRuleContext?
+    init() {
+        for str in builtIns.keys {
+            reserveFunction(str)
         }
     }
+
     private let litToType: [String: Ptype.Type] = ["int": Int.self, "bool": Bool.self, "string": String.self, "decimal": Decimal.self, "self": Nil.self]
     private let builtIns
         : [String: (ParserRuleContext, Pvisitor, [Pval]) throws -> Pval?] =
@@ -122,7 +121,11 @@ class Pvisitor {
     private enum Path {
         case pNormal, pExiting, pBreak, pContinue, pFallthrough
     }
-    
+    private static func assertPvals( _ s: [Pval], _ i: Int) throws {
+        if s.count != i {
+            throw Perr(EPARAM_LENGTH)
+        }
+    }
     
     private struct FKind {
         var k: Kind
@@ -153,10 +156,7 @@ class Pvisitor {
         }
         
     }
-    private var cfc: Fc {return lfc ?? fc}
-    private var fc = Fc()
-    private var lfc: Fc?
-    private var fkmap = [String:Fheader]()
+
     private struct Fheader {
         var funcContext: PinnParser.FunctionContext?
         var kind: Kind?
@@ -270,11 +270,7 @@ class Pvisitor {
         return rt
     }
     
-    private var texts = [String]()
-    private var line = -1
-    private var prc: ParserRuleContext?
-    private var oldPrc: ParserRuleContext?
-    private var pline: Int { return prc!.getStart()!.getLine()}
+
     private static func childToToken(_ child: Tree) -> PinnParser.Tokens {
         return PinnParser.Tokens(rawValue: (child as! TerminalNode).getSymbol()!.getType())!
     }
@@ -1044,10 +1040,6 @@ class Pvisitor {
         default: break
         }
     }
-    init() {
-        for str in builtIns.keys {
-            reserveFunction(str)
-        }
-    }
+
     
 }
