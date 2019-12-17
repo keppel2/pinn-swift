@@ -103,16 +103,7 @@ func de(_ s: String = "") -> Never {
 func dbg() {
     _fatalError("dbg")
 }
-enum Gtype {
-    case gScalar, gArray, gMap, gSlice, gTuple, gPointer
-}
 
-class Wrap <T> {
-    var w: T
-    init(_ x: T) {
-        w = x
-    }
-}
 func stringToParser(_ s: String) -> PinnParser {
     let aInput = ANTLRInputStream(s)
     let lexer = PinnLexer(aInput)
@@ -123,7 +114,16 @@ func stringToParser(_ s: String) -> PinnParser {
 func pEq(_ a: Ptype, _ b: Ptype) -> Bool {
     return type(of:a) == type(of:b)
 }
+enum Gtype {
+    case gScalar, gArray, gMap, gSlice, gTuple, gPointer
+}
 
+class Wrap <T> {
+    var w: T
+    init(_ x: T) {
+        w = x
+    }
+}
 struct Nil: Ptype, CustomStringConvertible {
     var description: String { return "N"}
     

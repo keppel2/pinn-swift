@@ -52,39 +52,14 @@ class Kind {
         ke = .km(kar)
         self.assert()
     }
-
-    private enum Kinde {
-        case vt(Ptype.Type)
-        case k(Kind)
-        case km([Kind])
-        
-        func getVt() -> Ptype.Type? {
-            if case .vt(let pw) = self {
-                return pw
-            }
-            return nil
-        }
-        func getK() -> Kind? {
-            if case .k(let ar) = self {
-                return ar
-            }
-            return nil
-        }
-        func getKm() -> [Kind]? {
-            if case .km(let map) = self {
-                return map
-            }
-            return nil
-            
-        }
-    }
-    
     init(_ vtype: Ptype.Type) {
         ke = .vt(vtype)
         gtype = .gScalar
         count = 1
         self.assert()
     }
+
+
     func assert() {
         switch gtype {
         case .gScalar:
@@ -162,6 +137,32 @@ class Kind {
                 }
                 return $0.kindEquivalent($1)
             })
+        }
+    }
+    
+    private enum Kinde {
+        case vt(Ptype.Type)
+        case k(Kind)
+        case km([Kind])
+        
+        func getVt() -> Ptype.Type? {
+            if case .vt(let pw) = self {
+                return pw
+            }
+            return nil
+        }
+        func getK() -> Kind? {
+            if case .k(let ar) = self {
+                return ar
+            }
+            return nil
+        }
+        func getKm() -> [Kind]? {
+            if case .km(let map) = self {
+                return map
+            }
+            return nil
+            
         }
     }
 }

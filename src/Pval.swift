@@ -1,17 +1,8 @@
 import Antlr4
 
 class Pval {
-    var e: Pvalp
-    class Pvalp {
-        fileprivate var k: Kind
-        fileprivate var con: Contents
-        let prc: ParserRuleContext?
-        fileprivate init(_ k: Kind, _ con: Contents, _ prc: ParserRuleContext?) {
-            self.k = k
-            self.con = con
-            self.prc = prc
-        }
-    }
+    private var e: Pvalp
+
     
     
     
@@ -37,108 +28,7 @@ class Pval {
     
     
     
-    fileprivate enum Contents {
-        case single(Pwrap)
-        case multi(Wrap<[Pval]>)
-        case map(Wrap<[String: Pval]>)
-        init(_ c: Contents) {
-            switch c {
-                
-            case .multi(let pv):
-                self = .multi(pv)
-            case .map(let ma):
-                self = .map(ma)
-            case .single(let s):
-                self = .single(s)
-            }
-        }
-        func setCon(_ k: Ktype? = nil, _ v: Pval? = nil) {
-            switch self{
-            case .multi(let pv):
-                if k == nil {
-                    pv.w.append(v!)
-                } else {
-                    pv.w[k as! Int] = v!
-                }
-            case .map(let ma):
-                ma.w[k as! String] = v
-            case .single:
-                de(ECASE)
-            }
-        }
-        fileprivate func getPw() -> Pwrap {
-            if case .single(let pw) = self {
-                return pw
-            }
-            de(ECASE)
-        }
-        func getAr() -> [Pval] {
-            if case .multi(let ar) = self {
-                return ar.w
-            }
-            de(ECASE)
-        }
-        func getMap() -> [String: Pval] {
-            if case .map(let map) = self {
-                return map.w
-            }
-            de(ECASE)
-        }
-        func isNull() -> Bool {
-            return equal(Contents.single(Pwrap(Nil())))
-        }
-        func equal(_ co: Contents) -> Bool {
-            switch self {
-            case .single(let pw):
-                if case .multi(let x) = co {
-                    _ = x
-                    return false
-                }
-                return pw.equal(co.getPw())
-            case .multi(let ar):
-                if case .single(let x) = co {
-                    _ = x
-                    return false
-                }
-                return ar.w.elementsEqual(co.getAr(), by: {$0.equal($1)})
-            case .map(let map):
-                let omap = co.getMap()
-                for (key, value) in map.w {
-                    if omap[key] == nil {
-                        return false
-                    }
-                    if !value.equal(omap[key]!) {
-                        return false
-                    }
-                }
-                return true
-                
-                
-            }
-        }
-        func getSlice(_ a: Int, _ b: Int) -> [Pval] {
-            switch self {
-            case .multi(let pvs):
-                return Array(pvs.w[a..<b])
-            default: de(ECASE)
-            }
-        }
-        
-        
-        func count() -> Int {
-            switch self {
-            case .multi(let ar):
-                return ar.w.count
-            case .map(let map):
-                return map.w.count
-            case.single:
-                return 1
-            }
-        }
-    }
-    
-    
-    
+
     
     
     
@@ -147,7 +37,7 @@ class Pval {
         e = p.e
     }
     
-    init(_ c: ParserRuleContext?, _ ar: [Pval], _ k: Kind) throws {
+    init(_ c: ParserRuleContext, _ ar: [Pval], _ k: Kind) throws {
         for v in ar {
             if !v.kind.kindEquivalent(k.cKind()) {
                 throw Perr(ETYPE, c)
@@ -156,7 +46,7 @@ class Pval {
         e = Pvalp(k, .multi(Wrap(ar)), c)
     }
     
-    init(_ c: ParserRuleContext?, _ ar: [Pval]) throws {
+    init(_ c: ParserRuleContext, _ ar: [Pval]) throws {
         //                          prc = c
         let mar = ar
         let ka = ar.map { $0.kind }
@@ -169,25 +59,20 @@ class Pval {
         e = Pvalp(k, .multi(Wrap(mar)), c)
     }
     
-    init(_ c: ParserRuleContext?, _ a: Ptype) {
+    init(_ c: ParserRuleContext, _ a: Ptype) {
         let w = Pwrap(a)
         let k = Kind(type(of: w.unwrap()))
         e = Pvalp(k, .single(w), c)
     }
     
-    convenience init( _ c: ParserRuleContext?, _ pv: Pval, _ a: Int, _ b: Int) {
+    convenience init( _ c: ParserRuleContext, _ pv: Pval, _ a: Int, _ b: Int) {
         self.init(c, Kind(pv.kind.cKind(), .gSlice, b - a))
         e.con = .multi(Wrap(pv.e.con.getSlice(a, b)))
     }
     
+
     
-    func conset(_ k: Ktype? = nil, _ p: Pval? = nil) {
-        e.con.setCon(k, p)
-        self.e.k.count = e.con.count()
-    }
-    
-    
-    init( _ c: ParserRuleContext?, _ k: Kind) {
+    init( _ c: ParserRuleContext, _ k: Kind) {
         switch k.gtype {
         case .gArray, .gSlice:
             
@@ -214,6 +99,12 @@ class Pval {
             break
         }
     }
+    
+    func conset(_ k: Ktype? = nil, _ p: Pval? = nil) {
+        e.con.setCon(k, p)
+        self.e.k.count = e.con.count()
+    }
+    var prc: ParserRuleContext {e.prc}
     func equal(_ p: Pval) -> Bool {
         
         ade(p.kind.kindEquivalent(kind))
@@ -405,6 +296,117 @@ class Pval {
             return Pval(self)
         }
     }
+    private class Pvalp {
+        fileprivate var k: Kind
+        fileprivate var con: Contents
+        let prc: ParserRuleContext
+        fileprivate init(_ k: Kind, _ con: Contents, _ prc: ParserRuleContext) {
+            self.k = k
+            self.con = con
+            self.prc = prc
+        }
+    }
+    private enum Contents {
+        case single(Pwrap)
+        case multi(Wrap<[Pval]>)
+        case map(Wrap<[String: Pval]>)
+        init(_ c: Contents) {
+            switch c {
+                
+            case .multi(let pv):
+                self = .multi(pv)
+            case .map(let ma):
+                self = .map(ma)
+            case .single(let s):
+                self = .single(s)
+            }
+        }
+        func setCon(_ k: Ktype? = nil, _ v: Pval? = nil) {
+            switch self{
+            case .multi(let pv):
+                if k == nil {
+                    pv.w.append(v!)
+                } else {
+                    pv.w[k as! Int] = v!
+                }
+            case .map(let ma):
+                ma.w[k as! String] = v
+            case .single:
+                de(ECASE)
+            }
+        }
+        fileprivate func getPw() -> Pwrap {
+            if case .single(let pw) = self {
+                return pw
+            }
+            de(ECASE)
+        }
+        func getAr() -> [Pval] {
+            if case .multi(let ar) = self {
+                return ar.w
+            }
+            de(ECASE)
+        }
+        func getMap() -> [String: Pval] {
+            if case .map(let map) = self {
+                return map.w
+            }
+            de(ECASE)
+        }
+        func isNull() -> Bool {
+            return equal(Contents.single(Pwrap(Nil())))
+        }
+        func equal(_ co: Contents) -> Bool {
+            switch self {
+            case .single(let pw):
+                if case .multi(let x) = co {
+                    _ = x
+                    return false
+                }
+                return pw.equal(co.getPw())
+            case .multi(let ar):
+                if case .single(let x) = co {
+                    _ = x
+                    return false
+                }
+                return ar.w.elementsEqual(co.getAr(), by: {$0.equal($1)})
+            case .map(let map):
+                let omap = co.getMap()
+                for (key, value) in map.w {
+                    if omap[key] == nil {
+                        return false
+                    }
+                    if !value.equal(omap[key]!) {
+                        return false
+                    }
+                }
+                return true
+                
+                
+            }
+        }
+        func getSlice(_ a: Int, _ b: Int) -> [Pval] {
+            switch self {
+            case .multi(let pvs):
+                return Array(pvs.w[a..<b])
+            default: de(ECASE)
+            }
+        }
+        
+        
+        func count() -> Int {
+            switch self {
+            case .multi(let ar):
+                return ar.w.count
+            case .map(let map):
+                return map.w.count
+            case.single:
+                return 1
+            }
+        }
+    }
+    
+    
     
     
 }

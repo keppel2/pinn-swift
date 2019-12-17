@@ -119,50 +119,14 @@ class Pvisitor {
                 return nil
             }
     ]
-    private enum Path {
-        case pNormal, pExiting, pBreak, pContinue, pFallthrough
-    }
+
     private static func assertPvals( _ s: [Pval], _ i: Int) throws {
         if s.count != i {
             throw Perr(EPARAM_LENGTH)
         }
     }
     
-    private struct FKind {
-        var k: Kind
-        var s: String
-        var variadic = false
-        var prc: ParserRuleContext
-    }
-    private class Fc {
-        var m = [String: Pval]()
-        var rt: Pval?
-        var path = Path.pNormal
-        func setPath(_ p: Path) {
-            path = p
-        }
-        func toEndBlock()  -> Bool {
-            switch path {
-            case .pNormal, .pContinue:
-                path = .pNormal
-                return false
-            case .pBreak:
-                path = .pNormal
-                fallthrough
-            case .pExiting:
-                return true
-            default:
-                de(ECASE)
-            }
-        }
-        
-    }
 
-    private struct Fheader {
-        var funcContext: PinnParser.FunctionContext?
-        var kind: Kind?
-        var fkinds = [FKind]()
-    }
     private func getPv(_ s: String)  -> Pval?  {
         for m in [lfc?.m, fc.m] {
             if m == nil {
@@ -1041,6 +1005,42 @@ class Pvisitor {
         default: break
         }
     }
+    private struct FKind {
+        var k: Kind
+        var s: String
+        var variadic = false
+        var prc: ParserRuleContext
+    }
+    private class Fc {
+        var m = [String: Pval]()
+        var rt: Pval?
+        var path = Path.pNormal
+        func setPath(_ p: Path) {
+            path = p
+        }
+        func toEndBlock()  -> Bool {
+            switch path {
+            case .pNormal, .pContinue:
+                path = .pNormal
+                return false
+            case .pBreak:
+                path = .pNormal
+                fallthrough
+            case .pExiting:
+                return true
+            default:
+                de(ECASE)
+            }
+        }
+        
+    }
 
-    
+    private struct Fheader {
+        var funcContext: PinnParser.FunctionContext?
+        var kind: Kind?
+        var fkinds = [FKind]()
+    }
+    private enum Path {
+        case pNormal, pExiting, pBreak, pContinue, pFallthrough
+    }
 }

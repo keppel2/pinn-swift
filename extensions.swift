@@ -114,3 +114,4 @@ extension Decimal: Ptype, Plus, Compare, Arith, Negate {
         return self == a as! Self
     }
 }
+

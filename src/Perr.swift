@@ -1,6 +1,3 @@
-
-
-import Foundation
 import Antlr4
 
 class Perr : Error {
@@ -24,7 +21,7 @@ class Perr : Error {
         var rt = ""
         rt += "Error: \(str)."
         if let pv = pval {
-            rt += "Pval. Line " + pv.e.prc!.getStart()!.getLine() + " Col " + pv.e.prc!.getStart()!.getCharPositionInLine() + "."
+            rt += "Pval. Line " + pv.prc.getStart()!.getLine() + " Col " + pv.prc.getStart()!.getCharPositionInLine() + "."
         }
         if let pc = prc {
             rt += "PRC. Text \(pc.getText()). Line \(pc.getStart()!.getLine()) Col \(pc.getStart()!.getCharPositionInLine())."
