@@ -1,3 +1,4 @@
-  cur := (nil, 42, nil);
-  //xam("cur");
-                cur[0] = (nil, 101, nil);
+var dar [2][slice]int;
+dar[1] = [42, 101];
+xam("dar");
+//print(len(dar[1]));

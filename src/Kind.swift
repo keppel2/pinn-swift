@@ -7,7 +7,7 @@ class Kind {
     var gtype: Gtype
     var count: Int
     var kinds = [Kind]()
-    init(_ k: Kind?, _ gtype: Gtype, _ count: Int? = nil) {
+    init(_ k: Kind, _ gtype: Gtype, _ count: Int? = nil) {
         self.gtype = gtype
         switch gtype {
         case .gScalar, .gTuple, .gPointer:
@@ -15,10 +15,10 @@ class Kind {
         case .gMap:
             ade(count == nil)
             self.count = 0
-            ke = .k(k!)
+            ke = .k(k)
         case .gArray, .gSlice:
             self.count = count!
-            ke = .k(k!)
+            ke = .k(k)
         }
         self.assert()
     }
