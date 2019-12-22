@@ -43,6 +43,7 @@ class Pval {
                 throw Perr(ETYPE, c)
             }
         }
+        k.count = nil
         e = Pvalp(k, .multi(Wrap(ar)), c)
     }
     
@@ -56,12 +57,13 @@ class Pval {
                 mar[key].e.k = k
             }
         }
+        k.count = nil
         e = Pvalp(k, .multi(Wrap(mar)), c)
     }
     
     init(_ c: ParserRuleContext, _ a: Ptype) {
         let w = Pwrap(a)
-        let k = Kind(type(of: w.unwrap()))
+        let k = Kind(type(of: a))
         e = Pvalp(k, .single(w), c)
     }
 
@@ -76,14 +78,17 @@ class Pval {
             for _ in 0..<k.count! {
                 ar.append(Pval(c, k.cKind()))
             }
+//            k.count = nil
             e = Pvalp(k, Contents.multi(Wrap(ar)), c)
         case .gMap:
             let m = [String: Pval]()
+            ade(k.count == nil)
             e = Pvalp(k, Contents.map(Wrap(m)), c)
             
         case .gPointer:
             e = Pvalp(k, Contents.single(Pwrap(Nil())), c)
         case .gScalar:
+            ade(k.count == nil)
             let se = Pwrap(k.tKind().self.zeroValue())
             e = Pvalp(k, Contents.single(se), c)
         case .gTuple:
@@ -91,6 +96,7 @@ class Pval {
             for x in k.aKind() {
                 ar.append(Pval(c, x))
             }
+            k.count = nil
             e = Pvalp(k, Contents.multi(Wrap(ar)), c)
             break
         }
@@ -222,7 +228,30 @@ class Pval {
     
     func getKind() throws -> Kind {
         let k = e.k
-        k.count = e.con.count()
+        
+        
+        
+               switch e.con {
+                case .single:
+//                    if e.k.gtype != .gScalar{
+//                        throw Perr(EASSERT, self)
+//                    }
+                    return k
+                case .multi(let ar):
+                    k.count = ar.w.count
+                case .map(let m):
+                    k.count = m.w.count
+        //            de(ECASE)
+                }
+
+        
+        
+        
+        
+        
+        
+        
+        k.assert()
         return k
         
         switch e.con {

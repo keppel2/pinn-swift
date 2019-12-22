@@ -14,7 +14,7 @@ class Kind {
             de(ECASE)
         case .gMap:
             ade(count == nil)
-            self.count = 0
+//            self.count = 0
             ke = .k(k)
         case .gArray, .gSlice:
             self.count = count!
