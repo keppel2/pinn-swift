@@ -7,6 +7,11 @@ class Kind {
     var gtype: Gtype
     var count: Int?
 //    var kinds = [Kind]()
+    init(_ k: Kind){
+        self.ke = k.ke
+        self.gtype = k.gtype
+        self.count = k.count
+    }
     init(_ k: Kind, _ gtype: Gtype, _ count: Int? = nil) {
         self.gtype = gtype
         switch gtype {
@@ -74,6 +79,33 @@ class Kind {
 //            }
         }
     }
+    
+    
+    
+//    func clone() throws -> Kind {
+//        var gtype: Gtype
+//        var count: Int?
+//        
+//        
+//        
+//        switch e.con {
+//        case .single(let pw):
+//            return Pval(e.prc, pw.clone().unwrap())
+//        case .multi(let ar):
+//            
+//            if try getKind().gtype == .gSlice || getKind().gtype == .gPointer {
+//                return Pval(self)}
+//            if try getKind().gtype == .gArray {
+//                return try Pval(e.prc, ar.w.map { try $0.cloneIf() }, getKind())
+//            } else {
+//                return try Pval(e.prc, ar.w.map {try $0.cloneIf()})
+//            }
+//        case .map:
+//            return Pval(self)
+//        }
+//    }
+//    
+    
     
 
     func cKind() -> Kind {

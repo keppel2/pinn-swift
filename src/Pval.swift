@@ -78,8 +78,9 @@ class Pval {
             for _ in 0..<k.count! {
                 ar.append(Pval(c, k.cKind()))
             }
-//            k.count = nil
-            e = Pvalp(k, Contents.multi(Wrap(ar)), c)
+            let mk = Kind(k)
+            mk.count = nil
+            e = Pvalp(mk, Contents.multi(Wrap(ar)), c)
         case .gMap:
             let m = [String: Pval]()
             ade(k.count == nil)
