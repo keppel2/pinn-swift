@@ -5,7 +5,7 @@ import Antlr4
 class Kind {
     private var ke: Kinde
     var gtype: Gtype
-    var count: Int
+    var count: Int?
     var kinds = [Kind]()
     init(_ k: Kind, _ gtype: Gtype, _ count: Int? = nil) {
         self.gtype = gtype
@@ -55,7 +55,7 @@ class Kind {
     init(_ vtype: Ptype.Type) {
         ke = .vt(vtype)
         gtype = .gScalar
-        count = 1
+//        count = 1
         self.assert()
     }
 
@@ -64,7 +64,7 @@ class Kind {
         switch gtype {
         case .gScalar:
             ade(ke.getVt() != nil)
-            ade(count == 1)
+            ade(count == nil)
         case .gArray, .gSlice, .gMap:
             ade(ke.getK() != nil)
         case .gTuple, .gPointer:

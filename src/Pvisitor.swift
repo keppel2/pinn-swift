@@ -58,26 +58,26 @@ class Pvisitor {
                 return nil
             },
             "len": { sctx, pv, s in try assertPvals(s, 1)
-                if s[0].kind.isType(String.self) {
-                    return Pval(sctx, (s[0].getUnwrap() as! String).count)
+                if try s[0].getKind().isType(String.self) {
+                    return Pval(sctx, (try s[0].getUnwrap() as! String).count)
                 }
-                return Pval(sctx, s[0].kind.count)},
+                return Pval(sctx, try s[0].getKind().count!)},
             "stringValue":
                 { sctx, pv, s in try assertPvals(s, 1)
-                    return Pval(sctx, s[0].string(false)) },
+                    return Pval(sctx, try s[0].string(false)) },
             "depthString":
                 {sctx, pv, s in try assertPvals(s, 1)
-                            return Pval(sctx, s[0].string(true))
+                            return Pval(sctx, try s[0].string(true))
             },
             "print":
                 {sctx, pv, s in
-                    let rt = Pvisitor.printSpace(s.map {$0.string(false)})
+                    let rt = Pvisitor.printSpace(try s.map {try $0.string(false)})
                     pv.textout(rt)
                     return nil
             },
             "println":
                 {sctx, pv, s in
-                    var rt = Pvisitor.printSpace(s.map {$0.string(false)})
+                    var rt = Pvisitor.printSpace(try s.map {try $0.string(false)})
                     pv.textout(rt + "\n")
                     return nil
             },
@@ -143,9 +143,9 @@ class Pvisitor {
         let rt: Pval
         switch str {
         case "==":
-            return Pval(sctx, lhs.equal(rhs))
+            return Pval(sctx, try lhs.equal(rhs))
         case "!=":
-            return Pval(sctx, !lhs.equal(rhs))
+            return Pval(sctx, try !lhs.equal(rhs))
 
         case "+":
             let lh: Plus = try tryCast(lhs)
@@ -297,7 +297,7 @@ class Pvisitor {
                 let par = Pval(ctx, Kind(v.k, .gArray, s.count - index))
                 
                 for (key, varadds) in s[index...].enumerated() {
-                    if !varadds.kind.kindEquivalent(v.k) {
+                    if try !varadds.getKind().kindEquivalent(v.k) {
                         throw Perr(ETYPE, sctx)
                     }
                     try par.set(key, varadds)
@@ -308,7 +308,7 @@ class Pvisitor {
                 lfc!.m[fh.fkinds[index].s] = par//Pval(par)
                 continue
             }
-            if !s[index].kind.kindEquivalent(v.k) {
+            if try !s[index].getKind().kindEquivalent(v.k) {
                 throw Perr(ETYPE, sctx)
             }
             if let pv = lfc!.m[fh.fkinds[index].s]  {
@@ -327,7 +327,7 @@ class Pvisitor {
             guard let rp = lfc!.rt else {
                 throw Perr(ETYPE, sctx)
             }
-            if !k.kindEquivalent(rp.kind) {
+            if !k.kindEquivalent(try rp.getKind()) {
                 throw Perr(ETYPE, sctx)
             }
         } else {
@@ -473,7 +473,7 @@ class Pvisitor {
         var rt = false
         for child in sctx.expr() {
             let cv = try visitPval(child)!
-            if cv.equal(v) {
+            if try cv.equal(v) {
                 rt = true
                 break
             }
@@ -627,7 +627,7 @@ class Pvisitor {
                 
                 let (str, pv) = try visitObjectPair(op)
                 if kind == nil {
-                    kind = Kind(pv.kind, .gMap)
+                    kind = Kind(try pv.getKind(), .gMap)
                     rt = Pval(sctx, kind!)
                 }
                 try rt!.set(str, pv)
@@ -636,7 +636,7 @@ class Pvisitor {
         case let sctx as PinnParser.ArrayLiteralContext:
             let el = sctx.exprList()!
             let ae = try visitList(el)
-            let aeFirstk = ae.first!.kind
+            let aeFirstk = try ae.first!.getKind()
 
             let kind = Kind(aeFirstk, .gSlice, ae.count)
             rt = try Pval(sctx, ae, kind)
@@ -709,7 +709,7 @@ class Pvisitor {
                 if let lh = sctx.first {
                     lhsv = try tryCast(try visitPval(lh)!)
                 }
-                var rhsv = v.kind.count
+                var rhsv = try v.getKind().count!
                 if let rh = sctx.second {
                     rhsv = try tryCast(try visitPval(rh)!)
                 }
@@ -717,7 +717,7 @@ class Pvisitor {
                     rhsv+=1
                 }
                 
-                rt = Pval(sctx, v, lhsv, rhsv)
+                rt = try Pval(sctx, v, lhsv, rhsv)
                 
                 
                 return rt
@@ -905,9 +905,9 @@ class Pvisitor {
                 
                 
                 let ranger = try visitPval(sctx.expr()!)!
-                switch ranger.kind.gtype {
+                switch try ranger.getKind().gtype {
                 case .gSlice, .gArray:
-                    for x in 0..<ranger.kind.count {
+                    for x in try 0..<ranger.getKind().count! {
                         try value!.setPV(ranger.get(x))
                         try key?.setPV(Pval(sctx, x))
                         
@@ -964,8 +964,8 @@ class Pvisitor {
             
             if sctx.LPAREN() != nil {
                 let e = try visitPval(sctx.expr()!)!
-                ade(e.kind.gtype == .gTuple)
-                ade(e.kind.count == sctx.ID().count)
+                ade(try e.getKind().gtype == .gTuple)
+                ade(try e.getKind().count == sctx.ID().count)
                 for (k, v) in sctx.ID().enumerated() {
                     let str = v.getText()
                     let te = try e.get(k)

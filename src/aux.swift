@@ -75,10 +75,10 @@ private func _fatalError(_ s: String) -> Never {
     //    exit(1)
 }
 func tryCast<T> (_ pv: Pval) throws -> T {
-    if !(pv.getUnwrap() is T) {
+    if !(try pv.getUnwrap() is T) {
         throw Perr(ETYPE, pv)
     }
-    return pv.getUnwrap() as! T
+    return try pv.getUnwrap() as! T
 }
 
 
