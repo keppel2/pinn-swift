@@ -6,7 +6,7 @@ class Kind {
     private var ke: Kinde
     var gtype: Gtype
     var count: Int?
-    var kinds = [Kind]()
+//    var kinds = [Kind]()
     init(_ k: Kind, _ gtype: Gtype, _ count: Int? = nil) {
         self.gtype = gtype
         switch gtype {
