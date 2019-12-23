@@ -419,29 +419,30 @@ class Pvisitor {
     private func visitKind(_ sctx: PinnParser.KindContext) throws -> Kind {
         loadDebug(sctx)
         defer {popDebug()}
+        let rt: Kind
         if let spec = sctx.kindList() {
             let kL = try visitKindList(spec)
-            let rt = try Kind(kL)
-            return rt
-        }
+            rt = try Kind(kL)
+        } else
         if let type = sctx.TYPES() {
             let strType = type.getText()
             let vtype = litToType[strType]!
-            return Kind(vtype)
+            rt = Kind(vtype)
+//            return Kind(vtype)
+        } else {
+            let kind = try visitKind(sctx.kind()!)
+            if sctx.MAP() != nil {
+                rt = Kind(kind, .gMap)
+            } else if sctx.SLICE() != nil {
+                rt = Kind(kind, .gSlice, 0)
+            }
+            else {
+                let v = try visitPval(sctx.expr()!)!
+                let x: Int = try tryCast(v)
+                rt = Kind(kind, .gArray, x)
+            }
         }
-        let kind = try visitKind(sctx.kind()!)
-        let rt: Kind
-        if sctx.MAP() != nil {
-            rt = Kind(kind, .gMap)
-        } else if sctx.SLICE() != nil {
-            rt = Kind(kind, .gSlice, 0)
-        }
-        else {
-            let v = try visitPval(sctx.expr()!)!
-            let x: Int = try tryCast(v)
-            rt = Kind(kind, .gArray, x)
-        }
-        return rt
+        return Kind.produceKind(rt)
     }
     private func visitFKind(_ sctx: PinnParser.FvarDeclContext) throws -> FKind {
         loadDebug(sctx)
@@ -1003,7 +1004,7 @@ class Pvisitor {
                 }
             } else {
                 let k = try visitKind(sctx.kind()!)
-                newV = Pval(sctx, Kind.produceKind(k))
+                newV = Pval(sctx, k)
             }
             if lfc != nil {
                 lfc!.m[str] = newV!

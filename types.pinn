@@ -713,6 +713,7 @@ for i = range [1, 5, 10, 2, 3] {
 print(depthString(bst));
 
 ec();
+/*
 ft("Depth-first search", "1 ,2 ,3 ,5 ,7 ,10 ,");
 func dfs(node  (self, int, self)) {
     if node == nil {
@@ -723,6 +724,7 @@ func dfs(node  (self, int, self)) {
         dfs(node[2]);
 }
 dfs(bst);
+ec();
 ft("Linked list", "(5 (8 (23 N)))");
 var LL (int, self);
 LL = (5, nil);
@@ -734,6 +736,7 @@ LL = LL[1];
 LL[1] = (23, nil);
 print(depthString(base));
 ec();
+
 ft("Doubly linked list", "(P 7 P)(E 5 P)(E 5 P)");
 var dll (self, int, self);
 dll = (nil, 5, nil);
@@ -754,3 +757,4 @@ npt2 := (42, (101, nil, nil), nil);
 print(npt2);
 print(depthString(npt2));
 ec();
+*/

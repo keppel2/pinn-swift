@@ -167,6 +167,9 @@ class Kind {
     }
     
     func kindEquivalent(_ k2: Kind) -> Bool {
+        if self === k2 {
+            return true
+        }
         //     if isNil() && k2.isPointer() || isPointer() && k2.isNil() {
         if isNil() && k2.isPointer() {
             return true
@@ -181,9 +184,10 @@ class Kind {
             return k2.ke.getVt() != nil && vt == k2.ke.getVt()!
         case .k(let k):
             
-            if k2.ke.getK() == nil {
-                return false
-            }
+//            if k2.ke.getK() == nil {
+//                aden()
+//                return false
+//            }
             switch gtype {
             case .gArray:
                 return k.kindEquivalent(k2.ke.getK()!) && count == k2.count
@@ -193,7 +197,7 @@ class Kind {
                 de(ECASE)
             }
         case .km(let km):
-            return k2.ke.getKm() != nil && km.elementsEqual(k2.ke.getKm()!, by: {
+            return km.elementsEqual(k2.ke.getKm()!, by: {
                 if self === $0 && k2 === $1 {
                     return true
                 }
