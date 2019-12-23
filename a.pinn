@@ -1,1 +1,1 @@
-var tup ((int, self), self);
+var tup (int, self);

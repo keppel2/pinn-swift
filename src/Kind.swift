@@ -27,6 +27,7 @@ class Kind {
         }
         self.assert()
     }
+    
     init(_ ka: [Kind]) throws {
         gtype = .gTuple
         var kar = ka
@@ -45,9 +46,9 @@ class Kind {
             for (k, v) in kar.enumerated() {
                 if v.isPointer() {
                     if !v.isOneNil() {
-                        if !kar.elementsEqual(v.ke.getKm()!, by: {$0.kindEquivalent($1)}) {
-                            throw Perr(ETYPE)
-                        }
+//                        if !kar.elementsEqual(v.ke.getKm()!, by: {$0.kindEquivalent($1)}) {
+//                            throw Perr(ETYPE)
+//                        }
                     }
                     kar[k] = self
                     
@@ -67,6 +68,16 @@ class Kind {
 //        if let ki = Self.kinds.firstIndex {
 //            $0.gtype == .gScalar } { print(ki) }
     }
+//    static func existingPointer(_ ka: [Kind]) -> Kind? {
+//        if !(ka.contains {
+//            $0.isNil()
+//        }) { return nil}
+//        let index = kinds.firstIndex {
+//            if let kska = $0.ke.getKm() {
+//                if ka.elementsEqual(kska, by: {})
+//            }
+//        }
+//    }
     static func produceKind(_ k: Kind) -> Kind {
 //        let k = Kind(vtype)
         let ki = kinds.firstIndex {
@@ -157,7 +168,7 @@ class Kind {
     
     func kindEquivalent(_ k2: Kind) -> Bool {
         //     if isNil() && k2.isPointer() || isPointer() && k2.isNil() {
-        if isOneNil() && k2.isPointer() || isPointer() && k2.isOneNil() {
+        if isNil() && k2.isPointer() {
             return true
         }
         if gtype != k2.gtype {
@@ -169,6 +180,7 @@ class Kind {
             
             return k2.ke.getVt() != nil && vt == k2.ke.getVt()!
         case .k(let k):
+            
             if k2.ke.getK() == nil {
                 return false
             }
