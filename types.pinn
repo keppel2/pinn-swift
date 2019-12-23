@@ -77,9 +77,23 @@ arStr[1] = "bravo";
 arStr[2] = "charlie";
 print(arStr);
 
-ft("Short declaration slice", "[10 23 42 101]");
+
+ft("Short declaration slice", "[10 23 42 101] [10 23 42 101]");
 sda := [10, 23, 42, 101];
-print(sda);
+print(sda, "");
+var sds [slice]int;
+sds = sda;
+print(sds);
+
+ft("Assign smaller slice to slice plus length", "[202 302] 2");
+assts := [24, 30, 101];
+assts = [202, 302];
+print(assts, len(assts));
+
+ft("Assign larger slice to slice plus length", "[202 302 502] 3");
+alsts := [24, 30];
+alsts = [202, 302, 502];
+print(alsts, len(alsts));
 
 ft("Print open interval 1 to 5", "[1 2 3 4]");
 print(1:5);
@@ -480,10 +494,9 @@ negdec = -10.2;
 print(negint, negdec);
 ft("print", "Hello, world.");
 print("Hello, world.");
-/*
-ft("println", "End with lf.");
+ft("println", "End with lf.
+");
 println("End with lf.");
-*/
 ft("Printed lf", "");
 ft("printB", "111");
 printB(7);
