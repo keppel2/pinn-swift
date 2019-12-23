@@ -106,8 +106,17 @@ class Pvisitor {
                 return Pval(sctx, try s[0].hasKey(str))
             },
             "debug": { sctx, pv, s in try assertPvals(s, 0)
-                dbg()
+                fatalError()
+//                return nil
+            },
+            "bi": { sctx, pv, s in try assertPvals(s, 2)
+                var str: String = try tryCast(s[0])
+                let xa1 = pv.getPv(str)!
+                str = try tryCast(s[1])
+                let xa2 = pv.getPv(str)!
+                ade(try xa1.getKind() === xa2.getKind())
                 return nil
+
             },
 //            "sort": { sctx, s in assertPvals(s, 1)
 //                s[0].sort()
@@ -994,7 +1003,7 @@ class Pvisitor {
                 }
             } else {
                 let k = try visitKind(sctx.kind()!)
-                    newV = Pval(sctx, k)
+                newV = Pval(sctx, Kind.produceKind(k))
             }
             if lfc != nil {
                 lfc!.m[str] = newV!

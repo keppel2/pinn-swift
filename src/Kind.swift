@@ -6,7 +6,7 @@ class Kind {
     private var ke: Kinde
     var gtype: Gtype
     var count: Int?
-//    var kinds = [Kind]()
+    static var kinds = [Kind]()
     init(_ k: Kind){
         self.ke = k.ke
         self.gtype = k.gtype
@@ -62,6 +62,24 @@ class Kind {
         gtype = .gScalar
 //        count = 1
         self.assert()
+
+        
+//        if let ki = Self.kinds.firstIndex {
+//            $0.gtype == .gScalar } { print(ki) }
+    }
+    static func produceKind(_ k: Kind) -> Kind {
+//        let k = Kind(vtype)
+        let ki = kinds.firstIndex {
+             k.kindEquivalent($0)
+//            return $0.gtype == k.gtype
+//                && $0.ke.getVt() == k.ke.getVt()
+//                && $0.count == k.count
+        }
+        if ki != nil {
+            return kinds[ki!]
+        }
+        kinds.append(k)
+        return k
     }
 
 

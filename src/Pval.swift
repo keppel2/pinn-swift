@@ -83,7 +83,9 @@ class Pval {
             e = Pvalp(mk, Contents.multi(Wrap(ar)), c)
         case .gMap:
             let m = [String: Pval]()
-            ade(k.count == nil)
+            let mk = Kind(k)
+            mk.count = nil
+//            ade(k.count == nil)
             e = Pvalp(k, Contents.map(Wrap(m)), c)
             
         case .gPointer:

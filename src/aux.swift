@@ -100,9 +100,6 @@ func de(_ s: String = "") -> Never {
     de(Perr(s))
 }
 
-func dbg() {
-    _fatalError("dbg")
-}
 
 func stringToParser(_ s: String) -> PinnParser {
     let aInput = ANTLRInputStream(s)

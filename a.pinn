@@ -1,4 +1,1 @@
-
-//var ar[2][3]int;
-var ar((int, int, int), (int, int, int));
-xam("ar");
+var tup ((int, self), self);
