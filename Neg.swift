@@ -69,12 +69,26 @@ var x [2]int;
 var y [2]string;
 y = x;
 """),
-("Wrong type assignment defined types", """
+("Wrong type assignment defined types (tuple = array)", """
 var x (int, int);
 var y [2]int;
 y = x;
 """),
-
+("Wrong type assignment defined types (map = tuple)", """
+var x [map]int;
+var y (int, int);
+x = y;
+"""),
+("Wrong type assignment defined types (scalar = array)", """
+var x int;
+var y [2]int;
+x = y;
+"""),
+("Wrong type assignment defined types (array = scalar)", """
+var x int;
+var y [2]int;
+y = x;
+"""),
 ("Wrong type get from short declaration", """
 x := 0;
 y := true;

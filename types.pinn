@@ -20,115 +20,115 @@ ft("Create int", "0");
 var x int;
 print(x);
 
-ec();ft("Print empty array", "[]");
+ft("Print empty array", "[]");
 var empty [0]int;
 print(empty);
 
-ec();ft("Print singleton array", "[23]");
+ft("Print singleton array", "[23]");
 print([23]);
 
-ec();ft("Print two in array", "[101 777]");
+ft("Print two in array", "[101 777]");
 print([101, 777]);
 
-ec();ft("Print single element object", "{foo:42}");
+ft("Print single element object", "{foo:42}");
 print({"foo": 42});
 
-ec();ft("Create and set to 10", "10");
+ft("Create and set to 10", "10");
 var x2 int;
 x2 = 10;
 print(x2);
 
-ec();ft("Create bool", "false");
+ft("Create bool", "false");
 var b bool;
 print(b);
 
-ec();ft("Create string", "");
+ft("Create string", "");
 var str string;
 print(str);
 
-ec();ft("Set string", "value");
+ft("Set string", "value");
 var str2 string;
 str2 = "value";
 print(str2);
 
-ec();ft("Short declaration", "true");
+ft("Short declaration", "true");
 shortBool := true;
 print(shortBool);
 
-ec();ft("Create map", "{answer:true} true false");
+ft("Create map", "{answer:true} true false");
 var newMap [map]bool;
 newMap["answer"] = true;
 print(newMap, key(newMap, "answer"), key(newMap, "not"));
 
-ec();ft("Create slice", "[777]");
+ft("Create slice", "[777]");
 var newSlice [slice]int;
 newSlice[0] = 777;
 print(newSlice);
 
-ec();ft("Create array", "aap");
+ft("Create array", "aap");
 var newArray [3]string;
 newArray[1] = "aap";
 print(newArray[1]);
 
-ec();ft("Create array of string", "[alpha bravo charlie]");
+ft("Create array of string", "[alpha bravo charlie]");
 var arStr [3]string;
 arStr[0] = "alpha";
 arStr[1] = "bravo";
 arStr[2] = "charlie";
 print(arStr);
 
-ec();ft("Short declaration slice", "[10 23 42 101]");
+ft("Short declaration slice", "[10 23 42 101]");
 sda := [10, 23, 42, 101];
 print(sda);
 
-ec();ft("Print open interval 1 to 5", "[1 2 3 4]");
+ft("Print open interval 1 to 5", "[1 2 3 4]");
 print(1:5);
 
-ec();ft("Print closed interval 11 through 13", "[11 12 13]");
+ft("Print closed interval 11 through 13", "[11 12 13]");
 print(11@13);
 
-ec();ft("Create array of ints", "[10 14 23 42 101 201]");
+ft("Create array of ints", "[10 14 23 42 101 201]");
 aInt := [10, 14, 23, 42, 101, 201];
 print(aInt);
 
-ec();ft("Copy to slice of ints", "[10 14 23 42 101 201]");
+ft("Copy to slice of ints", "[10 14 23 42 101 201]");
 sInt := aInt[:];
 print(sInt);
 
-ec();ft("Add 666 to slice of ints", "[10 14 23 42 101 201 666]");
+ft("Add 666 to slice of ints", "[10 14 23 42 101 201 666]");
 sInt[len(sInt)] = 666;
 print(sInt);
 
-ec();ft("Change first element to 7", "[7 14 23 42 101 201 666]");
+ft("Change first element to 7", "[7 14 23 42 101 201 666]");
 sInt[0] = 7;
 print(sInt);
 
-ec();ft("Get second element", "14");
+ft("Get second element", "14");
 print(sInt[1]);
 
-ec();ft("Block", "in");
+ft("Block", "in");
 {
     print("in");
 }
 
-ec();ft("Empty", "");
+ft("Empty", "");
 ;
 
-ec();ft("For range closed interval 11 to 14", "11,12,13,14,");
+ft("For range closed interval 11 to 14", "11,12,13,14,");
 var xRange int;
 for xRange = range 11@14 {
     print(xRange);
     print(",");
 }
 
-ec();ft("Continue on evens--print odds", "23,25,27,");
+ft("Continue on evens--print odds", "23,25,27,");
 var xRange86 int;
 for xRange86 = range 22@27 {
     if xRange86 % 2 == 0 continue;
     print(xRange86);
     print(",");
 }
-ec();ft("Break", "101,102,");
+ft("Break", "101,102,");
 var xBreak int;
 for xBreak = range 101@104 {
 if xBreak == 103 {
@@ -137,7 +137,7 @@ break;
 print(xBreak);
 print(",");
 }
-ec();ft("Deep return", "203");
+ft("Deep return", "203");
 func deepReturn() int {
     var i int;
     for i = range 202@205 {
@@ -146,13 +146,13 @@ func deepReturn() int {
 }
 print(deepReturn());
 
-ec();ft("3 part for statement", "10,12,14,");
+ft("3 part for statement", "10,12,14,");
 for forX := 10; forX < 15; forX += 2 {
     print(forX);
     print(",");
 }
 
-ec();ft("For range key value", "0 abcd.1 xyz.2 hello.");
+ft("For range key value", "0 abcd.1 xyz.2 hello.");
 var key int;
 var value string;
 arS := ["abcd", "xyz", "hello"];
@@ -160,32 +160,32 @@ for key, value = range arS {
     print(key, value);print(".");
 }
 
-ec();ft("For loop without init", "In for");
+ft("For loop without init", "In for");
 var bFor bool;
 for ; bFor != true; bFor = !bFor {
     print("In for");
 }
 
-ec();ft("If true print true", "true");
+ft("If true print true", "true");
 if true print("true");
 
-ec();ft("If false do not print bad", "");
+ft("If false do not print bad", "");
 if false print("bad");
 
-ec();ft("If false print else", "else");
+ft("If false print else", "else");
 if false ; else print("else");
 
-ec();ft("If true do not print else", "");
+ft("If true do not print else", "");
 if true ; else print("bad else");
 
-ec();ft("Ternary true", "42");
+ft("Ternary true", "42");
 print (true ? 42 : 5);
 
-ec();ft("Ternary false", "good");
+ft("Ternary false", "good");
 print (false ? "bad" : "good");
 
 
-ec();ft("While countdown", "50.40.30.20.");
+ft("While countdown", "50.40.30.20.");
 wh := 50;
 while wh > 10 {
     print(wh);
@@ -193,7 +193,7 @@ while wh > 10 {
     print(".");
 }
 
-ec();ft("Repeat \"ab\" and doubling while len < 8", "ab.abab.");
+ft("Repeat \"ab\" and doubling while len < 8", "ab.abab.");
 wstr := "ab";
 repeat {
     print(wstr);
@@ -201,27 +201,27 @@ repeat {
     wstr += wstr;
 } while len(wstr) < 8;
 
-ec();ft("Slice middle of slice", "[4 5]");
+ft("Slice middle of slice", "[4 5]");
 ar := [1, 4, 5, 14, 23, 32];
 s := ar[1:3];
 print(s);
 
-ec();ft("Slice first 2 closed interval", "[1 4]");
+ft("Slice first 2 closed interval", "[1 4]");
 print(ar[@1]);
 
-ec();ft("Slice last 3", "[14 23 32]");
+ft("Slice last 3", "[14 23 32]");
 print(ar[3:]);
 
 func f() { print("in f"); }
 
-ec();ft("Call function", "in f");
+ft("Call function", "in f");
 f();
 
-ec();ft("Call function with 42, print", "42");
+ft("Call function with 42, print", "42");
 func g(iLocal int) { print(iLocal); }
 g(42);
 
-ec();ft("Call variadic", "7,13,101,");
+ft("Call variadic", "7,13,101,");
 func variadic(i ...int) {
     var x int;
     for x = range i {
@@ -231,7 +231,7 @@ func variadic(i ...int) {
 }
 variadic(7, 13, 101);
 
-ec();ft("Forward call", "forward");
+ft("Forward call", "forward");
 
 func forward() {
     forwardCalled();
@@ -244,13 +244,13 @@ forward();
 
 
 
-ec();ft("Call returns", "42");
+ft("Call returns", "42");
 func returns42() int {
     return 42;
 }
 print(returns42());
 
-ec();ft("Return exits", "good");
+ft("Return exits", "good");
 func exits() {
     print("good");
     return;
@@ -258,7 +258,7 @@ func exits() {
 }
 exits();
 
-ec();ft("Call recursive", "1 ,2 ,3 ,4 ,");
+ft("Call recursive", "1 ,2 ,3 ,4 ,");
 func countToFour(i int) {
     if i > 1 {
         countToFour(i - 1);
@@ -267,7 +267,7 @@ func countToFour(i int) {
 }
 countToFour(4);
 
-ec();ft("Function with map, slice, variadic", "foo 4210,11,12,13,14,false,false,true,");
+ft("Function with map, slice, variadic", "foo 4210,11,12,13,14,false,false,true,");
 func fLots(m [map]int, a [slice]int, vary ...bool) {
 var s string;
 var i int;
@@ -288,7 +288,7 @@ var outerm [map]int;
 outerm["foo"] = 42;
 fLots(outerm, 10@14, false, false, true);
 
-ec();ft("Deep function return", "");
+ft("Deep function return", "");
 func deep() {
     repeat {
         return;
@@ -296,7 +296,7 @@ func deep() {
     } while false;
 }
 
-ec();ft("Guard fail", "fail");
+ft("Guard fail", "fail");
 func fguard() {
     guard false else {
         print("fail");
@@ -306,7 +306,7 @@ func fguard() {
 }
 fguard();
 
-ec();ft("Guard pass", "afterguard");
+ft("Guard pass", "afterguard");
 func fguard2() {
     guard true else {
     print("bad");
@@ -316,7 +316,7 @@ print("afterguard");
 }
 fguard2();
 
-ec();ft("Chain call", "true");
+ft("Chain call", "true");
 func call2nd() int {
     return 42;
 }
@@ -325,7 +325,7 @@ func call1st() bool {
 }
 print(call1st());
 
-ec();ft("Mutually recurse", "m1,1m2,2m1,4m2,5m1,10m2,11m1,22m2,23m1,46m2,47m1,94m2,95");
+ft("Mutually recurse", "m1,1m2,2m1,4m2,5m1,10m2,11m1,22m2,23m1,46m2,47m1,94m2,95");
 MLIMIT := 100;
 func mrecurse1(x int) {
     print("m1,");
@@ -352,26 +352,26 @@ return ar;
 }
 print(returnSliceString());
 
-ec();ft("Match true", "matched");
+ft("Match true", "matched");
 match true {
 when false:
     print("bad");
 when true:
     print("matched");
 }
-ec();ft("Match default", "default");
+ft("Match default", "default");
 match 5 {
 when 2: print("2, bad");
 when 1:
 default: print("default");
 }
-ec();ft("Fallthrough", "start,fell through");
+ft("Fallthrough", "start,fell through");
 match true {
 when true: print("start,");
 fallthrough;
 when false: print("fell through");
 }
-ec();ft("Fallthrough default", "match foo,fell through default");
+ft("Fallthrough default", "match foo,fell through default");
 match "foo" {
 when "foo":
     print("match foo,");
@@ -379,14 +379,14 @@ when "foo":
 default:
     print("fell through default");
 }
-ec();ft("Break out of default", "default only,");
+ft("Break out of default", "default only,");
 match true {
 default:
 print("default only,");
 break;
 print("after break");
 }
-ec();ft("Continue with outer for", "in match,10in match,11in match,12in match,13in match,14");
+ft("Continue with outer for", "in match,10in match,11in match,12in match,13in match,14");
 var deepX int;
 for deepX = range 10@14 {
 match true {
@@ -398,7 +398,7 @@ continue;
 print("bad");
 }
 
-ec();ft("Break with outer for", "in break match,10in break match,11in break match,12in break match,13in break match,14");
+ft("Break with outer for", "in break match,10in break match,11in break match,12in break match,13in break match,14");
 var deepX324 int;
 for deepX324 = range 10@14 {
 match true {
@@ -410,7 +410,7 @@ print("bad");
 }
 }
 
-ec();ft("Return from deep match in function", "201,203");
+ft("Return from deep match in function", "201,203");
 func deepR() int {
 var x int;
 for x = range 201@204 {
@@ -424,33 +424,33 @@ print("201,");
 }
 
 print(deepR());
-ec();ft("7, 3. + - * / %", "10 4 21 2 1");
+ft("7, 3. + - * / %", "10 4 21 2 1");
 A := 7;
 B := 3;
 print(A + B, A - B, A * B, A / B, A % B );
-ec();
+
 ft("Eq, not eq, lt, gt", "false true false true");
 print (A == B, A != B, A < B, A > B);
-ec();
+
 ft("Order", "false");
 print(true && 10 < 2 + 1 );
-ec();
+
 
 
 ft("<= and >=", "true false true false");
 print (5 <= 5, 6 <= 5, 5 >= 5, 4 >= 5);
 SA := "bar";
 SB := "foo";
-ec();ft("bar foo < > ==", "barfoo true false false");
+ft("bar foo < > ==", "barfoo true false false");
 print (SA + SB, SA < SB, SA > SB, SA == SB);
 
-ec();ft("&& ||", "true false true false");
+ft("&& ||", "true false true false");
 print (true && true, true && false, true || false, false || false);
 func bad() bool {print("bad"); return false;}
-ec();ft("bad test", "false true");
+ft("bad test", "false true");
 print (false && bad(), true || bad());
 
-ec();ft("Compound + - * % /", "<7><4><8><2><1>");
+ft("Compound + - * % /", "<7><4><8><2><1>");
 
 comp := 5;
 comp += 2;
@@ -463,31 +463,33 @@ comp %= 3;
 brak(comp);
 comp /= 2;
 brak(comp);
-ec();ft("Order of ops", "<9><7>");
+ft("Order of ops", "<9><7>");
 brak(1+2*3);
 brak(1+(2*3));
-ec();ft("++ --", "<6><4>");
+ft("++ --", "<6><4>");
 dub := 5;
 dub++;
 brak(dub);
 dub--;
 dub--;
 brak(dub);
-ec();ft("Negative int and decimal", "-5 -10.2");
+ft("Negative int and decimal", "-5 -10.2");
 negint := -5;
 var negdec decimal;
 negdec = -10.2;
 print(negint, negdec);
-ec();ft("print", "Hello, world.");
+ft("print", "Hello, world.");
 print("Hello, world.");
-ec();ft("println", "End with lf.");
+/*
+ft("println", "End with lf.");
 println("End with lf.");
+*/
 ft("Printed lf", "");
-ec();ft("printB", "111");
+ft("printB", "111");
 printB(7);
-ec();ft("printH", "1e");
+ft("printH", "1e");
 printH(30);
-ec();
+
 ft("delete", "{aap:101 foo:42}true false{aap:101}");
 var intMap [map]int;
 intMap["foo"] = 42;
@@ -496,11 +498,11 @@ print(intMap);
 print(delete(intMap, "foo"), "");
 print(delete(intMap, "bar"));
 print(intMap);
-ec();
+
 ft("len array", "3 7");
 lenAr := [1, 22, 42];
 print(len(lenAr), len(101@107));
-ec();
+
 ft("map length", "<0><1><2>");
 var boolMap [map]bool;
 brak(len(boolMap));
@@ -508,26 +510,26 @@ boolMap["aap"] = true;
 brak(len(boolMap));
 boolMap["noot"] = true;
 brak(len(boolMap));
-ec();
+
 ft("string length", "4");
 print(len("abcd"));
-ec();ft("string Value", "42");
+ft("string Value", "42");
 var strv string;
 strv = stringValue(42);
 print(strv);
 DA := 1.1;
 DB := 5.5;
-ec();ft("decimal + - * /", "6.6 -4.4 6.05 0.2");
+ft("decimal + - * /", "6.6 -4.4 6.05 0.2");
 print(DA + DB, DA - DB, DA * DB, DA / DB);
 
-ec();
+
 /*ft("Slice Sort", "[1 4 32 45 101]");
 
 toSort := [4, 45, 1, 101, 32];
 sorted := sort(toSort);
 print(sorted);
 
-ec();
+
 */
 ft("Global int in header", "3");
 GLOB := 3;
@@ -537,7 +539,7 @@ func giih(ar [GLOB]bool) {
 var glob [GLOB] bool;
 giih(glob);
 
-ec();ft("Array copies in call", "23");
+ft("Array copies in call", "23");
 func arFunc(ar [1]int) {
     ar[0] = 42;
 }
@@ -547,7 +549,7 @@ arFunc(arF);
 print(arF[0]);
 
 
-ec();ft("Slice shares in call", "[201 101]");
+ft("Slice shares in call", "[201 101]");
 func slFunc(s [slice]int) {
     s[0] = 201;
 }
@@ -555,7 +557,7 @@ var slf [slice]int;
 slf = [23, 101];
 slFunc(slf);
 print(slf);
-ec();
+
 
 ft("Map shares in call", "{aap:101}");
 func mFunc(m [map]int) {
@@ -565,7 +567,7 @@ mapShare := { "aap": 42};
 mFunc(mapShare);
 print(mapShare);
 
-ec();
+
 
 ft("Tuple copies in call", "(42 7)");
 func mTup(t (int, int)) {
@@ -574,18 +576,18 @@ func mTup(t (int, int)) {
 tupShare := (42, 7);
 mTup(tupShare);
 print(tupShare);
-ec();
+
 
 ft("Tuple", "true 42 1.5 (42 true str 1.5)");
 tup := (42, true, "str", 1.5);
 
 print(tup[1], tup[0], tup[3], tup);
-ec();
+
 ft("Set tuple", "23 false");
 tup[0] = 23;
 tup[1] = false;
 print(tup[0], tup[1]);
-ec();
+
 ft("Compound add array, tuple, map", "[30 23] 4.5 {aap:201}");
 caAr := [10, 23];
 caAr[0] += 20;
@@ -594,7 +596,7 @@ caTu[1] += 3.0;
 caMa := {"aap": 101};
 caMa["aap"] += 100;
 print(caAr, caTu[1], caMa);
-ec();
+
 ft("Postfix minus array tuple, map", "49 100 22");
 pfA := [50];
 pfT := (101, "boo");
@@ -603,27 +605,27 @@ pfA[0]--;
 pfT[0]--;
 pfM["aaa"]--;
 print(pfA[0], pfT[0], pfM["aaa"]);
-ec();
+
 ft("Compound equals", "true false");
 ceAr1 := [1, 5, 23];
 ceAr2 := [1, 5, 23];
 ceAr3 := [1, 7, 23];
 print(ceAr1 == ceAr2, ceAr2 == ceAr3);
-ec();
+
 ft("Map equals", "true false false");
 meMap1 := {"aap": 5};
 meMap2 := {"aap": 5};
 meMap3 := {"noot": 5};
 meMap4 := {"aap": 32};
 print(meMap1 == meMap2, meMap1 == meMap3, meMap1 == meMap4);
-ec();
+
 
 ft("Map returns zero value with no key", "0, false");
 var mrz [map]int;
 print(mrz["a"]);
 print(",", key(mrz, "a"));
 
-ec();
+
 
 
 ft("Tuple equals", "true false");
@@ -631,14 +633,14 @@ teTup := (5, "aap", false);
 teTup2 := (5, "aap", false);
 teTup3 := (23, "aap", false);
 print(teTup == teTup2, teTup == teTup3);
-ec();
+
 ft("Global ar", "[1 5]");
 gar := [1, 5];
 func garf() {
     gar = [10, 12];
 }
 print(gar);
-ec();
+
 ft("Short declaration copies integer", "5 5,10 5");
 sdci1 := 5;
 sdci2 := sdci1;
@@ -646,7 +648,7 @@ print(sdci1, sdci2);
 print(",");
 sdci1 = 10;
 print(sdci1, sdci2);
-ec();
+
 
 ft("Slicing shares", "[1 777 101 202],[777 101]");
 ssAr1 := [1, 10, 101, 202];
@@ -655,13 +657,13 @@ ssAr2[0] = 777;
 print(ssAr1);
 print(",");
 print(ssAr2);
-ec();
+
 
 ft("Multi-dimensional array of int", "[[0 0 0] [0 0 42]]");
 var mda [2][3]int;
 mda[1][2] = 42;
 print(mda);
-ec();
+
 
 ft("Multi-dimensional tuple", "([0 0 42 0 0] (true 101))");
 var mdt ([5]int, (bool, int));
@@ -669,18 +671,18 @@ mdt[0][2] = 42;
 mdt[1][1] = 101;
 mdt[1][0] = true;
 print(mdt);
-ec();
+
 
 ft("Multi-dimensional tuple set compound type", "([0 0 42 0 0] (true 202))");
 var mdt2 ([5]int, (bool, int));
 mdt[1] = (true, 202);
 print(mdt);
-ec();
+
 
 ft("Deeply nested type", "[(false 0 {}) (false 0 {}) (false 0 {})]");
 var dnt [3](bool, int, [map](int, string));
 print(dnt);
-ec();
+
 
 ft("Binary search tree", "((N 1 ((N 2 (N 3 N)) 5 N)) 7 (N 10 N))");
 var i int;
@@ -712,7 +714,7 @@ for i = range [1, 5, 10, 2, 3] {
 }
 print(depthString(bst));
 
-ec();
+
 /*
 ft("Depth-first search", "1 ,2 ,3 ,5 ,7 ,10 ,");
 func dfs(node  (self, int, self)) {
@@ -724,7 +726,7 @@ func dfs(node  (self, int, self)) {
         dfs(node[2]);
 }
 dfs(bst);
-ec();
+
 ft("Linked list", "(5 (8 (23 N)))");
 var LL (int, self);
 LL = (5, nil);
@@ -735,7 +737,7 @@ LL[1] = (8, nil);
 LL = LL[1];
 LL[1] = (23, nil);
 print(depthString(base));
-ec();
+
 
 ft("Doubly linked list", "(P 7 P)(E 5 P)(E 5 P)");
 var dll (self, int, self);
@@ -748,7 +750,7 @@ dll = dll[2];
 print(base7[2]);
 print(base7[2][0]);
 print(base7[2][2][0][0]);
-ec();
+
 ft("Nested pointer types, depth and flat", "(aap E P)(aap N (noot N N))(42 P E)(42 (101 N N) N)");
 npt := ("aap", nil, ("noot", nil, nil));
 print(npt);
@@ -756,5 +758,5 @@ print(depthString(npt));
 npt2 := (42, (101, nil, nil), nil);
 print(npt2);
 print(depthString(npt2));
-ec();
+
 */

@@ -6,8 +6,8 @@ class Pvisitor {
     private var t_explain = ""
     private var t_compare = ""
     private var ft = ""
-    private var li = "".startIndex
-
+    private var li: String.Index?
+    
     private var fc = Fc()
     private var lfc: Fc?
     private var fkmap = [String:Fheader]()
@@ -40,6 +40,10 @@ class Pvisitor {
 //                fatalError()
 //            },
             "ft": { sctx, pv, s in try assertPvals(s, 2)
+                ade(pv.lfc == nil)
+                if pv.li != nil {
+                    try pv.testCompare(sctx)
+                }
                 print("--", sctx.getStart()!.getLine())
                 pv.li = pv.printed.endIndex
                 let s1: String = try tryCast(s[0])
@@ -49,12 +53,6 @@ class Pvisitor {
                 return nil
             },
             "ec": { sctx, pv, s in try assertPvals(s, 0)
-                let compee = pv.printed[pv.li..<pv.printed.endIndex]
-                //print(compee, "!")
-                //print(printed, "??")
-                if compee != pv.t_compare {
-                    throw Perr(ETEST_FAIL + "," +  pv.t_explain + ", want: " + pv.t_compare + ", got: " + compee, sctx)
-                }
                 return nil
             },
             "len": { sctx, pv, s in try assertPvals(s, 1)
@@ -134,8 +132,17 @@ class Pvisitor {
             throw Perr(EPARAM_LENGTH)
         }
     }
+    private func testCompare(_ sctx: ParserRuleContext) throws{
+        let compee = printed[li!..<printed.endIndex]
+        //print(compee, "!")
+        //print(printed, "??")
+        if compee != t_compare {
+            throw Perr(ETEST_FAIL + "," +  t_explain + ", want: " + t_compare + ", got: " + compee, sctx)
+        }
+    }
     
-
+    
+    
     private func getPv(_ s: String)  -> Pval?  {
         for m in [lfc?.m, fc.m] {
             if m == nil {
@@ -374,6 +381,9 @@ class Pvisitor {
                     }
                 }
             }
+        }
+        if li != nil {
+            try testCompare(sctx)
         }
     }
     
