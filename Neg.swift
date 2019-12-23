@@ -69,6 +69,29 @@ var x [2]int;
 var y [2]string;
 y = x;
 """),
+("Wrong type assignment defined types (scalar = array)", """
+var x [slice]bool;
+var y [2]bool;
+x = y;
+"""),
+("Wrong type assignment (array = slice, both size 2)", """
+var x [2]int;
+y := [42, 101];
+x = y;
+"""),
+("Wrong type assignment (slice = array, both size 2)", """
+var x [2]int;
+y := [42, 101];
+y = x;
+"""),
+("Wrong type assignment defined types (array = slice, both size 2)", """
+var x [2]int;
+var y [slice]int;
+y[0] = 10;
+y[1] = 20;
+x = y;
+"""),
+
 ("Wrong type assignment defined types (tuple = array)", """
 var x (int, int);
 var y [2]int;
@@ -150,6 +173,18 @@ s := [4, 1, true];
 """),
 ("Slice literal with an int and a tuple of 2 ints", """
 s := [5, (1, 3)];
+"""),
+("Test statement in function", """
+func f() {
+  ft("Test", "");
+}
+f();
+"""),
+("Exit with a value", """
+exit(5);
+"""),
+("Exit with two values", """
+exit(true, true);
 """),
 ("Pointer", """
 s := (10, nil);

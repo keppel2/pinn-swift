@@ -40,7 +40,9 @@ class Pvisitor {
 //                fatalError()
 //            },
             "ft": { sctx, pv, s in try assertPvals(s, 2)
-                ade(pv.lfc == nil)
+                if pv.lfc != nil {
+                    throw Perr(ESTATEMENT, sctx)
+                }
                 if pv.li != nil {
                     try pv.testCompare(sctx)
                 }
