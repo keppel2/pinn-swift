@@ -31,13 +31,17 @@ _Implementations as interpreters in Antlr for Go and Swift. Current progress in 
 
 * _From highest precedence_
 * `<id> "[" (<expr>? (":" | "@") <expr>?)? "]"` Index expression.
-* `"[" <expr_list "]"` Array literal
-* `"{" <ID> ":" <expr> { "," <ID> ":" <expr> } }` Map literal
+* `"[" <expr_list "]"` Slice literal
+  * All expressions must be of the same type.
+* `"{" <STRING> ":" <expr> { "," <STRING> ":" <expr> } }` Map literal
+  * Expressions must be of the same type.
 * `+ - !` Unary
 * `+ - * / %` Binary (simplified precedence), _string concatenation_
 * `== != < <= > >=` Comparison, _string comparisons_
 * `&& ||` Short-circuit AND and OR
 * `<id> "(" <expr_list>? ")"` Call
+* `"(" <expr> ")"` Parenthesize expression
+* `"(" <expr_list> ")"` Tuple
 * `<expr> ( ":" | "@" ) <expr>` Range generator. Both generate one through ten: `1:11 1@10`.
 * `<expr> "?" <expr> ":" <expr>` Ternary conditional. First `expr` is evaluated. If true, resolve to second `expr`. If false, resolve to third `expr`.
 * `<ID> <FLOAT> <INT> <BOOL> <STRING>` Tokens representing symbols, decimals, integers, booleans, and strings.
@@ -85,8 +89,8 @@ A function calls a piece of code, assigning each variable in the parameter list 
 * ` ( break | continue | fallthrough ) ;`
 * ` ; ` Empty statement
 ## Variable declaration (`<var_decl>`)
-* `<id> <kind> [ = <expr_list> ]`
-  * Declare `id` of `kind` type. Optionally initialize it.
+* `var <id> <kind>`
+  * Declare `id` of `kind` type.
 * `<id> := <expr>`
   * Short declaration. The `id` is set to the type and value of expression.
 
