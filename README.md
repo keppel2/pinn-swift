@@ -17,14 +17,14 @@ _Implementations as interpreters in Antlr for Go and Swift. Current progress in 
 * `bool`. Standard, `true` or `false`.
 * `string`. Immutable Unicode. `"string"` `"this is a double quote:\""`
 * `decimal`. Decimal.
-* `nil`. Pointer to nothing.
+* `nil`. Pointer of tuple type to nothing.
 ## Group Types
 
 * _Scalar_ is a single element.
 * `map`. A map produces a unique _value_ for each _key_. The key is always a string. Like Go, a missing string returns the zero value for an element.
-* `array`. An array is a group of elements with a constant size. It is only produced in a specific variable declaration.
-* `slice`. A slice is an array that can be grown. It can be produced by variable declaration, slicing, and ranges. It shares storage with other slices of the same data.
-* `tuple`. A tuple is a group of elements with a constant size and possibly different type.
+* `array`. An array is a group of elements with a constant size. It is only produced in a variable declaration. It copies on assignment.
+* `slice`. A slice is an array that can be grown. It can be produced by variable declaration, slicing, and ranges. It shares a reference on assignment.
+* `tuple`. A tuple is a group of elements with a constant size and possibly different types.
 * `pointer`. A pointer is a tuple with one or more references to itself. These references are of type `self`, and can be either `nil` or a pointer to a different copy with the same type as itself.
 
 ## Expressions
@@ -92,6 +92,23 @@ A function calls a piece of code, assigning each variable in the parameter list 
 
 
 The grammar is clean of implementation language and is written in ANTLR. It has implementations in Go and Swift. The Swift implementation is more recent.
+
+## Built-in functions
+* `exit()`
+  * Exit the program. No parameters allowed.
+* `len(<expr>)`
+  * Return the length of the expression. For compound types, return the count of data. For strings, return the length of the string.
+* `print(<expr_list>)`
+  * Print each `expr` in the list, with a space between them.
+* `println(<expr_list>)`
+  * `print()` with a line feed at the end.
+* `stringValue(<expr>)`
+  * Returns a string representation of the `expr`--the same printed with `print`.
+* `delete(<expr>, <expr>)`
+  * Delete key(second `expr`) from map(first `expr`). Return `bool` indicating whether the key existed.
+* `key(<expr>, <expr>)`
+  * Determine if key(second `expr`) exists in map(first `expr`).
+
 
 ## Notation
 ```
