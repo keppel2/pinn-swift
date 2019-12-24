@@ -120,7 +120,6 @@
 				E2C2CCED2382412100C6D2A2 /* tic.pinn */,
 				E2D2DBFB2366B76500E0CC35 /* Pinn.g4 */,
 				E2673963235BC825000CF830 /* Products */,
-				E2E3BB8F2398DDA200AB9A98 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -130,13 +129,6 @@
 				E2673962235BC825000CF830 /* pinn */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		E2E3BB8F2398DDA200AB9A98 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
