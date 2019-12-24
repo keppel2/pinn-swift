@@ -85,6 +85,13 @@ var sds [slice]int;
 sds = sda;
 print(sds);
 
+ft("Short declaration nested slice", "[[2 1] [21 23 101]][[2 1] [21 23 101]]");
+sdns := [[2, 1], [21, 23, 101]];
+print(sdns);
+var sdns2 [slice][slice]int;
+sdns2 = sdns;
+print(sdns2);
+
 ft("Assign smaller slice to slice plus length", "[202 302] 2");
 assts := [24, 30, 101];
 assts = [202, 302];

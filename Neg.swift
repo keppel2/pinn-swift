@@ -59,6 +59,19 @@ x := [1, 5];
 var y [2]int;
 y = x;
 """),
+("Wrong short declaration", """
+sdns := [[2, 1], 24];
+"""),
+("Wrong short declaration", """
+sdns := (5, (true, "foo"), [true, "foo"]);
+"""),
+("Wrong short declaration", """
+sdns := [[2, 1], [true, true, true]];
+"""),
+("Wrong short declaration", """
+sdns := {"aap": 5, "noot": false};
+"""),
+
 ("Wrong type assignment defined types", """
 var x [1]int;
 var y [2]int;
@@ -238,10 +251,6 @@ s[1] = (42, 1);
         }
     }
 """),
-    
-    
-    
-    
     
     
 
