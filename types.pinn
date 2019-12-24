@@ -535,15 +535,6 @@ DB := 5.5;
 ft("decimal + - * /", "6.6 -4.4 6.05 0.2");
 print(DA + DB, DA - DB, DA * DB, DA / DB);
 
-
-/*ft("Slice Sort", "[1 4 32 45 101]");
-
-toSort := [4, 45, 1, 101, 32];
-sorted := sort(toSort);
-print(sorted);
-
-
-*/
 ft("Global int in header", "3");
 GLOB := 3;
 func giih(ar [GLOB]bool) {
@@ -581,6 +572,15 @@ mFunc(mapShare);
 print(mapShare);
 
 
+ft("Tuple", "(0 false )");
+var tup23 (int, bool, string);
+print(tup23);
+
+ft("Tuple assignments", "([3 5] [aap noot])");
+var tup2 ([slice]int, [slice]string);
+tup2[0] = [3, 5];
+tup2[1] = ["aap", "noot"];
+print(tup2);
 
 ft("Tuple copies in call", "(42 7)");
 func mTup(t (int, int)) {
@@ -591,7 +591,7 @@ mTup(tupShare);
 print(tupShare);
 
 
-ft("Tuple", "true 42 1.5 (42 true str 1.5)");
+ft("Tuple short declaration", "true 42 1.5 (42 true str 1.5)");
 tup := (42, true, "str", 1.5);
 
 print(tup[1], tup[0], tup[3], tup);
@@ -692,8 +692,10 @@ mdt[1] = (true, 202);
 print(mdt);
 
 
-ft("Deeply nested type", "[(false 0 {}) (false 0 {}) (false 0 {})]");
-var dnt [3](bool, int, [map](int, string));
+ft("Deeply nested type", "[(false 0 {}) (false 0 {})][(false 0 {}) (false 0 {aap:(42 noot)})]");
+var dnt [2](bool, int, [map](int, string));
+print(dnt);
+dnt[1][2]["aap"] = (42, "noot");
 print(dnt);
 
 
