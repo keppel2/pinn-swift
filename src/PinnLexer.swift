@@ -20,10 +20,10 @@ open class PinnLexer: Lexer {
             T__15=16, T__16=17, T__17=18, T__18=19, T__19=20, T__20=21, 
             T__21=22, T__22=23, T__23=24, T__24=25, T__25=26, T__26=27, 
             T__27=28, T__28=29, T__29=30, T__30=31, T__31=32, T__32=33, 
-            T__33=34, T__34=35, LSQUARE=36, LPAREN=37, MAP=38, SLICE=39, 
-            TYPES=40, NIL=41, COMMA=42, COLON=43, CE=44, IOTA=45, BINOP=46, 
-            DOUBLEOP=47, RANGE=48, BOOL=49, AST=50, THREEDOT=51, TWODOTS=52, 
-            ID=53, CHAR=54, INT=55, FLOAT=56, WS=57, STRING=58
+            T__33=34, LSQUARE=35, LPAREN=36, MAP=37, SLICE=38, TYPES=39, 
+            NIL=40, COMMA=41, COLON=42, CE=43, IOTA=44, BINOP=45, DOUBLEOP=46, 
+            RANGE=47, BOOL=48, AST=49, THREEDOT=50, TWODOTS=51, ID=52, CHAR=53, 
+            INT=54, FLOAT=55, WS=56, STRING=57
 
 	public
 	static let channelNames: [String] = [
@@ -41,17 +41,16 @@ open class PinnLexer: Lexer {
 		"T__9", "T__10", "T__11", "T__12", "T__13", "T__14", "T__15", "T__16", 
 		"T__17", "T__18", "T__19", "T__20", "T__21", "T__22", "T__23", "T__24", 
 		"T__25", "T__26", "T__27", "T__28", "T__29", "T__30", "T__31", "T__32", 
-		"T__33", "T__34", "LSQUARE", "LPAREN", "MAP", "SLICE", "TYPES", "NIL", 
-		"COMMA", "COLON", "CE", "IOTA", "BINOP", "DOUBLEOP", "RANGE", "BOOL", 
-		"AST", "THREEDOT", "TWODOTS", "ID", "CHAR", "INT", "FLOAT", "WS", "STRING", 
-		"DECIMAL_DIGIT", "DECIMAL_DIGITS", "DECIMAL_EXPONENT", "HEX_DIGIT", "HEX_DIGITS", 
-		"HEX_MANTISSA", "HEX_EXPONENT", "OCTAL_DIGIT", "BINARY_DIGIT"
+		"T__33", "LSQUARE", "LPAREN", "MAP", "SLICE", "TYPES", "NIL", "COMMA", 
+		"COLON", "CE", "IOTA", "BINOP", "DOUBLEOP", "RANGE", "BOOL", "AST", "THREEDOT", 
+		"TWODOTS", "ID", "CHAR", "INT", "FLOAT", "WS", "STRING", "DECIMAL_DIGIT", 
+		"DECIMAL_DIGITS", "DECIMAL_EXPONENT"
 	]
 
 	private static let _LITERAL_NAMES: [String?] = [
 		nil, "'func'", "')'", "'{'", "'}'", "'var'", "']'", "'='", "'+'", "'-'", 
-		"'^'", "'!'", "'=='", "'!='", "'>'", "'<'", "'>='", "'<='", "'&&'", "'||'", 
-		"'?'", "'return'", "'if'", "'else'", "'guard'", "'while'", "'loop'", "'repeat'", 
+		"'!'", "'=='", "'!='", "'>'", "'<'", "'>='", "'<='", "'&&'", "'||'", "'?'", 
+		"'return'", "'if'", "'else'", "'guard'", "'while'", "'loop'", "'repeat'", 
 		"'for'", "';'", "'when'", "'match'", "'default'", "'break'", "'continue'", 
 		"'fallthrough'", "'['", "'('", "'map'", "'slice'", nil, "'nil'", "','", 
 		"':'", "':='", "'iota'", nil, nil, "'range'", nil, "'*'", "'...'", "'@'"
@@ -59,7 +58,7 @@ open class PinnLexer: Lexer {
 	private static let _SYMBOLIC_NAMES: [String?] = [
 		nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, 
 		nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, 
-		nil, nil, nil, nil, nil, nil, nil, nil, "LSQUARE", "LPAREN", "MAP", "SLICE", 
+		nil, nil, nil, nil, nil, nil, nil, "LSQUARE", "LPAREN", "MAP", "SLICE", 
 		"TYPES", "NIL", "COMMA", "COLON", "CE", "IOTA", "BINOP", "DOUBLEOP", "RANGE", 
 		"BOOL", "AST", "THREEDOT", "TWODOTS", "ID", "CHAR", "INT", "FLOAT", "WS", 
 		"STRING"

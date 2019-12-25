@@ -37,7 +37,7 @@ TYPES
 
 simpleStatement
   : lExpr '=' expr #simpleSet
-  | lExpr ('+' | '-' | '^' | BINOP) '=' expr #compoundSet
+  | lExpr ('+' | '-' | BINOP) '=' expr #compoundSet
   | lExpr DOUBLEOP #doubleSet ;
 
 lExpr
@@ -135,15 +135,11 @@ TWODOTS : '@' ;
 ID : [a-zA-Z_]([a-zA-Z_0-9])* ;
 CHAR : '\''[a-zA-Z_0-9]'\'' ;
 INT : '0'
-  | [1-9] ('_'? DECIMAL_DIGITS)?
-  | '0x' '_'? HEX_DIGIT ('_'? HEX_DIGIT)*
-  | '0b' '_'? BINARY_DIGIT ('_'? BINARY_DIGIT)*
-  | '0o' '_'? OCTAL_DIGIT ('_'? OCTAL_DIGIT)* ;
+  | [1-9] ('_'? DECIMAL_DIGITS)? ;
 
 FLOAT : DECIMAL_DIGITS '.' DECIMAL_DIGITS? DECIMAL_EXPONENT?
   | DECIMAL_DIGITS DECIMAL_EXPONENT
-  | '.' DECIMAL_DIGITS DECIMAL_EXPONENT?
-  | '0x' HEX_MANTISSA HEX_EXPONENT ;
+  | '.' DECIMAL_DIGITS DECIMAL_EXPONENT? ;
 
 WS : ([ \t\n]+ | '//' ~('\n')* '\n' | '/*' .*? '*/' )-> skip ;
 STRING : '"' ( '\\"' | ~('"' | '\\') )*      '"' ;
@@ -151,13 +147,3 @@ STRING : '"' ( '\\"' | ~('"' | '\\') )*      '"' ;
 fragment DECIMAL_DIGIT : [0-9] ;
 fragment DECIMAL_DIGITS : DECIMAL_DIGIT ('_'? DECIMAL_DIGIT)* ;
 fragment DECIMAL_EXPONENT : 'e' [+-]? DECIMAL_DIGITS ;
-fragment HEX_DIGIT : [0-9a-f] ;
-fragment HEX_DIGITS: HEX_DIGIT ('_'? HEX_DIGIT)* ;
-fragment HEX_MANTISSA : '_'? HEX_DIGITS '.' HEX_DIGITS?
-  | '_'? HEX_DIGITS
-  | '.' HEX_DIGITS ;
-fragment HEX_EXPONENT : 'p' [+-]? DECIMAL_DIGITS 
-  | 'h' [+-]? HEX_DIGITS ;
-fragment OCTAL_DIGIT : [0-7] ;
-fragment BINARY_DIGIT : [01] ;
-
