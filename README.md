@@ -30,8 +30,11 @@ _Implementations as interpreters in Antlr for Go and Swift. Current progress in 
 ## Tokens
 * `<ID>`
   * Consists of the letters `a` through `z`, `A` through `Z`, `_`, and digits `0`-`9`. May not start with a digit.
+* `<FLOAT>`
 * `<STRING>`
-  * Starts and ends with a `"`. In a string, use `\"` to refer to a `"` character.
+  * Starts and ends with a `"`. In a string, use `\"` to refer to a `"` character. Use `\\` to refer to a `\` character. Otherwise, `\` is illegal.
+* `<FLOAT>`
+
 
 ## Expressions
 
@@ -103,6 +106,8 @@ A function calls a piece of code, assigning each variable in the parameter list 
   * `fallthrough` falls through to the next `when` in a `match` block.
 * `<expr> ;` Evalutate `expr`. The result is thrown away.
 * ` ; ` Empty statement.
+* `<ID> | <FLOAT> | <INT> | <BOOL> | <STRING> | <NIL>` Literals.
+
 ## Variable declaration (`<var_decl>`)
 * `var <ID> <kind>`
   * Declare `id` of `kind` type.
