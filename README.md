@@ -95,9 +95,8 @@ A function calls a piece of code, assigning each variable in the parameter list 
 ## Variable declaration (`<var_decl>`)
 * `var <id> <kind>`
   * Declare `id` of `kind` type.
-* `<id> := <expr>`
+* `<id> ":=" <expr>`
   * Short declaration. The `id` is set to the type and value of expression.
-
 
 The grammar is clean of implementation language and is written in ANTLR. It has implementations in Go and Swift. The Swift implementation is more recent.
 
@@ -120,16 +119,16 @@ The grammar is clean of implementation language and is written in ANTLR. It has 
 
 ## Notation
 ```
-|   alternation
-()  grouping
-[]  option (0 or 1 times)
-{}  repetition (0 to n times)
-:=  assign to token or production on left
-literal
-<production> rule specified elsewhere
-<TOKEN>
+|            alternation
+()           grouping
+[]           option (0 or 1 times)
+{}           repetition (0 to n times)
+:=           assign to token or production on left
+literal      literal characters as typed--"literal"
+<prod>       grammar rule specified elsewhere
+<TOKEN>      lexer rule specified elsewhere
 
-"{" "[" notation elements as literals
+"{" "[" ...  notation elements as literals
 ```
 ## Solving Tic-Tac-Toe.
 
