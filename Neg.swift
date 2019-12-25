@@ -193,6 +193,36 @@ func f() {
 }
 f();
 """),
+("Binary op", """
+4 + true;
+"""),
+("Binary op", """
+"aap" + false;
+"""),
+("Unary op", """
+-true;
+"""),
+("Unary op", """
+!5;
+"""),
+("Slice operator fail", """
+[5, 42, 101][0@3];
+"""),
+("Slice operator fail", """
+(2, true, false)[0@1];
+"""),
+("Slice operator fail", """
+[[1, 2], [10, 11], [101, 102]][1@2][0][0@2];
+"""),
+("Index operator fail", """
+[4, 5][-1];
+"""),
+("Index operator fail", """
+(4, false)[-1];
+"""),
+("Index operator fail", """
+5[0];
+"""),
 ("Exit with a value", """
 exit(5);
 """),

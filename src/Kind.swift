@@ -137,14 +137,15 @@ class Kind {
     
     
 
-    func cKind() -> Kind {
+    func cKind() throws -> Kind {
         switch ke {
         case .vt(let vt):
             return Kind(vt)
         case .k(let k):
             return k
         default:
-            de(ECASE)
+            throw Perr(ETYPE)
+//            de(ECASE)
         }
     }
     func tKind() -> Ptype.Type {

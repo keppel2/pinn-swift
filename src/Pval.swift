@@ -70,13 +70,13 @@ class Pval {
     
 
     
-    init( _ c: ParserRuleContext, _ k: Kind) {
+    init( _ c: ParserRuleContext, _ k: Kind) throws {
         switch k.gtype {
         case .gArray, .gSlice:
             
             var ar = [Pval]()
             for _ in 0..<k.count! {
-                ar.append(Pval(c, k.cKind()))
+                try ar.append(Pval(c, k.cKind()))
             }
             let mk = Kind(k)
             mk.count = nil
@@ -97,7 +97,7 @@ class Pval {
         case .gTuple:
             var ar = [Pval]()
             for x in k.aKind() {
-                ar.append(Pval(c, x))
+                try ar.append(Pval(c, x))
             }
             k.count = nil
             e = Pvalp(k, Contents.multi(Wrap(ar)), c)
@@ -107,8 +107,8 @@ class Pval {
     
     
     convenience init( _ c: ParserRuleContext, _ pv: Pval, _ a: Int, _ b: Int) throws {
-        self.init(c, Kind(try pv.getKind().cKind(), .gSlice, b - a))
-        e.con = .multi(Wrap(pv.e.con.getSlice(a, b)))
+        try self.init(c, Kind(pv.getKind().cKind(), .gSlice, b - a))
+        e.con = .multi(Wrap(try pv.e.con.getSlice(a, b)))
     }
     
     func conset(_ k: Ktype? = nil, _ p: Pval? = nil) {
@@ -140,7 +140,7 @@ class Pval {
     }
     
     private func getNewChild() throws  -> Pval {
-        return Pval(e.prc, try getKind().cKind())
+        return try Pval(e.prc, getKind().cKind())
     }
     func get(_ k: Ktype, _ lh: Bool = false) throws -> Pval {
         switch k {
@@ -454,9 +454,12 @@ class Pval {
                 
             }
         }
-        func getSlice(_ a: Int, _ b: Int) -> [Pval] {
+        func getSlice(_ a: Int, _ b: Int) throws -> [Pval] {
             switch self {
             case .multi(let pvs):
+                if !pvs.w.indices.contains(a) || !pvs.w.indices.contains(b - 1) {
+                    throw Perr(ERANGE)
+                }
                 return Array(pvs.w[a..<b])
             default: de(ECASE)
             }

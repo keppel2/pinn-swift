@@ -242,7 +242,7 @@ class Pvisitor {
             guard rhsv - lhsv >= 0 else {
                 throw Perr(ERANGE, sctx)
             }
-            rt = Pval(sctx, Kind(Kind(Int.self), .gSlice, rhsv - lhsv))
+            rt = try Pval(sctx, Kind(Kind(Int.self), .gSlice, rhsv - lhsv))
             for x in lhsv..<rhsv {
                 try rt.set(x - lhsv, Pval(sctx, x))
             }
@@ -312,7 +312,7 @@ class Pvisitor {
         }
         for (index, v) in fh.fkinds.enumerated() {
             if v.variadic {
-                let par = Pval(ctx, Kind(v.k, .gArray, s.count - index))
+                let par = try Pval(ctx, Kind(v.k, .gArray, s.count - index))
                 
                 for (key, varadds) in s[index...].enumerated() {
                     if try !varadds.getKind().kindEquivalent(v.k) {
@@ -650,7 +650,7 @@ class Pvisitor {
                 let (str, pv) = try visitObjectPair(op)
                 if kind == nil {
                     kind = Kind(try pv.getKind(), .gMap)
-                    rt = Pval(sctx, kind!)
+                    rt = try Pval(sctx, kind!)
                 }
                 try rt!.set(str, pv)
             }
@@ -1016,7 +1016,7 @@ class Pvisitor {
                 }
             } else {
                 let k = try visitKind(sctx.kind()!)
-                newV = Pval(sctx, k)
+                newV = try Pval(sctx, k)
             }
             if lfc != nil {
                 lfc!.m[str] = newV!

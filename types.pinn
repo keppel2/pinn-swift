@@ -233,6 +233,9 @@ print(ar[@1]);
 ft("Slice last 3", "[14 23 32]");
 print(ar[3:]);
 
+ft("Double slice", "[4 5]");
+print(ar[@4][1@2]);
+
 func f() { print("in f"); }
 
 ft("Call function", "in f");
@@ -494,11 +497,15 @@ brak(dub);
 dub--;
 dub--;
 brak(dub);
-ft("Negative int and decimal", "-5 -10.2");
+ft("Unary negative int and decimal", "-5 -10.2");
 negint := -5;
 var negdec decimal;
 negdec = -10.2;
 print(negint, negdec);
+ft("Unary plus", "202");
+print(+202);
+ft("Unary boolean negate", "false");
+print(!true);
 ft("print", "Hello, world.");
 print("Hello, world.");
 ft("println", "End with lf.
@@ -678,6 +685,16 @@ print(ssAr1);
 print(",");
 print(ssAr2);
 
+ft("Slice of arrays", "[[0 42] [101 0]] [[0 42] [0 42]] [[202 42] [202 42]]");
+var soa [slice][2]int;
+
+soa[0][1] = 42;
+soa[1][0] = 101;
+print(soa, "");
+soa[1] = soa[0];
+print(soa, "");
+soa[0][0] = 202;
+print(soa);
 
 ft("Multi-dimensional array of int", "[[0 0 0] [0 0 42]]");
 var mda [2][3]int;
