@@ -36,10 +36,10 @@ _Implementations as interpreters in Antlr for Go and Swift. Current progress in 
 * `"{" <STRING> ":" <expr> { "," <STRING> ":" <expr> } }` Map literal
   * Expressions must be of the same type.
 * `+ - !` Unary
-* `+ - * / %` Binary (simplified precedence), _string concatenation_
+* `<op> := + - * / %` Binary (simplified precedence), _string concatenation_
 * `== != < <= > >=` Comparison, _string comparisons_
 * `&& ||` Short-circuit AND and OR
-* `<id> "(" <expr_list>? ")"` Call
+* `<id> "(" <expr_list>? ")"` Call function
 * `"(" <expr> ")"` Parenthesize expression
 * `"(" <expr_list> ")"` Tuple
 * `<expr> ( ":" | "@" ) <expr>` Range generator. Both generate one through ten: `1:11 1@10`.
@@ -55,11 +55,15 @@ _Implementations as interpreters in Antlr for Go and Swift. Current progress in 
 A function calls a piece of code, assigning each variable in the parameter list to each the value in the calling list. The `...` is allowed for the last parameter. It is expanded into an array carrying zero or more calling expressions.
 ## block
 * `"{" { <statement> } "}"`
+  * A block is a series of zero or more statements.
 
 ## simple-statement
-* `<id> [ "[" <expr> "]" ] = <expr>` Simple set
-* `<id> [ "[" <expr> "]" ] <op> = <expr>` Compound set
+* `<L-expr> [ "[" <expr> "]" ] = <expr>` Simple set
+  * The `expr` to the right of the `=` is assigned to the `L-expr`.
+* `<L-expr> <op> = <expr>` Compound set
 ## grammar fragments
+### `<L-expr`
+* `<id> ( "[" <expr> "]" )*`
 ### `<expr_list>`
 * `<expr> { , <expr> }`
 ### `Left expression, <LExpr>`
