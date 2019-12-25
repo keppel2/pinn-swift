@@ -17,12 +17,12 @@ _Implementations as interpreters in Antlr for Go and Swift. Current progress in 
 * `bool`. Standard, `true` or `false`.
 * `string`. Immutable Unicode. `"string"` `"this is a double quote:\""`
 * `decimal`. Decimal.
-* `nil`. Pointer of tuple type to nothing.
+* `self`. Pointer of tuple type to itself.
 ## Group Types
 
 * _Scalar_ is a single element.
 * `map`. A map produces a unique _value_ for each _key_. The key is always a string. Like Go, a missing string returns the zero value for an element.
-* `array`. An array is a group of elements with a constant size. It is only produced in a variable declaration. It copies on assignment.
+* `array`. An array is a group of elements with a constant size. It is only produced in a variable declaration. It never shares its storage, even if sliced.
 * `slice`. A slice is an array that can be grown. It can be produced by variable declaration, slicing, and ranges. It shares a reference on assignment.
 * `tuple`. A tuple is a group of elements with a constant size and possibly different types.
 * `pointer`. A pointer is a tuple with one or more references to itself. These references are of type `self`, and can be either `nil` or a pointer to a different copy with the same type as itself.
@@ -30,7 +30,7 @@ _Implementations as interpreters in Antlr for Go and Swift. Current progress in 
 ## Expressions
 
 * _From highest precedence_
-* `<id> "[" (<expr>? (":" | "@") <expr>?)? "]"` Index expression.
+* `<ID> "[" (<expr>? (":" | "@") <expr>?)? "]"` Index expression.
 * `"[" <expr_list "]"` Slice literal
   * All expressions must be of the same type.
 * `"{" <STRING> ":" <expr> { "," <STRING> ":" <expr> } }` Map literal
@@ -39,7 +39,7 @@ _Implementations as interpreters in Antlr for Go and Swift. Current progress in 
 * `<op> := + - * / %` Binary (simplified precedence), _string concatenation_
 * `== != < <= > >=` Comparison, _string comparisons_
 * `&& ||` Short-circuit AND and OR
-* `<id> "(" <expr_list>? ")"` Call function
+* `<ID> "(" <expr_list>? ")"` Call function
 * `"(" <expr> ")"` Parenthesize expression
 * `"(" <expr_list> ")"` Tuple
 * `<expr> ( ":" | "@" ) <expr>` Range generator. Both generate one through ten: `1:11 1@10`.
@@ -61,20 +61,21 @@ A function calls a piece of code, assigning each variable in the parameter list 
 * `<L-expr> [ "[" <expr> "]" ] = <expr>` Simple set
   * The `expr` to the right of the `=` is assigned to the `L-expr`.
 * `<L-expr> <op> = <expr>` Compound set
+  * `x += 2` is equivalent to `x = x + 2`
 ## grammar fragments
-### `<L-expr`
-* `<id> ( "[" <expr> "]" )*`
+### `<L-expr>`
+* `<ID> ( "[" <expr> "]" )*`
+  * An `L-expr` can be assigned to.
 ### `<expr_list>`
 * `<expr> { , <expr> }`
-### `Left expression, <LExpr>`
-* `<id> ( [ <expr> ] )*`
-  * A left-expression can be assigned a value.
+  * Used in various productions. Note that at least one `expr` is required.
 ### `<kind>`
 * ` int | bool | string | decimal | self`
+  * Primitive types.
 * `"[" (map | slice | <expr>) "]" <kind>`
+  * `map`, `slice`, or `array`, respectively.
 * `"(" <kind> ( , <kind>)* ")"`
-
-
+  * Declares a tuple type.
 ## `<statement>`
 * `while <expr> <block>`
   * Evaluate `expr`. If true, execute `block` and repeat this line. If false, go on.
@@ -86,16 +87,20 @@ A function calls a piece of code, assigning each variable in the parameter list 
   * Evaluate `expr`. If true, exectue first `statement`. If false, either move on or execute second `statement`.
 * `guard <expr> else <block>`
   * Evaluate `expr`. If false, execute `block`. The block must relinquish control, with a `return`, `break`, or `continue`.
-* `for <id> [, <id>] = range <expr> <block>`
+* `for <ID> [, <ID>] = range <expr> <block>`
   * If `id` is alone, it becomes the values of the `expr`. If a second `id` is present, it becomes the values and the first `id` are the keys. The `expr` must evaluate to an array, slice, or map. The block iterates through the elements. Note that `id1` and `id2` must be predeclared.
 * `"{" { <statement> } "}"` Block statement
-* `match <expr> "{" { when <expr_list> : { <statement> } } [ default : { <statement> } ] "}"` `expr` is compared to each `when` clause in order.  two spaces. one space.
+* `match <expr> "{" { when <expr_list> : { <statement> } } [ default : { <statement> } ] "}"` `expr` is compared to each `when` clause in order.
 * ` ( break | continue | fallthrough ) ;`
-* ` ; ` Empty statement
+  * `break` stops execution of the current loop. It then exits the loop.
+  * `continue` stops execution of the current loop. It then continues execution of the next loop.
+  * `fallthrough` falls through to the next `when` in a `match` block.
+* `<expr> ;` Evalutate `expr`. The result is thrown away.
+* ` ; ` Empty statement.
 ## Variable declaration (`<var_decl>`)
-* `var <id> <kind>`
+* `var <ID> <kind>`
   * Declare `id` of `kind` type.
-* `<id> ":=" <expr>`
+* `<ID> ":=" <expr>`
   * Short declaration. The `id` is set to the type and value of expression.
 
 The grammar is clean of implementation language and is written in ANTLR. It has implementations in Go and Swift. The Swift implementation is more recent.
