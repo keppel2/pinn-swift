@@ -27,6 +27,12 @@ _Implementations as interpreters in Antlr for Go and Swift. Current progress in 
 * `tuple`. A tuple is a group of elements with a constant size and possibly different types.
 * `pointer`. A pointer is a tuple with one or more references to itself. These references are of type `self`, and can be either `nil` or a pointer to a different copy with the same type as itself.
 
+## Tokens
+* `<ID>`
+  * Consists of the letters `a` through `z`, `A` through `Z`, `_`, and digits `0`-`9`. May not start with a digit.
+* `<STRING>`
+  * Starts and ends with a `"`. In a string, use `\"` to refer to a `"` character.
+
 ## Expressions
 
 * _From highest precedence_
