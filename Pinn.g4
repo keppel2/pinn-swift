@@ -142,7 +142,7 @@ FLOAT : DECIMAL_DIGITS '.' DECIMAL_DIGITS? DECIMAL_EXPONENT?
   | '.' DECIMAL_DIGITS DECIMAL_EXPONENT? ;
 
 WS : ([ \t\n]+ | '//' ~('\n')* '\n' | '/*' .*? '*/' )-> skip ;
-STRING : '"' ( '\\"' | ~('"' | '\\') )*      '"' ;
+STRING : '"' ( '\\"' | '\\\\' | ~('"' | '\\') )*      '"' ;
 
 fragment DECIMAL_DIGIT : [0-9] ;
 fragment DECIMAL_DIGITS : DECIMAL_DIGIT ('_'? DECIMAL_DIGIT)* ;

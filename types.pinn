@@ -20,6 +20,9 @@ ft("Create int", "0");
 var x int;
 print(x);
 
+ft("Print", "a \\ slash");
+print("a \\ slash");
+
 ft("Print empty array", "[]");
 var empty [0]int;
 print(empty);

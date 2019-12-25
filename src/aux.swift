@@ -66,7 +66,9 @@ func stringDequote(_ s: String) -> String {
     var str = s
     str.remove(at: s.startIndex)
     str.remove(at: str.index(before: str.endIndex))
-    return str.replacingOccurrences(of: "\\\"", with: "\"")
+    str = str.replacingOccurrences(of: "\\\"", with: "\"")
+    str = str.replacingOccurrences(of: "\\\\", with: "\\")
+    return str
 }
 
 private func _fatalError(_ s: String) -> Never {
