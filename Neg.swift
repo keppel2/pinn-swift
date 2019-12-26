@@ -192,7 +192,6 @@ x := true;
 ("Assign in global context a local variable", """
 func f() {
   x := 5;
-  print(x);
 }
 f();
 x = 10;
@@ -245,6 +244,24 @@ f();
 """),
 ("Binary op", """
 "aap" + false;
+"""),
+("Binary op", """
+true + false;
+"""),
+//("Binary op", """
+//true && 1;
+//"""),
+("Binary op", """
+true % 4;
+"""),
+("Binary op", """
+true > 4;
+"""),
+("Binary op", """
+4 > true;
+"""),
+("Ternary op", """
+10 ? 5 : false;
 """),
 ("Unary op", """
 -true;

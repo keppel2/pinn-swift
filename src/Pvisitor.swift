@@ -20,7 +20,7 @@ class Pvisitor {
             reserveFunction(str)
         }
     }
-
+    
     private let litToType: [String: Ptype.Type] = ["int": Int.self, "bool": Bool.self, "string": String.self, "decimal": Decimal.self, "self": Nil.self]
     private let builtIns
         : [String: (ParserRuleContext, Pvisitor, [Pval]) throws -> Pval?] =
@@ -34,11 +34,11 @@ class Pvisitor {
                 let xa = pv.getPv(str)
                 fatalError()
             },
-//            "xv": { sctx, pv, s in try assertPvals(s, 1)
-//                
-//                let xa = pv.getPv(str)
-//                fatalError()
-//            },
+            //            "xv": { sctx, pv, s in try assertPvals(s, 1)
+            //
+            //                let xa = pv.getPv(str)
+            //                fatalError()
+            //            },
             "ft": { sctx, pv, s in try assertPvals(s, 2)
                 if pv.lfc != nil {
                     throw Perr(ESTATEMENT, sctx)
@@ -67,7 +67,7 @@ class Pvisitor {
                     return Pval(sctx, try s[0].string(false)) },
             "depthString":
                 {sctx, pv, s in try assertPvals(s, 1)
-                            return Pval(sctx, try s[0].string(true))
+                    return Pval(sctx, try s[0].string(true))
             },
             "print":
                 {sctx, pv, s in
@@ -107,7 +107,7 @@ class Pvisitor {
             },
             "debug": { sctx, pv, s in try assertPvals(s, 0)
                 fatalError()
-//                return nil
+                //                return nil
             },
             "bi": { sctx, pv, s in try assertPvals(s, 2)
                 var str: String = try tryCast(s[0])
@@ -116,19 +116,19 @@ class Pvisitor {
                 let xa2 = pv.getPv(str)!
                 ade(try xa1.getKind() === xa2.getKind())
                 return nil
-
+                
             },
-//            "sort": { sctx, s in assertPvals(s, 1)
-//                s[0].sort()
-//                return s[0]
-//            },
+            //            "sort": { sctx, s in assertPvals(s, 1)
+            //                s[0].sort()
+            //                return s[0]
+            //            },
             "sleep": { sctx, pv, s in try assertPvals(s, 1)
                 let x: Int = try tryCast(s[0])
                 sleep(UInt32(x))
                 return nil
             }
     ]
-
+    
     private static func assertPvals( _ s: [Pval], _ i: Int) throws {
         if s.count != i {
             throw Perr(EPARAM_LENGTH)
@@ -164,7 +164,7 @@ class Pvisitor {
             return Pval(sctx, try lhs.equal(rhs))
         case "!=":
             return Pval(sctx, try !lhs.equal(rhs))
-
+            
         case "+":
             let lh: Plus = try tryCast(lhs)
             let rh: Plus = try tryCast(rhs)
@@ -179,7 +179,7 @@ class Pvisitor {
             if !pEq(lh, rh) {
                 throw Perr(ETYPE, rhs)
             }
-
+            
             rt = Pval(sctx, lh.arith(rh, str))
             return rt
         case "<", "<=", ">", ">=":
@@ -188,7 +188,7 @@ class Pvisitor {
             if !pEq(lh, rh) {
                 throw Perr(ETYPE, rhs)
             }
-
+            
             let result: Bool
             switch str {
                 
@@ -253,7 +253,7 @@ class Pvisitor {
         return rt
     }
     
-
+    
     private static func childToToken(_ child: Tree) -> PinnParser.Tokens {
         return PinnParser.Tokens(rawValue: (child as! TerminalNode).getSymbol()!.getType())!
     }
@@ -263,11 +263,11 @@ class Pvisitor {
     private func loadDebug(_ ctx:ParserRuleContext) {
         oldPrc = prc
         prc = ctx
-//        texts.append(ctx.getText())
+        //        texts.append(ctx.getText())
         line = ctx.start!.getLine()
     }
     private func popDebug() {
-//        texts.removeLast()
+        //        texts.removeLast()
         prc = oldPrc
     }
     
@@ -364,7 +364,7 @@ class Pvisitor {
     
     
     public func visitFile(_ sctx: PinnParser.FileContext) throws {
-
+        
         for child in sctx.children! {
             if let spec = child as? PinnParser.FunctionContext {
                 try visitHeader(spec)
@@ -426,8 +426,8 @@ class Pvisitor {
         }
         fkmap[sctx.ID()!.getText()] = Fheader(funcContext: sctx, kind: k, fkinds: fkinds)
     }
-
-
+    
+    
     private func visitKind(_ sctx: PinnParser.KindContext) throws -> Kind {
         loadDebug(sctx)
         defer {popDebug()}
@@ -436,23 +436,23 @@ class Pvisitor {
             let kL = try visitKindList(spec)
             rt = try Kind(kL)
         } else
-        if let type = sctx.TYPES() {
-            let strType = type.getText()
-            let vtype = litToType[strType]!
-            rt = Kind(vtype)
-//            return Kind(vtype)
-        } else {
-            let kind = try visitKind(sctx.kind()!)
-            if sctx.MAP() != nil {
-                rt = Kind(kind, .gMap)
-            } else if sctx.SLICE() != nil {
-                rt = Kind(kind, .gSlice, 0)
-            }
-            else {
-                let v = try visitPval(sctx.expr()!)!
-                let x: Int = try tryCast(v)
-                rt = Kind(kind, .gArray, x)
-            }
+            if let type = sctx.TYPES() {
+                let strType = type.getText()
+                let vtype = litToType[strType]!
+                rt = Kind(vtype)
+                //            return Kind(vtype)
+            } else {
+                let kind = try visitKind(sctx.kind()!)
+                if sctx.MAP() != nil {
+                    rt = Kind(kind, .gMap)
+                } else if sctx.SLICE() != nil {
+                    rt = Kind(kind, .gSlice, 0)
+                }
+                else {
+                    let v = try visitPval(sctx.expr()!)!
+                    let x: Int = try tryCast(v)
+                    rt = Kind(kind, .gArray, x)
+                }
         }
         return Kind.produceKind(rt)
     }
@@ -553,21 +553,21 @@ class Pvisitor {
             return cv
         case let sctx as PinnParser.IntExprContext:
             let op = Self.childToText(sctx.getChild(1)!)
-              let lhs = try visitPval(sctx.expr(0)!)!
-       let rhs = try visitPval(sctx.expr(1)!)!
-                        rt = try Self.doOp(lhs, rhs, op, sctx)
-            
-            
-            
-            case let sctx as PinnParser.CompExprContext:
-                 let op = Self.childToText(sctx.getChild(1)!)
-                   let lhs = try visitPval(sctx.expr(0)!)!
+            let lhs = try visitPval(sctx.expr(0)!)!
             let rhs = try visitPval(sctx.expr(1)!)!
-                             try rt = Self.doOp(lhs, rhs, op, sctx)
-                 
+            rt = try Self.doOp(lhs, rhs, op, sctx)
             
-                case let sctx as PinnParser.BoolExprContext:
-
+            
+            
+        case let sctx as PinnParser.CompExprContext:
+            let op = Self.childToText(sctx.getChild(1)!)
+            let lhs = try visitPval(sctx.expr(0)!)!
+            let rhs = try visitPval(sctx.expr(1)!)!
+            try rt = Self.doOp(lhs, rhs, op, sctx)
+            
+            
+        case let sctx as PinnParser.BoolExprContext:
+            
             let op = Self.childToText(sctx.getChild(1)!)
             let lhs = try visitPval(sctx.expr(0)!)!
             if op == "&&" {
@@ -577,7 +577,8 @@ class Pvisitor {
                     break
                 }
                 else {
-                    rt = Pval(sctx, try visitPval(sctx.expr(1)!)!.getUnwrap())
+                    let rhsv: Bool = try tryCast(visitPval(sctx.expr(1)!)!)
+                    rt = Pval(sctx, rhsv)
                     break
                 }
             }
@@ -588,12 +589,13 @@ class Pvisitor {
                     break
                 }
                 else {
-                    rt = Pval(sctx, try visitPval(sctx.expr(1)!)!.getUnwrap())
+                    let rhsv: Bool = try tryCast(visitPval(sctx.expr(1)!)!)
+                    rt = Pval(sctx, rhsv)
                     break
                 }
             }
-     
- 
+            
+            
         case let sctx as PinnParser.UnaryExprContext:
             
             
@@ -659,12 +661,12 @@ class Pvisitor {
             let el = sctx.exprList()!
             let ae = try visitList(el)
             let aeFirstk = try ae.first!.getKind()
-
+            
             let kind = Kind(aeFirstk, .gSlice, ae.count)
             rt = try Pval(sctx, ae, kind)
-
+            
             return rt
-
+            
         case let sctx as PinnParser.LiteralExprContext:
             let child = sctx.getChild(0)!
             
@@ -719,8 +721,8 @@ class Pvisitor {
             let op = Self.childToText(sctx.getChild(1)!)
             
             let lhs = try visitPval(sctx.expr(0)!)!
-                      let rhs = try visitPval(sctx.expr(1)!)!
-                        rt = try Self.doOp(lhs, rhs, op, sctx)
+            let rhs = try visitPval(sctx.expr(1)!)!
+            rt = try Self.doOp(lhs, rhs, op, sctx)
         case let sctx as PinnParser.IndexExprContext:
             
             
@@ -750,14 +752,14 @@ class Pvisitor {
             let i: Ktype = try tryCast(e2)
             
             rt = try v.get(i)
-               
             
-            case let sctx as PinnParser.ExprContext:
-                rt = try visitPval(sctx.getChild(0) as! ParserRuleContext)
-                
+            
+        case let sctx as PinnParser.ExprContext:
+            rt = try visitPval(sctx.getChild(0) as! ParserRuleContext)
+            
         default:
-
-           aden()
+            
+            aden()
         }
         return rt
     }
@@ -766,7 +768,7 @@ class Pvisitor {
     {
         loadDebug(sctx)
         defer {popDebug()}
-//        throw Perr("tst", sctx)
+        //        throw Perr("tst", sctx)
         switch sctx {
         case let sctx as PinnParser.SwitchStatementContext:
             let v = try visitPval(sctx.expr()!)!
@@ -799,17 +801,17 @@ class Pvisitor {
                 }
             }
         case let sctx as PinnParser.CompoundSetContext:
-
-                let lh = try visitPval(sctx.lExpr()!)!
-                let rh = try visitPval(sctx.expr()!)!
-//                lh.setPV(rh)
-
-                let op = sctx.children![sctx.children!.count - 3].getText()
-
             
-                let result = try Self.doOp(lh, rh, op, sctx)
-                try lh.setPV(result)
-        
+            let lh = try visitPval(sctx.lExpr()!)!
+            let rh = try visitPval(sctx.expr()!)!
+            //                lh.setPV(rh)
+            
+            let op = sctx.children![sctx.children!.count - 3].getText()
+            
+            
+            let result = try Self.doOp(lh, rh, op, sctx)
+            try lh.setPV(result)
+            
         case let sctx as PinnParser.StatementContext:
             if let e = sctx.expr() {
                 _ = try visitPval(e)
@@ -837,15 +839,15 @@ class Pvisitor {
         case let sctx as PinnParser.DoubleSetContext:
             
             let lh = try visitPval(sctx.lExpr()!)!
-                let rhsv: Int
-                switch sctx.DOUBLEOP()!.getText() {
-                case "++": rhsv = 1
-                case "--": rhsv = -1
-                default:
-                    aden()
-                }
+            let rhsv: Int
+            switch sctx.DOUBLEOP()!.getText() {
+            case "++": rhsv = 1
+            case "--": rhsv = -1
+            default:
+                aden()
+            }
             let lhsv: Int = try tryCast(lh)
-                try lh.setPV(Pval(sctx, lhsv + rhsv))
+            try lh.setPV(Pval(sctx, lhsv + rhsv))
         case let sctx as PinnParser.ReturnStatementContext:
             cfc.path = .pExiting
             if let e = sctx.expr() {
@@ -865,7 +867,7 @@ class Pvisitor {
             let lh = try visitPval(sctx.lExpr()!)!
             let rh = try visitPval(sctx.expr()!)!
             return try lh.setPV(rh)
-
+            
         case let sctx as PinnParser.IfStatementContext:
             
             let v = try visitPval(sctx.expr()!)!
@@ -896,13 +898,13 @@ class Pvisitor {
                 v = try visitPval(sctx.expr()!)!
                 b = try tryCast(v)
             }
-            case let sctx as PinnParser.LoopStatementContext:
-                
-                 while true {
-                    try visit(sctx.block()!)
-                    if  cfc.toEndBlock() {break}
-                }
-
+        case let sctx as PinnParser.LoopStatementContext:
+            
+            while true {
+                try visit(sctx.block()!)
+                if  cfc.toEndBlock() {break}
+            }
+            
         case let sctx as PinnParser.FoStatementContext:
             if sctx.RANGE() != nil {
                 var key: Pval?
@@ -1002,7 +1004,7 @@ class Pvisitor {
                 }
                 return
             }
- 
+            
             let str = sctx.ID(0)!.getText()
             
             var newV: Pval?
@@ -1056,7 +1058,7 @@ class Pvisitor {
         }
         
     }
-
+    
     private struct Fheader {
         var funcContext: PinnParser.FunctionContext?
         var kind: Kind?
