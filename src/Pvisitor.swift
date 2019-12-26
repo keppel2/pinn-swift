@@ -393,9 +393,11 @@ class Pvisitor {
         loadDebug(sctx)
         defer {popDebug()}
         let rt1: String
-        let rt2: Pval
+        //let rt2: Pval
         rt1 = stringDequote(sctx.STRING()!.getText())
-        rt2 = try visitPval(sctx.expr()!)!
+        guard let rt2 = try visitPval(sctx.expr()!) else {
+            throw Perr(ETYPE, sctx)
+        }
         return (rt1, rt2)
     }
     
@@ -449,7 +451,9 @@ class Pvisitor {
                     rt = Kind(kind, .gSlice, 0)
                 }
                 else {
-                    let v = try visitPval(sctx.expr()!)!
+                    guard let v = try visitPval(sctx.expr()!) else {
+                        throw Perr(ENIL)
+                    }
                     let x: Int = try tryCast(v)
                     rt = Kind(kind, .gArray, x)
                 }
@@ -482,7 +486,9 @@ class Pvisitor {
         
         var rt = [Pval]()
         for child in sctx.expr() {
-            let v = try visitPval(child)!
+            guard let v = try visitPval(child) else {
+                throw Perr(ENIL, sctx)
+            }
             rt.append(v)
         }
         return rt
@@ -494,7 +500,9 @@ class Pvisitor {
         
         var rt = false
         for child in sctx.expr() {
-            let cv = try visitPval(child)!
+            guard let cv = try visitPval(child) else {
+                throw Perr(ENIL, sctx)
+            }
             if try cv.equal(v) {
                 rt = true
                 break
@@ -533,7 +541,12 @@ class Pvisitor {
         }
         return rt
     }
-    
+    private func _visitPval(_ sctx: ParserRuleContext) throws -> Pval {
+        guard let rt = try visitPval(sctx) else {
+            throw Perr(ENIL, sctx)
+        }
+        return rt
+    }
     private func visitPval(_ sctx: ParserRuleContext) throws -> Pval? {
         loadDebug(sctx)
         defer {popDebug()}
@@ -547,29 +560,45 @@ class Pvisitor {
             }
             var cv = v
             for e in sctx.expr() {
-                let kt: Ktype = try tryCast(try visitPval(e)!)
+                guard let pv = try visitPval(e) else {
+                    throw Perr(ENIL, sctx)
+                }
+                let kt: Ktype = try tryCast(pv)
                 cv = try cv.get(kt, true)
             }
-            return cv
+            rt = cv
         case let sctx as PinnParser.IntExprContext:
             let op = Self.childToText(sctx.getChild(1)!)
-            let lhs = try visitPval(sctx.expr(0)!)!
-            let rhs = try visitPval(sctx.expr(1)!)!
+            guard let lhs = try visitPval(sctx.expr(0)!) else {
+                throw Perr(ENIL)
+            }
+            guard let rhs = try visitPval(sctx.expr(1)!) else {
+                throw Perr(ENIL)
+            }
+
             rt = try Self.doOp(lhs, rhs, op, sctx)
             
             
             
         case let sctx as PinnParser.CompExprContext:
             let op = Self.childToText(sctx.getChild(1)!)
-            let lhs = try visitPval(sctx.expr(0)!)!
-            let rhs = try visitPval(sctx.expr(1)!)!
+            guard let lhs = try visitPval(sctx.expr(0)!) else {
+                throw Perr(ENIL)
+            }
+            guard let rhs = try visitPval(sctx.expr(1)!) else {
+                throw Perr(ENIL)
+            }
+            
+            
             try rt = Self.doOp(lhs, rhs, op, sctx)
             
             
         case let sctx as PinnParser.BoolExprContext:
             
             let op = Self.childToText(sctx.getChild(1)!)
-            let lhs = try visitPval(sctx.expr(0)!)!
+            guard let lhs = try visitPval(sctx.expr(0)!) else {
+                throw Perr(ENIL)
+            }
             if op == "&&" {
                 let lhsv: Bool = try tryCast(lhs)
                 if !lhsv {
@@ -577,7 +606,11 @@ class Pvisitor {
                     break
                 }
                 else {
-                    let rhsv: Bool = try tryCast(visitPval(sctx.expr(1)!)!)
+                    
+                    guard let rhs = try visitPval(sctx.expr(1)!) else {
+                        throw Perr(ENIL)
+                    }
+                    let rhsv: Bool = try tryCast(rhs)
                     rt = Pval(sctx, rhsv)
                     break
                 }
@@ -589,9 +622,11 @@ class Pvisitor {
                     break
                 }
                 else {
-                    let rhsv: Bool = try tryCast(visitPval(sctx.expr(1)!)!)
-                    rt = Pval(sctx, rhsv)
-                    break
+                    guard let rhs = try visitPval(sctx.expr(1)!) else {
+                         throw Perr(ENIL)
+                     }
+                     let rhsv: Bool = try tryCast(rhs)
+                     rt = Pval(sctx, rhsv)
                 }
             }
             
@@ -601,25 +636,23 @@ class Pvisitor {
             
             switch Self.childToText(sctx.getChild(0)!) {
             case "!":
-                guard let e = try visitPval(sctx.expr()!)!.getUnwrap() as? Bool else {
-                    throw Perr(ETYPE, sctx)
+                guard let pv = try visitPval(sctx.expr()!) else {
+                    throw Perr(ENIL, sctx)
                 }
-                rt = Pval(sctx, !e)
-                break
+                let b: Bool = try tryCast(pv)
+                rt = Pval(sctx, !b)
             case "-":
-                guard let e = try visitPval(sctx.expr()!)!.getUnwrap() as? Negate else {
-                    throw Perr(ETYPE, sctx)
+                guard let pv = try visitPval(sctx.expr()!) else {
+                    throw Perr(ENIL, sctx)
                 }
-                rt = Pval(sctx, e.neg())
-                break
+                let b: Negate = try tryCast(pv)
+                rt = Pval(sctx, b.neg())
             case "+":
-                
-                guard let e = try visitPval(sctx.expr()!)!.getUnwrap() as? Int else {
-                    throw Perr(ETYPE, sctx)
+                guard let pv = try visitPval(sctx.expr()!) else {
+                    throw Perr(ENIL, sctx)
                 }
-                rt = Pval(sctx, e)
-                break
-                
+                let b: Int = try tryCast(pv)
+                rt = Pval(sctx, b)
                 
             default:
                 aden()
@@ -631,7 +664,7 @@ class Pvisitor {
             
             let el = sctx.exprList()!
             let s = try visitList(el)
-            return try Pval(sctx, s)
+            rt = try Pval(sctx, s)
         case let sctx as PinnParser.CallExprContext:
             var s = [Pval]()
             
@@ -711,31 +744,34 @@ class Pvisitor {
             
         case let sctx as PinnParser.ConditionalExprContext:
             
-            let b: Bool = try tryCast(try visitPval(sctx.expr(0)!)!)
+            
+            
+            
+            let b: Bool = try tryCast(_visitPval(sctx.expr(0)!))
             if b {
-                rt = try visitPval(sctx.expr(1)!)!
+                rt = try _visitPval(sctx.expr(1)!)
             } else {
-                rt = try visitPval(sctx.expr(2)!)!
+                rt = try _visitPval(sctx.expr(2)!)
             }
         case let sctx as PinnParser.RangeExprContext:
             let op = Self.childToText(sctx.getChild(1)!)
             
-            let lhs = try visitPval(sctx.expr(0)!)!
-            let rhs = try visitPval(sctx.expr(1)!)!
+            let lhs = try _visitPval(sctx.expr(0)!)
+            let rhs = try _visitPval(sctx.expr(1)!)
             rt = try Self.doOp(lhs, rhs, op, sctx)
         case let sctx as PinnParser.IndexExprContext:
             
             
-            let v = try visitPval(sctx.expr(0)!)!
+            let v = try _visitPval(sctx.expr(0)!)
             if (sctx.TWODOTS() != nil || sctx.COLON() != nil) {
                 
                 var lhsv = 0
                 if let lh = sctx.first {
-                    lhsv = try tryCast(try visitPval(lh)!)
+                    lhsv = try tryCast(try _visitPval(lh))
                 }
                 var rhsv = try v.getKind().count!
                 if let rh = sctx.second {
-                    rhsv = try tryCast(try visitPval(rh)!)
+                    rhsv = try tryCast(try _visitPval(rh))
                 }
                 if (sctx.TWODOTS() != nil) {
                     rhsv+=1
@@ -748,7 +784,7 @@ class Pvisitor {
                 
             }
             
-            let e2 = try visitPval(sctx.expr(1)!)!
+            let e2 = try _visitPval(sctx.expr(1)!)
             let i: Ktype = try tryCast(e2)
             
             rt = try v.get(i)
@@ -771,7 +807,7 @@ class Pvisitor {
         //        throw Perr("tst", sctx)
         switch sctx {
         case let sctx as PinnParser.SwitchStatementContext:
-            let v = try visitPval(sctx.expr()!)!
+            let v = try _visitPval(sctx.expr()!)
             var broken = false
             for child in sctx.caseStatement()
             {
@@ -802,9 +838,10 @@ class Pvisitor {
             }
         case let sctx as PinnParser.CompoundSetContext:
             
-            let lh = try visitPval(sctx.lExpr()!)!
-            let rh = try visitPval(sctx.expr()!)!
-            //                lh.setPV(rh)
+            guard let lh = try visitPval(sctx.lExpr()!) else {
+                throw Perr(ENIL, sctx)
+            }
+            let rh = try _visitPval(sctx.expr()!)
             
             let op = sctx.children![sctx.children!.count - 3].getText()
             
@@ -838,7 +875,7 @@ class Pvisitor {
             
         case let sctx as PinnParser.DoubleSetContext:
             
-            let lh = try visitPval(sctx.lExpr()!)!
+            let lh = try _visitPval(sctx.lExpr()!)
             let rhsv: Int
             switch sctx.DOUBLEOP()!.getText() {
             case "++": rhsv = 1
@@ -865,12 +902,12 @@ class Pvisitor {
             }
         case let sctx as PinnParser.SimpleSetContext:
             let lh = try visitPval(sctx.lExpr()!)!
-            let rh = try visitPval(sctx.expr()!)!
+            let rh = try _visitPval(sctx.expr()!)
             return try lh.setPV(rh)
             
         case let sctx as PinnParser.IfStatementContext:
             
-            let v = try visitPval(sctx.expr()!)!
+            let v = try _visitPval(sctx.expr()!)
             let b: Bool = try tryCast(v)
             if b {
                 try visit(sctx.statement(0)!)
@@ -884,18 +921,18 @@ class Pvisitor {
                 if  cfc.toEndBlock() {
                     break
                 }
-                let v = try visitPval(sctx.expr()!)!
+                let v = try _visitPval(sctx.expr()!)
                 b = try tryCast(v)
                 
             }
         case let sctx as PinnParser.WhStatementContext:
             
-            var v = try visitPval(sctx.expr()!)!
+            var v = try _visitPval(sctx.expr()!)
             var b: Bool = try tryCast(v)
             while b {
                 try visit(sctx.block()!)
                 if  cfc.toEndBlock() {break}
-                v = try visitPval(sctx.expr()!)!
+                v = try _visitPval(sctx.expr()!)
                 b = try tryCast(v)
             }
         case let sctx as PinnParser.LoopStatementContext:
@@ -928,7 +965,7 @@ class Pvisitor {
                 }
                 
                 
-                let ranger = try visitPval(sctx.expr()!)!
+                let ranger = try _visitPval(sctx.expr()!)
                 switch try ranger.getKind().gtype {
                 case .gSlice, .gArray:
                     for x in try 0..<ranger.getKind().count! {
@@ -964,13 +1001,13 @@ class Pvisitor {
                 if sctx.fss != nil {
                     try visit(sctx.fss)
             }
-            var v: Bool = try tryCast(try visitPval(sctx.expr()!)!)
+            var v: Bool = try tryCast(try _visitPval(sctx.expr()!))
             while v {
                 try visit(sctx.block()!)
                 
                 if  cfc.toEndBlock() {break}
                 try visit(sctx.sss)
-                v = try tryCast(try visitPval(sctx.expr()!)!)
+                v = try tryCast(try _visitPval(sctx.expr()!))
                 
             }
         case let sctx as PinnParser.GuardStatementContext:
@@ -987,7 +1024,7 @@ class Pvisitor {
             let map = lfc?.m ?? fc.m
             
             if sctx.LPAREN() != nil {
-                let e = try visitPval(sctx.expr()!)!
+                let e = try _visitPval(sctx.expr()!)
                 ade(try e.getKind().gtype == .gTuple)
                 ade(try e.getKind().count == sctx.ID().count)
                 for (k, v) in sctx.ID().enumerated() {
@@ -1015,6 +1052,9 @@ class Pvisitor {
                 newV = try visitPval(sctx.expr()!)
                 if newV == nil {
                     throw Perr(ENIL, sctx)
+                }
+                if try newV!.getKind().isNil() {
+                    throw Perr(ETYPE, sctx)
                 }
             } else {
                 let k = try visitKind(sctx.kind()!)

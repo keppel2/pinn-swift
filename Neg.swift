@@ -63,6 +63,13 @@ y = x;
 sdns := [[2, 1], 24];
 """),
 ("Wrong short declaration", """
+sd := nil;
+"""),
+("Wrong short declaration", """
+func f() {}
+sd := f();
+"""),
+("Wrong short declaration", """
 sdns := (5, (true, "foo"), [true, "foo"]);
 """),
 ("Wrong short declaration", """
@@ -71,7 +78,17 @@ sdns := [[2, 1], [true, true, true]];
 ("Wrong short declaration", """
 sdns := {"aap": 5, "noot": false};
 """),
-
+("Wrong short declaration", """
+func f() {}
+sdns := [4, f()];
+"""),
+("Wrong array declaration", """
+var ar [true]int;
+"""),
+("Wrong array declaration", """
+func f() {}
+var ar [f()]int;
+"""),
 ("Wrong type assignment defined types", """
 var x [1]int;
 var y [2]int;
@@ -252,10 +269,11 @@ true + false;
 //true && 1;
 //"""),
 ("Binary op", """
-true % 4;
+func f() {}
+3 + f();
 """),
 ("Binary op", """
-true > 4;
+3 + [1, 5];
 """),
 ("Binary op", """
 4 > true;

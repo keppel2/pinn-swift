@@ -77,6 +77,9 @@ private func _fatalError(_ s: String) -> Never {
     //    exit(1)
 }
 func tryCast<T> (_ pv: Pval) throws -> T {
+    if try pv.getKind().gtype != .gScalar {
+        throw Perr(ETYPE, pv)
+    }
     if !(try pv.getUnwrap() is T) {
         throw Perr(ETYPE, pv)
     }
