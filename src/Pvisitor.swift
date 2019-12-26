@@ -16,11 +16,8 @@ class Pvisitor {
     private var oldPrc: ParserRuleContext?
     private var cfc: Fc {return lfc ?? fc}
     init() {
-        for str in builtIns.keys {
-            reserveFunction(str)
-        }
+        reset()
     }
-    
     private let litToType: [String: Ptype.Type] = ["int": Int.self, "bool": Bool.self, "string": String.self, "decimal": Decimal.self, "self": Nil.self]
     private let builtIns
         : [String: (ParserRuleContext, Pvisitor, [Pval]) throws -> Pval?] =
@@ -43,6 +40,7 @@ class Pvisitor {
                 if pv.lfc != nil {
                     throw Perr(ESTATEMENT, sctx)
                 }
+                pv.reset()
                 if pv.li != nil {
                     try pv.testCompare(sctx)
                 }
@@ -134,6 +132,14 @@ class Pvisitor {
             throw Perr(EPARAM_LENGTH)
         }
     }
+    private func reset() {
+        fc = Fc()
+        fkmap = [String:Fheader]()
+        for str in builtIns.keys {
+            reserveFunction(str)
+        }
+    }
+    
     private func testCompare(_ sctx: ParserRuleContext) throws{
         let compee = printed[li!..<printed.endIndex]
         //print(compee, "!")
@@ -451,9 +457,8 @@ class Pvisitor {
                     rt = Kind(kind, .gSlice, 0)
                 }
                 else {
-                    guard let v = try visitPval(sctx.expr()!) else {
-                        throw Perr(ENIL)
-                    }
+                    let v = try _visitPval(sctx.expr()!)
+                  
                     let x: Int = try tryCast(v)
                     rt = Kind(kind, .gArray, x)
                 }
@@ -676,7 +681,7 @@ class Pvisitor {
             
             
         case let sctx as PinnParser.ParenExprContext:
-            rt = try visitPval(sctx.expr()!)
+            rt = try _visitPval(sctx.expr()!)
         case let sctx as PinnParser.ObjectLiteralContext:
             let list = sctx.objectPair()
             var kind: Kind?
@@ -1011,7 +1016,7 @@ class Pvisitor {
                 
             }
         case let sctx as PinnParser.GuardStatementContext:
-            let v = try visitPval(sctx.expr()!)!
+            let v = try _visitPval(sctx.expr()!)
             let b: Bool = try tryCast(v)
             if !b {
                 try visit(sctx.block()!)

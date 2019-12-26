@@ -287,6 +287,18 @@ func f() {}
 ("Unary op", """
 !5;
 """),
+("Parenthesize call", """
+func f() {}
+(f());
+"""),
+("Empty call for if", """
+func f() {}
+if(f()) {}
+"""),
+("Nil for if", """
+func f() {}
+if(nil) {}
+"""),
 ("Slice operator fail", """
 [5, 42, 101][0@3];
 """),
