@@ -125,6 +125,53 @@ var x int;
 var y [2]int;
 y = x;
 """),
+("Wrong types, declared", """
+var cdn [slice][slice]int;
+var cdns [slice]int;
+cdns[0] = "aap";
+cdns[1] = "noot";
+cdn[0] = cdns;
+"""),
+("Wrong types, declared", """
+var cdn [slice][slice]int;
+var cdns [slice]int;
+cdns[0] = 42;
+cdns[1] = "noot";
+"""),
+("Wrong types, declared", """
+var cdn [slice][2]int;
+var cdns [slice]int;
+cdns[0] = 42;
+cdns[1] = 101;
+cdn[0] = cdns;
+"""),
+("Wrong types, declared", """
+var cdn [2][slice]int;
+var cdns [slice]int;
+cdns[0] = 42;
+cdns[1] = 101;
+cdn[2] = cdns;
+"""),
+("Wrong types, declared", """
+var cdn [slice][2]int;
+var cdns [3]int;
+cdns[0] = 42;
+cdns[1] = 101;
+cdn[0] = cnds;
+"""),
+("Wrong types, declared", """
+var cdn [3][slice]int;
+var cdns [2]int;
+cdns[0] = 42;
+cdns[1] = 101;
+cdn[0] = cnds;
+"""),
+("Wrong types, declared", """
+var cdn [3][slice]int;
+var cdns [slice]bool;
+cdns[0] = true;
+cdn[0] = cnds;
+"""),
 ("Wrong type get from short declaration", """
 x := 0;
 y := true;

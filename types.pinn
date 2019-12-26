@@ -80,6 +80,26 @@ arStr[1] = "bravo";
 arStr[2] = "charlie";
 print(arStr);
 
+ft("Create deep nesting", "[[42 101]]");
+var cdn [slice][slice]int;
+var cdns [slice]int;
+cdns[0] = 42;
+cdns[1] = 101;
+cdn[0] = cdns;
+print(cdn);
+
+
+ft("Nested types, declared", "[true] [[true] [] []]");
+var cdn42 [3][slice]bool;
+var cdns42 [slice]bool;
+cdns42[0] = true;
+cdn42[0] = cdns42;
+print(cdns42, cdn42);
+
+ft("Nested types, declared deep array", "[[[0 0 0 0] [0 0 42 0] [0 0 0 0]] [[0 0 0 0] [0 0 0 0] [0 0 0 0]]]");
+var ntdda [2][3][4]int;
+ntdda[0][1][2] = 42;
+print(ntdda);
 
 ft("Short declaration slice", "[10 23 42 101] [10 23 42 101]");
 sda := [10, 23, 42, 101];
@@ -462,8 +482,6 @@ print (A == B, A != B, A < B, A > B);
 ft("Order", "false");
 print(true && 10 < 2 + 1 );
 
-
-
 ft("<= and >=", "true false true false");
 print (5 <= 5, 6 <= 5, 5 >= 5, 4 >= 5);
 SA := "bar";
@@ -654,9 +672,6 @@ ft("Map returns zero value with no key", "0, false");
 var mrz [map]int;
 print(mrz["a"]);
 print(",", key(mrz, "a"));
-
-
-
 
 ft("Tuple equals", "true false");
 teTup := (5, "aap", false);
