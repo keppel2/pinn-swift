@@ -78,11 +78,13 @@ cdns[0] = 42;
 cdns[1] = 101;
 cdn[0] = cdns;
 print(cdn);
-ft("Deep nesting and length", "[(0 {} [[0 0 0 0 42]])] 1 5");
+ft("Deep nesting and length", "[(0 {} [[0 0 0 0 42]])] 1 5 [(42 {key:true} [12 101]) (101 {aap:false} [202])]");
 var cx [slice](int, [map]bool, [slice][5]int);
+cx2 := [(42, {"key": true}, [12, 101])];
+cx2[1] = (101, {"aap": false}, [202]);
 cx[0][2][0][4] = 42;
-print(cx, len(cx), len(cx[0][2][0]));
-
+print(cx, len(cx), len(cx[0][2][0]), "");
+print(cx2);
 ft("Nested types, declared", "[true] [[true] [] []]");
 var cdn42 [3][slice]bool;
 var cdns42 [slice]bool;
