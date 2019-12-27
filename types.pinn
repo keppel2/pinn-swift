@@ -1,6 +1,4 @@
-//func ec() {
-//    println();
-//}
+
 func conc(d string, v string) string {
     return d + "!" + v + "#";
 }
@@ -399,8 +397,7 @@ func mrecurse2(i int) {
     }
 }
 mrecurse1(1);
-ec()
-;ft("Return slice of strings","[aap noot mies]");
+ft("Return slice of strings","[aap noot mies]");
 func returnSliceString() [slice]string {
 ar := ["aap", "noot", "mies"];
 return ar;

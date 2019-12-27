@@ -407,6 +407,54 @@ exit(5);
 ("Exit with two values", """
 exit(true, true);
 """),
+("len", """
+len(4);
+"""),
+("len", """
+len(true);
+"""),
+("len", """
+len(nil);
+"""),
+
+("len", """
+len("abc", "def");
+"""),
+("stringValue", """
+stringValue();
+"""),
+("stringValue", """
+stringValue(5, ",");
+"""),
+("Print empty", """
+func f() {}
+print(f());
+"""),
+("Delete", """
+m := {"key": 42};
+delete(m);
+"""),
+("Delete", """
+m := {"key": 42};
+delete(m, 2);
+"""),
+("Delete", """
+m := 42;
+delete(m, "k");
+"""),
+("Delete", """
+m := [2, 24];
+delete(m, "k");
+"""),
+("Delete", """
+m := {"key": 42};
+x := delete(m, "k");
+x = 101;
+"""),
+("key", """
+m := {"key": 42};
+key(m);
+"""),
 ("Pointer", """
 s := (10, nil);
 s = (false, nil);

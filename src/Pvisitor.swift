@@ -52,15 +52,16 @@ class Pvisitor {
                 
                 return nil
             },
-            "ec": { sctx, pv, s in try assertPvals(s, 0)
-                return nil
-            },
             "len": { sctx, pv, s in try assertPvals(s, 1)
                 if try s[0].getKind().isType(String.self) {
                     return Pval(sctx, (try s[0].getUnwrap() as! String).count)
                 }
-                return Pval(sctx, try s[0].getKind().count!)},
-            "stringValue":
+                guard let c = try s[0].getKind().count else {
+                    throw Perr(ETYPE, sctx)
+                }
+                return Pval(sctx, c)
+            },
+                            "stringValue":
                 { sctx, pv, s in try assertPvals(s, 1)
                     return Pval(sctx, try s[0].string(false)) },
             "depthString":
