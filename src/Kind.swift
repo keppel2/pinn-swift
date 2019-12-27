@@ -17,11 +17,11 @@ class Kind {
         switch gtype {
         case .gScalar, .gTuple, .gPointer:
             de(ECASE)
-        case .gMap:
+        case .gMap, .gSlice:
             ade(count == nil)
 //            self.count = 0
             ke = .k(k)
-        case .gArray, .gSlice:
+        case .gArray:
             self.count = count!
             ke = .k(k)
         }

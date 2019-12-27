@@ -249,7 +249,7 @@ class Pvisitor {
             guard rhsv - lhsv >= 0 else {
                 throw Perr(ERANGE, sctx)
             }
-            rt = try Pval(sctx, Kind(Kind(Int.self), .gSlice, rhsv - lhsv))
+            rt = try Pval(sctx, Kind(Kind(Int.self), .gSlice))
             for x in lhsv..<rhsv {
                 try rt.set(x - lhsv, Pval(sctx, x))
             }
@@ -455,7 +455,7 @@ class Pvisitor {
                 if sctx.MAP() != nil {
                     rt = Kind(kind, .gMap)
                 } else if sctx.SLICE() != nil {
-                    rt = Kind(kind, .gSlice, 0)
+                    rt = Kind(kind, .gSlice)
                 }
                 else {
                     let v = try _visitPval(sctx.expr()!)
@@ -701,7 +701,7 @@ class Pvisitor {
             let ae = try visitList(el)
             let aeFirstk = try ae.first!.getKind()
             
-            let kind = Kind(aeFirstk, .gSlice, ae.count)
+            let kind = Kind(aeFirstk, .gSlice)
             rt = try Pval(sctx, ae, kind)
             
             return rt

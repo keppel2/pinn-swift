@@ -72,7 +72,9 @@ class Pval {
     
     init( _ c: ParserRuleContext, _ k: Kind) throws {
         switch k.gtype {
-        case .gArray, .gSlice:
+        case .gSlice:
+            e = Pvalp(k, Contents.multi(Wrap([Pval]())), c)
+        case .gArray:
             
             var ar = [Pval]()
             for _ in 0..<k.count! {
@@ -107,7 +109,7 @@ class Pval {
     
     
     convenience init( _ c: ParserRuleContext, _ pv: Pval, _ a: Int, _ b: Int) throws {
-        try self.init(c, Kind(pv.getKind().cKind(), .gSlice, b - a))
+        try self.init(c, Kind(pv.getKind().cKind(), .gSlice))
         e.con = .multi(Wrap(try pv.e.con.getSlice(a, b)))
     }
     
