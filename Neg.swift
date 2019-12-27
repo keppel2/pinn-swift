@@ -273,6 +273,14 @@ func f() {}
 3 + f();
 """),
 ("Binary op", """
+func f() {}
+3 + nil;
+"""),
+("Binary op", """
+func f() {}
++nil;
+"""),
+("Binary op", """
 3 + [1, 5];
 """),
 ("Binary op", """
@@ -280,6 +288,9 @@ func f() {}
 """),
 ("Ternary op", """
 10 ? 5 : false;
+"""),
+("Ternary op", """
+nil ? true : false;
 """),
 ("Unary op", """
 -true;
