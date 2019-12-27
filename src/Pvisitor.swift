@@ -336,7 +336,7 @@ class Pvisitor {
                 throw Perr(ETYPE, sctx)
             }
             if let pv = lfc!.m[fh.fkinds[index].s]  {
-                throw Perr(EREDECLARE, pv, sctx)
+                throw Perr(EREDECLARE, sctx, pv)
             }
             lfc!.m[fh.fkinds[index].s] = Pval(s[index])
         }
@@ -955,16 +955,16 @@ class Pvisitor {
                     key = getPv(sctx.ID(0)!.getText())
                     if key == nil  {
                         
-                        throw Perr(EUNDECLARED, nil, sctx, sctx.ID(0)!.getSymbol()!)
+                        throw Perr(EUNDECLARED, sctx, nil, sctx.ID(0)!.getSymbol()!)
                     }
                     value = getPv(sctx.ID(1)!.getText())
                     if value == nil {
-                        throw Perr(EUNDECLARED, nil, sctx, sctx.ID(1)!.getSymbol()!)
+                        throw Perr(EUNDECLARED, sctx, nil, sctx.ID(1)!.getSymbol()!)
                     }
                 } else {
                     value = getPv(sctx.ID(0)!.getText())
                     if value == nil {
-                        throw Perr(EUNDECLARED, nil, sctx, sctx.ID(0)!.getSymbol()!)
+                        throw Perr(EUNDECLARED, sctx, nil, sctx.ID(0)!.getSymbol()!)
                     }
                     
                 }
@@ -996,7 +996,7 @@ class Pvisitor {
                     }
                     break
                 default:
-                    aden()
+                    throw Perr(ETYPE, sctx, ranger)
                 }
                 break
             }
@@ -1036,7 +1036,7 @@ class Pvisitor {
                     let str = v.getText()
                     let te = try e.get(k)
                     if let prev = map[str] {
-                        throw Perr(EREDECLARE, prev, sctx)
+                        throw Perr(EREDECLARE, sctx, prev)
                     }
                     if lfc != nil {
                         lfc!.m[str] = te
@@ -1051,7 +1051,7 @@ class Pvisitor {
             
             var newV: Pval?
             if let prev = map[str] {
-                throw Perr(EREDECLARE, prev, sctx)
+                throw Perr(EREDECLARE, sctx, prev)
             }
             if sctx.CE() != nil {
                 newV = try visitPval(sctx.expr()!)

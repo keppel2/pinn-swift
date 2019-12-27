@@ -5,13 +5,13 @@ class Perr : Error {
     var pval: Pval?
     var prc: ParserRuleContext?
     var tok: Token?
-    init (_ s: String, _ p: Pval? = nil, _ p2: ParserRuleContext? = nil, _ p3: Token? = nil) {
+    init (_ s: String, _ p2: ParserRuleContext? = nil, _ p: Pval? = nil, _ p3: Token? = nil) {
         str = s
         pval = p
         prc = p2 //?? pv.prc
         tok = p3
     }
-    convenience init(_ s: String, _ p: ParserRuleContext?) {
+    convenience init(_ s: String, _ p: Pval?) {
         self.init(s, nil, p, nil)
     }
     convenience init(_ s: String, _ t: Token) {

@@ -304,12 +304,85 @@ func f() {}
 """),
 ("Empty call for if", """
 func f() {}
-if(f()) {}
+if (f()) {}
 """),
 ("Nil for if", """
 func f() {}
-if(nil) {}
+if (nil) {}
 """),
+("Zero for if", """
+if (0) {}
+"""),
+("Zero for if", """
+if (0) ; else ;
+"""),
+("Zero for while", """
+while 0 {}
+"""),
+("Bad return in loop", """
+func f() int {
+loop {
+  return false;
+}
+}
+f();
+"""),
+("No exit from guard", """
+guard false else {
+}
+"""),
+("Range", """
+for x = range 1@10 {}
+"""),
+("Range", """
+var x int;
+for x = range true {}
+"""),
+("Range", """
+var x int;
+for x = range ["aap", "noot"] {}
+"""),
+("Range", """
+var x [2]int;
+for x = range [5, 10] {}
+"""),
+("Range", """
+var x int;
+for x = range (5, 10) {}
+"""),
+("Range", """
+var x string;
+var y int;
+for x, y = range [5, 10] {}
+"""),
+("Range", """
+var x int;
+var y int;
+for x, y = range {"aap": 5, "noot": 23} {}
+"""),
+("Range", """
+var x int;
+var y int;
+for x, y = range 23 {}
+"""),
+("Range", """
+var x string;
+var y int;
+for x, y = range ["aap", "noot"] {}
+"""),
+("For triple", """
+for var x int; i < 5; i += "aap" {}
+"""),
+("For triple", """
+for var x int; 2; i += 10 {}
+"""),
+("For triple", """
+for var x string; i < 2; i += "aap" {}
+"""),
+("For triple", """
+for var i [2]int; i[1] < 2; i++ {}
+"""),
+
 ("Slice operator fail", """
 [5, 42, 101][0@3];
 """),
