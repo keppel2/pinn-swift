@@ -230,12 +230,23 @@ class Pval {
     }
     
    
-    
+    func getCount() throws -> Int {
+        
+        switch try getKind().gtype {
+        case .gArray:
+            return try getKind().count!
+        case .gSlice, .gTuple:
+            return e.con.getAr().count
+        case .gMap:
+            return e.con.getMap().count
+        default:
+            throw Perr(ETYPE, self)
+        }
+    }
     func getKind() throws -> Kind {
+        
         let k = e.k
-        
-        
-        
+
                switch e.con {
                 case .single:
 //                    if e.k.gtype != .gScalar{

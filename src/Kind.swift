@@ -31,30 +31,30 @@ class Kind {
     init(_ ka: [Kind]) throws {
         gtype = .gTuple
         var kar = ka
-        self.count = kar.count
-        ke = .vt(Nil.self)
-        for v in kar {
-            if v.isPointer() {
-                gtype = .gPointer
-            }
-            if v.isNil() {
-                gtype = .gPointer
-                v.gtype = .gPointer
-            }
-        }
-        if gtype == .gPointer {
-            for (k, v) in kar.enumerated() {
-                if v.isPointer() {
-                    if !v.isOneNil() {
-//                        if !kar.elementsEqual(v.ke.getKm()!, by: {$0.kindEquivalent($1)}) {
-//                            throw Perr(ETYPE)
-//                        }
-                    }
-                    kar[k] = self
-                    
-                }
-            }
-        }
+//        self.count = kar.count
+//        ke = .vt(Nil.self)
+//        for v in kar {
+//            if v.isPointer() {
+//                gtype = .gPointer
+//            }
+//            if v.isNil() {
+//                gtype = .gPointer
+//                v.gtype = .gPointer
+//            }
+//        }
+//        if gtype == .gPointer {
+//            for (k, v) in kar.enumerated() {
+//                if v.isPointer() {
+//                    if !v.isOneNil() {
+////                        if !kar.elementsEqual(v.ke.getKm()!, by: {$0.kindEquivalent($1)}) {
+////                            throw Perr(ETYPE)
+////                        }
+//                    }
+//                    kar[k] = self
+//                    
+//                }
+//            }
+//        }
         ke = .km(kar)
         self.assert()
     }

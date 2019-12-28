@@ -478,35 +478,35 @@ s[1] = (42, 1);
     
     
     
-("Binary search tree error", """
-    var i int;
-    bst := (nil, 7, nil);
-    cur := bst;
-    for i = range [1, 5, 10, 2, 3] {
-        cur = bst;
-        loop {
-            if i < cur[1] {
-                if cur[0] == nil {
-                    cur[0] = (nil, i, nil, 4);
-                    break;
-                } else {
-                    cur = cur[0];
-                    continue;
-                }
-            } else if i > cur[1] {
-                if cur[2] == nil {
-                    cur[2] = (nil, i, nil);
-                    break;
-                } else {
-                    cur = cur[2];
-                    continue;
-                }
-            } else {
-                break;
-            }
-        }
-    }
-"""),
+//("Binary search tree error", """
+//    var i int;
+//    bst := (nil, 7, nil);
+//    cur := bst;
+//    for i = range [1, 5, 10, 2, 3] {
+//        cur = bst;
+//        loop {
+//            if i < cur[1] {
+//                if cur[0] == nil {
+//                    cur[0] = (nil, i, nil, 4);
+//                    break;
+//                } else {
+//                    cur = cur[0];
+//                    continue;
+//                }
+//            } else if i > cur[1] {
+//                if cur[2] == nil {
+//                    cur[2] = (nil, i, nil);
+//                    break;
+//                } else {
+//                    cur = cur[2];
+//                    continue;
+//                }
+//            } else {
+//                break;
+//            }
+//        }
+//    }
+//"""),
     
     
 

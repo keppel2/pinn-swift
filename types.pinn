@@ -759,7 +759,7 @@ print(dnt);
 dnt[1][2]["aap"] = (42, "noot");
 print(dnt);
 
-
+/*
 ft("Binary search tree", "((N 1 ((N 2 (N 3 N)) 5 N)) 7 (N 10 N))");
 var i int;
 bst := (nil, 7, nil);
@@ -791,7 +791,6 @@ for i = range [1, 5, 10, 2, 3] {
 print(depthString(bst));
 
 
-/*
 ft("Depth-first search", "1 ,2 ,3 ,5 ,7 ,10 ,");
 func dfs(node  (self, int, self)) {
     if node == nil {

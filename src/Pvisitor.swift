@@ -56,10 +56,10 @@ class Pvisitor {
                 if try s[0].getKind().isType(String.self) {
                     return Pval(sctx, (try s[0].getUnwrap() as! String).count)
                 }
-                guard let c = try s[0].getKind().count else {
-                    throw Perr(ETYPE, sctx)
-                }
-                return Pval(sctx, c)
+//                guard let c = try s[0].getKind().count else {
+//                    throw Perr(ETYPE, sctx)
+//                }
+                return try Pval(sctx, s[0].getCount())
             },
                             "stringValue":
                 { sctx, pv, s in try assertPvals(s, 1)
