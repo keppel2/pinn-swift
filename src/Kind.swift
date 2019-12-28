@@ -193,6 +193,8 @@ class Kind {
             case .gArray:
                 return k.kindEquivalent(k2.ke.getK()!) && count == k2.count
             case .gMap, .gSlice:
+//                return k.kindEquivalent(k2.ke.getK()!) && count == k2.count
+
                 return k.kindEquivalent(k2.ke.getK()!)
             case .gTuple, .gScalar, .gPointer:
                 de(ECASE)
