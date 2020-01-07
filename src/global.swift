@@ -1,5 +1,4 @@
-
-import Foundation
+//import Foundation
 var test = false
 var gparser: PinnParser? = nil
 let ENIL = "Unexpected nil"

@@ -77,13 +77,13 @@ private func _fatalError(_ s: String) -> Never {
     //    exit(1)
 }
 func tryCast<T> (_ pv: Pval) throws -> T {
-    if try pv.getKind().gtype != .gScalar {
-        throw Perr(ETYPE, pv)
+    if case .gScalar = try pv.getKind().gtype {
+        if !(try pv.getUnwrap() is T) {
+            throw Perr(ETYPE, pv)
+        }
+        return try pv.getUnwrap() as! T
     }
-    if !(try pv.getUnwrap() is T) {
-        throw Perr(ETYPE, pv)
-    }
-    return try pv.getUnwrap() as! T
+    throw Perr(ETYPE, pv)
 }
 
 
@@ -117,7 +117,79 @@ func pEq(_ a: Ptype, _ b: Ptype) -> Bool {
     return type(of:a) == type(of:b)
 }
 enum Gtype {
-    case gScalar, gArray, gMap, gSlice, gTuple, gPointer
+    case gScalar(Ptype.Type)
+    case gArray(Kind, Int)
+    case gSlice(Kind)
+    case gMap(Kind)
+    case gTuple([Kind])
+    case gPointer([Kind])
+    
+    func openString() -> String {
+        switch self {
+        case .gArray, .gSlice:
+            return "["
+        case .gMap:
+            return "{"
+        case .gTuple, .gPointer:
+            return "("
+        default:
+            aden()
+        }
+    }
+    
+    func closeString() -> String {
+        switch self {
+        case .gArray, .gSlice:
+            return "]"
+        case .gMap:
+            return "}"
+        case .gTuple, .gPointer:
+            return ")"
+        default:
+            aden()
+        }
+    }
+    
+    func gEquivalent(_ g2: Gtype) -> Bool {
+        switch self {
+        case .gScalar(let pt):
+            if case .gScalar(let pt2) = g2 {
+                return pt == pt2
+            }
+            return false
+        case .gArray(let k, let i):
+            if case .gArray(let k2, let i2) = g2 {
+                return i == i2 && k === k2
+            }
+            return false
+        case .gSlice(let k):
+            if case .gSlice(let k2) = g2 {
+                return k === k2
+            }
+            return false
+        case .gMap(let k):
+            if case .gMap(let k2) = g2 {
+                return k === k2
+            }
+            return false
+        case .gTuple(let ka):
+        if case .gTuple(let ka2) = g2 {
+    
+            return ka.elementsEqual(ka2) {
+                $0 === $1
+            }
+        }
+            return false
+        case .gPointer:
+        return false
+        }
+    }
+    
+    
+    
+    
+    
+    
 }
 
 class Wrap <T> {

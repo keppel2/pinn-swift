@@ -53,12 +53,16 @@ class Pvisitor {
                 return nil
             },
             "len": { sctx, pv, s in try assertPvals(s, 1)
-                if try s[0].getKind().isType(String.self) {
-                    return Pval(sctx, (try s[0].getUnwrap() as! String).count)
-                }
-//                guard let c = try s[0].getKind().count else {
-//                    throw Perr(ETYPE, sctx)
+//                if try s[0].getKind().isType(String.self) {
+//                    return Pval(sctx, (try s[0].getUnwrap() as! String).count)
 //                }
+                if case .gScalar(let pt) = s[0].getKind().gtype {
+                    if pt != String.self {
+                        throw Perr(ETYPE, sctx)
+                    }
+                    return try Pval(sctx, (s[0].getUnwrap() as! String).count)
+                }
+
                 return try Pval(sctx, s[0].getCount())
             },
                             "stringValue":
@@ -97,7 +101,7 @@ class Pvisitor {
             "delete": { sctx, pv, s in try assertPvals(s, 2)
                 let kt: String = try tryCast(s[1])
                 let rt = try s[0].hasKey(kt)
-                try s[0].set(kt, nil)
+                try s[0].delKey(kt)
                 return Pval(sctx, rt)
             },
             "key": { sctx, pv, s in try assertPvals(s, 2)
@@ -249,7 +253,8 @@ class Pvisitor {
             guard rhsv - lhsv >= 0 else {
                 throw Perr(ERANGE, sctx)
             }
-            rt = try Pval(sctx, Kind(Kind(Int.self), .gSlice))
+            let ki = Kind.produceKind(Gtype.gScalar(Int.self))
+            rt = try Pval(sctx, Kind.produceKind(Gtype.gSlice(ki)))
             for x in lhsv..<rhsv {
                 try rt.set(x - lhsv, Pval(sctx, x))
             }
@@ -319,10 +324,10 @@ class Pvisitor {
         }
         for (index, v) in fh.fkinds.enumerated() {
             if v.variadic {
-                let par = try Pval(ctx, Kind(v.k, .gArray, s.count - index))
+                let par = try Pval(ctx, Kind.produceKind(Gtype.gArray(v.k, s.count - index)))
                 
                 for (key, varadds) in s[index...].enumerated() {
-                    if try !varadds.getKind().kindEquivalent(v.k) {
+                    if varadds.getKind() !== v.k {
                         throw Perr(ETYPE, sctx)
                     }
                     try par.set(key, varadds)
@@ -333,7 +338,7 @@ class Pvisitor {
                 lfc!.m[fh.fkinds[index].s] = par//Pval(par)
                 continue
             }
-            if try !s[index].getKind().kindEquivalent(v.k) {
+            if try s[index].getKind() !== v.k {
                 throw Perr(ETYPE, sctx)
             }
             if let pv = lfc!.m[fh.fkinds[index].s]  {
@@ -352,7 +357,7 @@ class Pvisitor {
             guard let rp = lfc!.rt else {
                 throw Perr(ETYPE, sctx)
             }
-            if !k.kindEquivalent(try rp.getKind()) {
+            if k !== rp.getKind()  {
                 throw Perr(ETYPE, sctx)
             }
         } else {
@@ -443,28 +448,28 @@ class Pvisitor {
         let rt: Kind
         if let spec = sctx.kindList() {
             let kL = try visitKindList(spec)
-            rt = try Kind(kL)
+            rt = Kind.produceKind(Gtype.gTuple(kL))
         } else
             if let type = sctx.TYPES() {
                 let strType = type.getText()
                 let vtype = litToType[strType]!
-                rt = Kind(vtype)
+                rt = Kind.produceKind(Gtype.gScalar(vtype))
                 //            return Kind(vtype)
             } else {
                 let kind = try visitKind(sctx.kind()!)
                 if sctx.MAP() != nil {
-                    rt = Kind(kind, .gMap)
+                    rt = Kind.produceKind(Gtype.gMap(kind))
                 } else if sctx.SLICE() != nil {
-                    rt = Kind(kind, .gSlice)
+                    rt = Kind.produceKind(Gtype.gSlice(kind))
                 }
                 else {
                     let v = try _visitPval(sctx.expr()!)
                   
                     let x: Int = try tryCast(v)
-                    rt = Kind(kind, .gArray, x)
+                    rt = Kind.produceKind(Gtype.gArray(kind, x))
                 }
         }
-        return Kind.produceKind(rt)
+        return rt
     }
     private func visitFKind(_ sctx: PinnParser.FvarDeclContext) throws -> FKind {
         loadDebug(sctx)
@@ -686,12 +691,17 @@ class Pvisitor {
         case let sctx as PinnParser.ObjectLiteralContext:
             let list = sctx.objectPair()
             var kind: Kind?
+            var ckind: Kind?
             for op in list {
                 
                 let (str, pv) = try visitObjectPair(op)
                 if kind == nil {
-                    kind = Kind(try pv.getKind(), .gMap)
+                    ckind = pv.getKind()
+                    kind = try Kind.produceKind(Gtype.gMap(ckind!))
                     rt = try Pval(sctx, kind!)
+                }
+                if pv.getKind() !== ckind {
+                    throw Perr(ETYPE, sctx)
                 }
                 try rt!.set(str, pv)
             }
@@ -701,8 +711,7 @@ class Pvisitor {
             let ae = try visitList(el)
             let aeFirstk = try ae.first!.getKind()
             
-            let kind = Kind(aeFirstk, .gSlice)
-            rt = try Pval(sctx, ae, kind)
+            rt = try Pval(sctx, ae, aeFirstk)
             
             return rt
             
@@ -775,12 +784,12 @@ class Pvisitor {
                 if let lh = sctx.first {
                     lhsv = try tryCast(try _visitPval(lh))
                 }
-                var rhsv = try v.getKind().count!
+                var rhsv = try v.getCount()
                 if let rh = sctx.second {
-                    rhsv = try tryCast(try _visitPval(rh))
+                    rhsv = try tryCast(_visitPval(rh))
                 }
                 if (sctx.TWODOTS() != nil) {
-                    rhsv+=1
+                    rhsv += 1
                 }
                 
                 rt = try Pval(sctx, v, lhsv, rhsv)
@@ -974,7 +983,7 @@ class Pvisitor {
                 let ranger = try _visitPval(sctx.expr()!)
                 switch try ranger.getKind().gtype {
                 case .gSlice, .gArray:
-                    for x in try 0..<ranger.getKind().count! {
+                    for x in try 0..<ranger.getCount() {
                         try value!.setPV(ranger.get(x))
                         try key?.setPV(Pval(sctx, x))
                         
@@ -1031,8 +1040,8 @@ class Pvisitor {
             
             if sctx.LPAREN() != nil {
                 let e = try _visitPval(sctx.expr()!)
-                ade(try e.getKind().gtype == .gTuple)
-                ade(try e.getKind().count == sctx.ID().count)
+//                ade(try e.getKind().gtype == .gTuple)
+//                ade(try e.getKind().count == sctx.ID().count)
                 for (k, v) in sctx.ID().enumerated() {
                     let str = v.getText()
                     let te = try e.get(k)
@@ -1059,9 +1068,9 @@ class Pvisitor {
                 if newV == nil {
                     throw Perr(ENIL, sctx)
                 }
-                if try newV!.getKind().isNil() {
-                    throw Perr(ETYPE, sctx)
-                }
+//                if try newV!.getKind().isNil() {
+//                    throw Perr(ETYPE, sctx)
+//                }
             } else {
                 let k = try visitKind(sctx.kind()!)
                 newV = try Pval(sctx, k)

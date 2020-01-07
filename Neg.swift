@@ -62,9 +62,9 @@ y = x;
 ("Wrong short declaration", """
 sdns := [[2, 1], 24];
 """),
-("Wrong short declaration", """
-sd := nil;
-"""),
+//("Wrong short declaration", """
+//sd := nil;
+//"""),
 ("Wrong short declaration", """
 func f() {}
 sd := f();
