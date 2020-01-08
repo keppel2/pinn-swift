@@ -7,6 +7,10 @@ class Pval {
         e = p.e
     }
     
+    private init(_ x: Pvalp) {
+        e = x
+    }
+    
     init(_ c: ParserRuleContext, _ ar: [Pval], _ k: Kind) throws {
         if (try ar.contains {
             try $0.getKind() !== k
@@ -339,11 +343,22 @@ aden()
     
     
     func cloneIf() throws -> Pval {
-        return Pval(self)
-//        switch e.con {
-//        case .single(let pw):
-//            return Pval(e.prc, pw.clone().unwrap())
-//        case .multi(let ar):
+ //       return Pval(self)
+        switch e.con {
+        case .single(let pw):
+            return Pval(e.prc, pw.clone().unwrap())
+        case .multi(let ar):
+            switch getKind().gtype {
+            case .gSlice:
+                return Pval(self)
+            case .gArray, .gTuple:
+                let con = try Contents.multi(Wrap(ar.w.map { try $0.cloneIf() }))
+                let pvp = Pvalp(e.k, con, e.prc)
+                return Pval(pvp)
+            
+            default: aden()
+//                return try Pval(e.prc, ar.w.map { try $0.cloneIf() }, k)
+            }
 //
 //            if try getKind().gtype == .gSlice || getKind().gtype == .gPointer {
 //                return Pval(self)}
@@ -352,9 +367,9 @@ aden()
 //            } else {
 //                return try Pval(e.prc, ar.w.map {try $0.cloneIf()})
 //            }
-//        case .map:
-//            return Pval(self)
-//        }
+        case .map:
+            return Pval(self)
+        }
     }
     private class Pvalp {
         fileprivate var k: Kind
@@ -399,17 +414,17 @@ aden()
         case single(Pwrap)
         case multi(Wrap<[Pval]>)
         case map(Wrap<[String: Pval]>)
-        init(_ c: Contents) {
-            switch c {
-                
-            case .multi(let pv):
-                self = .multi(pv)
-            case .map(let ma):
-                self = .map(ma)
-            case .single(let s):
-                self = .single(s)
-            }
-        }
+//        init(_ c: Contents) {
+//            switch c {
+//                
+//            case .multi(let pv):
+//                self = .multi(pv)
+//            case .map(let ma):
+//                self = .map(ma)
+//            case .single(let s):
+//                self = .single(s)
+//            }
+//        }
         func appendCon(_ v: Pval) {
             if case .multi(let pv) = self {
                 pv.w.append(v)
