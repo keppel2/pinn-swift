@@ -173,20 +173,26 @@ enum Gtype {
             }
             return false
         case .gTuple(let ka):
-        if case .gTuple(let ka2) = g2 {
-    
-            return ka.elementsEqual(ka2) {
-                $0 === $1
+            if case .gTuple(let ka2) = g2 {
+                
+                return ka.elementsEqual(ka2) {
+                    $0 === $1
+                }
             }
-        }
             return false
-        case .gPointer:
-        return false
+        case .gPointer(let ka):
+            if case .gPointer(let ka2) = g2 {
+                
+                return ka.elementsEqual(ka2) {
+                    $0 === $1
+                }
+            }
+            return false
+            
         }
+        
+        
     }
-    
-    
-    
     
     
     

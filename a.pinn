@@ -1,2 +1,4 @@
-func f() {}
-print(f());
+var node (int, self);
+node = (5, nil);
+node[1] = (23, nil);
+println(node);

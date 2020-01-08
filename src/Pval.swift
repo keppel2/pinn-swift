@@ -60,12 +60,10 @@ class Pval {
             let m = [String: Pval]()
             e = Pvalp(k, Contents.map(Wrap(m)), c)
             
-        case .gPointer:
-aden()
         case .gScalar(let pt):
             let se = Pwrap(pt.zeroValue())
             e = Pvalp(k, Contents.single(se), c)
-        case .gTuple(let ka):
+        case .gTuple(let ka), .gPointer(let ka):
             var ar = [Pval]()
             for x in ka {
                 try ar.append(Pval(c, x))
@@ -230,55 +228,6 @@ aden()
     }
     func getKind() -> Kind {
         return e.k
-//        let k = e.k
-//
-//               switch e.con {
-//                case .single:
-////                    if e.k.gtype != .gScalar{
-////                        throw Perr(EASSERT, self)
-////                    }
-//                    return k
-//                case .multi(let ar):
-//                    k.count = ar.w.count
-//                case .map(let m):
-//                    k.count = m.w.count
-//        //            de(ECASE)
-//                }
-
-        
-        
-        
-        
-        
-        
-
-//        
-//        switch e.con {
-//        case .single(let pw):
-//            if e.k.gtype != .gScalar{
-//                throw Perr(EASSERT, self)
-//            }
-//            return Kind(type(of:pw.unwrap()))
-//        case .multi(let ar):
-//            switch e.k.gtype {
-//            case .gArray, .gSlice:
-//                if ar.w.count == 0 {
-//                    return k
-//                }
-//                return try ar.w.first!.getKind()
-//            case .gTuple, .gPointer:
-//                let ka = try ar.w.map { try $0.getKind() }
-//                return try Kind(ka)
-//            default:
-//                de(ECASE)
-//            }
-//        case .map:
-//            return k
-////            de(ECASE)
-//        }
-
-        
-
     }
     
     
@@ -349,7 +298,7 @@ aden()
             return Pval(e.prc, pw.clone().unwrap())
         case .multi(let ar):
             switch getKind().gtype {
-            case .gSlice:
+            case .gSlice, .gPointer:
                 return Pval(self)
             case .gArray, .gTuple:
                 let con = try Contents.multi(Wrap(ar.w.map { try $0.cloneIf() }))
@@ -357,16 +306,7 @@ aden()
                 return Pval(pvp)
             
             default: aden()
-//                return try Pval(e.prc, ar.w.map { try $0.cloneIf() }, k)
             }
-//
-//            if try getKind().gtype == .gSlice || getKind().gtype == .gPointer {
-//                return Pval(self)}
-//            if try getKind().gtype == .gArray {
-//                return try Pval(e.prc, ar.w.map { try $0.cloneIf() }, getKind())
-//            } else {
-//                return try Pval(e.prc, ar.w.map {try $0.cloneIf()})
-//            }
         case .map:
             return Pval(self)
         }
@@ -414,17 +354,7 @@ aden()
         case single(Pwrap)
         case multi(Wrap<[Pval]>)
         case map(Wrap<[String: Pval]>)
-//        init(_ c: Contents) {
-//            switch c {
-//                
-//            case .multi(let pv):
-//                self = .multi(pv)
-//            case .map(let ma):
-//                self = .map(ma)
-//            case .single(let s):
-//                self = .single(s)
-//            }
-//        }
+
         func appendCon(_ v: Pval) {
             if case .multi(let pv) = self {
                 pv.w.append(v)
