@@ -123,7 +123,19 @@ enum Gtype {
     case gMap(Kind)
     case gTuple([Kind])
     case gPointer([Kind])
-    
+    func isPointer() -> Bool {
+        if case .gPointer = self {
+            return true
+        }
+        return false
+    }
+    func isTuple() -> Bool {
+        if case .gTuple = self {
+            return true
+        }
+        return false
+    }
+
     func openString() -> String {
         switch self {
         case .gArray, .gSlice:

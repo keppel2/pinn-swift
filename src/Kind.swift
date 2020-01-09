@@ -15,7 +15,30 @@ class Kind {
     private init(_ g: Gtype) {
         gtype = g
     }
-
+    
+    
+    static func processKindList(_ kl: [Kind]) -> Kind {
+        var isPointer = false
+        for (index, value) in kl.enumerated() {
+            if value === has(.gScalar(Nil.self)) {
+                isPointer = true
+            }
+        }
+        if isPointer {
+            return produceKind(Gtype.gPointer(kl))
+        }
+        return produceKind(Gtype.gTuple(kl))
+    }
+    static func has(_ g: Gtype) -> Kind? {
+        let ki = kinds.firstIndex {
+            $0.gtype.gEquivalent(g)
+        }
+        guard ki != nil else {
+            return nil
+        }
+        return kinds[ki!]
+        
+    }
     static func produceKind(_ g: Gtype) -> Kind {
 
 //        if (kinds.contains {
@@ -24,23 +47,17 @@ class Kind {
 //            return k
 //        }
         
-        let ki = kinds.firstIndex {
-            $0.gtype.gEquivalent(g)
-//            return $0.gtype == k.gtype
-//                && $0.ke.getVt() == k.ke.getVt()
-//                && $0.count == k.count
+        let k = has(g)
+        if k != nil {
+            return k!
         }
+        let k2 = Kind(g)
 
-        if ki != nil {
-            return kinds[ki!]
-        }
-        let k = Kind(g)
-
-        kinds.append(k)
-        return k
+        kinds.append(k2)
+        return k2
     }
 
-
+    
     func assert() {
 
     }

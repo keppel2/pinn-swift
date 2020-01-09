@@ -2,7 +2,7 @@ import Antlr4
 
 class Pval {
     private var e: Pvalp
-
+    
     init(_ p: Pval) {
         e = p.e
     }
@@ -14,7 +14,7 @@ class Pval {
     init(_ c: ParserRuleContext, _ ar: [Pval], _ k: Kind) throws {
         if (try ar.contains {
             try $0.getKind() !== k
-        }) {
+            }) {
             throw Perr(ETYPE, c)
         }
         let k2 = Kind.produceKind(Gtype.gSlice(k))
@@ -25,14 +25,39 @@ class Pval {
         //                          prc = c
         let mar = ar
         let ka = try ar.map { try $0.getKind() }
-        let k = Kind.produceKind(Gtype.gTuple(ka))
-//        let k = try Kind(ka)
-//        for (key, value) in mar.enumerated() {
-//            if try value.getKind().isOneNil() {
-//                mar[key].e.k = k
-//            }
+        var isPointer = false
+//        if (ka.contains {
+//            $0.gtype.gEquivalent(Gtype.gScalar(Nil.self))
+//        }) {
+//            isPointer = true
 //        }
-//        k.count = nil
+        for (key, value) in mar.enumerated() {
+            if value.getKind().gtype.gEquivalent(Gtype.gScalar(Nil.self)) {
+                isPointer = true
+            }
+        }
+        
+        
+        
+        
+        let k = isPointer ? Kind.produceKind(Gtype.gPointer(ka)) : Kind.produceKind(Gtype.gTuple(ka))
+        
+        for (key, value) in mar.enumerated() {
+            if value.getKind().gtype.gEquivalent(Gtype.gScalar(Nil.self)) {
+                value.e.k = k
+//                let pvp = Pvalp(k, Contents.single(Pwrap(Nil())), c)
+//                mar.append(Pval(pvp))
+//            } else {
+//                try mar.append(Pval(c, x))
+            }
+        }
+        //        let k = try Kind(ka)
+        //        for (key, value) in mar.enumerated() {
+        //            if try value.getKind().isOneNil() {
+        //                mar[key].e.k = k
+        //            }
+        //        }
+        //        k.count = nil
         e = Pvalp(k, .multi(Wrap(mar)), c)
     }
     
@@ -41,9 +66,9 @@ class Pval {
         let k = Kind.produceKind(Gtype.gScalar(type(of: a)))
         e = Pvalp(k, .single(w), c)
     }
-
     
-
+    
+    
     
     init( _ c: ParserRuleContext, _ k: Kind) throws {
         switch k.gtype {
@@ -63,13 +88,26 @@ class Pval {
         case .gScalar(let pt):
             let se = Pwrap(pt.zeroValue())
             e = Pvalp(k, Contents.single(se), c)
-        case .gTuple(let ka), .gPointer(let ka):
+        case .gTuple(let ka):
             var ar = [Pval]()
             for x in ka {
                 try ar.append(Pval(c, x))
             }
             e = Pvalp(k, Contents.multi(Wrap(ar)), c)
             break
+        case .gPointer(let ka):
+            var ar = [Pval]()
+            for x in ka {
+                if x.gtype.gEquivalent(Gtype.gScalar(Nil.self)) {
+                    let pvp = Pvalp(k, Contents.single(Pwrap(Nil())), c)
+                    ar.append(Pval(pvp))
+                } else {
+                    try ar.append(Pval(c, x))
+                }
+            }
+            e = Pvalp(k, Contents.multi(Wrap(ar)), c)
+            break
+            
         }
     }
     
@@ -77,20 +115,20 @@ class Pval {
     convenience init( _ c: ParserRuleContext, _ pv: Pval, _ a: Int, _ b: Int) throws {
         switch try pv.getKind().gtype {
         case .gSlice(let k):
-                    try self.init(c, Kind.produceKind(Gtype.gSlice(k)))
-                    e.con = .multi(Wrap(try pv.e.con.getSlice(a, b)))
+            try self.init(c, Kind.produceKind(Gtype.gSlice(k)))
+            e.con = .multi(Wrap(try pv.e.con.getSlice(a, b)))
         case .gArray(let k, let i):
             try self.init(c, Kind.produceKind(Gtype.gSlice(k)))
             e.con = .multi(Wrap(try pv.e.con.getSlice(a, b)))
-
-               default:
-                throw Perr(ETYPE, pv)
-                
-                }
+            
+        default:
+            throw Perr(ETYPE, pv)
+            
+        }
         
     }
     
-
+    
     var prc: ParserRuleContext {e.prc}
     func equal(_ p: Pval) throws -> Bool {
         
@@ -102,18 +140,18 @@ class Pval {
         return try get().unwrap()
     }
     private func get() throws -> Pwrap {
-//        ade(try getKind().gtype == .gScalar)
+        //        ade(try getKind().gtype == .gScalar)
         return e.con.getPw()
     }
     func hasKey(_ s: String) throws -> Bool {
-//        if try getKind().gtype != .gMap {
-//            throw Perr(ETYPE, self)
-//        }
+        //        if try getKind().gtype != .gMap {
+        //            throw Perr(ETYPE, self)
+        //        }
         if case .gMap = getKind().gtype {
-           return e.con.getMap()[s] != nil
+            return e.con.getMap()[s] != nil
         }
         throw Perr(ETYPE, self)
-
+        
     }
     func getKeys() -> [String] {
         return [String](e.con.getMap().keys)
@@ -146,7 +184,7 @@ class Pval {
             }
         case let v1v as String:
             if case .gMap(let k) = getKind().gtype {
-
+                
                 if e.con.getMap()[v1v] == nil {
                     if lh {
                         try e.con.setCon(v1v, Pval(e.prc, k))
@@ -177,31 +215,31 @@ class Pval {
     
     func set(_ k: Ktype, _ v: Pval) throws {
         
-//        ade(try getKind().gtype != .gScalar)
+        //        ade(try getKind().gtype != .gScalar)
         
-//        switch try getKind().gtype {
-//        case .gArray, .gSlice, .gMap:
-//
-////            if try !getKind().cKind().kindEquivalent(try v!.getKind().cKind()) {
-////                throw Perr(ETYPE, self)
-////            }
-//        default:
-//            let index = k as! Int
-//
-////            if try !getKind().aKind()[index].kindEquivalent(try v!.getKind().aKind()[index]) {
-////                throw Perr(ETYPE, self)
-////            }
-//        }
-//
-//
-//
-//
+        //        switch try getKind().gtype {
+        //        case .gArray, .gSlice, .gMap:
+        //
+        ////            if try !getKind().cKind().kindEquivalent(try v!.getKind().cKind()) {
+        ////                throw Perr(ETYPE, self)
+        ////            }
+        //        default:
+        //            let index = k as! Int
+        //
+        ////            if try !getKind().aKind()[index].kindEquivalent(try v!.getKind().aKind()[index]) {
+        ////                throw Perr(ETYPE, self)
+        ////            }
+        //        }
+        //
+        //
+        //
+        //
         switch k {
         case let v1v as Int:
-
-//            if case .gSlice = try getKind().gtype {
-//
-//            }
+            
+            //            if case .gSlice = try getKind().gtype {
+            //
+            //            }
             if v1v == e.con.count() {
                 e.con.appendCon(v)
             } else {
@@ -214,7 +252,7 @@ class Pval {
         }
     }
     
-   
+    
     func getCount() throws -> Int {
         
         switch try getKind().gtype {
@@ -233,13 +271,13 @@ class Pval {
     
     
     func stringOrLetter() throws -> String {
-//        if try getKind().isPointer() {
-//            if try e.con.isNull() {
-//                return "E"
-//            } else {
-//                return "P"
-//            }
-//        }
+        if getKind().gtype.isPointer() {
+                    if try e.con.isNull() {
+                        return "E"
+                    } else {
+                        return "P"
+                    }
+                }
         return try string(false)
     }
     func string(_ follow: Bool) throws -> String {
@@ -253,7 +291,7 @@ class Pval {
             var rt = ""
             rt += try getKind().gtype.openString()
             if ar.w.count > 0 {
-                if true {//try follow || getKind().gtype != .gPointer {
+                if follow || getKind().gtype.isTuple() {
                     rt += try ar.w.first!.string(follow)
                     for v in ar.w[1...] {
                         rt += try " " + v.string(follow)
@@ -292,7 +330,7 @@ class Pval {
     
     
     func cloneIf() throws -> Pval {
- //       return Pval(self)
+        //       return Pval(self)
         switch e.con {
         case .single(let pw):
             return Pval(e.prc, pw.clone().unwrap())
@@ -304,7 +342,7 @@ class Pval {
                 let con = try Contents.multi(Wrap(ar.w.map { try $0.cloneIf() }))
                 let pvp = Pvalp(e.k, con, e.prc)
                 return Pval(pvp)
-            
+                
             default: aden()
             }
         case .map:
@@ -354,7 +392,7 @@ class Pval {
         case single(Pwrap)
         case multi(Wrap<[Pval]>)
         case map(Wrap<[String: Pval]>)
-
+        
         func appendCon(_ v: Pval) {
             if case .multi(let pv) = self {
                 pv.w.append(v)
@@ -366,7 +404,7 @@ class Pval {
         func setCon(_ k: Ktype, _ v: Pval? = nil) {
             switch self{
             case .multi(let pv):
-                    pv.w[k as! Int] = v!
+                pv.w[k as! Int] = v!
             case .map(let ma):
                 ma.w[k as! String] = v
             case .single:
