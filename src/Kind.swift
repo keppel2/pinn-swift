@@ -17,18 +17,7 @@ class Kind {
     }
     
     
-    static func processKindList(_ kl: [Kind]) -> Kind {
-        var isPointer = false
-        for (index, value) in kl.enumerated() {
-            if value === has(.gScalar(Nil.self)) {
-                isPointer = true
-            }
-        }
-        if isPointer {
-            return produceKind(Gtype.gPointer(kl))
-        }
-        return produceKind(Gtype.gTuple(kl))
-    }
+
     static func has(_ g: Gtype) -> Kind? {
         let ki = kinds.firstIndex {
             $0.gtype.gEquivalent(g)

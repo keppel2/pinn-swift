@@ -25,22 +25,10 @@ class Pval {
         //                          prc = c
         let mar = ar
         let ka = try ar.map { try $0.getKind() }
-        var isPointer = false
-//        if (ka.contains {
-//            $0.gtype.gEquivalent(Gtype.gScalar(Nil.self))
-//        }) {
-//            isPointer = true
-//        }
-        for (key, value) in mar.enumerated() {
-            if value.getKind().gtype.gEquivalent(Gtype.gScalar(Nil.self)) {
-                isPointer = true
-            }
-        }
+
         
         
-        
-        
-        let k = isPointer ? Kind.produceKind(Gtype.gPointer(ka)) : Kind.produceKind(Gtype.gTuple(ka))
+        let k = Kind.produceKind(Gtype.gPointer(ka))
         
         for (key, value) in mar.enumerated() {
             if value.getKind().gtype.gEquivalent(Gtype.gScalar(Nil.self)) {
@@ -88,13 +76,6 @@ class Pval {
         case .gScalar(let pt):
             let se = Pwrap(pt.zeroValue())
             e = Pvalp(k, Contents.single(se), c)
-        case .gTuple(let ka):
-            var ar = [Pval]()
-            for x in ka {
-                try ar.append(Pval(c, x))
-            }
-            e = Pvalp(k, Contents.multi(Wrap(ar)), c)
-            break
         case .gPointer(let ka):
             var ar = [Pval]()
             for x in ka {
@@ -174,7 +155,7 @@ class Pval {
                     try e.con.appendCon(Pval(e.prc, k))
                 }
                 fallthrough
-            case .gArray, .gTuple, .gPointer:
+            case .gArray, .gPointer:
                 if !e.con.getAr().indices.contains(v1v) {
                     throw Perr(ERANGE, self)
                 }
@@ -256,7 +237,7 @@ class Pval {
     func getCount() throws -> Int {
         
         switch try getKind().gtype {
-        case .gSlice, .gTuple, .gArray:
+        case .gSlice, .gPointer, .gArray:
             return e.con.getAr().count
         case .gMap:
             return e.con.getMap().count
@@ -291,7 +272,7 @@ class Pval {
             var rt = ""
             rt += try getKind().gtype.openString()
             if ar.w.count > 0 {
-                if follow || getKind().gtype.isTuple() {
+                if true { // {follow  {
                     rt += try ar.w.first!.string(follow)
                     for v in ar.w[1...] {
                         rt += try " " + v.string(follow)
@@ -338,7 +319,7 @@ class Pval {
             switch getKind().gtype {
             case .gSlice, .gPointer:
                 return Pval(self)
-            case .gArray, .gTuple:
+            case .gArray:
                 let con = try Contents.multi(Wrap(ar.w.map { try $0.cloneIf() }))
                 let pvp = Pvalp(e.k, con, e.prc)
                 return Pval(pvp)
