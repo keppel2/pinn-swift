@@ -287,6 +287,12 @@ func f() {}
 ("Binary op", """
 3 + [1, 5];
 """),
+("Equal with mismatched types", """
+3 == true;
+"""),
+("Equal with mismatched types", """
+3 == nil;
+"""),
 ("Binary op", """
 4 > true;
 """),

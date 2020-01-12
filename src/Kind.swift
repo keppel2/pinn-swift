@@ -53,7 +53,16 @@ class Kind {
     func assert() {
 
     }
-    
+    func equivalent(_ k: Kind) -> Bool {
+        if self === k {
+            return true
+        }
+        if hasSelf() && k === Kind.nkind || self === Kind.nkind && k.hasSelf() {
+            return true
+        }
+        return false
+        
+    }
     
     
 

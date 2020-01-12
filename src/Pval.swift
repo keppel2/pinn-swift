@@ -102,8 +102,9 @@ class Pval {
     
     var prc: ParserRuleContext {e.prc}
     func equal(_ p: Pval) throws -> Bool {
-        
-        ade(getKind() === p.getKind())
+        if !getKind().equivalent(p.getKind()) {
+            throw Perr(ETYPE, self)
+        }
         return try e.con.equal(p.e.con)
     }
     

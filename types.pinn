@@ -746,17 +746,17 @@ print(dnt);
 dnt[1][2]["aap"] = (42, "noot");
 print(dnt);
 
-ft("Declared pointer","(0 N) (0 P) (24 N) N true");
+ft("Declared pointer","(0 N) false (0 P) (24 N) N true");
 var two (int, self);
-print(two, "");
+print(two, two == nil, "");
 two[1] = (24, nil);
 print(two, "");
 print(two[1], "");
 two = nil;
 print(two, two == nil);
 
-/*
-ft("Binary search tree", "((N 1 ((N 2 (N 3 N)) 5 N)) 7 (N 10 N))");
+
+ft("Binary search tree", "1 2 3 5 7 10 ");
 var i int;
 bst := (nil, 7, nil);
 cur := bst;
@@ -790,12 +790,12 @@ func dfs(node  (self, int, self)) {
         return;
     }
         dfs(node[0]);
-        print(node[1], ",");
+        print(node[1], "");
         dfs(node[2]);
 }
 dfs(bst);
 
-ft("Linked list", "(5 (8 (23 N)))");
+ft("Linked list", "5 8 23 ");
 var LL (int, self);
 LL = (5, nil);
 base := LL;
@@ -804,9 +804,16 @@ LL[1] = (8, nil);
 
 LL = LL[1];
 LL[1] = (23, nil);
-print(depthString(base));
+func pll(node (int, self)) {
+    if node == nil {
+        return;
+    }
+    print(node[0], "");
+    pll(node[1]);
+}
+pll(base);
 
-
+/*
 ft("Doubly linked list", "(P 7 P)(E 5 P)(E 5 P)");
 var dll (self, int, self);
 dll = (nil, 5, nil);
@@ -819,6 +826,7 @@ print(base7[2]);
 print(base7[2][0]);
 print(base7[2][2][0][0]);
 
+/*
 ft("Nested pointer types, depth and flat", "(aap E P)(aap N (noot N N))(42 P E)(42 (101 N N) N)");
 npt := ("aap", nil, ("noot", nil, nil));
 print(npt);
