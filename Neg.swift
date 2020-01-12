@@ -198,6 +198,10 @@ y = x;
 var x bool;
 x = "bad";
 """),
+("Wrong type assignment from declaration", """
+var x int;
+x = nil;
+"""),
 ("Redeclare both short", """
 x := 5;
 x := 10;

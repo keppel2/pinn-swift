@@ -83,7 +83,7 @@ var cx [slice](int, [map]bool, [slice][5]int);
 cx2 := [(42, {"key": true}, [12, 101])];
 cx2[1] = (101, {"aap": false}, [202]);
 cx[0][2][0][4] = 42;
-print(depthString(cx), len(cx), len(cx[0][2][0]), "");
+print(cx, len(cx), len(cx[0][2][0]), "");
 print(cx2);
 ft("Nested types, declared", "[true] [[true] [] []]");
 var cdn42 [3][slice]bool;
@@ -545,11 +545,6 @@ print("Hello, world.");
 ft("println", "End with lf.
 ");
 println("End with lf.");
-ft("Printed lf", "");
-ft("printB", "111");
-printB(7);
-ft("printH", "1e");
-printH(30);
 
 ft("delete", "{aap:101 foo:42}true false{aap:101}");
 var intMap [map]int;
@@ -751,6 +746,15 @@ print(dnt);
 dnt[1][2]["aap"] = (42, "noot");
 print(dnt);
 
+ft("Declared pointer","(0 N) (0 P) (24 N) N true");
+var two (int, self);
+print(two, "");
+two[1] = (24, nil);
+print(two, "");
+print(two[1], "");
+two = nil;
+print(two, two == nil);
+
 /*
 ft("Binary search tree", "((N 1 ((N 2 (N 3 N)) 5 N)) 7 (N 10 N))");
 var i int;
@@ -780,10 +784,7 @@ for i = range [1, 5, 10, 2, 3] {
         }
     }
 }
-print(depthString(bst));
 
-
-ft("Depth-first search", "1 ,2 ,3 ,5 ,7 ,10 ,");
 func dfs(node  (self, int, self)) {
     if node == nil {
         return;

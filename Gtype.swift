@@ -10,6 +10,14 @@ enum Gtype {
         }
         return false
     }
+//    func hasSelf() -> Bool {
+//        guard case .gPointer(let ka) = self else {
+//            return false
+//        }
+//        return ka.contains {
+//            
+//        }
+//    }
 
 
     func openString() -> String {

@@ -31,21 +31,11 @@ class Pval {
         let k = Kind.produceKind(Gtype.gPointer(ka))
         
         for (key, value) in mar.enumerated() {
-            if value.getKind().gtype.gEquivalent(Gtype.gScalar(Nil.self)) {
+            if value.getKind() === Kind.nkind {
                 value.e.k = k
-//                let pvp = Pvalp(k, Contents.single(Pwrap(Nil())), c)
-//                mar.append(Pval(pvp))
-//            } else {
-//                try mar.append(Pval(c, x))
             }
         }
-        //        let k = try Kind(ka)
-        //        for (key, value) in mar.enumerated() {
-        //            if try value.getKind().isOneNil() {
-        //                mar[key].e.k = k
-        //            }
-        //        }
-        //        k.count = nil
+
         e = Pvalp(k, .multi(Wrap(mar)), c)
     }
     
@@ -79,7 +69,7 @@ class Pval {
         case .gPointer(let ka):
             var ar = [Pval]()
             for x in ka {
-                if x.gtype.gEquivalent(Gtype.gScalar(Nil.self)) {
+                if x === Kind.nkind {
                     let pvp = Pvalp(k, Contents.single(Pwrap(Nil())), c)
                     ar.append(Pval(pvp))
                 } else {
@@ -184,7 +174,13 @@ class Pval {
     
     
     func setPV(_ v : Pval) throws {
-        if getKind() !== v.getKind() {
+        if v.getKind() === Kind.nkind {
+            if !getKind().hasSelf() {
+                throw Perr(ETYPE, v)
+            }
+            e.con = .single(Pwrap(Nil()))
+            return
+        } else if getKind() !== v.getKind() {
             throw Perr(ETYPE, v)
         }
         e = v.e
@@ -252,38 +248,24 @@ class Pval {
     
     
     func stringOrLetter() throws -> String {
-        if getKind().gtype.isPointer() {
-                    if try e.con.isNull() {
-                        return "E"
-                    } else {
+        
+        if try getKind().gtype.isPointer() && getKind().hasSelf() && !e.con.isNull() {
                         return "P"
-                    }
-                }
-        return try string(false)
+        }
+        return try string()
     }
-    func string(_ follow: Bool) throws -> String {
+    func string() throws -> String {
         switch e.con {
         case .single(let pw):
             return pw.string()
         case .multi(let ar):
-            
-            
-            
             var rt = ""
             rt += try getKind().gtype.openString()
             if ar.w.count > 0 {
-                if true { // {follow  {
-                    rt += try ar.w.first!.string(follow)
-                    for v in ar.w[1...] {
-                        rt += try " " + v.string(follow)
-                    }
-                } else {
                     rt += try ar.w.first!.stringOrLetter()
                     for v in ar.w[1...] {
                         rt += try " " + v.stringOrLetter()
                     }
-                    
-                }
             }
             rt += try getKind().gtype.closeString()
             
@@ -298,7 +280,7 @@ class Pval {
                 if inner != "" {
                     inner += " "
                 }
-                inner += try key + ":" + map.w[key]!.string(follow)
+                inner += try key + ":" + map.w[key]!.string()
             }
             rt += inner
             

@@ -1,11 +1,6 @@
-/*
-var node (int, self);
-node[1] = (23, nil);
-println(node);
-node[1][1] = (101, nil);
-println(node);
-*/
-n2 := (5, nil, true);
-print(n2);
-n2[1] = (10, nil, false);
-print(n2);
+var LL (int, self);
+print(LL);
+LL[1] = nil;
+print(LL);
+LL[1] = nil;
+print(LL);

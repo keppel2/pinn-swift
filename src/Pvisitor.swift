@@ -67,20 +67,20 @@ class Pvisitor {
             },
                             "stringValue":
                 { sctx, pv, s in try assertPvals(s, 1)
-                    return Pval(sctx, try s[0].string(false)) },
-            "depthString":
-                {sctx, pv, s in try assertPvals(s, 1)
-                    return Pval(sctx, try s[0].string(true))
-            },
+                    return Pval(sctx, try s[0].string()) },
+//            "depthString":
+//                {sctx, pv, s in try assertPvals(s, 1)
+//                    return Pval(sctx, try s[0].string(true))
+//            },
             "print":
                 {sctx, pv, s in
-                    let rt = Pvisitor.printSpace(try s.map {try $0.string(false)})
+                    let rt = Pvisitor.printSpace(try s.map {try $0.string()})
                     pv.textout(rt)
                     return nil
             },
             "println":
                 {sctx, pv, s in
-                    var rt = Pvisitor.printSpace(try s.map {try $0.string(false)})
+                    var rt = Pvisitor.printSpace(try s.map {try $0.string()})
                     pv.textout(rt + "\n")
                     return nil
             },
@@ -88,16 +88,16 @@ class Pvisitor {
                 sctx, pv, s in try assertPvals(s, 0)
                 return Pval(sctx, readLine()!)
             },
-            "printH": { sctx, pv, s in try assertPvals(s, 1)
-                let x: Int = try tryCast(s[0])
-                pv.textout(String(x, radix: 16, uppercase: false))
-                return nil
-            },
-            "printB": { sctx, pv, s in try assertPvals(s, 1)
-                let x: Int = try tryCast(s[0])
-                pv.textout(String(x, radix: 2, uppercase: false))
-                return nil
-            },
+//            "printH": { sctx, pv, s in try assertPvals(s, 1)
+//                let x: Int = try tryCast(s[0])
+//                pv.textout(String(x, radix: 16, uppercase: false))
+//                return nil
+//            },
+//            "printB": { sctx, pv, s in try assertPvals(s, 1)
+//                let x: Int = try tryCast(s[0])
+//                pv.textout(String(x, radix: 2, uppercase: false))
+//                return nil
+//            },
             "delete": { sctx, pv, s in try assertPvals(s, 2)
                 let kt: String = try tryCast(s[1])
                 let rt = try s[0].hasKey(kt)
@@ -150,7 +150,7 @@ class Pvisitor {
         //print(compee, "!")
         //print(printed, "??")
         if compee != t_compare {
-            throw Perr(ETEST_FAIL + "," +  t_explain + ", want: " + t_compare + ", got: " + compee, sctx)
+            throw Perr(ETEST_FAIL + "," +  t_explain + ", want: " + t_compare + ", got: " + compee)
         }
     }
     
