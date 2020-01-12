@@ -67,18 +67,15 @@ class Pval {
             let se = Pwrap(pt.zeroValue())
             e = Pvalp(k, Contents.single(se), c)
         case .gPointer(let ka):
-            var ar = [Pval]()
+            if k.hasSelf() {
+                e = Pvalp(k, Contents.single(Pwrap(Nil())), c)
+            } else {
+                var ar = [Pval]()
             for x in ka {
-                if x === Kind.nkind {
-                    let pvp = Pvalp(k, Contents.single(Pwrap(Nil())), c)
-                    ar.append(Pval(pvp))
-                } else {
                     try ar.append(Pval(c, x))
-                }
             }
-            e = Pvalp(k, Contents.multi(Wrap(ar)), c)
-            break
-            
+                e = Pvalp(k, Contents.multi(Wrap(ar)), c)
+            }
         }
     }
     

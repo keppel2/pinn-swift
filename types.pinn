@@ -746,10 +746,10 @@ print(dnt);
 dnt[1][2]["aap"] = (42, "noot");
 print(dnt);
 
-ft("Declared pointer","(0 N) false (0 P) (24 N) N true");
+ft("Declared pointer","N true (24 N) N N true");
 var two (int, self);
 print(two, two == nil, "");
-two[1] = (24, nil);
+two = (24, nil);
 print(two, "");
 print(two[1], "");
 two = nil;
@@ -813,6 +813,7 @@ func pll(node (int, self)) {
 }
 pll(base);
 
+
 /*
 ft("Doubly linked list", "(P 7 P)(E 5 P)(E 5 P)");
 var dll (self, int, self);
@@ -826,7 +827,6 @@ print(base7[2]);
 print(base7[2][0]);
 print(base7[2][2][0][0]);
 
-/*
 ft("Nested pointer types, depth and flat", "(aap E P)(aap N (noot N N))(42 P E)(42 (101 N N) N)");
 npt := ("aap", nil, ("noot", nil, nil));
 print(npt);

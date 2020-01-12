@@ -1,6 +1,4 @@
-var LL (int, self);
-print(LL);
-LL[1] = nil;
-print(LL);
-LL[1] = nil;
-print(LL);
+var t (int, self);
+println(t);
+t = (10, nil);
+println(t);
