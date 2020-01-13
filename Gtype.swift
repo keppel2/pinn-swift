@@ -3,9 +3,17 @@ enum Gtype {
     case gArray(Kind, Int)
     case gSlice(Kind)
     case gMap(Kind)
+    case gTuple([Kind])
     case gPointer([Kind])
     func isPointer() -> Bool {
         if case .gPointer = self {
+            return true
+        }
+        return false
+    }
+    
+    func isTuple() -> Bool {
+        if case .gTuple = self {
             return true
         }
         return false
@@ -28,6 +36,8 @@ enum Gtype {
             return "{"
         case .gPointer:
             return "("
+        case .gTuple:
+            return "("
         default:
             aden()
         }
@@ -39,7 +49,7 @@ enum Gtype {
             return "]"
         case .gMap:
             return "}"
-        case .gPointer:
+        case .gPointer, .gTuple:
             return ")"
         default:
             aden()
@@ -78,6 +88,16 @@ enum Gtype {
             }
             return false
             
+            
+            case .gTuple(let ka):
+                if case .gTuple(let ka2) = g2 {
+                    
+                    return ka.elementsEqual(ka2) {
+                        $0 === $1
+                    }
+                }
+                return false
+                
         }
         
         

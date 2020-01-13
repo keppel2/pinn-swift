@@ -16,7 +16,9 @@ class Kind {
 //        self.count = k.count
 //    }
     private init(_ g: Gtype) {
+//        if g.isPointer() &&
         gtype = g
+        
     }
     
     
@@ -44,7 +46,7 @@ class Kind {
             return k!
         }
         let k2 = Kind(g)
-
+    
         kinds.append(k2)
         return k2
     }

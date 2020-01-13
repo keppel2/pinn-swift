@@ -114,8 +114,6 @@ statement
   | ';' ;
 BINOP : (AST | '/' | '%' ) ;
 
-
-
 LSQUARE : '[' ;
 LPAREN : '(' ;
 NIL : 'nil' ;

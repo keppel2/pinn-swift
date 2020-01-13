@@ -9,7 +9,7 @@ let ERANGE          = "Out of range"
 let ECASE           = "Case unimplemented (unexpected error)"
 let EREDECLARE = "Redeclared"
 let EUNDECLARED = "Undeclared"
-let EUNDECLAREDF = "Undeclared function"
+let EUNDECLAREDF = "Bad Function Name"
 
 let ETEST_FAIL = "Test failed"
 let EPARSE_FAIL = "Parse failed"

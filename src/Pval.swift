@@ -66,16 +66,14 @@ class Pval {
         case .gScalar(let pt):
             let se = Pwrap(pt.zeroValue())
             e = Pvalp(k, Contents.single(se), c)
-        case .gPointer(let ka):
-            if k.hasSelf() {
-                e = Pvalp(k, Contents.single(Pwrap(Nil())), c)
-            } else {
+        case .gTuple(let ka):
                 var ar = [Pval]()
             for x in ka {
                     try ar.append(Pval(c, x))
             }
                 e = Pvalp(k, Contents.multi(Wrap(ar)), c)
-            }
+        case .gPointer(let ka):
+                e = Pvalp(k, Contents.single(Pwrap(Nil())), c)
         }
     }
     
@@ -143,7 +141,7 @@ class Pval {
                     try e.con.appendCon(Pval(e.prc, k))
                 }
                 fallthrough
-            case .gArray, .gPointer:
+            case .gArray, .gPointer, .gTuple:
                 if try e.con.isNull() {
                     throw Perr(ENIL, self)
                 }
@@ -302,7 +300,7 @@ class Pval {
             switch getKind().gtype {
             case .gSlice, .gPointer:
                 return Pval(self)
-            case .gArray:
+            case .gArray, .gTuple:
                 let con = try Contents.multi(Wrap(ar.w.map { try $0.cloneIf() }))
                 let pvp = Pvalp(e.k, con, e.prc)
                 return Pval(pvp)

@@ -448,7 +448,11 @@ class Pvisitor {
         let rt: Kind
         if let spec = sctx.kindList() {
             let kL = try visitKindList(spec)
-            rt = Kind.produceKind(Gtype.gPointer(kL))
+            if sctx.AST() != nil {
+                rt = Kind.produceKind(Gtype.gPointer(kL))
+            } else {
+                rt = Kind.produceKind(Gtype.gTuple(kL))
+            }
         } else
             if let type = sctx.TYPES() {
                 let strType = type.getText()
