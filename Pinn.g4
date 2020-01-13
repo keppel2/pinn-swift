@@ -19,12 +19,11 @@ varDecl
   | ID CE expr
   | LPAREN ID ( ',' ID )* ')' CE expr;
 
-LSQUARE : '[' ;
-LPAREN : '(' ;
+
 kind
   : TYPES
   | (LSQUARE ( MAP | SLICE | expr) ']') kind
-  |  LPAREN kindList ')' ;
+  |  AST? LPAREN kindList ')' ;
 
 MAP
  : 'map' ;
@@ -57,7 +56,7 @@ expr
   | expr ('&&' | '||') expr #boolExpr
   |   ID LPAREN exprList? ')' #callExpr
   |  LPAREN expr ')' #parenExpr
-  |  AST? LPAREN exprList ')' #tupleExpr
+  |  CARET? AST? LPAREN exprList ')' #tupleExpr
   | expr (TWODOTS | COLON) expr #rangeExpr
   | expr '?' expr COLON expr #conditionalExpr
   | (ID | FLOAT | INT | BOOL | STRING | NIL ) #literalExpr ;
@@ -113,24 +112,27 @@ statement
   | 'continue' ';'
   | 'fallthrough' ';'
   | ';' ;
+BINOP : (AST | '/' | '%' ) ;
 
+
+
+LSQUARE : '[' ;
+LPAREN : '(' ;
 NIL : 'nil' ;
 COMMA : ',' ;
 COLON : ':' ;
 CE : ':=' ;
 IOTA : 'iota' ;
-BINOP : (AST | '/' | '%' ) ;
-
-DOUBLEOP
-: '++' | '--' ;
-
 RANGE : 'range' ;
-
-BOOL : 'true' | 'false' ;
 AST: '*' ;
-THREEDOT
-: '...' ;
+THREEDOT : '...' ;
 TWODOTS : '@' ;
+CARET : '^' ;
+
+DOUBLEOP : '++' | '--' ;
+BOOL : 'true' | 'false' ;
+
+
 
 ID : [a-zA-Z_]([a-zA-Z_0-9])* ;
 CHAR : '\''[a-zA-Z_0-9]'\'' ;
