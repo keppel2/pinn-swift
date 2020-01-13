@@ -21,14 +21,14 @@ class Pval {
         e = Pvalp(k2, .multi(Wrap(ar)), c)
     }
     
-    init(_ c: ParserRuleContext, _ ar: [Pval]) throws {
+    init(_ c: ParserRuleContext, _ ar: [Pval], _ pointer: Bool) throws {
         //                          prc = c
         let mar = ar
         let ka = try ar.map { try $0.getKind() }
 
         
         
-        let k = Kind.produceKind(Gtype.gPointer(ka))
+        let k = Kind.produceKind(pointer ? Gtype.gPointer(ka) : Gtype.gTuple(ka))
         
         for (key, value) in mar.enumerated() {
             if value.getKind() === Kind.nkind {

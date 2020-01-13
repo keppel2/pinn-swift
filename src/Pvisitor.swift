@@ -679,7 +679,7 @@ class Pvisitor {
             
             let el = sctx.exprList()!
             let s = try visitList(el)
-            rt = try Pval(sctx, s)
+            rt = try Pval(sctx, s, sctx.AST() != nil)
         case let sctx as PinnParser.CallExprContext:
             var s = [Pval]()
             

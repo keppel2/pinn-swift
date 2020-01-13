@@ -78,7 +78,7 @@ cdns[0] = 42;
 cdns[1] = 101;
 cdn[0] = cdns;
 print(cdn);
-/*
+
 ft("Deep nesting and length", "[(0 {} [[0 0 0 0 42]])] 1 5 [(42 {key:true} [12 101]) (101 {aap:false} [202])]");
 var cx [slice](int, [map]bool, [slice][5]int);
 //xam("cx");
@@ -87,7 +87,7 @@ cx2[1] = (101, {"aap": false}, [202]);
 cx[0][2][0][4] = 42;
 print(cx, len(cx), len(cx[0][2][0]), "");
 print(cx2);
-*/
+
 ft("Nested types, declared", "[true] [[true] [] []]");
 var cdn42 [3][slice]bool;
 var cdns42 [slice]bool;
@@ -733,7 +733,7 @@ mdt[1][0] = true;
 print(mdt);
 
 
-/*ft("Multi-dimensional tuple set compound type", "([0 0 42 0 0] (true 202))");
+ft("Multi-dimensional tuple set compound type", "([0 0 42 0 0] (true 202))");
 var mdt ([5]int, (bool, int));
 mdt[0][2] = 42;
 mdt[1][1] = 101;
@@ -749,38 +749,38 @@ print(dnt);
 dnt[1][2]["aap"] = (42, "noot");
 print(dnt);
 
-ft("Declared pointer","N true (24 N) N N true");
-var two (int, self);
+ft("Declared pointer","N true *(24 N) N N true");
+var two *(int, self);
 print(two, two == nil, "");
-two = (24, nil);
+two = *(24, nil);
 print(two, "");
 print(two[1], "");
 two = nil;
 print(two, two == nil);
 
-ft("Pointer in tuple", "(0 N) (0 P) (true N) ");
-var tup (int, (bool, self));
+ft("Pointer in tuple", "(0 N) (0 P) *(true N) ");
+var tup (int, *(bool, self));
 print(tup, "");
-tup[1] = (true, nil);
+tup[1] = *(true, nil);
 print(tup, "");
 print(tup[1], "");
 
-ft("Nested tuple short", "(4 (10 P))(10 P)(12 N)");
-x := (4, (10, (12, nil)));
+ft("Nested tuple short", "(4 (10 P))(10 P)*(12 N)");
+x := (4, (10, *(12, nil)));
 print(x);
 print(x[1]);
 print(x[1][1]);
 
 ft("Binary search tree", "1 2 3 5 7 10 ");
 var i int;
-bst := (nil, 7, nil);
+bst := *(nil, 7, nil);
 cur := bst;
 for i = range [1, 5, 10, 2, 3] {
     cur = bst;
     loop {
         if i < cur[1] {
             if cur[0] == nil {
-                cur[0] = (nil, i, nil);
+                cur[0] = *(nil, i, nil);
                 break;
             } else {
                 cur = cur[0];
@@ -788,7 +788,7 @@ for i = range [1, 5, 10, 2, 3] {
             }
         } else if i > cur[1] {
             if cur[2] == nil {
-                cur[2] = (nil, i, nil);
+                cur[2] = *(nil, i, nil);
                 break;
             } else {
                 cur = cur[2];
@@ -800,7 +800,7 @@ for i = range [1, 5, 10, 2, 3] {
     }
 }
 
-func dfs(node  (self, int, self)) {
+func dfs(node  *(self, int, self)) {
     if node == nil {
         return;
     }
@@ -811,15 +811,15 @@ func dfs(node  (self, int, self)) {
 dfs(bst);
 
 ft("Linked list", "5 8 23 ");
-var LL (int, self);
-LL = (5, nil);
+var LL *(int, self);
+LL = *(5, nil);
 base := LL;
 
-LL[1] = (8, nil);
+LL[1] = *(8, nil);
 
 LL = LL[1];
-LL[1] = (23, nil);
-func pll(node (int, self)) {
+LL[1] = *(23, nil);
+func pll(node *(int, self)) {
     if node == nil {
         return;
     }
@@ -828,7 +828,7 @@ func pll(node (int, self)) {
 }
 pll(base);
 
-*/
+
 /*
 ft("Doubly linked list", "(P 7 P)(E 5 P)(E 5 P)");
 var dll (self, int, self);

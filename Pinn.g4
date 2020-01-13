@@ -25,25 +25,17 @@ kind
   | (LSQUARE ( MAP | SLICE | expr) ']') kind
   |  AST? LPAREN kindList ')' ;
 
-MAP
- : 'map' ;
-
-SLICE
- : 'slice' ;
-
-TYPES
-  : ('int' | 'bool' |'string' | 'decimal' | 'self' ) ;
 
 simpleStatement
   : lExpr '=' expr #simpleSet
-  | lExpr ('+' | '-' | BINOP) '=' expr #compoundSet
+  | lExpr ('+' | '-' | '*' | '/' | '%') '=' expr #compoundSet
   | lExpr DOUBLEOP #doubleSet ;
 
 lExpr
   : ID (LSQUARE expr ']')* ;
 
-objectPair :
-STRING ':' expr ;
+objectPair
+  : STRING ':' expr ;
 
 expr
   :
@@ -51,7 +43,7 @@ expr
   |   LSQUARE exprList ']' #arrayLiteral
   | '{' objectPair ( ',' objectPair )* '}' #objectLiteral
   |    ('+' | '-' | '!' ) expr #unaryExpr
-  | expr ('+' | '-' | BINOP) expr #intExpr
+  | expr ('+' | '-' | AST | '/' | '%') expr #intExpr
   | expr ('==' | '!=' | '>' | '<' | '>=' | '<=' ) expr #compExpr
   | expr ('&&' | '||') expr #boolExpr
   |   ID LPAREN exprList? ')' #callExpr
@@ -112,8 +104,20 @@ statement
   | 'continue' ';'
   | 'fallthrough' ';'
   | ';' ;
-BINOP : (AST | '/' | '%' ) ;
+  
+  
 
+
+TYPES
+  : ('int' | 'bool' |'string' | 'decimal' | 'self' ) ;
+DOUBLEOP : '++' | '--' ;
+BOOL : 'true' | 'false' ;
+
+MAP
+ : 'map' ;
+
+SLICE
+ : 'slice' ;
 LSQUARE : '[' ;
 LPAREN : '(' ;
 NIL : 'nil' ;
@@ -127,13 +131,10 @@ THREEDOT : '...' ;
 TWODOTS : '@' ;
 CARET : '^' ;
 
-DOUBLEOP : '++' | '--' ;
-BOOL : 'true' | 'false' ;
 
 
 
 ID : [a-zA-Z_]([a-zA-Z_0-9])* ;
-CHAR : '\''[a-zA-Z_0-9]'\'' ;
 INT : '0'
   | [1-9] ('_'? DECIMAL_DIGITS)? ;
 

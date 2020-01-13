@@ -35,7 +35,7 @@ enum Gtype {
         case .gMap:
             return "{"
         case .gPointer:
-            return "("
+            return "*("
         case .gTuple:
             return "("
         default:
