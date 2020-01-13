@@ -41,6 +41,7 @@ func execute() throws  {
     try exe(myinput)
     if (test) {
         print()
+        print("Passed positive tests")
         for ts in negTest {
             try exe(ts.1, ts.0)
         }

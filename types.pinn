@@ -755,6 +755,18 @@ print(two[1], "");
 two = nil;
 print(two, two == nil);
 
+ft("Pointer in tuple", "(0 N) (0 P) (true N) ");
+var tup (int, (bool, self));
+print(tup, "");
+tup[1] = (true, nil);
+print(tup, "");
+print(tup[1], "");
+
+ft("Nested tuple short", "(4 (10 P))(10 P)(12 N)");
+x := (4, (10, (12, nil)));
+print(x);
+print(x[1]);
+print(x[1][1]);
 
 ft("Binary search tree", "1 2 3 5 7 10 ");
 var i int;

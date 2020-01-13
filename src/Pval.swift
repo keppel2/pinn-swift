@@ -144,6 +144,9 @@ class Pval {
                 }
                 fallthrough
             case .gArray, .gPointer:
+                if try e.con.isNull() {
+                    throw Perr(ENIL, self)
+                }
                 if !e.con.getAr().indices.contains(v1v) {
                     throw Perr(ERANGE, self)
                 }

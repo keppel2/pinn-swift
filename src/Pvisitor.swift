@@ -303,7 +303,7 @@ class Pvisitor {
     private func callFunction(_ sctx: ParserRuleContext, _ str: String, _ s: [Pval]) throws -> Pval? {
         var rt: Pval?
         guard let fh = fkmap[str] else {
-            throw Perr(EUNDECLARED, sctx)
+            throw Perr(EUNDECLAREDF, sctx)
         }
         guard let ctx = fh.funcContext else {
             if str == "ec" {

@@ -7,14 +7,14 @@
 //
 
 let negTest = [
+    ("Call undeclared function", """
+    func f() {}
+    g();
+    """),
     ("Redeclare function", """
     func f() {};
     func f() int {return 42;}
     """),
-("Call undeclared function", """
-func f() {}
-g();
-"""),
 ("Send parameter to function without any", """
 func f() {}
 x := f(5);

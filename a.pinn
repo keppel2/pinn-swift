@@ -1,4 +1,4 @@
-var t (int, self);
-println(t);
-t = (10, nil);
-println(t);
+x := (nil, 42, (nil, 12, (nil, 15, nil)));
+println(x);
+println(x[2]);
+println(x[2][2]);
