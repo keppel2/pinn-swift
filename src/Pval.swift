@@ -174,7 +174,7 @@ class Pval {
     
     func setPV(_ v : Pval) throws {
         if v.getKind() === Kind.nkind {
-            if !getKind().hasSelf() {
+            if !getKind().gtype.isPointer() {
                 throw Perr(ETYPE, v)
             }
             e.con = .single(Pwrap(Nil()))

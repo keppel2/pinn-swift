@@ -831,17 +831,17 @@ pll(base);
 
 /*
 ft("Doubly linked list", "(P 7 P)(E 5 P)(E 5 P)");
-var dll (self, int, self);
-dll = (nil, 5, nil);
+var dll *(self, int, self);
+dll = *(nil, 5, nil);
 base7 := dll;
-dll[2] = (dll, 7, nil);
+dll[2] = *(dll, 7, nil);
 dll = dll[2];
-dll[2] = (dll, 1, nil);
+dll[2] = *(dll, 1, nil);
 dll = dll[2];
 print(base7[2]);
 print(base7[2][0]);
 print(base7[2][2][0][0]);
-
+/*
 ft("Nested pointer types, depth and flat", "(aap E P)(aap N (noot N N))(42 P E)(42 (101 N N) N)");
 npt := ("aap", nil, ("noot", nil, nil));
 print(npt);

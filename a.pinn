@@ -1,2 +1,7 @@
-var tup *(int);
-println(tup);
+var node *(int, self);
+println(node);
+node = *(2, nil);
+println(node);
+node[1] = *(4, node);
+println(node);
+println(node[1]);
