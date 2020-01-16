@@ -59,7 +59,7 @@ class Kind {
         if self === k {
             return true
         }
-        if hasSelf() && k === Kind.nkind || self === Kind.nkind && k.hasSelf() {
+        if gtype.isPointer() && k === Kind.nkind || self === Kind.nkind && k.gtype.isPointer() {
             return true
         }
         return false
@@ -68,17 +68,17 @@ class Kind {
     
     
 
-    func hasSelf() -> Bool {
-
-//        ade(gtype.isPointer())
-        guard case .gPointer(let ka) = gtype  else {
-            return false
-        }
-        return ka.contains {
-            $0 === Kind.nkind
-        }
-        
-    }
+//    private func hasSelf() -> Bool {
+//
+////        ade(gtype.isPointer())
+//        guard case .gPointer(let ka) = gtype  else {
+//            return false
+//        }
+//        return ka.contains {
+//            $0 === Kind.nkind
+//        }
+//        
+//    }
    
 //    func tKind() -> Ptype.Type {
 //        return ke.getVt()!

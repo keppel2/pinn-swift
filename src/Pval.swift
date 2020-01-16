@@ -248,7 +248,7 @@ class Pval {
     
     func stringOrLetter() throws -> String {
         
-        if try getKind().gtype.isPointer() && getKind().hasSelf() && !e.con.isNull() {
+        if try getKind().gtype.isPointer() && !e.con.isNull() {
                         return "P"
         }
         return try string()
