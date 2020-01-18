@@ -1,6 +1,5 @@
 import Foundation
 import Antlr4
-//var gtree: PinnParser.FileContext? = nil
 
 func exe(_ s: String, _ failReason: String? = nil) throws {
     let (tree, parser) = parse(s)

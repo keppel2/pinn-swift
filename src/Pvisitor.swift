@@ -983,7 +983,6 @@ class Pvisitor {
                     
                 }
                 
-                
                 let ranger = try _visitPval(sctx.expr()!)
                 switch ranger.getKind().gtype {
                 case .gSlice, .gArray:
@@ -1044,8 +1043,6 @@ class Pvisitor {
             
             if sctx.LPAREN() != nil {
                 let e = try _visitPval(sctx.expr()!)
-//                ade(try e.getKind().gtype == .gTuple)
-//                ade(try e.getKind().count == sctx.ID().count)
                 for (k, v) in sctx.ID().enumerated() {
                     let str = v.getText()
                     let te = try e.get(k)

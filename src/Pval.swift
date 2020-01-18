@@ -15,6 +15,8 @@ class Pval {
             throw Perr(ETYPE, c)
         }
         let k2 = try Kind.produceKind(Gtype.gSlice(k))
+//        let k2 = try Kind.produceKind(Gtype.gArray(k, ar.count))
+
         e = Pvalp(k2, .multi(Wrap(ar)), c)
     }
     
@@ -256,7 +258,6 @@ class Pval {
     
     
     func cloneIf() throws -> Pval {
-        //       return Pval(self)
         switch e.con {
         case .single(let pw):
             if getKind().gtype.isPointer() {
@@ -271,7 +272,6 @@ class Pval {
                 let con = try Contents.multi(Wrap(ar.w.map { try $0.cloneIf() }))
                 let pvp = Pvalp(e.k, con, e.prc)
                 return Pval(pvp)
-                
             default: aden()
             }
         case .map:
@@ -288,11 +288,6 @@ class Pval {
             self.prc = prc
         }
     }
-    
-    
-    
-    
-    
     
     fileprivate class Pwrap {
         private var wrapped: Ptype
@@ -321,7 +316,6 @@ class Pval {
         case single(Pwrap)
         case multi(Wrap<[Pval]>)
         case map(Wrap<[String: Pval]>)
-        
         func appendCon(_ v: Pval) {
             if case .multi(let pv) = self {
                 pv.w.append(v)
