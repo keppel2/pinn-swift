@@ -101,7 +101,7 @@ class Pvisitor {
             "delete": { sctx, pv, s in try assertPvals(s, 2)
                 let kt: String = try tryCast(s[1])
                 let rt = try s[0].hasKey(kt)
-                try s[0].delKey(kt)
+                s[0].delKey(kt)
                 return Pval(sctx, rt)
             },
             "key": { sctx, pv, s in try assertPvals(s, 2)
@@ -117,7 +117,7 @@ class Pvisitor {
                 let xa1 = pv.getPv(str)!
                 str = try tryCast(s[1])
                 let xa2 = pv.getPv(str)!
-                ade(try xa1.getKind() === xa2.getKind())
+                ade(xa1.getKind() === xa2.getKind())
                 return nil
                 
             },
@@ -338,7 +338,7 @@ class Pvisitor {
                 lfc!.m[fh.fkinds[index].s] = par//Pval(par)
                 continue
             }
-            if try s[index].getKind() !== v.k {
+            if s[index].getKind() !== v.k {
                 throw Perr(ETYPE, sctx)
             }
             if let pv = lfc!.m[fh.fkinds[index].s]  {
@@ -713,7 +713,7 @@ class Pvisitor {
         case let sctx as PinnParser.ArrayLiteralContext:
             let el = sctx.exprList()!
             let ae = try visitList(el)
-            let aeFirstk = try ae.first!.getKind()
+            let aeFirstk = ae.first!.getKind()
             
             rt = try Pval(sctx, ae, aeFirstk)
             
@@ -985,7 +985,7 @@ class Pvisitor {
                 
                 
                 let ranger = try _visitPval(sctx.expr()!)
-                switch try ranger.getKind().gtype {
+                switch ranger.getKind().gtype {
                 case .gSlice, .gArray:
                     for x in try 0..<ranger.getCount() {
                         try value!.setPV(ranger.get(x))

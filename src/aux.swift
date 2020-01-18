@@ -42,7 +42,7 @@ func execute() throws  {
     if (test) {
         print()
         print("Passed positive tests")
-        Perr("Negative start")
+        _ = Perr("Negative start")
         for ts in negTest {
             try exe(ts.1, ts.0)
         }
@@ -79,7 +79,7 @@ private func _fatalError(_ s: String) -> Never {
     //    exit(1)
 }
 func tryCast<T> (_ pv: Pval) throws -> T {
-    if case .gScalar = try pv.getKind().gtype {
+    if case .gScalar = pv.getKind().gtype {
         if !(try pv.getUnwrap() is T) {
             throw Perr(ETYPE, pv)
         }

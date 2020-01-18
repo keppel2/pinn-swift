@@ -9,7 +9,8 @@ enum Gtype {
         switch self {
         case .gScalar:
             return true
-        case .gArray(let k, let _):
+        case .gArray(let k, let x):
+            _ = x
             return k !== gOne.nkind
         case .gSlice(let k), .gMap(let k):
             return k !== gOne.nkind

@@ -14,6 +14,7 @@ class Perr : Error {
         prc = p2 //?? pv.prc
         tok = p3
         let _str = string
+        _ = _str
     }
     convenience init(_ s: String, _ p: Pval?) {
         self.init(s, nil, p, nil)
