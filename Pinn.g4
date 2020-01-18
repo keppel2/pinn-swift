@@ -22,7 +22,7 @@ varDecl
 
 kind
   : TYPES
-  | (LSQUARE ( MAP | SLICE | expr) ']') kind
+  | (LSQUARE ( MAP | expr)? ']') kind
   |  AST? LPAREN kindList ')' ;
 
 
@@ -116,8 +116,6 @@ BOOL : 'true' | 'false' ;
 MAP
  : 'map' ;
 
-SLICE
- : 'slice' ;
 LSQUARE : '[' ;
 LPAREN : '(' ;
 NIL : 'nil' ;

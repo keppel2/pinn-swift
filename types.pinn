@@ -55,7 +55,7 @@ newMap["answer"] = true;
 print(newMap, key(newMap, "answer"), key(newMap, "not"));
 
 ft("Create slice", "[777]");
-var newSlice [slice]int;
+var newSlice []int;
 newSlice[0] = 777;
 print(newSlice);
 
@@ -72,15 +72,15 @@ arStr[2] = "charlie";
 print(arStr);
 
 ft("Create deep nesting", "[[42 101]]");
-var cdn [slice][slice]int;
-var cdns [slice]int;
+var cdn [][]int;
+var cdns []int;
 cdns[0] = 42;
 cdns[1] = 101;
 cdn[0] = cdns;
 print(cdn);
 
 ft("Deep nesting and length", "[(0 {} [[0 0 0 0 42]])] 1 5 [(42 {key:true} [12 101]) (101 {aap:false} [202])]");
-var cx [slice](int, [map]bool, [slice][5]int);
+var cx [](int, [map]bool, [][5]int);
 //xam("cx");
 cx2 := [(42, {"key": true}, [12, 101])];
 cx2[1] = (101, {"aap": false}, [202]);
@@ -89,8 +89,8 @@ print(cx, len(cx), len(cx[0][2][0]), "");
 print(cx2);
 
 ft("Nested types, declared", "[true] [[true] [] []]");
-var cdn42 [3][slice]bool;
-var cdns42 [slice]bool;
+var cdn42 [3][]bool;
+var cdns42 []bool;
 cdns42[0] = true;
 cdn42[0] = cdns42;
 print(cdns42, cdn42);
@@ -103,14 +103,14 @@ print(ntdda);
 ft("Short declaration slice", "[10 23 42 101] [10 23 42 101]");
 sda := [10, 23, 42, 101];
 print(sda, "");
-var sds [slice]int;
+var sds []int;
 sds = sda;
 print(sds);
 
 ft("Short declaration nested slice", "[[2 1] [21 23 101]][[2 1] [21 23 101]]");
 sdns := [[2, 1], [21, 23, 101]];
 print(sdns);
-var sdns2 [slice][slice]int;
+var sdns2 [][]int;
 sdns2 = sdns;
 print(sdns2);
 
@@ -140,7 +140,7 @@ ft("Convert array to slice", "[42 101] [42 101]");
 var ar[2]int;
 ar[0] = 42;
 ar[1] = 101;
-var s[slice]int;
+var s[]int;
 s = ar[:];
 print(ar, s);
 ft("Copy to slice of ints", "[10 14 23 42 101 201]");
@@ -338,7 +338,7 @@ func countToFour(i int) {
 countToFour(4);
 
 ft("Function with map, slice, variadic", "foo 4210,11,12,13,14,false,false,true,");
-func fLots(m [map]int, a [slice]int, vary ...bool) {
+func fLots(m [map]int, a []int, vary ...bool) {
 var s string;
 var i int;
 for s, i = range m {
@@ -415,7 +415,7 @@ func mrecurse2(i int) {
 }
 mrecurse1(1);
 ft("Return slice of strings","[aap noot mies]");
-func returnSliceString() [slice]string {
+func returnSliceString() []string {
 ar := ["aap", "noot", "mies"];
 return ar;
 }
@@ -610,10 +610,10 @@ print(arF[0]);
 
 
 ft("Slice shares in call", "[201 101]");
-func slFunc(s [slice]int) {
+func slFunc(s []int) {
     s[0] = 201;
 }
-var slf [slice]int;
+var slf []int;
 slf = [23, 101];
 slFunc(slf);
 print(slf);
@@ -633,7 +633,7 @@ var tup23 (int, bool, string);
 print(tup23);
 
 ft("Tuple assignments", "([3 5] [aap noot])");
-var tup2 ([slice]int, [slice]string);
+var tup2 ([]int, []string);
 tup2[0] = [3, 5];
 tup2[1] = ["aap", "noot"];
 print(tup2);
@@ -718,7 +718,7 @@ print(",");
 print(ssAr2);
 
 ft("Slice of arrays", "[[0 42] [101 0]] [[0 42] [0 42]] [[202 42] [202 42]]");
-var soa [slice][2]int;
+var soa [][2]int;
 
 soa[0][1] = 42;
 soa[1][0] = 101;

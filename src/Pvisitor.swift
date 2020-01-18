@@ -463,14 +463,15 @@ class Pvisitor {
                 let kind = try visitKind(sctx.kind()!)
                 if sctx.MAP() != nil {
                     rt = try Kind.produceKind(Gtype.gMap(kind))
-                } else if sctx.SLICE() != nil {
-                    rt = try Kind.produceKind(Gtype.gSlice(kind))
+                } else if sctx.expr() != nil {
+                      let v = try _visitPval(sctx.expr()!)
+                    
+                      let x: Int = try tryCast(v)
+                      rt = try Kind.produceKind(Gtype.gArray(kind, x))
+
                 }
                 else {
-                    let v = try _visitPval(sctx.expr()!)
-                  
-                    let x: Int = try tryCast(v)
-                    rt = try Kind.produceKind(Gtype.gArray(kind, x))
+                    rt = try Kind.produceKind(Gtype.gSlice(kind))
                 }
         }
         return rt
