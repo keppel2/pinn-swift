@@ -35,16 +35,6 @@ enum Gtype {
         }
         return false
     }
-//    func hasSelf() -> Bool {
-//        guard case .gPointer(let ka) = self else {
-//            return false
-//        }
-//        return ka.contains {
-//            
-//        }
-//    }
-
-
     func openString() -> String {
         switch self {
         case .gArray, .gSlice:
@@ -95,7 +85,7 @@ enum Gtype {
                 return k === k2
             }
             return false
-
+            
         case .gPointer(let ka):
             if case .gPointer(let ka2) = g2 {
                 
@@ -106,20 +96,14 @@ enum Gtype {
             return false
             
             
-            case .gTuple(let ka):
-                if case .gTuple(let ka2) = g2 {
-                    
-                    return ka.elementsEqual(ka2) {
-                        $0 === $1
-                    }
-                }
-                return false
+        case .gTuple(let ka):
+            if case .gTuple(let ka2) = g2 {
                 
+                return ka.elementsEqual(ka2) {
+                    $0 === $1
+                }
+            }
+            return false
         }
-        
-        
     }
-    
-    
-    
 }
