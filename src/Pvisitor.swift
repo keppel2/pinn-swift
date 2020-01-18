@@ -1063,26 +1063,24 @@ class Pvisitor {
             
             let str = sctx.ID(0)!.getText()
             
-            var newV: Pval?
+            var newV: Pval
             if let prev = map[str] {
                 throw Perr(EREDECLARE, sctx, prev)
             }
             if sctx.CE() != nil {
-                newV = try visitPval(sctx.expr()!)
-                if newV == nil {
-                    throw Perr(ENIL, sctx)
-                }
-//                if try newV!.getKind().isNil() {
-//                    throw Perr(ETYPE, sctx)
-//                }
+                newV = try _visitPval(sctx.expr()!)
+
             } else {
                 let k = try visitKind(sctx.kind()!)
                 newV = try Pval(sctx, k)
             }
+            if newV.getKind() === gOne.nkind {
+                throw Perr(ETYPE, sctx)
+            }
             if lfc != nil {
-                lfc!.m[str] = newV!
+                lfc!.m[str] = newV
             } else {
-                fc.m[str] = newV!
+                fc.m[str] = newV
             }
             
         default: break

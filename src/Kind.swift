@@ -38,12 +38,15 @@ class Kind {
 //        }) {
 //            return k
 //        }
-        
+        if !g.isValid() {
+            throw Perr(ETYPE)
+        }
         let k = has(g)
         if k != nil {
             return k!
         }
         let k2 = Kind(g)
+        
     
         kinds.append(k2)
         return k2

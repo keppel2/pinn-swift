@@ -62,9 +62,9 @@ y = x;
 ("Wrong short declaration", """
 sdns := [[2, 1], 24];
 """),
-//("Wrong short declaration", """
-//sd := nil;
-//"""),
+("Wrong short declaration", """
+sd := nil;
+"""),
 ("Wrong short declaration", """
 func f() {}
 sd := f();
@@ -81,6 +81,21 @@ sdns := {"aap": 5, "noot": false};
 ("Wrong short declaration", """
 func f() {}
 sdns := [4, f()];
+"""),
+("Wrong self declaration", """
+var n self;
+"""),
+("Wrong self declaration", """
+var n [3]self;
+"""),
+("Wrong self declaration", """
+var n [slice]self;
+"""),
+("Wrong self declaration", """
+var n [map]self;
+"""),
+("Wrong self declaration", """
+var n (int, self);
 """),
 ("Wrong array declaration", """
 var ar [true]int;
@@ -471,18 +486,15 @@ s = (false, nil);
 """),
 ("Pointer", """
 s := (10, nil);
-s[1] = (42, 1);
 """),
-//("Pointer", """
-//s := (4, nil);
-//s[1] = (true, nil);
-//"""),
+("Pointer", """
+s := *(4, nil);
+s[1] = *(true, nil);
+"""),
 
     ("Deeply nested bad assignment", """
     var dnt [2](bool, int, [map](int, string));
-     print(dnt);
      dnt[1][2]["aap"] = (42, true);
-     print(dnt);
     """),
 
     

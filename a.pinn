@@ -1,7 +1,2 @@
-var node *(int, self);
-println(node);
-node = *(2, nil);
-println(node);
-node[1] = *(4, node);
-println(node);
-println(node[1]);
+//n := nil;
+var n2 self;

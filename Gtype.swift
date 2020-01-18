@@ -5,6 +5,22 @@ enum Gtype {
     case gMap(Kind)
     case gTuple([Kind])
     case gPointer([Kind])
+    func isValid() -> Bool {
+        switch self {
+        case .gScalar:
+            return true
+        case .gArray(let k, let _):
+            return k !== gOne.nkind
+        case .gSlice(let k), .gMap(let k):
+            return k !== gOne.nkind
+        case .gTuple(let ka):
+            return !ka.contains {
+                $0 === gOne.nkind
+            }
+        case .gPointer:
+            return true
+        }
+    }
     func isPointer() -> Bool {
         if case .gPointer = self {
             return true
