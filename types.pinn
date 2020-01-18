@@ -133,7 +133,9 @@ print(11@13);
 ft("Create array of ints", "[10 14 23 42 101 201]");
 aInt := [10, 14, 23, 42, 101, 201];
 print(aInt);
-
+ft("Create literal of pointer and nil", "[P N]");
+ar := [*(42, true), nil];
+print(ar);
 ft("Copy to slice of ints", "[10 14 23 42 101 201]");
 aInt := [10, 14, 23, 42, 101, 201];
 sInt := aInt[:];
