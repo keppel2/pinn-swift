@@ -23,10 +23,11 @@ class Pval {
         let mar = ar
         let ka = ar.map {$0.getKind() }
         let k = try Kind.produceKind(pointer ? Gtype.gPointer(ka) : Gtype.gTuple(ka))
-        if pointer {for value in mar {
-            if value.getKind() === gOne.nkind {
-                value.e.k = k
-            }
+        if pointer {
+            for value in mar {
+                if value.getKind() === gOne.nkind {
+                    value.e.k = k
+                }
             }
         }
         e = Pvalp(k, .multi(Wrap(mar)), c)
@@ -50,7 +51,6 @@ class Pval {
         case .gMap:
             let m = [String: Pval]()
             e = Pvalp(k, Contents.map(Wrap(m)), c)
-            
         case .gScalar(let pt):
             let se = Pwrap(pt.zeroValue())
             e = Pvalp(k, Contents.single(se), c)
@@ -64,8 +64,7 @@ class Pval {
             e = Pvalp(k, Contents.single(Pwrap(Nil())), c)
         }
     }
-    
-    
+        
     convenience init( _ c: ParserRuleContext, _ pv: Pval, _ a: Int, _ b: Int) throws {
         switch pv.getKind().gtype {
         case .gSlice(let k):
@@ -75,7 +74,7 @@ class Pval {
             _ = x
             try self.init(c, Kind.produceKind(Gtype.gSlice(k)))
             e.con = .multi(Wrap(try pv.e.con.getSlice(a, b)))
-            
+        
         default:
             throw Perr(ETYPE, pv)
             
@@ -94,13 +93,9 @@ class Pval {
         return try get().unwrap()
     }
     private func get() throws -> Pwrap {
-        //        ade(try getKind().gtype == .gScalar)
         return e.con.getPw()
     }
     func hasKey(_ s: String) throws -> Bool {
-        //        if try getKind().gtype != .gMap {
-        //            throw Perr(ETYPE, self)
-        //        }
         if case .gMap = getKind().gtype {
             return e.con.getMap()[s] != nil
         }
@@ -141,7 +136,6 @@ class Pval {
             }
         case let v1v as String:
             if case .gMap(let k) = getKind().gtype {
-                
                 if e.con.getMap()[v1v] == nil {
                     if lh {
                         try e.con.setCon(v1v, Pval(e.prc, k))
@@ -172,8 +166,12 @@ class Pval {
         e = v.e
     }
     
-    func delKey(_ s: String) {
-        e.con.setCon(s, nil)
+    func delKey(_ s: String) throws {
+        if case .gMap = getKind().gtype {
+            e.con.setCon(s, nil)
+            return
+        }
+        throw Perr(ETYPE, self)
     }
     
     func set(_ k: Ktype, _ v: Pval) throws {
@@ -208,11 +206,7 @@ class Pval {
     func getKind() -> Kind {
         return e.k
     }
-    
-    
-    
     func stringOrLetter() throws -> String {
-        
         if try getKind().gtype.isPointer() && !e.con.isNull() {
             return "P"
         }
@@ -232,7 +226,6 @@ class Pval {
                 }
             }
             rt += getKind().gtype.closeString()
-            
             return rt
         case .map(let map):
             var rt = ""
@@ -247,14 +240,10 @@ class Pval {
                 inner += try key + ":" + map.w[key]!.string()
             }
             rt += inner
-            
             rt += getKind().gtype.closeString()
             return rt
-            
         }
     }
-    
-    
     
     func cloneIf() throws -> Pval {
         switch e.con {
@@ -302,15 +291,10 @@ class Pval {
         func equal(_ a: Pwrap) -> Bool {
             return unwrap().equal(a.unwrap())
         }
-        
         func string() -> String {
             return String(describing: wrapped)
         }
     }
-    
-    
-    
-    
     private enum Contents {
         case single(Pwrap)
         case multi(Wrap<[Pval]>)
@@ -379,8 +363,6 @@ class Pval {
                     }
                 }
                 return true
-                
-                
             }
         }
         func getSlice(_ a: Int, _ b: Int) throws -> [Pval] {

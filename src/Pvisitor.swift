@@ -88,20 +88,10 @@ class Pvisitor {
                 sctx, pv, s in try assertPvals(s, 0)
                 return Pval(sctx, readLine()!)
             },
-//            "printH": { sctx, pv, s in try assertPvals(s, 1)
-//                let x: Int = try tryCast(s[0])
-//                pv.textout(String(x, radix: 16, uppercase: false))
-//                return nil
-//            },
-//            "printB": { sctx, pv, s in try assertPvals(s, 1)
-//                let x: Int = try tryCast(s[0])
-//                pv.textout(String(x, radix: 2, uppercase: false))
-//                return nil
-//            },
             "delete": { sctx, pv, s in try assertPvals(s, 2)
                 let kt: String = try tryCast(s[1])
                 let rt = try s[0].hasKey(kt)
-                s[0].delKey(kt)
+                try s[0].delKey(kt)
                 return Pval(sctx, rt)
             },
             "key": { sctx, pv, s in try assertPvals(s, 2)
