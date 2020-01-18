@@ -253,7 +253,7 @@ class Pvisitor {
             guard rhsv - lhsv >= 0 else {
                 throw Perr(ERANGE, sctx)
             }
-            let ki = Kind.produceKind(Gtype.gScalar(Int.self))
+            let ki = try Kind.produceKind(Gtype.gScalar(Int.self))
             rt = try Pval(sctx, Kind.produceKind(Gtype.gSlice(ki)))
             for x in lhsv..<rhsv {
                 try rt.set(x - lhsv, Pval(sctx, x))
@@ -449,28 +449,28 @@ class Pvisitor {
         if let spec = sctx.kindList() {
             let kL = try visitKindList(spec)
             if sctx.AST() != nil {
-                rt = Kind.produceKind(Gtype.gPointer(kL))
+                rt = try Kind.produceKind(Gtype.gPointer(kL))
             } else {
-                rt = Kind.produceKind(Gtype.gTuple(kL))
+                rt = try Kind.produceKind(Gtype.gTuple(kL))
             }
         } else
             if let type = sctx.TYPES() {
                 let strType = type.getText()
                 let vtype = litToType[strType]!
-                rt = Kind.produceKind(Gtype.gScalar(vtype))
+                rt = try Kind.produceKind(Gtype.gScalar(vtype))
                 //            return Kind(vtype)
             } else {
                 let kind = try visitKind(sctx.kind()!)
                 if sctx.MAP() != nil {
-                    rt = Kind.produceKind(Gtype.gMap(kind))
+                    rt = try Kind.produceKind(Gtype.gMap(kind))
                 } else if sctx.SLICE() != nil {
-                    rt = Kind.produceKind(Gtype.gSlice(kind))
+                    rt = try Kind.produceKind(Gtype.gSlice(kind))
                 }
                 else {
                     let v = try _visitPval(sctx.expr()!)
                   
                     let x: Int = try tryCast(v)
-                    rt = Kind.produceKind(Gtype.gArray(kind, x))
+                    rt = try Kind.produceKind(Gtype.gArray(kind, x))
                 }
         }
         return rt

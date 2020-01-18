@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E21A841123D2A4CE00B0F3F2 /* Single.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21A841023D2A4CE00B0F3F2 /* Single.swift */; };
 		E27B67D123A221AA009B8503 /* Neg.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27B67D023A221AA009B8503 /* Neg.swift */; };
 		E2B531442398E3500041751D /* PinnParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B531382398E3500041751D /* PinnParser.swift */; };
 		E2B531452398E3500041751D /* PinnParserATN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B531392398E3500041751D /* PinnParserATN.swift */; };
@@ -64,6 +65,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E21A841023D2A4CE00B0F3F2 /* Single.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Single.swift; sourceTree = "<group>"; };
 		E22C2FA62399FD9E007AD1D5 /* Antlr4-swift */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Antlr4-swift"; sourceTree = "<group>"; };
 		E2673962235BC825000CF830 /* pinn */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = pinn; sourceTree = BUILT_PRODUCTS_DIR; };
 		E27B67D023A221AA009B8503 /* Neg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Neg.swift; sourceTree = "<group>"; };
@@ -108,6 +110,7 @@
 				E2E585B723C70BC80089A239 /* Gtype.swift */,
 				E2E6B45D23A4CD1300BE7758 /* extensions.swift */,
 				E2B531432398E3500041751D /* global.swift */,
+				E21A841023D2A4CE00B0F3F2 /* Single.swift */,
 				E2B5313A2398E3500041751D /* Kind.swift */,
 				E2B531422398E3500041751D /* main.swift */,
 				E2B5313D2398E3500041751D /* Perr.swift */,
@@ -228,6 +231,7 @@
 				E2B531482398E3500041751D /* Pvisitor.swift in Sources */,
 				E2B531492398E3500041751D /* Perr.swift in Sources */,
 				E2B531452398E3500041751D /* PinnParserATN.swift in Sources */,
+				E21A841123D2A4CE00B0F3F2 /* Single.swift in Sources */,
 				E2B5314C2398E3500041751D /* PinnLexerATN.swift in Sources */,
 				E2B5314A2398E3500041751D /* aux.swift in Sources */,
 				E2B5314E2398E3500041751D /* main.swift in Sources */,

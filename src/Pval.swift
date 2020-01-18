@@ -17,7 +17,7 @@ class Pval {
             }) {
             throw Perr(ETYPE, c)
         }
-        let k2 = Kind.produceKind(Gtype.gSlice(k))
+        let k2 = try Kind.produceKind(Gtype.gSlice(k))
         e = Pvalp(k2, .multi(Wrap(ar)), c)
     }
     
@@ -28,10 +28,10 @@ class Pval {
 
         
         
-        let k = Kind.produceKind(pointer ? Gtype.gPointer(ka) : Gtype.gTuple(ka))
+        let k = try Kind.produceKind(pointer ? Gtype.gPointer(ka) : Gtype.gTuple(ka))
         
         for (key, value) in mar.enumerated() {
-            if value.getKind() === Kind.nkind {
+            if value.getKind() === gOne.nkind {
                 value.e.k = k
             }
         }
@@ -41,7 +41,7 @@ class Pval {
     
     init(_ c: ParserRuleContext, _ a: Ptype) {
         let w = Pwrap(a)
-        let k = Kind.produceKind(Gtype.gScalar(type(of: a)))
+        let k = try! Kind.produceKind(Gtype.gScalar(type(of: a)))
         e = Pvalp(k, .single(w), c)
     }
     
@@ -173,7 +173,7 @@ class Pval {
     
     
     func setPV(_ v : Pval) throws {
-        if v.getKind() === Kind.nkind {
+        if v.getKind() === gOne.nkind {
             if !getKind().gtype.isPointer() {
                 throw Perr(ETYPE, v)
             }

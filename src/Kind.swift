@@ -7,9 +7,7 @@ class Kind {
     var gtype: Gtype
 //    var count: Int?
     static var kinds = [Kind]()
-    static var nkind: Kind {
-        return produceKind(Gtype.gScalar(Nil.self))
-    }
+
 //    init(_ k: Kind){
 //        self.ke = k.ke
 //        self.gtype = k.gtype
@@ -33,7 +31,7 @@ class Kind {
         return kinds[ki!]
         
     }
-    static func produceKind(_ g: Gtype) -> Kind {
+    static func produceKind(_ g: Gtype) throws -> Kind {
 
 //        if (kinds.contains {
 //            $0 === k
@@ -59,7 +57,7 @@ class Kind {
         if self === k {
             return true
         }
-        if gtype.isPointer() && k === Kind.nkind || self === Kind.nkind && k.gtype.isPointer() {
+        if gtype.isPointer() && k === gOne.nkind || self === gOne.nkind && k.gtype.isPointer() {
             return true
         }
         return false
