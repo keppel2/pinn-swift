@@ -82,8 +82,8 @@ print(cdn);
 ft("Deep nesting and length", "[(0 {} [[0 0 0 0 42]])] 1 5 [(42 {key:true} [12 101]) (101 {aap:false} [202])]");
 var cx [](int, [map]bool, [][5]int);
 //xam("cx");
-cx2 := [(42, {"key": true}, [12, 101])];
-cx2[1] = (101, {"aap": false}, [202]);
+cx2 := ...[(42, {"key": true}, ...[12, 101])];
+cx2[1] = (101, {"aap": false}, ...[202]);
 cx[0][2][0][4] = 42;
 print(cx, len(cx), len(cx[0][2][0]), "");
 print(cx2);
@@ -101,27 +101,27 @@ ntdda[0][1][2] = 42;
 print(ntdda);
 
 ft("Short declaration slice", "[10 23 42 101] [10 23 42 101]");
-sda := [10, 23, 42, 101];
+sda := ...[10, 23, 42, 101];
 print(sda, "");
 var sds []int;
 sds = sda;
 print(sds);
 
 ft("Short declaration nested slice", "[[2 1] [21 23 101]][[2 1] [21 23 101]]");
-sdns := [[2, 1], [21, 23, 101]];
+sdns := ...[...[2, 1], ...[21, 23, 101]];
 print(sdns);
 var sdns2 [][]int;
 sdns2 = sdns;
 print(sdns2);
 
 ft("Assign smaller slice to slice plus length", "[202 302] 2");
-assts := [24, 30, 101];
-assts = [202, 302];
+assts := ...[24, 30, 101];
+assts = [202, 302][:];
 print(assts, len(assts));
 
 ft("Assign larger slice to slice plus length", "[202 302 502] 3");
-alsts := [24, 30];
-alsts = [202, 302, 502];
+alsts := ...[24, 30];
+alsts = ...[202, 302, 502];
 print(alsts, len(alsts));
 
 ft("Print open interval 1 to 5", "[1 2 3 4]");
@@ -416,7 +416,7 @@ func mrecurse2(i int) {
 mrecurse1(1);
 ft("Return slice of strings","[aap noot mies]");
 func returnSliceString() []string {
-ar := ["aap", "noot", "mies"];
+ar := ...["aap", "noot", "mies"];
 return ar;
 }
 print(returnSliceString());
@@ -614,7 +614,7 @@ func slFunc(s []int) {
     s[0] = 201;
 }
 var slf []int;
-slf = [23, 101];
+slf = ...[23, 101];
 slFunc(slf);
 print(slf);
 
@@ -634,8 +634,8 @@ print(tup23);
 
 ft("Tuple assignments", "([3 5] [aap noot])");
 var tup2 ([]int, []string);
-tup2[0] = [3, 5];
-tup2[1] = ["aap", "noot"];
+tup2[0] = ...[3, 5];
+tup2[1] = ["aap", "noot"][:];
 print(tup2);
 
 
@@ -710,7 +710,7 @@ print(sdci1, sdci2);
 
 
 ft("Slicing shares", "[1 777 101 202],[777 101]");
-ssAr1 := [1, 10, 101, 202];
+ssAr1 := ...[1, 10, 101, 202];
 ssAr2 := ssAr1[1@2];
 ssAr2[0] = 777;
 print(ssAr1);

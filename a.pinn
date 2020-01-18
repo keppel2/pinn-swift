@@ -1,6 +1,4 @@
-var ar[2] int;
-ar[0] = 5;
-ar[1] = 42;
-var s[slice]int;
-s = ar[:];
+ar := [23, 42];
+s := ar[:];
+s[0] = 101;
 println(ar, s);

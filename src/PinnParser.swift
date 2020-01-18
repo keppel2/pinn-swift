@@ -161,6 +161,7 @@ open class PinnParser: Parser {
 		 		case .LPAREN:fallthrough
 		 		case .NIL:fallthrough
 		 		case .AST:fallthrough
+		 		case .THREEDOT:fallthrough
 		 		case .CARET:fallthrough
 		 		case .ID:fallthrough
 		 		case .INT:fallthrough
@@ -180,7 +181,7 @@ open class PinnParser: Parser {
 		 	} while (//closure
 		 	 { () -> Bool in
 		 	      let testSet: Bool = {  () -> Bool in
-		 	   let testArray: [Int] = [_la, PinnParser.Tokens.T__0.rawValue,PinnParser.Tokens.T__2.rawValue,PinnParser.Tokens.T__4.rawValue,PinnParser.Tokens.T__7.rawValue,PinnParser.Tokens.T__8.rawValue,PinnParser.Tokens.T__11.rawValue,PinnParser.Tokens.T__21.rawValue,PinnParser.Tokens.T__22.rawValue,PinnParser.Tokens.T__24.rawValue,PinnParser.Tokens.T__25.rawValue,PinnParser.Tokens.T__26.rawValue,PinnParser.Tokens.T__27.rawValue,PinnParser.Tokens.T__28.rawValue,PinnParser.Tokens.T__29.rawValue,PinnParser.Tokens.T__31.rawValue,PinnParser.Tokens.T__33.rawValue,PinnParser.Tokens.T__34.rawValue,PinnParser.Tokens.T__35.rawValue,PinnParser.Tokens.BOOL.rawValue,PinnParser.Tokens.LSQUARE.rawValue,PinnParser.Tokens.LPAREN.rawValue,PinnParser.Tokens.NIL.rawValue,PinnParser.Tokens.AST.rawValue,PinnParser.Tokens.CARET.rawValue,PinnParser.Tokens.ID.rawValue,PinnParser.Tokens.INT.rawValue,PinnParser.Tokens.FLOAT.rawValue,PinnParser.Tokens.STRING.rawValue]
+		 	   let testArray: [Int] = [_la, PinnParser.Tokens.T__0.rawValue,PinnParser.Tokens.T__2.rawValue,PinnParser.Tokens.T__4.rawValue,PinnParser.Tokens.T__7.rawValue,PinnParser.Tokens.T__8.rawValue,PinnParser.Tokens.T__11.rawValue,PinnParser.Tokens.T__21.rawValue,PinnParser.Tokens.T__22.rawValue,PinnParser.Tokens.T__24.rawValue,PinnParser.Tokens.T__25.rawValue,PinnParser.Tokens.T__26.rawValue,PinnParser.Tokens.T__27.rawValue,PinnParser.Tokens.T__28.rawValue,PinnParser.Tokens.T__29.rawValue,PinnParser.Tokens.T__31.rawValue,PinnParser.Tokens.T__33.rawValue,PinnParser.Tokens.T__34.rawValue,PinnParser.Tokens.T__35.rawValue,PinnParser.Tokens.BOOL.rawValue,PinnParser.Tokens.LSQUARE.rawValue,PinnParser.Tokens.LPAREN.rawValue,PinnParser.Tokens.NIL.rawValue,PinnParser.Tokens.AST.rawValue,PinnParser.Tokens.THREEDOT.rawValue,PinnParser.Tokens.CARET.rawValue,PinnParser.Tokens.ID.rawValue,PinnParser.Tokens.INT.rawValue,PinnParser.Tokens.FLOAT.rawValue,PinnParser.Tokens.STRING.rawValue]
 		 	    return  Utils.testBitLeftShiftArray(testArray, 0)
 		 	}()
 		 	      return testSet
@@ -383,7 +384,7 @@ open class PinnParser: Parser {
 		 	while (//closure
 		 	 { () -> Bool in
 		 	      let testSet: Bool = {  () -> Bool in
-		 	   let testArray: [Int] = [_la, PinnParser.Tokens.T__2.rawValue,PinnParser.Tokens.T__4.rawValue,PinnParser.Tokens.T__7.rawValue,PinnParser.Tokens.T__8.rawValue,PinnParser.Tokens.T__11.rawValue,PinnParser.Tokens.T__21.rawValue,PinnParser.Tokens.T__22.rawValue,PinnParser.Tokens.T__24.rawValue,PinnParser.Tokens.T__25.rawValue,PinnParser.Tokens.T__26.rawValue,PinnParser.Tokens.T__27.rawValue,PinnParser.Tokens.T__28.rawValue,PinnParser.Tokens.T__29.rawValue,PinnParser.Tokens.T__31.rawValue,PinnParser.Tokens.T__33.rawValue,PinnParser.Tokens.T__34.rawValue,PinnParser.Tokens.T__35.rawValue,PinnParser.Tokens.BOOL.rawValue,PinnParser.Tokens.LSQUARE.rawValue,PinnParser.Tokens.LPAREN.rawValue,PinnParser.Tokens.NIL.rawValue,PinnParser.Tokens.AST.rawValue,PinnParser.Tokens.CARET.rawValue,PinnParser.Tokens.ID.rawValue,PinnParser.Tokens.INT.rawValue,PinnParser.Tokens.FLOAT.rawValue,PinnParser.Tokens.STRING.rawValue]
+		 	   let testArray: [Int] = [_la, PinnParser.Tokens.T__2.rawValue,PinnParser.Tokens.T__4.rawValue,PinnParser.Tokens.T__7.rawValue,PinnParser.Tokens.T__8.rawValue,PinnParser.Tokens.T__11.rawValue,PinnParser.Tokens.T__21.rawValue,PinnParser.Tokens.T__22.rawValue,PinnParser.Tokens.T__24.rawValue,PinnParser.Tokens.T__25.rawValue,PinnParser.Tokens.T__26.rawValue,PinnParser.Tokens.T__27.rawValue,PinnParser.Tokens.T__28.rawValue,PinnParser.Tokens.T__29.rawValue,PinnParser.Tokens.T__31.rawValue,PinnParser.Tokens.T__33.rawValue,PinnParser.Tokens.T__34.rawValue,PinnParser.Tokens.T__35.rawValue,PinnParser.Tokens.BOOL.rawValue,PinnParser.Tokens.LSQUARE.rawValue,PinnParser.Tokens.LPAREN.rawValue,PinnParser.Tokens.NIL.rawValue,PinnParser.Tokens.AST.rawValue,PinnParser.Tokens.THREEDOT.rawValue,PinnParser.Tokens.CARET.rawValue,PinnParser.Tokens.ID.rawValue,PinnParser.Tokens.INT.rawValue,PinnParser.Tokens.FLOAT.rawValue,PinnParser.Tokens.STRING.rawValue]
 		 	    return  Utils.testBitLeftShiftArray(testArray, 0)
 		 	}()
 		 	      return testSet
@@ -660,6 +661,7 @@ open class PinnParser: Parser {
 		 		case .LPAREN:fallthrough
 		 		case .NIL:fallthrough
 		 		case .AST:fallthrough
+		 		case .THREEDOT:fallthrough
 		 		case .CARET:fallthrough
 		 		case .ID:fallthrough
 		 		case .INT:fallthrough
@@ -1031,6 +1033,10 @@ open class PinnParser: Parser {
 			func exprList() -> ExprListContext? {
 				return getRuleContext(ExprListContext.self, 0)
 			}
+			open
+			func THREEDOT() -> TerminalNode? {
+				return getToken(PinnParser.Tokens.THREEDOT.rawValue, 0)
+			}
 
 		public
 		init(_ ctx: ExprContext) {
@@ -1267,19 +1273,32 @@ open class PinnParser: Parser {
 		do {
 			var _alt: Int
 			try enterOuterAlt(_localctx, 1)
-			setState(195)
+			setState(198)
 			try _errHandler.sync(self)
-			switch(try getInterpreter().adaptivePredict(_input,18, _ctx)) {
+			switch(try getInterpreter().adaptivePredict(_input,19, _ctx)) {
 			case 1:
 				_localctx = ArrayLiteralContext(_localctx)
 				_ctx = _localctx
 				_prevctx = _localctx
 
-				setState(157)
-				try match(PinnParser.Tokens.LSQUARE.rawValue)
 				setState(158)
+				try _errHandler.sync(self)
+				_la = try _input.LA(1)
+				if (//closure
+				 { () -> Bool in
+				      let testSet: Bool = _la == PinnParser.Tokens.THREEDOT.rawValue
+				      return testSet
+				 }()) {
+					setState(157)
+					try match(PinnParser.Tokens.THREEDOT.rawValue)
+
+				}
+
+				setState(160)
+				try match(PinnParser.Tokens.LSQUARE.rawValue)
+				setState(161)
 				try exprList()
-				setState(159)
+				setState(162)
 				try match(PinnParser.Tokens.T__5.rawValue)
 
 				break
@@ -1287,11 +1306,11 @@ open class PinnParser: Parser {
 				_localctx = ObjectLiteralContext(_localctx)
 				_ctx = _localctx
 				_prevctx = _localctx
-				setState(161)
+				setState(164)
 				try match(PinnParser.Tokens.T__2.rawValue)
-				setState(162)
+				setState(165)
 				try objectPair()
-				setState(167)
+				setState(170)
 				try _errHandler.sync(self)
 				_la = try _input.LA(1)
 				while (//closure
@@ -1299,17 +1318,17 @@ open class PinnParser: Parser {
 				      let testSet: Bool = _la == PinnParser.Tokens.COMMA.rawValue
 				      return testSet
 				 }()) {
-					setState(163)
+					setState(166)
 					try match(PinnParser.Tokens.COMMA.rawValue)
-					setState(164)
+					setState(167)
 					try objectPair()
 
 
-					setState(169)
+					setState(172)
 					try _errHandler.sync(self)
 					_la = try _input.LA(1)
 				}
-				setState(170)
+				setState(173)
 				try match(PinnParser.Tokens.T__3.rawValue)
 
 				break
@@ -1317,7 +1336,7 @@ open class PinnParser: Parser {
 				_localctx = UnaryExprContext(_localctx)
 				_ctx = _localctx
 				_prevctx = _localctx
-				setState(172)
+				setState(175)
 				_la = try _input.LA(1)
 				if (!(//closure
 				 { () -> Bool in
@@ -1333,7 +1352,7 @@ open class PinnParser: Parser {
 					_errHandler.reportMatch(self)
 					try consume()
 				}
-				setState(173)
+				setState(176)
 				try expr(10)
 
 				break
@@ -1341,27 +1360,27 @@ open class PinnParser: Parser {
 				_localctx = CallExprContext(_localctx)
 				_ctx = _localctx
 				_prevctx = _localctx
-				setState(174)
-				try match(PinnParser.Tokens.ID.rawValue)
-				setState(175)
-				try match(PinnParser.Tokens.LPAREN.rawValue)
 				setState(177)
+				try match(PinnParser.Tokens.ID.rawValue)
+				setState(178)
+				try match(PinnParser.Tokens.LPAREN.rawValue)
+				setState(180)
 				try _errHandler.sync(self)
 				_la = try _input.LA(1)
 				if (//closure
 				 { () -> Bool in
 				      let testSet: Bool = {  () -> Bool in
-				   let testArray: [Int] = [_la, PinnParser.Tokens.T__2.rawValue,PinnParser.Tokens.T__7.rawValue,PinnParser.Tokens.T__8.rawValue,PinnParser.Tokens.T__11.rawValue,PinnParser.Tokens.BOOL.rawValue,PinnParser.Tokens.LSQUARE.rawValue,PinnParser.Tokens.LPAREN.rawValue,PinnParser.Tokens.NIL.rawValue,PinnParser.Tokens.AST.rawValue,PinnParser.Tokens.CARET.rawValue,PinnParser.Tokens.ID.rawValue,PinnParser.Tokens.INT.rawValue,PinnParser.Tokens.FLOAT.rawValue,PinnParser.Tokens.STRING.rawValue]
+				   let testArray: [Int] = [_la, PinnParser.Tokens.T__2.rawValue,PinnParser.Tokens.T__7.rawValue,PinnParser.Tokens.T__8.rawValue,PinnParser.Tokens.T__11.rawValue,PinnParser.Tokens.BOOL.rawValue,PinnParser.Tokens.LSQUARE.rawValue,PinnParser.Tokens.LPAREN.rawValue,PinnParser.Tokens.NIL.rawValue,PinnParser.Tokens.AST.rawValue,PinnParser.Tokens.THREEDOT.rawValue,PinnParser.Tokens.CARET.rawValue,PinnParser.Tokens.ID.rawValue,PinnParser.Tokens.INT.rawValue,PinnParser.Tokens.FLOAT.rawValue,PinnParser.Tokens.STRING.rawValue]
 				    return  Utils.testBitLeftShiftArray(testArray, 0)
 				}()
 				      return testSet
 				 }()) {
-					setState(176)
+					setState(179)
 					try exprList()
 
 				}
 
-				setState(179)
+				setState(182)
 				try match(PinnParser.Tokens.T__1.rawValue)
 
 				break
@@ -1369,11 +1388,11 @@ open class PinnParser: Parser {
 				_localctx = ParenExprContext(_localctx)
 				_ctx = _localctx
 				_prevctx = _localctx
-				setState(180)
+				setState(183)
 				try match(PinnParser.Tokens.LPAREN.rawValue)
-				setState(181)
+				setState(184)
 				try expr(0)
-				setState(182)
+				setState(185)
 				try match(PinnParser.Tokens.T__1.rawValue)
 
 				break
@@ -1381,7 +1400,7 @@ open class PinnParser: Parser {
 				_localctx = TupleExprContext(_localctx)
 				_ctx = _localctx
 				_prevctx = _localctx
-				setState(185)
+				setState(188)
 				try _errHandler.sync(self)
 				_la = try _input.LA(1)
 				if (//closure
@@ -1389,12 +1408,12 @@ open class PinnParser: Parser {
 				      let testSet: Bool = _la == PinnParser.Tokens.CARET.rawValue
 				      return testSet
 				 }()) {
-					setState(184)
+					setState(187)
 					try match(PinnParser.Tokens.CARET.rawValue)
 
 				}
 
-				setState(188)
+				setState(191)
 				try _errHandler.sync(self)
 				_la = try _input.LA(1)
 				if (//closure
@@ -1402,16 +1421,16 @@ open class PinnParser: Parser {
 				      let testSet: Bool = _la == PinnParser.Tokens.AST.rawValue
 				      return testSet
 				 }()) {
-					setState(187)
+					setState(190)
 					try match(PinnParser.Tokens.AST.rawValue)
 
 				}
 
-				setState(190)
+				setState(193)
 				try match(PinnParser.Tokens.LPAREN.rawValue)
-				setState(191)
+				setState(194)
 				try exprList()
-				setState(192)
+				setState(195)
 				try match(PinnParser.Tokens.T__1.rawValue)
 
 				break
@@ -1419,7 +1438,7 @@ open class PinnParser: Parser {
 				_localctx = LiteralExprContext(_localctx)
 				_ctx = _localctx
 				_prevctx = _localctx
-				setState(194)
+				setState(197)
 				_la = try _input.LA(1)
 				if (!(//closure
 				 { () -> Bool in
@@ -1440,26 +1459,26 @@ open class PinnParser: Parser {
 			default: break
 			}
 			_ctx!.stop = try _input.LT(-1)
-			setState(230)
+			setState(233)
 			try _errHandler.sync(self)
-			_alt = try getInterpreter().adaptivePredict(_input,23,_ctx)
+			_alt = try getInterpreter().adaptivePredict(_input,24,_ctx)
 			while (_alt != 2 && _alt != ATN.INVALID_ALT_NUMBER) {
 				if ( _alt==1 ) {
 					if _parseListeners != nil {
 					   try triggerExitRuleEvent()
 					}
 					_prevctx = _localctx
-					setState(228)
+					setState(231)
 					try _errHandler.sync(self)
-					switch(try getInterpreter().adaptivePredict(_input,22, _ctx)) {
+					switch(try getInterpreter().adaptivePredict(_input,23, _ctx)) {
 					case 1:
 						_localctx = IntExprContext(  ExprContext(_parentctx, _parentState))
 						try pushNewRecursionContext(_localctx, _startState, PinnParser.RULE_expr)
-						setState(197)
+						setState(200)
 						if (!(precpred(_ctx, 9))) {
 						    throw ANTLRException.recognition(e:FailedPredicateException(self, "precpred(_ctx, 9)"))
 						}
-						setState(198)
+						setState(201)
 						_la = try _input.LA(1)
 						if (!(//closure
 						 { () -> Bool in
@@ -1475,18 +1494,18 @@ open class PinnParser: Parser {
 							_errHandler.reportMatch(self)
 							try consume()
 						}
-						setState(199)
+						setState(202)
 						try expr(10)
 
 						break
 					case 2:
 						_localctx = CompExprContext(  ExprContext(_parentctx, _parentState))
 						try pushNewRecursionContext(_localctx, _startState, PinnParser.RULE_expr)
-						setState(200)
+						setState(203)
 						if (!(precpred(_ctx, 8))) {
 						    throw ANTLRException.recognition(e:FailedPredicateException(self, "precpred(_ctx, 8)"))
 						}
-						setState(201)
+						setState(204)
 						_la = try _input.LA(1)
 						if (!(//closure
 						 { () -> Bool in
@@ -1502,18 +1521,18 @@ open class PinnParser: Parser {
 							_errHandler.reportMatch(self)
 							try consume()
 						}
-						setState(202)
+						setState(205)
 						try expr(9)
 
 						break
 					case 3:
 						_localctx = BoolExprContext(  ExprContext(_parentctx, _parentState))
 						try pushNewRecursionContext(_localctx, _startState, PinnParser.RULE_expr)
-						setState(203)
+						setState(206)
 						if (!(precpred(_ctx, 7))) {
 						    throw ANTLRException.recognition(e:FailedPredicateException(self, "precpred(_ctx, 7)"))
 						}
-						setState(204)
+						setState(207)
 						_la = try _input.LA(1)
 						if (!(//closure
 						 { () -> Bool in
@@ -1526,18 +1545,18 @@ open class PinnParser: Parser {
 							_errHandler.reportMatch(self)
 							try consume()
 						}
-						setState(205)
+						setState(208)
 						try expr(8)
 
 						break
 					case 4:
 						_localctx = RangeExprContext(  ExprContext(_parentctx, _parentState))
 						try pushNewRecursionContext(_localctx, _startState, PinnParser.RULE_expr)
-						setState(206)
+						setState(209)
 						if (!(precpred(_ctx, 3))) {
 						    throw ANTLRException.recognition(e:FailedPredicateException(self, "precpred(_ctx, 3)"))
 						}
-						setState(207)
+						setState(210)
 						_la = try _input.LA(1)
 						if (!(//closure
 						 { () -> Bool in
@@ -1550,52 +1569,52 @@ open class PinnParser: Parser {
 							_errHandler.reportMatch(self)
 							try consume()
 						}
-						setState(208)
+						setState(211)
 						try expr(4)
 
 						break
 					case 5:
 						_localctx = ConditionalExprContext(  ExprContext(_parentctx, _parentState))
 						try pushNewRecursionContext(_localctx, _startState, PinnParser.RULE_expr)
-						setState(209)
+						setState(212)
 						if (!(precpred(_ctx, 2))) {
 						    throw ANTLRException.recognition(e:FailedPredicateException(self, "precpred(_ctx, 2)"))
 						}
-						setState(210)
-						try match(PinnParser.Tokens.T__20.rawValue)
-						setState(211)
-						try expr(0)
-						setState(212)
-						try match(PinnParser.Tokens.COLON.rawValue)
 						setState(213)
+						try match(PinnParser.Tokens.T__20.rawValue)
+						setState(214)
+						try expr(0)
+						setState(215)
+						try match(PinnParser.Tokens.COLON.rawValue)
+						setState(216)
 						try expr(3)
 
 						break
 					case 6:
 						_localctx = IndexExprContext(  ExprContext(_parentctx, _parentState))
 						try pushNewRecursionContext(_localctx, _startState, PinnParser.RULE_expr)
-						setState(215)
+						setState(218)
 						if (!(precpred(_ctx, 13))) {
 						    throw ANTLRException.recognition(e:FailedPredicateException(self, "precpred(_ctx, 13)"))
 						}
-						setState(216)
+						setState(219)
 						try match(PinnParser.Tokens.LSQUARE.rawValue)
-						setState(225)
+						setState(228)
 						try _errHandler.sync(self)
-						switch(try getInterpreter().adaptivePredict(_input,21, _ctx)) {
+						switch(try getInterpreter().adaptivePredict(_input,22, _ctx)) {
 						case 1:
-							setState(218)
+							setState(221)
 							try _errHandler.sync(self)
 							_la = try _input.LA(1)
 							if (//closure
 							 { () -> Bool in
 							      let testSet: Bool = {  () -> Bool in
-							   let testArray: [Int] = [_la, PinnParser.Tokens.T__2.rawValue,PinnParser.Tokens.T__7.rawValue,PinnParser.Tokens.T__8.rawValue,PinnParser.Tokens.T__11.rawValue,PinnParser.Tokens.BOOL.rawValue,PinnParser.Tokens.LSQUARE.rawValue,PinnParser.Tokens.LPAREN.rawValue,PinnParser.Tokens.NIL.rawValue,PinnParser.Tokens.AST.rawValue,PinnParser.Tokens.CARET.rawValue,PinnParser.Tokens.ID.rawValue,PinnParser.Tokens.INT.rawValue,PinnParser.Tokens.FLOAT.rawValue,PinnParser.Tokens.STRING.rawValue]
+							   let testArray: [Int] = [_la, PinnParser.Tokens.T__2.rawValue,PinnParser.Tokens.T__7.rawValue,PinnParser.Tokens.T__8.rawValue,PinnParser.Tokens.T__11.rawValue,PinnParser.Tokens.BOOL.rawValue,PinnParser.Tokens.LSQUARE.rawValue,PinnParser.Tokens.LPAREN.rawValue,PinnParser.Tokens.NIL.rawValue,PinnParser.Tokens.AST.rawValue,PinnParser.Tokens.THREEDOT.rawValue,PinnParser.Tokens.CARET.rawValue,PinnParser.Tokens.ID.rawValue,PinnParser.Tokens.INT.rawValue,PinnParser.Tokens.FLOAT.rawValue,PinnParser.Tokens.STRING.rawValue]
 							    return  Utils.testBitLeftShiftArray(testArray, 0)
 							}()
 							      return testSet
 							 }()) {
-								setState(217)
+								setState(220)
 								try {
 										let assignmentValue = try expr(0)
 										_localctx.castdown(IndexExprContext.self).first = assignmentValue
@@ -1604,7 +1623,7 @@ open class PinnParser: Parser {
 
 							}
 
-							setState(220)
+							setState(223)
 							_la = try _input.LA(1)
 							if (!(//closure
 							 { () -> Bool in
@@ -1617,18 +1636,18 @@ open class PinnParser: Parser {
 								_errHandler.reportMatch(self)
 								try consume()
 							}
-							setState(222)
+							setState(225)
 							try _errHandler.sync(self)
 							_la = try _input.LA(1)
 							if (//closure
 							 { () -> Bool in
 							      let testSet: Bool = {  () -> Bool in
-							   let testArray: [Int] = [_la, PinnParser.Tokens.T__2.rawValue,PinnParser.Tokens.T__7.rawValue,PinnParser.Tokens.T__8.rawValue,PinnParser.Tokens.T__11.rawValue,PinnParser.Tokens.BOOL.rawValue,PinnParser.Tokens.LSQUARE.rawValue,PinnParser.Tokens.LPAREN.rawValue,PinnParser.Tokens.NIL.rawValue,PinnParser.Tokens.AST.rawValue,PinnParser.Tokens.CARET.rawValue,PinnParser.Tokens.ID.rawValue,PinnParser.Tokens.INT.rawValue,PinnParser.Tokens.FLOAT.rawValue,PinnParser.Tokens.STRING.rawValue]
+							   let testArray: [Int] = [_la, PinnParser.Tokens.T__2.rawValue,PinnParser.Tokens.T__7.rawValue,PinnParser.Tokens.T__8.rawValue,PinnParser.Tokens.T__11.rawValue,PinnParser.Tokens.BOOL.rawValue,PinnParser.Tokens.LSQUARE.rawValue,PinnParser.Tokens.LPAREN.rawValue,PinnParser.Tokens.NIL.rawValue,PinnParser.Tokens.AST.rawValue,PinnParser.Tokens.THREEDOT.rawValue,PinnParser.Tokens.CARET.rawValue,PinnParser.Tokens.ID.rawValue,PinnParser.Tokens.INT.rawValue,PinnParser.Tokens.FLOAT.rawValue,PinnParser.Tokens.STRING.rawValue]
 							    return  Utils.testBitLeftShiftArray(testArray, 0)
 							}()
 							      return testSet
 							 }()) {
-								setState(221)
+								setState(224)
 								try {
 										let assignmentValue = try expr(0)
 										_localctx.castdown(IndexExprContext.self).second = assignmentValue
@@ -1640,13 +1659,13 @@ open class PinnParser: Parser {
 
 							break
 						case 2:
-							setState(224)
+							setState(227)
 							try expr(0)
 
 							break
 						default: break
 						}
-						setState(227)
+						setState(230)
 						try match(PinnParser.Tokens.T__5.rawValue)
 
 						break
@@ -1654,9 +1673,9 @@ open class PinnParser: Parser {
 					}
 			 
 				}
-				setState(232)
+				setState(235)
 				try _errHandler.sync(self)
-				_alt = try getInterpreter().adaptivePredict(_input,23,_ctx)
+				_alt = try getInterpreter().adaptivePredict(_input,24,_ctx)
 			}
 
 		}
@@ -1701,9 +1720,9 @@ open class PinnParser: Parser {
 	    }
 		do {
 		 	try enterOuterAlt(_localctx, 1)
-		 	setState(233)
+		 	setState(236)
 		 	try expr(0)
-		 	setState(238)
+		 	setState(241)
 		 	try _errHandler.sync(self)
 		 	_la = try _input.LA(1)
 		 	while (//closure
@@ -1711,13 +1730,13 @@ open class PinnParser: Parser {
 		 	      let testSet: Bool = _la == PinnParser.Tokens.COMMA.rawValue
 		 	      return testSet
 		 	 }()) {
-		 		setState(234)
+		 		setState(237)
 		 		try match(PinnParser.Tokens.COMMA.rawValue)
-		 		setState(235)
+		 		setState(238)
 		 		try expr(0)
 
 
-		 		setState(240)
+		 		setState(243)
 		 		try _errHandler.sync(self)
 		 		_la = try _input.LA(1)
 		 	}
@@ -1764,9 +1783,9 @@ open class PinnParser: Parser {
 	    }
 		do {
 		 	try enterOuterAlt(_localctx, 1)
-		 	setState(241)
+		 	setState(244)
 		 	try kind()
-		 	setState(246)
+		 	setState(249)
 		 	try _errHandler.sync(self)
 		 	_la = try _input.LA(1)
 		 	while (//closure
@@ -1774,13 +1793,13 @@ open class PinnParser: Parser {
 		 	      let testSet: Bool = _la == PinnParser.Tokens.COMMA.rawValue
 		 	      return testSet
 		 	 }()) {
-		 		setState(242)
+		 		setState(245)
 		 		try match(PinnParser.Tokens.COMMA.rawValue)
-		 		setState(243)
+		 		setState(246)
 		 		try kind()
 
 
-		 		setState(248)
+		 		setState(251)
 		 		try _errHandler.sync(self)
 		 		_la = try _input.LA(1)
 		 	}
@@ -1815,20 +1834,20 @@ open class PinnParser: Parser {
 	    }
 		do {
 		 	try enterOuterAlt(_localctx, 1)
-		 	setState(249)
+		 	setState(252)
 		 	try match(PinnParser.Tokens.T__21.rawValue)
-		 	setState(251)
+		 	setState(254)
 		 	try _errHandler.sync(self)
 		 	_la = try _input.LA(1)
 		 	if (//closure
 		 	 { () -> Bool in
 		 	      let testSet: Bool = {  () -> Bool in
-		 	   let testArray: [Int] = [_la, PinnParser.Tokens.T__2.rawValue,PinnParser.Tokens.T__7.rawValue,PinnParser.Tokens.T__8.rawValue,PinnParser.Tokens.T__11.rawValue,PinnParser.Tokens.BOOL.rawValue,PinnParser.Tokens.LSQUARE.rawValue,PinnParser.Tokens.LPAREN.rawValue,PinnParser.Tokens.NIL.rawValue,PinnParser.Tokens.AST.rawValue,PinnParser.Tokens.CARET.rawValue,PinnParser.Tokens.ID.rawValue,PinnParser.Tokens.INT.rawValue,PinnParser.Tokens.FLOAT.rawValue,PinnParser.Tokens.STRING.rawValue]
+		 	   let testArray: [Int] = [_la, PinnParser.Tokens.T__2.rawValue,PinnParser.Tokens.T__7.rawValue,PinnParser.Tokens.T__8.rawValue,PinnParser.Tokens.T__11.rawValue,PinnParser.Tokens.BOOL.rawValue,PinnParser.Tokens.LSQUARE.rawValue,PinnParser.Tokens.LPAREN.rawValue,PinnParser.Tokens.NIL.rawValue,PinnParser.Tokens.AST.rawValue,PinnParser.Tokens.THREEDOT.rawValue,PinnParser.Tokens.CARET.rawValue,PinnParser.Tokens.ID.rawValue,PinnParser.Tokens.INT.rawValue,PinnParser.Tokens.FLOAT.rawValue,PinnParser.Tokens.STRING.rawValue]
 		 	    return  Utils.testBitLeftShiftArray(testArray, 0)
 		 	}()
 		 	      return testSet
 		 	 }()) {
-		 		setState(250)
+		 		setState(253)
 		 		try expr(0)
 
 		 	}
@@ -1871,19 +1890,19 @@ open class PinnParser: Parser {
 	    }
 		do {
 		 	try enterOuterAlt(_localctx, 1)
-		 	setState(253)
+		 	setState(256)
 		 	try match(PinnParser.Tokens.T__22.rawValue)
-		 	setState(254)
+		 	setState(257)
 		 	try expr(0)
-		 	setState(255)
-		 	try statement()
 		 	setState(258)
+		 	try statement()
+		 	setState(261)
 		 	try _errHandler.sync(self)
-		 	switch (try getInterpreter().adaptivePredict(_input,27,_ctx)) {
+		 	switch (try getInterpreter().adaptivePredict(_input,28,_ctx)) {
 		 	case 1:
-		 		setState(256)
+		 		setState(259)
 		 		try match(PinnParser.Tokens.T__23.rawValue)
-		 		setState(257)
+		 		setState(260)
 		 		try statement()
 
 		 		break
@@ -1923,13 +1942,13 @@ open class PinnParser: Parser {
 	    }
 		do {
 		 	try enterOuterAlt(_localctx, 1)
-		 	setState(260)
-		 	try match(PinnParser.Tokens.T__24.rawValue)
-		 	setState(261)
-		 	try expr(0)
-		 	setState(262)
-		 	try match(PinnParser.Tokens.T__23.rawValue)
 		 	setState(263)
+		 	try match(PinnParser.Tokens.T__24.rawValue)
+		 	setState(264)
+		 	try expr(0)
+		 	setState(265)
+		 	try match(PinnParser.Tokens.T__23.rawValue)
+		 	setState(266)
 		 	try block()
 
 		}
@@ -1965,11 +1984,11 @@ open class PinnParser: Parser {
 	    }
 		do {
 		 	try enterOuterAlt(_localctx, 1)
-		 	setState(265)
+		 	setState(268)
 		 	try match(PinnParser.Tokens.T__25.rawValue)
-		 	setState(266)
+		 	setState(269)
 		 	try expr(0)
-		 	setState(267)
+		 	setState(270)
 		 	try block()
 
 		}
@@ -2001,9 +2020,9 @@ open class PinnParser: Parser {
 	    }
 		do {
 		 	try enterOuterAlt(_localctx, 1)
-		 	setState(269)
+		 	setState(272)
 		 	try match(PinnParser.Tokens.T__26.rawValue)
-		 	setState(270)
+		 	setState(273)
 		 	try block()
 
 		}
@@ -2039,13 +2058,13 @@ open class PinnParser: Parser {
 	    }
 		do {
 		 	try enterOuterAlt(_localctx, 1)
-		 	setState(272)
-		 	try match(PinnParser.Tokens.T__27.rawValue)
-		 	setState(273)
-		 	try block()
-		 	setState(274)
-		 	try match(PinnParser.Tokens.T__25.rawValue)
 		 	setState(275)
+		 	try match(PinnParser.Tokens.T__27.rawValue)
+		 	setState(276)
+		 	try block()
+		 	setState(277)
+		 	try match(PinnParser.Tokens.T__25.rawValue)
+		 	setState(278)
 		 	try expr(0)
 
 		}
@@ -2110,23 +2129,23 @@ open class PinnParser: Parser {
 	    		try! exitRule()
 	    }
 		do {
-		 	setState(304)
+		 	setState(307)
 		 	try _errHandler.sync(self)
-		 	switch(try getInterpreter().adaptivePredict(_input,29, _ctx)) {
+		 	switch(try getInterpreter().adaptivePredict(_input,30, _ctx)) {
 		 	case 1:
 		 		try enterOuterAlt(_localctx, 1)
-		 		setState(277)
-		 		try match(PinnParser.Tokens.T__28.rawValue)
 		 		setState(280)
+		 		try match(PinnParser.Tokens.T__28.rawValue)
+		 		setState(283)
 		 		try _errHandler.sync(self)
-		 		switch (try getInterpreter().adaptivePredict(_input,28,_ctx)) {
+		 		switch (try getInterpreter().adaptivePredict(_input,29,_ctx)) {
 		 		case 1:
-		 			setState(278)
+		 			setState(281)
 		 			try varDecl()
 
 		 			break
 		 		case 2:
-		 			setState(279)
+		 			setState(282)
 		 			try {
 		 					let assignmentValue = try simpleStatement()
 		 					_localctx.castdown(FoStatementContext.self).fss = assignmentValue
@@ -2136,55 +2155,55 @@ open class PinnParser: Parser {
 		 			break
 		 		default: break
 		 		}
-		 		setState(282)
-		 		try match(PinnParser.Tokens.T__29.rawValue)
-		 		setState(283)
-		 		try expr(0)
-		 		setState(284)
-		 		try match(PinnParser.Tokens.T__29.rawValue)
 		 		setState(285)
+		 		try match(PinnParser.Tokens.T__29.rawValue)
+		 		setState(286)
+		 		try expr(0)
+		 		setState(287)
+		 		try match(PinnParser.Tokens.T__29.rawValue)
+		 		setState(288)
 		 		try {
 		 				let assignmentValue = try simpleStatement()
 		 				_localctx.castdown(FoStatementContext.self).sss = assignmentValue
 		 		     }()
 
-		 		setState(286)
+		 		setState(289)
 		 		try block()
 
 		 		break
 		 	case 2:
 		 		try enterOuterAlt(_localctx, 2)
-		 		setState(288)
-		 		try match(PinnParser.Tokens.T__28.rawValue)
-		 		setState(289)
-		 		try match(PinnParser.Tokens.ID.rawValue)
-		 		setState(290)
-		 		try match(PinnParser.Tokens.COMMA.rawValue)
 		 		setState(291)
-		 		try match(PinnParser.Tokens.ID.rawValue)
+		 		try match(PinnParser.Tokens.T__28.rawValue)
 		 		setState(292)
-		 		try match(PinnParser.Tokens.T__6.rawValue)
+		 		try match(PinnParser.Tokens.ID.rawValue)
 		 		setState(293)
-		 		try match(PinnParser.Tokens.RANGE.rawValue)
+		 		try match(PinnParser.Tokens.COMMA.rawValue)
 		 		setState(294)
-		 		try expr(0)
+		 		try match(PinnParser.Tokens.ID.rawValue)
 		 		setState(295)
+		 		try match(PinnParser.Tokens.T__6.rawValue)
+		 		setState(296)
+		 		try match(PinnParser.Tokens.RANGE.rawValue)
+		 		setState(297)
+		 		try expr(0)
+		 		setState(298)
 		 		try block()
 
 		 		break
 		 	case 3:
 		 		try enterOuterAlt(_localctx, 3)
-		 		setState(297)
-		 		try match(PinnParser.Tokens.T__28.rawValue)
-		 		setState(298)
-		 		try match(PinnParser.Tokens.ID.rawValue)
-		 		setState(299)
-		 		try match(PinnParser.Tokens.T__6.rawValue)
 		 		setState(300)
-		 		try match(PinnParser.Tokens.RANGE.rawValue)
+		 		try match(PinnParser.Tokens.T__28.rawValue)
 		 		setState(301)
-		 		try expr(0)
+		 		try match(PinnParser.Tokens.ID.rawValue)
 		 		setState(302)
+		 		try match(PinnParser.Tokens.T__6.rawValue)
+		 		setState(303)
+		 		try match(PinnParser.Tokens.RANGE.rawValue)
+		 		setState(304)
+		 		try expr(0)
+		 		setState(305)
 		 		try block()
 
 		 		break
@@ -2232,28 +2251,28 @@ open class PinnParser: Parser {
 	    }
 		do {
 		 	try enterOuterAlt(_localctx, 1)
-		 	setState(306)
+		 	setState(309)
 		 	try match(PinnParser.Tokens.T__30.rawValue)
-		 	setState(307)
+		 	setState(310)
 		 	try exprList()
-		 	setState(308)
+		 	setState(311)
 		 	try match(PinnParser.Tokens.COLON.rawValue)
-		 	setState(312)
+		 	setState(315)
 		 	try _errHandler.sync(self)
 		 	_la = try _input.LA(1)
 		 	while (//closure
 		 	 { () -> Bool in
 		 	      let testSet: Bool = {  () -> Bool in
-		 	   let testArray: [Int] = [_la, PinnParser.Tokens.T__2.rawValue,PinnParser.Tokens.T__4.rawValue,PinnParser.Tokens.T__7.rawValue,PinnParser.Tokens.T__8.rawValue,PinnParser.Tokens.T__11.rawValue,PinnParser.Tokens.T__21.rawValue,PinnParser.Tokens.T__22.rawValue,PinnParser.Tokens.T__24.rawValue,PinnParser.Tokens.T__25.rawValue,PinnParser.Tokens.T__26.rawValue,PinnParser.Tokens.T__27.rawValue,PinnParser.Tokens.T__28.rawValue,PinnParser.Tokens.T__29.rawValue,PinnParser.Tokens.T__31.rawValue,PinnParser.Tokens.T__33.rawValue,PinnParser.Tokens.T__34.rawValue,PinnParser.Tokens.T__35.rawValue,PinnParser.Tokens.BOOL.rawValue,PinnParser.Tokens.LSQUARE.rawValue,PinnParser.Tokens.LPAREN.rawValue,PinnParser.Tokens.NIL.rawValue,PinnParser.Tokens.AST.rawValue,PinnParser.Tokens.CARET.rawValue,PinnParser.Tokens.ID.rawValue,PinnParser.Tokens.INT.rawValue,PinnParser.Tokens.FLOAT.rawValue,PinnParser.Tokens.STRING.rawValue]
+		 	   let testArray: [Int] = [_la, PinnParser.Tokens.T__2.rawValue,PinnParser.Tokens.T__4.rawValue,PinnParser.Tokens.T__7.rawValue,PinnParser.Tokens.T__8.rawValue,PinnParser.Tokens.T__11.rawValue,PinnParser.Tokens.T__21.rawValue,PinnParser.Tokens.T__22.rawValue,PinnParser.Tokens.T__24.rawValue,PinnParser.Tokens.T__25.rawValue,PinnParser.Tokens.T__26.rawValue,PinnParser.Tokens.T__27.rawValue,PinnParser.Tokens.T__28.rawValue,PinnParser.Tokens.T__29.rawValue,PinnParser.Tokens.T__31.rawValue,PinnParser.Tokens.T__33.rawValue,PinnParser.Tokens.T__34.rawValue,PinnParser.Tokens.T__35.rawValue,PinnParser.Tokens.BOOL.rawValue,PinnParser.Tokens.LSQUARE.rawValue,PinnParser.Tokens.LPAREN.rawValue,PinnParser.Tokens.NIL.rawValue,PinnParser.Tokens.AST.rawValue,PinnParser.Tokens.THREEDOT.rawValue,PinnParser.Tokens.CARET.rawValue,PinnParser.Tokens.ID.rawValue,PinnParser.Tokens.INT.rawValue,PinnParser.Tokens.FLOAT.rawValue,PinnParser.Tokens.STRING.rawValue]
 		 	    return  Utils.testBitLeftShiftArray(testArray, 0)
 		 	}()
 		 	      return testSet
 		 	 }()) {
-		 		setState(309)
+		 		setState(312)
 		 		try statement()
 
 
-		 		setState(314)
+		 		setState(317)
 		 		try _errHandler.sync(self)
 		 		_la = try _input.LA(1)
 		 	}
@@ -2308,13 +2327,13 @@ open class PinnParser: Parser {
 	    }
 		do {
 		 	try enterOuterAlt(_localctx, 1)
-		 	setState(315)
+		 	setState(318)
 		 	try match(PinnParser.Tokens.T__31.rawValue)
-		 	setState(316)
+		 	setState(319)
 		 	try expr(0)
-		 	setState(317)
+		 	setState(320)
 		 	try match(PinnParser.Tokens.T__2.rawValue)
-		 	setState(321)
+		 	setState(324)
 		 	try _errHandler.sync(self)
 		 	_la = try _input.LA(1)
 		 	while (//closure
@@ -2322,15 +2341,15 @@ open class PinnParser: Parser {
 		 	      let testSet: Bool = _la == PinnParser.Tokens.T__30.rawValue
 		 	      return testSet
 		 	 }()) {
-		 		setState(318)
+		 		setState(321)
 		 		try caseStatement()
 
 
-		 		setState(323)
+		 		setState(326)
 		 		try _errHandler.sync(self)
 		 		_la = try _input.LA(1)
 		 	}
-		 	setState(332)
+		 	setState(335)
 		 	try _errHandler.sync(self)
 		 	_la = try _input.LA(1)
 		 	if (//closure
@@ -2338,33 +2357,33 @@ open class PinnParser: Parser {
 		 	      let testSet: Bool = _la == PinnParser.Tokens.T__32.rawValue
 		 	      return testSet
 		 	 }()) {
-		 		setState(324)
+		 		setState(327)
 		 		try match(PinnParser.Tokens.T__32.rawValue)
-		 		setState(325)
+		 		setState(328)
 		 		try match(PinnParser.Tokens.COLON.rawValue)
-		 		setState(329)
+		 		setState(332)
 		 		try _errHandler.sync(self)
 		 		_la = try _input.LA(1)
 		 		while (//closure
 		 		 { () -> Bool in
 		 		      let testSet: Bool = {  () -> Bool in
-		 		   let testArray: [Int] = [_la, PinnParser.Tokens.T__2.rawValue,PinnParser.Tokens.T__4.rawValue,PinnParser.Tokens.T__7.rawValue,PinnParser.Tokens.T__8.rawValue,PinnParser.Tokens.T__11.rawValue,PinnParser.Tokens.T__21.rawValue,PinnParser.Tokens.T__22.rawValue,PinnParser.Tokens.T__24.rawValue,PinnParser.Tokens.T__25.rawValue,PinnParser.Tokens.T__26.rawValue,PinnParser.Tokens.T__27.rawValue,PinnParser.Tokens.T__28.rawValue,PinnParser.Tokens.T__29.rawValue,PinnParser.Tokens.T__31.rawValue,PinnParser.Tokens.T__33.rawValue,PinnParser.Tokens.T__34.rawValue,PinnParser.Tokens.T__35.rawValue,PinnParser.Tokens.BOOL.rawValue,PinnParser.Tokens.LSQUARE.rawValue,PinnParser.Tokens.LPAREN.rawValue,PinnParser.Tokens.NIL.rawValue,PinnParser.Tokens.AST.rawValue,PinnParser.Tokens.CARET.rawValue,PinnParser.Tokens.ID.rawValue,PinnParser.Tokens.INT.rawValue,PinnParser.Tokens.FLOAT.rawValue,PinnParser.Tokens.STRING.rawValue]
+		 		   let testArray: [Int] = [_la, PinnParser.Tokens.T__2.rawValue,PinnParser.Tokens.T__4.rawValue,PinnParser.Tokens.T__7.rawValue,PinnParser.Tokens.T__8.rawValue,PinnParser.Tokens.T__11.rawValue,PinnParser.Tokens.T__21.rawValue,PinnParser.Tokens.T__22.rawValue,PinnParser.Tokens.T__24.rawValue,PinnParser.Tokens.T__25.rawValue,PinnParser.Tokens.T__26.rawValue,PinnParser.Tokens.T__27.rawValue,PinnParser.Tokens.T__28.rawValue,PinnParser.Tokens.T__29.rawValue,PinnParser.Tokens.T__31.rawValue,PinnParser.Tokens.T__33.rawValue,PinnParser.Tokens.T__34.rawValue,PinnParser.Tokens.T__35.rawValue,PinnParser.Tokens.BOOL.rawValue,PinnParser.Tokens.LSQUARE.rawValue,PinnParser.Tokens.LPAREN.rawValue,PinnParser.Tokens.NIL.rawValue,PinnParser.Tokens.AST.rawValue,PinnParser.Tokens.THREEDOT.rawValue,PinnParser.Tokens.CARET.rawValue,PinnParser.Tokens.ID.rawValue,PinnParser.Tokens.INT.rawValue,PinnParser.Tokens.FLOAT.rawValue,PinnParser.Tokens.STRING.rawValue]
 		 		    return  Utils.testBitLeftShiftArray(testArray, 0)
 		 		}()
 		 		      return testSet
 		 		 }()) {
-		 			setState(326)
+		 			setState(329)
 		 			try statement()
 
 
-		 			setState(331)
+		 			setState(334)
 		 			try _errHandler.sync(self)
 		 			_la = try _input.LA(1)
 		 		}
 
 		 	}
 
-		 	setState(334)
+		 	setState(337)
 		 	try match(PinnParser.Tokens.T__3.rawValue)
 
 		}
@@ -2439,118 +2458,118 @@ open class PinnParser: Parser {
 	    		try! exitRule()
 	    }
 		do {
-		 	setState(365)
+		 	setState(368)
 		 	try _errHandler.sync(self)
-		 	switch(try getInterpreter().adaptivePredict(_input,34, _ctx)) {
+		 	switch(try getInterpreter().adaptivePredict(_input,35, _ctx)) {
 		 	case 1:
 		 		try enterOuterAlt(_localctx, 1)
-		 		setState(336)
+		 		setState(339)
 		 		try expr(0)
-		 		setState(337)
+		 		setState(340)
 		 		try match(PinnParser.Tokens.T__29.rawValue)
 
 		 		break
 		 	case 2:
 		 		try enterOuterAlt(_localctx, 2)
-		 		setState(339)
+		 		setState(342)
 		 		try varDecl()
-		 		setState(340)
+		 		setState(343)
 		 		try match(PinnParser.Tokens.T__29.rawValue)
 
 		 		break
 		 	case 3:
 		 		try enterOuterAlt(_localctx, 3)
-		 		setState(342)
+		 		setState(345)
 		 		try simpleStatement()
-		 		setState(343)
+		 		setState(346)
 		 		try match(PinnParser.Tokens.T__29.rawValue)
 
 		 		break
 		 	case 4:
 		 		try enterOuterAlt(_localctx, 4)
-		 		setState(345)
+		 		setState(348)
 		 		try ifStatement()
 
 		 		break
 		 	case 5:
 		 		try enterOuterAlt(_localctx, 5)
-		 		setState(346)
+		 		setState(349)
 		 		try guardStatement()
 
 		 		break
 		 	case 6:
 		 		try enterOuterAlt(_localctx, 6)
-		 		setState(347)
+		 		setState(350)
 		 		try whStatement()
 
 		 		break
 		 	case 7:
 		 		try enterOuterAlt(_localctx, 7)
-		 		setState(348)
+		 		setState(351)
 		 		try repeatStatement()
-		 		setState(349)
+		 		setState(352)
 		 		try match(PinnParser.Tokens.T__29.rawValue)
 
 		 		break
 		 	case 8:
 		 		try enterOuterAlt(_localctx, 8)
-		 		setState(351)
+		 		setState(354)
 		 		try loopStatement()
 
 		 		break
 		 	case 9:
 		 		try enterOuterAlt(_localctx, 9)
-		 		setState(352)
+		 		setState(355)
 		 		try switchStatement()
 
 		 		break
 		 	case 10:
 		 		try enterOuterAlt(_localctx, 10)
-		 		setState(353)
+		 		setState(356)
 		 		try returnStatement()
-		 		setState(354)
+		 		setState(357)
 		 		try match(PinnParser.Tokens.T__29.rawValue)
 
 		 		break
 		 	case 11:
 		 		try enterOuterAlt(_localctx, 11)
-		 		setState(356)
+		 		setState(359)
 		 		try foStatement()
 
 		 		break
 		 	case 12:
 		 		try enterOuterAlt(_localctx, 12)
-		 		setState(357)
+		 		setState(360)
 		 		try block()
 
 		 		break
 		 	case 13:
 		 		try enterOuterAlt(_localctx, 13)
-		 		setState(358)
+		 		setState(361)
 		 		try match(PinnParser.Tokens.T__33.rawValue)
-		 		setState(359)
+		 		setState(362)
 		 		try match(PinnParser.Tokens.T__29.rawValue)
 
 		 		break
 		 	case 14:
 		 		try enterOuterAlt(_localctx, 14)
-		 		setState(360)
+		 		setState(363)
 		 		try match(PinnParser.Tokens.T__34.rawValue)
-		 		setState(361)
+		 		setState(364)
 		 		try match(PinnParser.Tokens.T__29.rawValue)
 
 		 		break
 		 	case 15:
 		 		try enterOuterAlt(_localctx, 15)
-		 		setState(362)
+		 		setState(365)
 		 		try match(PinnParser.Tokens.T__35.rawValue)
-		 		setState(363)
+		 		setState(366)
 		 		try match(PinnParser.Tokens.T__29.rawValue)
 
 		 		break
 		 	case 16:
 		 		try enterOuterAlt(_localctx, 16)
-		 		setState(364)
+		 		setState(367)
 		 		try match(PinnParser.Tokens.T__29.rawValue)
 
 		 		break

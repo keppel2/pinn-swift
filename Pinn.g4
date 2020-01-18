@@ -40,7 +40,7 @@ objectPair
 expr
   :
    expr LSQUARE ( first=expr? (TWODOTS | COLON) second=expr? | expr) ']' #indexExpr
-  |   LSQUARE exprList ']' #arrayLiteral
+  |   THREEDOT? LSQUARE exprList ']' #arrayLiteral
   | '{' objectPair ( ',' objectPair )* '}' #objectLiteral
   |    ('+' | '-' | '!' ) expr #unaryExpr
   | expr ('+' | '-' | AST | '/' | '%') expr #intExpr

@@ -716,8 +716,8 @@ class Pvisitor {
             let ae = try visitList(el)
             let aeFirstk = ae.first!.getKind()
             
-            rt = try Pval(sctx, ae, aeFirstk)
-            
+            rt = try Pval(sctx, ae, aeFirstk, sctx.THREEDOT() != nil)
+        
             return rt
             
         case let sctx as PinnParser.LiteralExprContext:

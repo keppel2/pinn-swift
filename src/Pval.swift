@@ -8,14 +8,13 @@ class Pval {
     private init(_ x: Pvalp) {
         e = x
     }
-    init(_ c: ParserRuleContext, _ ar: [Pval], _ k: Kind) throws {
+    init(_ c: ParserRuleContext, _ ar: [Pval], _ k: Kind, _ td: Bool) throws {
         if (ar.contains {
             !$0.getKind().equivalent(k)
             }) {
             throw Perr(ETYPE, c)
         }
-        let k2 = try Kind.produceKind(Gtype.gSlice(k))
-//        let k2 = try Kind.produceKind(Gtype.gArray(k, ar.count))
+        let k2 = td ? try Kind.produceKind(Gtype.gSlice(k)) : try Kind.produceKind(Gtype.gArray(k, ar.count))
 
         e = Pvalp(k2, .multi(Wrap(ar)), c)
     }

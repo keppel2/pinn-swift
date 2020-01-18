@@ -1,11 +1,3 @@
-//
-//  Neg.swift
-//  pinn
-//
-//  Created by Ryan Keppel on 12/11/19.
-//  Copyright © 2019 Ryan Keppel. All rights reserved.
-//
-
 let negTest = [
     ("Call undeclared function", """
     func f() {}
@@ -55,7 +47,7 @@ y := ["aap", "noot"];
 y = x;
 """),
 ("Wrong type assignment from short declaration", """
-x := [1, 5];
+x := ...[1, 5];
 var y [2]int;
 y = x;
 """),
@@ -121,13 +113,8 @@ x = y;
 """),
 ("Wrong type assignment (array = slice, both size 2)", """
 var x [2]int;
-y := [42, 101];
+y := ...[42, 101];
 x = y;
-"""),
-("Wrong type assignment (slice = array, both size 2)", """
-var x [2]int;
-y := [42, 101];
-y = x;
 """),
 ("Wrong type assignment defined types (array = slice, both size 2)", """
 var x [2]int;
