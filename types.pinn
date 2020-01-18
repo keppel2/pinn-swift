@@ -178,7 +178,19 @@ ft("Block", "in");
 {
     print("in");
 }
-
+ft("Two block layer", "in2");
+{
+    {
+        print("in2");
+    }
+}
+ft("No block scoping (fix)?", "5");
+{
+    {
+        x := 5;
+    }
+}
+print(x);
 ft("Empty", "");
 ;
 
