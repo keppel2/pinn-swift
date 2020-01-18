@@ -157,6 +157,11 @@ var x int;
 var y [2]int;
 y = x;
 """),
+("Wrong type assignment defined types pointers", """
+var point1 *(int, self);
+var point2 *(bool, self);
+point1 = point2;
+"""),
 ("Wrong types, declared", """
 var cdn [slice][slice]int;
 var cdns [slice]int;

@@ -27,13 +27,13 @@ class Pval {
         let ka = try ar.map { try $0.getKind() }
 
         
-        
         let k = try Kind.produceKind(pointer ? Gtype.gPointer(ka) : Gtype.gTuple(ka))
         
-        for (key, value) in mar.enumerated() {
+        if pointer {for (key, value) in mar.enumerated() {
             if value.getKind() === gOne.nkind {
                 value.e.k = k
             }
+        }
         }
 
         e = Pvalp(k, .multi(Wrap(mar)), c)
@@ -295,6 +295,9 @@ class Pval {
         //       return Pval(self)
         switch e.con {
         case .single(let pw):
+            if getKind().gtype.isPointer() {
+                return Pval(self)
+            }
             return Pval(e.prc, pw.clone().unwrap())
         case .multi(let ar):
             switch getKind().gtype {

@@ -1,2 +1,3 @@
-//n := nil;
-var n2 self;
+var point1 *(int, self);
+var point2 *(bool, self);
+point1 = point2;

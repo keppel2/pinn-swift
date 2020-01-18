@@ -6,6 +6,9 @@ class Perr : Error {
     var prc: ParserRuleContext?
     var tok: Token?
     init (_ s: String, _ p2: ParserRuleContext? = nil, _ p: Pval? = nil, _ p3: Token? = nil) {
+        if s == EX {
+            print(s)
+        }
         str = s
         pval = p
         prc = p2 //?? pv.prc

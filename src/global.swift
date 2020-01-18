@@ -15,4 +15,4 @@ let ETEST_FAIL = "Test failed"
 let EPARSE_FAIL = "Parse failed"
 let EASSERT = "Assertion failed (unexpected error)"
 let EUI = "Unimplemented"
-
+let EX = "Negative start"
