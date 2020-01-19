@@ -126,17 +126,7 @@ func minimax (player int, board [SIZE][SIZE]int) int
 func main() {
     var    board [SIZE][SIZE]int;
     println("Initial board");
-/*
-    ar := [0, 0, 0,
-           0, 0, 0,
-           0, 0, 0];
-           
-    var x int;
-    for x = range 0:SIZE * SIZE {
-        board[x] = ar[x];
-    }
-  */
-//  board[1][1] = 1;
+
     printBoard(board);
     
     result := minimax (PLAYER_A, board);
