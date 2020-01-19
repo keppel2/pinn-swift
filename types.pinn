@@ -652,6 +652,14 @@ ft("Tuple", "(0 false )");
 var tup23 (int, bool, string);
 print(tup23);
 
+ft("Tuple copies", "(42 false) (42 true)");
+var tup (int, bool);
+var tup2 (int, bool);
+tup[0] = 42;
+tup2 = tup;
+tup2[1] = true;
+print(tup, tup2);
+
 ft("Tuple assignments", "([3 5] [aap noot])");
 var tup2 ([]int, []string);
 tup2[0] = ...[3, 5];
@@ -796,6 +804,14 @@ print(two, "");
 print(two[1], "");
 two = nil;
 print(two, two == nil);
+
+ft("Pointer shares", "*(101 42) *(101 42)");
+var p *(int, int);
+var p2 *(int, int);
+p = *(23, 42);
+p2 = p;
+p2[0] = 101;
+print(p, p2);
 
 ft("Pointer in tuple", "(0 N) (0 P) *(true N) ");
 var tup (int, *(bool, self));
