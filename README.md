@@ -17,7 +17,7 @@ _Implementations as interpreters in Antlr for Go and Swift. Current progress in 
 * `bool`. Standard, `true` or `false`.
 * `string`. Immutable Unicode. `"string"` `"this is a double quote:\""`
 * `decimal`. Decimal.
-* `self`. Pointer of tuple type to itself.
+* `self`. Only allowed in a pointer--points to itself.
 ## Group Types
 
 * _Scalar_ is a single element.
@@ -25,7 +25,7 @@ _Implementations as interpreters in Antlr for Go and Swift. Current progress in 
 * `array`. An array is a group of elements with a constant size. It is only produced in a variable declaration. It never shares its storage, even if sliced.
 * `slice`. A slice is an array that can be grown. It can be produced by variable declaration, slicing, and ranges. It shares a reference on assignment.
 * `tuple`. A tuple is a group of elements with a constant size and possibly different types.
-* `pointer`. A pointer is a tuple with one or more references to itself. These references are of type `self`, and can be either `nil` or a pointer to a different copy with the same type as itself.
+* `pointer`. A pointer is a tuple that can be nil. The zero value is nil.
 
 ## Tokens
 * `<ID>`
@@ -33,15 +33,16 @@ _Implementations as interpreters in Antlr for Go and Swift. Current progress in 
 * `<FLOAT>`
 * `<STRING>`
   * Starts and ends with a `"`. In a string, use `\"` to refer to a `"` character. Use `\\` to refer to a `\` character. Otherwise, `\` is illegal.
-* `<FLOAT>`
-
+* `<NIL>`
+  * `nil`. The null value.
 
 ## Expressions
 
 * _From highest precedence_
-* `<ID> "[" (<expr>? (":" | "@") <expr>?)? "]"` Index expression.
-* `"[" <expr_list "]"` Slice literal
+* `<ID> "[" (<expr>? (: | @) <expr>? | <expr>) "]"` Index expression. With a `:` or `@`, slices the `ID`. 
+* `"[" <expr_list> "]"` Array literal
   * All expressions must be of the same type.
+* `..."[" <expr_list> "]"` Slice literal
 * `"{" <STRING> ":" <expr> { "," <STRING> ":" <expr> } }` Map literal
   * Expressions must be of the same type.
 * `+ - !` Unary
@@ -50,7 +51,8 @@ _Implementations as interpreters in Antlr for Go and Swift. Current progress in 
 * `&& ||` Short-circuit AND and OR
 * `<ID> "(" <expr_list>? ")"` Call function
 * `"(" <expr> ")"` Parenthesize expression
-* `"(" <expr_list> ")"` Tuple
+* `"(" <expr_list> ")"` Tuple literal
+* `*"(" <expr-list> ")"` Pointer literal
 * `<expr> ( ":" | "@" ) <expr>` Range generator. Both generate one through ten: `1:11 1@10`.
 * `<expr> "?" <expr> ":" <expr>` Ternary conditional. First `expr` is evaluated. If true, resolve to second `expr`. If false, resolve to third `expr`.
 * `<ID> <FLOAT> <INT> <BOOL> <STRING>` Tokens representing symbols, decimals, integers, booleans, and strings.
@@ -81,11 +83,13 @@ A function calls a piece of code, assigning each variable in the parameter list 
 ### `<kind>`
 * ` int | bool | string | decimal | self`
   * Primitive types.
-* `"[" (map | slice | <expr>) "]" <kind>`
-  * `map`, `slice`, or `array`, respectively.
+* `"[" (map | <expr>)? "]" <kind>`
+  * `map` declares a map. An `expr` declares an array. Empty brackets indicates a slice.
 * `"(" <kind> ( , <kind>)* ")"`
   * Declares a tuple type.
+* `*"(" kind> ( , <kind> )* ")"`, declares a pointer type.
 ## `<statement>`
+* `<var_decl> ;`
 * `while <expr> <block>`
   * Evaluate `expr`. If true, execute `block` and repeat this line. If false, go on.
 * `repeat <block> while <expr> ;`
@@ -109,12 +113,12 @@ A function calls a piece of code, assigning each variable in the parameter list 
 * `<ID> | <FLOAT> | <INT> | <BOOL> | <STRING> | <NIL>` Literals.
 
 ## Variable declaration (`<var_decl>`)
-* `var <ID> <kind>`
+* `var <ID> <kind> ;`
   * Declare `id` of `kind` type.
-* `<ID> ":=" <expr>`
-  * Short declaration. The `id` is set to the type and value of expression.
+* `<ID> ":=" <expr> ;`
+  * Short declaration. The `id` is set to the type and value of the `expr`.
 
-The grammar is clean of implementation language and is written in ANTLR. It has implementations in Go and Swift. The Swift implementation is more recent.
+The grammar is clean of implementation language and is written in ANTLR as a visitor to the tree. It has implementations in Go and Swift. The Swift implementation is more recent.
 
 ## Built-in functions
 * `exit()`
@@ -146,7 +150,7 @@ literal      literal characters as typed--"literal"
 
 "{" "[" ...  notation elements as literals
 ```
-## Solving Tic-Tac-Toe.
+## Solving Tic-Tac-Toe (`tic.pinn`)
 
 ```
 EMPTY := 0;
@@ -155,59 +159,66 @@ PLAYER_A := 1;
 PLAYER_B := 2;
 SIZE := 3;
 var rHashMap [map]int;
-func coord (x int, y int) int {
-	return y * SIZE + x;
-}
-func rHash(board [SIZE * SIZE]int, player int) int {
+
+func rHash(board [SIZE][SIZE]int, player int) int {
     rt := 0;
     var v int;
-    for v = range board {
-        rt *= SIZE;
-        rt += v;
+    var x int;
+    var y int;
+    for x = range 0:SIZE {
+        for y = range 0:SIZE {
+            v = board[x][y];
+            rt *= SIZE;
+            rt += v;
+        }
     }
     rt *= 2;
     rt += player - 1;
     return rt;
 }
-func printBoard (board [SIZE * SIZE]int) {
+func printBoard (board [SIZE][SIZE]int) {
 	var y int;
 	var x int;
 	for y = range 0:SIZE {
-        print (board[coord(0, y)]);
+        print (board[0][y]);
 		for x = range 1:SIZE {
         print (" ");
-        print (board[coord(x, y)]);
+        print (board[x][y]);
 		}
         println();
 	}
 	println ("---");
 }
-func full (board [SIZE * SIZE]int) bool {
-    var e int;
-    for e = range 0:SIZE * SIZE {
-        if board[e] == EMPTY {
-            return false;
+
+func full (board [SIZE][SIZE]int) bool {
+    var x int;
+    var y int;
+    for x = range 0:SIZE {
+        for y = range 0:SIZE {
+            if board[x][y] == EMPTY {
+                return false;
+            }
         }
     }
     return true;
 }
 
-func line (board [SIZE * SIZE]int, x int, y int, dx int, dy int) int {
-    comp := board[coord(x, y)];
+func line (board [SIZE][SIZE]int, x int, y int, dx int, dy int) int {
+    comp := board[x][y];
     if comp == EMPTY {
         return TIE;
     }
     while x + dx < SIZE && y + dy < SIZE {
         x += dx;
         y += dy;
-        if board[coord(x, y)] != comp {
+        if board[x][y] != comp {
             return TIE;
         }
     }
     return comp;
 }
 
-func winner (board [SIZE * SIZE]int) int {
+func winner (board [SIZE][SIZE]int) int {
 	var i int;
     var rt int;
 
@@ -228,10 +239,10 @@ func winner (board [SIZE * SIZE]int) int {
 
 func opposite (x int) int { return x == PLAYER_A ? PLAYER_B : PLAYER_A; }
 			
-func minimax (player int, board [SIZE * SIZE]int) int
+func minimax (player int, board [SIZE][SIZE]int) int
 {
 	var result int;
-	var best int = opposite(player);
+	best := opposite(player);
 
 	result = winner(board);
 	if result != TIE {
@@ -245,8 +256,8 @@ func minimax (player int, board [SIZE * SIZE]int) int
     var strRHash string;
 	for x = range 0:SIZE {
 		for y = range 0:SIZE {
-			if board[coord(x, y)] == EMPTY {
-				board[coord(x, y)] = player;
+			if board[x][y] == EMPTY {
+				board[x][y] = player;
                 strRHash = stringValue(rHash(board, player));
                 if rHashMap[strRHash] > 0 {
                     result = rHashMap[strRHash];
@@ -260,7 +271,7 @@ func minimax (player int, board [SIZE * SIZE]int) int
 				if result == TIE {
 					best = TIE;
 				}
-				board[coord(x, y)] = EMPTY;
+				board[x][y] = EMPTY;
 			}
 		}
 	}
@@ -268,20 +279,12 @@ func minimax (player int, board [SIZE * SIZE]int) int
 }
 
 func main() {
-    var    board [SIZE * SIZE]int;
+    var    board [SIZE][SIZE]int;
     println("Initial board");
-    ar := [0, 0, 0,
-           0, 0, 0,
-           0, 0, 0];
-           
-    var x int;
-    for x = range 0:SIZE * SIZE {
-        board[x] = ar[x];
-    }
-    
+
     printBoard(board);
     
-    var result int = minimax (PLAYER_A, board);
+    result := minimax (PLAYER_A, board);
    
     resultString := "";
     match result {
@@ -295,4 +298,5 @@ func main() {
     println ("Winner:", resultString);
 }
 main();
+
 ```
