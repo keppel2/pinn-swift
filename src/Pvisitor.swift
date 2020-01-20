@@ -887,7 +887,8 @@ class Pvisitor {
             
             let lh = try _visitPval(sctx.lExpr()!)
             let rhsv: Int
-            switch sctx.DOUBLEOP()!.getText() {
+            let str = Self.childToText(sctx.getChild(1)!)
+            switch str {
             case "++": rhsv = 1
             case "--": rhsv = -1
             default:
@@ -956,7 +957,7 @@ class Pvisitor {
             if sctx.RANGE() != nil {
                 var key: Pval?
                 var value: Pval?
-                if sctx.COMMA() != nil {
+                if sctx.ID().count == 2 {
                     key = getPv(sctx.ID(0)!.getText())
                     if key == nil  {
                         

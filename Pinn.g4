@@ -26,7 +26,7 @@ kind
 simpleStatement
   : lExpr '=' expr #simpleSet
   | lExpr ('+' | '-' | '*' | '/' | '%') '=' expr #compoundSet
-  | lExpr DOUBLEOP #doubleSet ;
+  | lExpr ('++' | '--') #doubleSet ;
 
 lExpr
   : ID (LSQUARE expr RSQUARE)* ;
@@ -39,7 +39,7 @@ expr
    expr LSQUARE ( first=expr? (AT | COLON) second=expr? | expr) RSQUARE #indexExpr
   |   THREEDOT? LSQUARE exprList RSQUARE #arrayLiteral
   | '{' objectPair ( ',' objectPair )* '}' #objectLiteral
-  |    ('+' | '-' | '!' ) expr #unaryExpr
+  | ('+' | '-' | '!' ) expr #unaryExpr
   | expr ('+' | '-' | AST | '/' | '%') expr #intExpr
   | expr ('==' | '!=' | '>' | '<' | '>=' | '<=' ) expr #compExpr
   | expr ('&&' | '||') expr #boolExpr
@@ -54,29 +54,21 @@ exprList
   : expr (',' expr)* ;
 kindList
   : kind (',' kind)* ;
-
 returnStatement
   : 'return' expr? ;
-
 ifStatement
   : 'if' expr statement ('else' statement)?;
-
 guardStatement
   : 'guard' expr 'else' block;
-
 whStatement
   : 'while' expr block ;
-  
 loopStatement
   : 'loop' block ;
-
 repeatStatement
   : 'repeat' block 'while' expr ;
-
-
 foStatement
   : 'for' (varDecl | fss=simpleStatement)? ';' expr ';' sss=simpleStatement block
-  | 'for' ID COMMA ID '=' RANGE expr block |
+  | 'for' ID ',' ID '=' RANGE expr block |
     'for' ID '=' RANGE expr block ;
 caseStatement
   : 'when' exprList COLON statement* ;
@@ -101,13 +93,9 @@ statement
   | 'continue' ';'
   | 'fallthrough' ';'
   | ';' ;
-  
-  
-
 
 TYPES
   : ('int' | 'bool' |'string' | 'decimal' | 'self' ) ;
-DOUBLEOP : '++' | '--' ;
 BOOL : 'true' | 'false' ;
 
 MAP
@@ -118,18 +106,13 @@ RSQUARE : ']' ;
 LPAREN : '(' ;
 RPAREN : ')' ;
 NIL : 'nil' ;
-COMMA : ',' ;
 COLON : ':' ;
 CE : ':=' ;
-IOTA : 'iota' ;
 RANGE : 'range' ;
 AST: '*' ;
 THREEDOT : '...' ;
 AT : '@' ;
 CARET : '^' ;
-
-
-
 
 ID : [a-zA-Z_]([a-zA-Z_0-9])* ;
 INT : '0'

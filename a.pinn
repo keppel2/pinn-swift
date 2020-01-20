@@ -1,3 +1,1 @@
-var p *(int, self);
-p = nil;
-p = *(42, nil);
+3++;
