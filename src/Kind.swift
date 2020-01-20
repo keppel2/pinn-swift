@@ -31,6 +31,16 @@ class Kind {
         if self === k {
             return true
         }
+
+        var ke = k
+        if ke === gOne.rkind {
+            ke = gOne.nkind
+        } else if ke === gOne.nkind {
+            ke = gOne.rkind
+        }
+        if self === ke {
+            return true
+        }
         
         if gtype.isPointer() && k === gOne.nkind || self === gOne.nkind && k.gtype.isPointer() {
             return true

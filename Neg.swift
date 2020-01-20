@@ -74,10 +74,11 @@ sdns := {"aap": 5, "noot": false};
 func f() {}
 sdns := [4, f()];
 """),
-("Wrong self declaration", """
-var n self;
-"""),
 /*
+("Wrong self declaration" + String(#line), """
+var n self;
+//"""),
+
 ("Wrong self declaration", """
 var n [3]self;
 """),

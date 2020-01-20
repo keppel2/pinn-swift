@@ -18,7 +18,7 @@ class Pvisitor {
     init() {
         reset()
     }
-    private let litToType: [String: Ptype.Type] = ["int": Int.self, "bool": Bool.self, "string": String.self, "decimal": Decimal.self, "self": Nil.self]
+    private let litToType: [String: Ptype.Type] = ["int": Int.self, "bool": Bool.self, "string": String.self, "decimal": Decimal.self, "self": Ref.self]
     private let builtIns
         : [String: (ParserRuleContext, Pvisitor, [Pval]) throws -> Pval?] =
         [
@@ -328,7 +328,7 @@ class Pvisitor {
                 lfc!.m[fh.fkinds[index].s] = par//Pval(par)
                 continue
             }
-            if s[index].getKind() !== v.k {
+            if !s[index].getKind().assignable(v.k) {
                 throw Perr(ETYPE, sctx)
             }
             if let pv = lfc!.m[fh.fkinds[index].s]  {

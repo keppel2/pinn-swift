@@ -1,4 +1,4 @@
-var tup (*(int));
-println(tup);
-tup = ^(nil);
-println(tup);
+//var p *(int, self);
+//p = nil;
+//p = *(42, nil);
+
