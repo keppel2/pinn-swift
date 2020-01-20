@@ -1,4 +1,3 @@
-//var p *(int, self);
-//p = nil;
-//p = *(42, nil);
-
+var p *(int, self);
+p = nil;
+p = *(42, nil);
