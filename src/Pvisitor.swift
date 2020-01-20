@@ -21,15 +21,13 @@ class Pvisitor {
                     throw Perr(ESTATEMENT, sctx)
                 }
                 pv.reset()
-                if pv.li != nil {
-                    try pv.testCompare(sctx)
-                }
+                try pv.test()
+
                 print("--", sctx.getStart()!.getLine())
                 pv.li = pv.printed.endIndex
                 let s1: String = try tryCast(s[0])
                 let s2: String = try tryCast(s[1])
-                (pv.t_explain, pv.t_compare) = (s1, s2)
-                
+                pv.tester = Tester(s1, s2)
                 return nil
             },
             "len": { sctx, pv, s in try assertPvals(s, 1)
@@ -206,10 +204,10 @@ class Pvisitor {
         }
     }
     private var printed = ""
+    private var tester: Tester?
     private var t_explain = ""
     private var t_compare = ""
-    private var ft = ""
-    private var li: String.Index?
+    private var li: String.Index
     
     private var fc = Fc()
     private var lfc: Fc?
@@ -219,13 +217,20 @@ class Pvisitor {
     private var oldPrc: ParserRuleContext?
     private var cfc: Fc {return lfc ?? fc}
 
-
     init() {
+        li = printed.startIndex
         reset()
     }
 
     
-
+    private func test() throws {
+        if let t = tester{
+            let compee = printed[li..<printed.endIndex]
+            if let bad = t.compare(String(compee)) {
+                throw Perr(ETEST_FAIL + bad)
+            }
+        }
+    }
     private func reset() {
         fc = Fc()
         fkmap = [String:Fheader]()
@@ -234,15 +239,7 @@ class Pvisitor {
         }
     }
     
-    private func testCompare(_ sctx: ParserRuleContext) throws{
-        let compee = printed[li!..<printed.endIndex]
-        //print(compee, "!")
-        //print(printed, "??")
-        if compee != t_compare {
-            throw Perr(ETEST_FAIL + "," +  t_explain + ", want: " + t_compare + ", got: " + compee)
-        }
-    }
-    
+
     
     
     private func getPv(_ s: String)  -> Pval?  {
@@ -379,9 +376,7 @@ class Pvisitor {
                 }
             }
         }
-        if li != nil {
-            try testCompare(sctx)
-        }
+        try test()
     }
     
     private func visitObjectPair(_ sctx: PinnParser.ObjectPairContext) throws -> (String, Pval) {
@@ -518,7 +513,7 @@ class Pvisitor {
         if try cfc.path == Path.pFallthrough ||  visitListCase(sctx.exprList()!, v) {
             rt = true
             if cfc.path == Path.pFallthrough {
-                cfc.setPath(.pNormal)
+                cfc.path = .pNormal
             }
             cloop: for (key, child) in sctx.statement().enumerated() {
                 try visit(child)
@@ -1074,13 +1069,25 @@ class Pvisitor {
         var variadic = false
         var prc: ParserRuleContext
     }
+    private class Tester {
+        private let desc: String
+        private let compare: String
+        init(_ d: String, _ c: String) {
+            desc = d
+            compare = c
+        }
+        func compare(_ s: String) -> String? {
+            if s != compare {
+                return ". " + desc + ", want: " + compare + ", got: " + s
+            }
+            return nil
+        }
+        
+    }
     private class Fc {
         var m = [String: Pval]()
         var rt: Pval?
         var path = Path.pNormal
-        func setPath(_ p: Path) {
-            path = p
-        }
         func toEndBlock()  -> Bool {
             switch path {
             case .pNormal, .pContinue:
