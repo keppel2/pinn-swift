@@ -33,7 +33,7 @@ func parse(_ s: String) -> (PinnParser.FileContext?, PinnParser) {
 
 func execute() throws  {
     let args = ProcessInfo.processInfo.arguments
-    let s = "/tmp/tic.pinn"//= args[1]
+    let s = args[1]
     test = s == "-t"
     
     let myinput = fnToString(test ? "/tmp/types.pinn" : s)

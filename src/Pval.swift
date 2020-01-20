@@ -154,13 +154,16 @@ class Pval {
     
     
     func setPV(_ v : Pval) throws {
-        if v.getKind() === gOne.nkind {
-            if !getKind().gtype.isPointer() {
-                throw Perr(ETYPE, v)
-            }
-            e.con = .single(Pwrap(Nil()))
-            return
-        } else if getKind() !== v.getKind() {
+//        if v.getKind() === gOne.nkind {
+//            if !getKind().gtype.isPointer() {
+//                throw Perr(ETYPE, v)
+//            }
+//            e.con = .single(Pwrap(Nil()))
+//            return
+//        } else if getKind() !== v.getKind() {
+//            throw Perr(ETYPE, v)
+//        }
+        if !getKind().assignable(v.getKind()) {
             throw Perr(ETYPE, v)
         }
         e = v.e

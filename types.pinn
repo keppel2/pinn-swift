@@ -1,12 +1,3 @@
-
-func conc(d string, v string) string {
-    return d + "!" + v + "#";
-}
-
-//func ft(d string, v string) {
-//print(conc(d, v));
-//}
-
 ft("Create int", "0");
 var x int;
 print(x);
@@ -795,6 +786,19 @@ var dnt [2](bool, int, [map](int, string));
 print(dnt);
 dnt[1][2]["aap"] = (42, "noot");
 print(dnt);
+
+ft("Pointer", "N *(42)");
+var x *(int);
+x = nil;
+print(x, "");
+x = *(42);
+print(x);
+
+ft("Tuple of pointer", "(N) (N)");
+var tup (*(int));
+print(tup, "");
+tup = ^(nil);
+print(tup);
 
 ft("Declared pointer","N true *(24 N) N N true");
 var two *(int, self);

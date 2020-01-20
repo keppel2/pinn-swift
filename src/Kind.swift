@@ -16,9 +16,9 @@ class Kind {
         return kinds[ki!]
     }
     static func produceKind(_ g: Gtype) throws -> Kind {
-        if !g.isValid() {
-            throw Perr(ETYPE)
-        }
+//        if !g.isValid() {
+//            throw Perr(ETYPE)
+//        }
         let k = has(g)
         if k != nil {
             return k!
@@ -27,13 +27,28 @@ class Kind {
         kinds.append(k2)
         return k2
     }
+    func assignable(_ k: Kind) -> Bool {
+        if self === k {
+            return true
+        }
+        
+        if gtype.isPointer() && k === gOne.nkind || self === gOne.nkind && k.gtype.isPointer() {
+            return true
+        }
+        
+        return gtype.gAssignable(k.gtype)
+
+    }
     func equivalent(_ k: Kind) -> Bool {
         if self === k {
             return true
         }
+        
+        
         if gtype.isPointer() && k === gOne.nkind || self === gOne.nkind && k.gtype.isPointer() {
             return true
         }
+        
         return false
     }
 }

@@ -77,6 +77,7 @@ sdns := [4, f()];
 ("Wrong self declaration", """
 var n self;
 """),
+/*
 ("Wrong self declaration", """
 var n [3]self;
 """),
@@ -89,6 +90,7 @@ var n [map]self;
 ("Wrong self declaration", """
 var n (int, self);
 """),
+*/
 ("Wrong array declaration", """
 var ar [true]int;
 """),
@@ -475,9 +477,6 @@ key(m);
 ("Pointer", """
 s := (10, nil);
 s = (false, nil);
-"""),
-("Pointer", """
-s := (10, nil);
 """),
 ("Pointer", """
 s := *(4, nil);
