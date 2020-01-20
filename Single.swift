@@ -6,4 +6,5 @@ class Single {
         try! rkind = Kind.produceKind(Gtype.gScalar(Ref.self))
     }
 }
+
 let gOne = Single()

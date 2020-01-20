@@ -2,12 +2,13 @@ import Antlr4
 
 class Pval {
     private var e: Pvalp
-    init(_ p: Pval) {
-        e = p.e
-    }
     private init(_ x: Pvalp) {
         e = x
     }
+    init(_ p: Pval) {
+        e = p.e
+    }
+
     init(_ c: ParserRuleContext, _ ar: [Pval], _ k: Kind, _ td: Bool) throws {
         if (ar.contains {
             !$0.getKind().equivalent(k)
@@ -154,15 +155,7 @@ class Pval {
     
     
     func setPV(_ v : Pval) throws {
-//        if v.getKind() === gOne.nkind {
-//            if !getKind().gtype.isPointer() {
-//                throw Perr(ETYPE, v)
-//            }
-//            e.con = .single(Pwrap(Nil()))
-//            return
-//        } else if getKind() !== v.getKind() {
-//            throw Perr(ETYPE, v)
-//        }
+
         if !getKind().assignable(v.getKind()) {
             throw Perr(ETYPE, v)
         }
@@ -280,8 +273,9 @@ class Pval {
         }
     }
     
-    fileprivate class Pwrap {
+    private class Pwrap {
         private var wrapped: Ptype
+
         init(_ p: Ptype) {
             wrapped = p
         }
@@ -298,6 +292,7 @@ class Pval {
             return String(describing: wrapped)
         }
     }
+
     private enum Contents {
         case single(Pwrap)
         case multi(Wrap<[Pval]>)

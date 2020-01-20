@@ -2,24 +2,9 @@ import Foundation
 import Antlr4
 
 class Pvisitor {
-    private var printed = ""
-    private var t_explain = ""
-    private var t_compare = ""
-    private var ft = ""
-    private var li: String.Index?
     
-    private var fc = Fc()
-    private var lfc: Fc?
-    private var fkmap = [String:Fheader]()
-    private var line = -1
-    private var prc: ParserRuleContext?
-    private var oldPrc: ParserRuleContext?
-    private var cfc: Fc {return lfc ?? fc}
-    init() {
-        reset()
-    }
-    private let litToType: [String: Ptype.Type] = ["int": Int.self, "bool": Bool.self, "string": String.self, "decimal": Decimal.self, "self": Ref.self]
-    private let builtIns
+    private static let litToType: [String: Ptype.Type] = ["int": Int.self, "bool": Bool.self, "string": String.self, "decimal": Decimal.self, "self": Ref.self]
+    private static let builtIns
         : [String: (ParserRuleContext, Pvisitor, [Pval]) throws -> Pval?] =
         [
             "exit": { sctx, pv, s in
@@ -31,11 +16,6 @@ class Pvisitor {
                 let xa = pv.getPv(str)
                 fatalError()
             },
-            //            "xv": { sctx, pv, s in try assertPvals(s, 1)
-            //
-            //                let xa = pv.getPv(str)
-            //                fatalError()
-            //            },
             "ft": { sctx, pv, s in try assertPvals(s, 2)
                 if pv.lfc != nil {
                     throw Perr(ESTATEMENT, sctx)
@@ -53,9 +33,6 @@ class Pvisitor {
                 return nil
             },
             "len": { sctx, pv, s in try assertPvals(s, 1)
-//                if try s[0].getKind().isType(String.self) {
-//                    return Pval(sctx, (try s[0].getUnwrap() as! String).count)
-//                }
                 if case .gScalar(let pt) = s[0].getKind().gtype {
                     if pt != String.self {
                         throw Perr(ETYPE, sctx)
@@ -68,10 +45,6 @@ class Pvisitor {
                             "stringValue":
                 { sctx, pv, s in try assertPvals(s, 1)
                     return Pval(sctx, try s[0].string()) },
-//            "depthString":
-//                {sctx, pv, s in try assertPvals(s, 1)
-//                    return Pval(sctx, try s[0].string(true))
-//            },
             "print":
                 {sctx, pv, s in
                     let rt = Pvisitor.printSpace(try s.map {try $0.string()})
@@ -120,17 +93,143 @@ class Pvisitor {
                 sleep(UInt32(x))
                 return nil
             }
-    ]
+        ]
     
+
+    private static func doOp(_ lhs: Pval, _ rhs: Pval, _ str: String, _ sctx: ParserRuleContext) throws -> Pval {
+         let rt: Pval
+         switch str {
+         case "==":
+             return Pval(sctx, try lhs.equal(rhs))
+         case "!=":
+             return Pval(sctx, try !lhs.equal(rhs))
+             
+         case "+":
+             let lh: Plus = try tryCast(lhs)
+             let rh: Plus = try tryCast(rhs)
+             if !pEq(lh, rh) {
+                 throw Perr(ETYPE, rhs)
+             }
+             rt = Pval(sctx, lh.plus(rh))
+             return rt
+         case "-", "*", "/":
+             let lh: Arith = try tryCast(lhs)
+             let rh: Arith = try tryCast(rhs)
+             if !pEq(lh, rh) {
+                 throw Perr(ETYPE, rhs)
+             }
+             
+             rt = Pval(sctx, lh.arith(rh, str))
+             return rt
+         case "<", "<=", ">", ">=":
+             let lh: Compare = try tryCast(lhs)
+             let rh: Compare = try tryCast(rhs)
+             if !pEq(lh, rh) {
+                 throw Perr(ETYPE, rhs)
+             }
+             
+             let result: Bool
+             switch str {
+                 
+             case "<":
+                 result = lh.lt(rh)
+             case "<=":
+                 result = lh.lt(rh) || lh.equal(rh)
+             case ">":
+                 result = lh.gt(rh)
+             case ">=":
+                 result = lh.gt(rh) || lh.equal(rh)
+             default: de(ECASE)
+             }
+             return Pval(sctx, result)
+         default: break
+         }
+         
+         let lhsv: Int = try tryCast(lhs)
+         var rhsv: Int = try tryCast(rhs)
+         switch str {
+         case "-":
+             rt = Pval(sctx, lhsv - rhsv)
+         case "*":
+             rt = Pval(sctx, lhsv * rhsv)
+         case "/":
+             rt = Pval(sctx, lhsv / rhsv)
+         case "%":
+             rt = Pval(sctx, lhsv % rhsv)
+         case "&":
+             rt = Pval(sctx, lhsv & rhsv)
+         case "|":
+             rt = Pval(sctx, lhsv | rhsv)
+         case "^":
+             rt = Pval(sctx, lhsv ^ rhsv)
+         case "<<":
+             rt = Pval(sctx, lhsv << rhsv)
+         case ">>":
+             rt = Pval(sctx, lhsv >> rhsv)
+         case "<":
+             rt = Pval(sctx, lhsv < rhsv)
+         case "<=":
+             rt = Pval(sctx, lhsv <= rhsv)
+         case ">":
+             rt = Pval(sctx, lhsv > rhsv)
+         case ">=":
+             rt = Pval(sctx, lhsv >= rhsv)
+         case "@":
+             rhsv += 1
+             fallthrough
+         case ":":
+             guard rhsv - lhsv >= 0 else {
+                 throw Perr(ERANGE, sctx)
+             }
+             let ki = try Kind.produceKind(Gtype.gScalar(Int.self))
+             rt = try Pval(sctx, Kind.produceKind(Gtype.gSlice(ki)))
+             for x in lhsv..<rhsv {
+                 try rt.set(x - lhsv, Pval(sctx, x))
+             }
+             
+         default:
+             de(ECASE)
+         }
+         return rt
+     }
+     
+     
+     private static func childToToken(_ child: Tree) -> PinnParser.Tokens {
+         return PinnParser.Tokens(rawValue: (child as! TerminalNode).getSymbol()!.getType())!
+     }
+     private static func childToText(_ child: Tree) -> String {
+         return (child as! TerminalNode).getText()
+     }
     private static func assertPvals( _ s: [Pval], _ i: Int) throws {
         if s.count != i {
             throw Perr(EPARAM_LENGTH)
         }
     }
+    private var printed = ""
+    private var t_explain = ""
+    private var t_compare = ""
+    private var ft = ""
+    private var li: String.Index?
+    
+    private var fc = Fc()
+    private var lfc: Fc?
+    private var fkmap = [String:Fheader]()
+    private var line = -1
+    private var prc: ParserRuleContext?
+    private var oldPrc: ParserRuleContext?
+    private var cfc: Fc {return lfc ?? fc}
+
+
+    init() {
+        reset()
+    }
+
+    
+
     private func reset() {
         fc = Fc()
         fkmap = [String:Fheader]()
-        for str in builtIns.keys {
+        for str in Self.builtIns.keys {
             reserveFunction(str)
         }
     }
@@ -158,110 +257,7 @@ class Pvisitor {
         return nil
         
     }
-    private static func doOp(_ lhs: Pval, _ rhs: Pval, _ str: String, _ sctx: ParserRuleContext) throws -> Pval {
-        let rt: Pval
-        switch str {
-        case "==":
-            return Pval(sctx, try lhs.equal(rhs))
-        case "!=":
-            return Pval(sctx, try !lhs.equal(rhs))
-            
-        case "+":
-            let lh: Plus = try tryCast(lhs)
-            let rh: Plus = try tryCast(rhs)
-            if !pEq(lh, rh) {
-                throw Perr(ETYPE, rhs)
-            }
-            rt = Pval(sctx, lh.plus(rh))
-            return rt
-        case "-", "*", "/":
-            let lh: Arith = try tryCast(lhs)
-            let rh: Arith = try tryCast(rhs)
-            if !pEq(lh, rh) {
-                throw Perr(ETYPE, rhs)
-            }
-            
-            rt = Pval(sctx, lh.arith(rh, str))
-            return rt
-        case "<", "<=", ">", ">=":
-            let lh: Compare = try tryCast(lhs)
-            let rh: Compare = try tryCast(rhs)
-            if !pEq(lh, rh) {
-                throw Perr(ETYPE, rhs)
-            }
-            
-            let result: Bool
-            switch str {
-                
-            case "<":
-                result = lh.lt(rh)
-            case "<=":
-                result = lh.lt(rh) || lh.equal(rh)
-            case ">":
-                result = lh.gt(rh)
-            case ">=":
-                result = lh.gt(rh) || lh.equal(rh)
-            default: de(ECASE)
-            }
-            return Pval(sctx, result)
-        default: break
-        }
-        
-        let lhsv: Int = try tryCast(lhs)
-        var rhsv: Int = try tryCast(rhs)
-        switch str {
-        case "-":
-            rt = Pval(sctx, lhsv - rhsv)
-        case "*":
-            rt = Pval(sctx, lhsv * rhsv)
-        case "/":
-            rt = Pval(sctx, lhsv / rhsv)
-        case "%":
-            rt = Pval(sctx, lhsv % rhsv)
-        case "&":
-            rt = Pval(sctx, lhsv & rhsv)
-        case "|":
-            rt = Pval(sctx, lhsv | rhsv)
-        case "^":
-            rt = Pval(sctx, lhsv ^ rhsv)
-        case "<<":
-            rt = Pval(sctx, lhsv << rhsv)
-        case ">>":
-            rt = Pval(sctx, lhsv >> rhsv)
-        case "<":
-            rt = Pval(sctx, lhsv < rhsv)
-        case "<=":
-            rt = Pval(sctx, lhsv <= rhsv)
-        case ">":
-            rt = Pval(sctx, lhsv > rhsv)
-        case ">=":
-            rt = Pval(sctx, lhsv >= rhsv)
-        case "@":
-            rhsv += 1
-            fallthrough
-        case ":":
-            guard rhsv - lhsv >= 0 else {
-                throw Perr(ERANGE, sctx)
-            }
-            let ki = try Kind.produceKind(Gtype.gScalar(Int.self))
-            rt = try Pval(sctx, Kind.produceKind(Gtype.gSlice(ki)))
-            for x in lhsv..<rhsv {
-                try rt.set(x - lhsv, Pval(sctx, x))
-            }
-            
-        default:
-            de(ECASE)
-        }
-        return rt
-    }
-    
-    
-    private static func childToToken(_ child: Tree) -> PinnParser.Tokens {
-        return PinnParser.Tokens(rawValue: (child as! TerminalNode).getSymbol()!.getType())!
-    }
-    private static func childToText(_ child: Tree) -> String {
-        return (child as! TerminalNode).getText()
-    }
+ 
     private func loadDebug(_ ctx:ParserRuleContext) {
         oldPrc = prc
         prc = ctx
@@ -296,10 +292,7 @@ class Pvisitor {
             throw Perr(EUNDECLAREDF, sctx)
         }
         guard let ctx = fh.funcContext else {
-            if str == "ec" {
-                //   fc = Fc()
-            }
-            return try builtIns[str]!(sctx, self, s)
+            return try Self.builtIns[str]!(sctx, self, s)
         }
         let oldfc = lfc
         lfc = Fc()
@@ -446,7 +439,7 @@ class Pvisitor {
         } else
             if let type = sctx.TYPES() {
                 let strType = type.getText()
-                let vtype = litToType[strType]!
+                let vtype = Self.litToType[strType]!
                 rt = try Kind.produceKind(Gtype.gScalar(vtype))
                 //            return Kind(vtype)
             } else {
@@ -1104,7 +1097,6 @@ class Pvisitor {
         }
         
     }
-    
     private struct Fheader {
         var funcContext: PinnParser.FunctionContext?
         var kind: Kind?

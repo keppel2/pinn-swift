@@ -28,9 +28,6 @@ func parse(_ s: String) -> (PinnParser.FileContext?, PinnParser) {
     return (tree, parser)
 }
 
-
-
-
 func execute() throws  {
     let args = ProcessInfo.processInfo.arguments
     let s = args[1]
@@ -45,15 +42,10 @@ func execute() throws  {
         for ts in negTest {
             try exe(ts.1, ts.0)
         }
-        
-        
-        
-        
-        
     }
 }
 
-public func writeString(_ s: String, _ f: String) {
+func writeString(_ s: String, _ f: String) {
     let fh = FileHandle(forWritingAtPath: f)!
     fh.write(Data(s.utf8))
 }
@@ -71,11 +63,6 @@ func stringDequote(_ s: String) -> String {
     str = str.replacingOccurrences(of: "\\\"", with: "\"")
     str = str.replacingOccurrences(of: "\\\\", with: "\\")
     return str
-}
-
-private func _fatalError(_ s: String) -> Never {
-    print(s)
-    fatalError()
 }
 
 func tryCast<T> (_ pv: Pval) throws -> T {
@@ -98,7 +85,8 @@ func aden() -> Never{
     de(EASSERT)
 }
 func de(_ me: Perr) -> Never {
-    _fatalError(me.string)
+    print(me.string)
+    fatalError()
 }
 
 func de(_ s: String = "") -> Never {

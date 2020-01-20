@@ -11,7 +11,7 @@ class Perr : Error {
         }
         str = s
         pval = p
-        prc = p2 //?? pv.prc
+        prc = p2
         tok = p3
         let _str = string
         _ = _str

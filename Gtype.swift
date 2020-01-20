@@ -28,7 +28,6 @@ enum Gtype {
         }
         return false
     }
-    
     func isTuple() -> Bool {
         if case .gTuple = self {
             return true
@@ -137,8 +136,6 @@ enum Gtype {
                 }
             }
             return false
-            
-            
         case .gTuple(let ka):
             if case .gTuple(let ka2) = g2 {
                 
