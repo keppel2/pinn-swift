@@ -3,10 +3,7 @@ grammar Pinn;
 file : ( function | statement )+ EOF ;
 
 function
-  : 'func' ID LPAREN (fvarDecl (',' fvarDecl)*)?  ')' kind? block ;
-
-testRule
-  : name=expr;
+  : 'func' ID LPAREN (fvarDecl (',' fvarDecl)*)?  RPAREN kind? block ;
 
 block
   : '{' statement* '}' ;
@@ -17,13 +14,13 @@ fvarDecl
 varDecl
   : 'var' ID kind
   | ID CE expr
-  | LPAREN ID ( ',' ID )* ')' CE expr;
+  | LPAREN ID ( ',' ID )* RPAREN CE expr;
 
 
 kind
   : TYPES
-  | (LSQUARE ( MAP | expr)? ']') kind
-  |  AST? LPAREN kindList ')' ;
+  | (LSQUARE ( MAP | expr)? RSQUARE) kind
+  |  AST? LPAREN kindList RPAREN ;
 
 
 simpleStatement
@@ -32,24 +29,24 @@ simpleStatement
   | lExpr DOUBLEOP #doubleSet ;
 
 lExpr
-  : ID (LSQUARE expr ']')* ;
+  : ID (LSQUARE expr RSQUARE)* ;
 
 objectPair
   : STRING ':' expr ;
 
 expr
   :
-   expr LSQUARE ( first=expr? (TWODOTS | COLON) second=expr? | expr) ']' #indexExpr
-  |   THREEDOT? LSQUARE exprList ']' #arrayLiteral
+   expr LSQUARE ( first=expr? (AT | COLON) second=expr? | expr) RSQUARE #indexExpr
+  |   THREEDOT? LSQUARE exprList RSQUARE #arrayLiteral
   | '{' objectPair ( ',' objectPair )* '}' #objectLiteral
   |    ('+' | '-' | '!' ) expr #unaryExpr
   | expr ('+' | '-' | AST | '/' | '%') expr #intExpr
   | expr ('==' | '!=' | '>' | '<' | '>=' | '<=' ) expr #compExpr
   | expr ('&&' | '||') expr #boolExpr
-  |   ID LPAREN exprList? ')' #callExpr
-  |  LPAREN expr ')' #parenExpr
-  |  CARET? AST? LPAREN exprList ')' #tupleExpr
-  | expr (TWODOTS | COLON) expr #rangeExpr
+  |   ID LPAREN exprList? RPAREN #callExpr
+  |  LPAREN expr RPAREN #parenExpr
+  |  CARET? AST? LPAREN exprList RPAREN #tupleExpr
+  | expr (AT | COLON) expr #rangeExpr
   | expr '?' expr COLON expr #conditionalExpr
   | (ID | FLOAT | INT | BOOL | STRING | NIL ) #literalExpr ;
   
@@ -117,7 +114,9 @@ MAP
  : 'map' ;
 
 LSQUARE : '[' ;
+RSQUARE : ']' ;
 LPAREN : '(' ;
+RPAREN : ')' ;
 NIL : 'nil' ;
 COMMA : ',' ;
 COLON : ':' ;
@@ -126,7 +125,7 @@ IOTA : 'iota' ;
 RANGE : 'range' ;
 AST: '*' ;
 THREEDOT : '...' ;
-TWODOTS : '@' ;
+AT : '@' ;
 CARET : '^' ;
 
 

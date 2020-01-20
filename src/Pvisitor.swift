@@ -773,7 +773,7 @@ class Pvisitor {
             
             
             let v = try _visitPval(sctx.expr(0)!)
-            if (sctx.TWODOTS() != nil || sctx.COLON() != nil) {
+            if (sctx.AT() != nil || sctx.COLON() != nil) {
                 
                 var lhsv = 0
                 if let lh = sctx.first {
@@ -783,7 +783,7 @@ class Pvisitor {
                 if let rh = sctx.second {
                     rhsv = try tryCast(_visitPval(rh))
                 }
-                if (sctx.TWODOTS() != nil) {
+                if (sctx.AT() != nil) {
                     rhsv += 1
                 }
                 
