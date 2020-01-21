@@ -38,10 +38,10 @@ func execute() throws  {
     if (test) {
         print()
         print("Passed positive tests")
-        _ = Perr("Negative start")
-        for ts in negTest {
-            try exe(ts.1, ts.0)
-        }
+//        _ = Perr("Negative start")
+//        for ts in negTest {
+//            try exe(ts.1, ts.0)
+//        }
     }
 }
 

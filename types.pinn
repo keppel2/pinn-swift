@@ -1,9 +1,3 @@
-ng("Wrong type assignment defined types (scalar = array):");
-var x [slice]bool;
-var y [2]bool;
-x = y;
-gn();
-
 ft("Create int", "0");
 var x int;
 print(x);
@@ -893,7 +887,6 @@ func pll(node *(int, self)) {
 }
 pll(base);
 
-
 /*
 ft("Doubly linked list", "(P 7 P)(E 5 P)(E 5 P)");
 var dll *(self, int, self);
@@ -921,3 +914,500 @@ print(depthString(npt2));
 
 
 
+
+
+
+
+ng("Send parameter to function without any:");
+func f() {}
+x := f(5);
+gn();
+ng("Send no parameter to function with one:");
+func f(i int) {}
+x := f();
+gn();
+ng("Send bad parameter to function with one:");
+func f(i int) {}
+x := f("abc");
+gn();
+ng("Use void return:");
+func f() {}
+x := f();
+gn();
+
+ng("Return int when no return parameter specified:");
+func f() { return 5; }
+f();
+gn();
+
+
+ng("Mix up parameters to function:");
+func f(i int, s string) {}
+x := f("abc", 10);
+gn();
+
+
+
+ng("Wrong type assignment from short declaration:");
+x := 0;
+x = true;
+gn();
+ng("Wrong type assignment from short declaration:");
+x := [1, 5];
+y := ["aap", "noot"];
+y = x;
+gn();
+ng("Wrong type assignment from short declaration:");
+x := ...[1, 5];
+var y [2]int;
+y = x;
+gn();
+ng("Wrong short declaration:");
+sdns := [[2, 1], 24];
+gn();
+ng("Wrong short declaration:");
+sd := nil;
+gn();
+ng("Wrong short declaration:");
+func f() {}
+sd := f();
+gn();
+ng("Wrong short declaration:");
+sdns := (5, (true, "foo"), [true, "foo"]);
+gn();
+ng("Wrong short declaration:");
+sdns := [[2, 1], [true, true, true]];
+gn();
+ng("Wrong short declaration:");
+sdns := {"aap": 5, "noot": false};
+gn();
+ng("Wrong short declaration:");
+func f() {}
+sdns := [4, f()];
+gn();
+
+
+
+
+/*
+ng("Wrong self declaration");
+var n self;
+//gn();
+
+ng("Wrong self declaration:");
+var n [3]self;
+gn();
+ng("Wrong self declaration:");
+var n []self;
+gn();
+ng("Wrong self declaration:");
+var n [map]self;
+gn();
+ng("Wrong self declaration:");
+var n (int, self);
+gn();
+*/
+
+
+
+
+ng("Wrong array declaration:");
+var ar [true]int;
+gn();
+ng("Wrong array declaration:");
+func f() {}
+var ar [f()]int;
+gn();
+ng("Wrong type assignment defined types:");
+var x [1]int;
+var y [2]int;
+y = x;
+gn();
+ng("Wrong type assignment defined types:");
+var x [2]int;
+var y [2]string;
+y = x;
+gn();
+
+ng("Wrong type assignment defined types (scalar = array):");
+var x []bool;
+var y [2]bool;
+x = y;
+gn();
+ng("Wrong type assignment (array = slice, both size 2):");
+var x [2]int;
+y := ...[42, 101];
+x = y;
+gn();
+ng("Wrong type assignment defined types (array = slice, both size 2):");
+var x [2]int;
+var y []int;
+y[0] = 10;
+y[1] = 20;
+x = y;
+gn();
+
+ng("Wrong type assignment defined types (tuple = array):");
+var x (int, int);
+var y [2]int;
+y = x;
+gn();
+ng("Wrong type assignment defined types (map = tuple):");
+var x [map]int;
+var y (int, int);
+x = y;
+gn();
+ng("Wrong type assignment defined types (scalar = array):");
+var x int;
+var y [2]int;
+x = y;
+gn();
+ng("Wrong type assignment defined types (array = scalar):");
+var x int;
+var y [2]int;
+y = x;
+gn();
+ng("Wrong type assignment defined types pointers:");
+var point1 *(int, self);
+var point2 *(bool, self);
+point1 = point2;
+gn();
+ng("Wrong types, declared:");
+var cdn [][]int;
+var cdns []string;
+cdns[0] = "aap";
+cdns[1] = "noot";
+cdn[0] = cdns;
+gn();
+ng("Wrong types, declared:");
+var cdn [][]int;
+var cdns []int;
+cdns[0] = 42;
+cdns[1] = "noot";
+gn();
+ng("Wrong types, declared:");
+var cdn [][2]int;
+var cdns []int;
+cdns[0] = 42;
+cdns[1] = 101;
+cdn[0] = cdns;
+gn();
+ng("Wrong types, declared:");
+var cdn [2][]int;
+var cdns []int;
+cdns[0] = 42;
+cdns[1] = 101;
+cdn[2] = cdns;
+gn();
+ng("Wrong types, declared:");
+var cdn [][2]int;
+var cdns [3]int;
+cdns[0] = 42;
+cdns[1] = 101;
+cdn[0] = cnds;
+gn();
+ng("Wrong types, declared:");
+var cdn [3][]int;
+var cdns [2]int;
+cdns[0] = 42;
+cdns[1] = 101;
+cdn[0] = cnds;
+gn();
+ng("Wrong types, declared:");
+var cdn [3][]int;
+var cdns []bool;
+cdns[0] = true;
+cdn[0] = cnds;
+gn();
+ng("Wrong type get from short declaration:");
+x := 0;
+y := true;
+y = x;
+gn();
+ng("Wrong type assignment from declaration:");
+var x bool;
+x = "bad";
+gn();
+ng("Wrong type assignment from declaration:");
+var x int;
+x = nil;
+gn();
+ng("Redeclare both short:");
+x := 5;
+x := 10;
+gn();
+ng("Redeclare both short, different type:");
+x := 5;
+x := true;
+gn();
+ng("Assign in global context a local variable:");
+func f() {
+  x := 5;
+}
+f();
+x = 10;
+gn();
+ng("Attempt to append to array:");
+var ar [3]int;
+ar[3] = 42;
+gn();
+ng("Attempt to append to one more than length of slice:");
+s := [1, 4];
+s[3] = 42;
+gn();
+ng("Index map by integer:");
+var m[map]int;
+m[23] = 42;
+gn();
+ng("Index slice by string:");
+s := [1, 4];
+s["a"];
+gn();
+
+ng("Delete a non-map:");
+var x int;
+delete(x, "k");
+gn();
+ng("Object literal with different types:");
+obj := {"a": 5, "b": true};
+gn();
+ng("Array set element with wrong type:");
+var arStr [3]string;
+arStr[0] = "alpha";
+arStr[1] = "bravo";
+arStr[2] = 42;
+print(arStr);
+gn();
+ng("Slice literal with different types:");
+s := [4, 1, true];
+gn();
+ng("Slice literal with an int and a tuple of 2 ints:");
+s := [5, (1, 3)];
+gn();
+ng("Test statement in function:");
+func f() {
+  ft("Test", "");
+}
+f();
+gn();
+ng("Binary op:");
+4 + true;
+gn();
+ng("Binary op:");
+"aap" + false;
+gn();
+ng("Binary op:");
+true + false;
+gn();
+//("Binary op:");
+//true && 1;
+//gn();
+ng("Binary op:");
+func f() {}
+3 + f();
+gn();
+ng("Binary op:");
+func f() {}
+3 + nil;
+gn();
+ng("Binary op:");
+func f() {}
++nil;
+gn();
+ng("Binary op:");
+3 + [1, 5];
+gn();
+ng("Equal with mismatched types:");
+3 == true;
+gn();
+ng("Equal with mismatched types:");
+3 == nil;
+gn();
+ng("Binary op:");
+4 > true;
+gn();
+ng("Ternary op:");
+10 ? 5 : false;
+gn();
+ng("Ternary op:");
+nil ? true : false;
+gn();
+ng("Unary op:");
+-true;
+gn();
+ng("Unary op:");
+!5;
+gn();
+ng("Parenthesize call:");
+func f() {}
+(f());
+gn();
+ng("Empty call for if:");
+func f() {}
+if (f()) {}
+gn();
+ng("Nil for if:");
+func f() {}
+if (nil) {}
+gn();
+ng("Zero for if:");
+if (0) {}
+gn();
+ng("Zero for if:");
+if (0) ; else ;
+gn();
+ng("Zero for while:");
+while 0 {}
+gn();
+ng("Bad return in loop:");
+func f() int {
+loop {
+  return false;
+}
+}
+f();
+gn();
+ng("No exit from guard:");
+guard false else {
+}
+gn();
+ng("Range:");
+for x = range 1@10 {}
+gn();
+ng("Range:");
+var x int;
+for x = range true {}
+gn();
+ng("Range:");
+var x int;
+for x = range ["aap", "noot"] {}
+gn();
+ng("Range:");
+var x [2]int;
+for x = range [5, 10] {}
+gn();
+ng("Range:");
+var x int;
+for x = range (5, 10) {}
+gn();
+ng("Range:");
+var x string;
+var y int;
+for x, y = range [5, 10] {}
+gn();
+ng("Range:");
+var x int;
+var y int;
+for x, y = range {"aap": 5, "noot": 23} {}
+gn();
+ng("Range:");
+var x int;
+var y int;
+for x, y = range 23 {}
+gn();
+ng("Range:");
+var x string;
+var y int;
+for x, y = range ["aap", "noot"] {}
+gn();
+ng("For triple:");
+for var x int; i < 5; i += "aap" {}
+gn();
+ng("For triple:");
+for var x int; 2; i += 10 {}
+gn();
+ng("For triple:");
+for var x string; i < 2; i += "aap" {}
+gn();
+ng("For triple:");
+for var i [2]int; i[1] < 2; i++ {}
+gn();
+
+ng("Slice operator fail:");
+[5, 42, 101][0@3];
+gn();
+ng("Slice operator fail:");
+(2, true, false)[0@1];
+gn();
+ng("Slice operator fail:");
+[[1, 2], [10, 11], [101, 102]][1@2][0][0@2];
+gn();
+ng("Index operator fail:");
+[4, 5][-1];
+gn();
+ng("Index operator fail:");
+(4, false)[-1];
+gn();
+ng("Index operator fail:");
+5[0];
+gn();
+ng("Exit with a value:");
+exit(5);
+gn();
+ng("Exit with two values:");
+exit(true, true);
+gn();
+ng("len:");
+len(4);
+gn();
+ng("len:");
+len(true);
+gn();
+ng("len:");
+len(nil);
+gn();
+
+ng("len:");
+len("abc", "def");
+gn();
+ng("stringValue:");
+stringValue();
+gn();
+ng("stringValue:");
+stringValue(5, ",");
+gn();
+ng("Print empty:");
+func f() {}
+print(f());
+gn();
+ng("Delete:");
+m := {"key": 42};
+delete(m);
+gn();
+ng("Delete:");
+m := {"key": 42};
+delete(m, 2);
+gn();
+ng("Delete:");
+m := 42;
+delete(m, "k");
+gn();
+ng("Delete:");
+m := [2, 24];
+delete(m, "k");
+gn();
+ng("Delete:");
+m := {"key": 42};
+x := delete(m, "k");
+x = 101;
+gn();
+ng("key:");
+m := {"key": 42};
+key(m);
+gn();
+ng("Pointer:");
+s := (10, nil);
+s = (false, nil);
+gn();
+ng("Pointer:");
+s := *(4, nil);
+s[1] = *(true, nil);
+gn();
+
+ng("Deeply nested bad assignment:");
+var dnt [2](bool, int, [map](int, string));
+dnt[1][2]["aap"] = (42, true);
+gn();
+
+    
+    

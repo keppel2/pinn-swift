@@ -405,7 +405,7 @@ class Pvisitor {
                 }
             }
         }
-        try test()
+        //try test()
     }
     
     private func visitObjectPair(_ sctx: PinnParser.ObjectPairContext) throws -> (String, Pval) {
