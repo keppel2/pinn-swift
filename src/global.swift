@@ -12,6 +12,8 @@ let EUNDECLARED = "Undeclared"
 let EUNDECLAREDF = "Bad Function Name"
 
 let ETEST_FAIL = "Test failed"
+let ENEGTEST_FAIL = "Negative Test failed"
+
 let EPARSE_FAIL = "Parse failed"
 let EASSERT = "Assertion failed (unexpected error)"
 let EUI = "Unimplemented"

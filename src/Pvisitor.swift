@@ -11,6 +11,19 @@ class Pvisitor {
                 try assertPvals(s, 0)
                 exit(0)
             },
+            "gn": { sctx, pv, s in
+                try assertPvals(s, 0)
+                if pv.trip {
+                    throw Perr(ENEGTEST_FAIL, sctx)
+                }
+                return nil
+            },
+            "ng": { sctx, pv, s in try assertPvals(s, 1)
+                    let str: String = try tryCast(s[0])
+                pv.trip = true
+                pv.neg = str
+                return nil
+            },
             "xam": { sctx, pv, s in try assertPvals(s, 1)
                 let str: String = try tryCast(s[0])
                 let xa = pv.getPv(str)
@@ -205,9 +218,9 @@ class Pvisitor {
     }
     private var printed = ""
     private var tester: Tester?
-    private var t_explain = ""
-    private var t_compare = ""
+    private var neg = ""
     private var li: String.Index
+    private var trip = false
     
     private var fc = Fc()
     private var lfc: Fc?
@@ -362,7 +375,20 @@ class Pvisitor {
                 try visitHeader(spec)
             } else {
                 if let spec = child as? PinnParser.StatementContext {
-                    try visit(spec)
+                    if trip {
+                        do {
+                            try visit(spec)
+                        } catch let err where err is Perr {
+                            var perr = err as! Perr
+                            if perr.str == ENEGTEST_FAIL {
+                                perr.str += ", " + neg
+                                throw perr
+                            }
+                            trip = false
+                        }
+                    } else {
+                        try visit(spec)
+                    }
                     switch fc.path {
                     case .pBreak, .pContinue, .pFallthrough:
                         throw Perr(ESTATEMENT, sctx)

@@ -1,10 +1,10 @@
 import Antlr4
 
 class Perr : Error {
-    let str: String
-    var pval: Pval?
-    var prc: ParserRuleContext?
-    var tok: Token?
+    var str: String
+    private var pval: Pval?
+    private var prc: ParserRuleContext?
+    private var tok: Token?
     init (_ s: String, _ p2: ParserRuleContext? = nil, _ p: Pval? = nil, _ p3: Token? = nil) {
         if s == EX {
             print(s)
