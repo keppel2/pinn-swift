@@ -21,6 +21,9 @@ class Pvisitor {
             },
             "ng": { sctx, pv, s in try assertPvals(s, 1)
                     let str: String = try tryCast(s[0])
+                if pv.trip {
+                    throw Perr(ENEGTEST_FAIL, sctx)
+                }
                 pv.reset()
                 pv.trip = true
                 pv.neg = str
