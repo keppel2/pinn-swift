@@ -1,3 +1,9 @@
+ng("Wrong type assignment defined types (scalar = array):");
+var x [slice]bool;
+var y [2]bool;
+x = y;
+gn();
+
 ft("Create int", "0");
 var x int;
 print(x);
