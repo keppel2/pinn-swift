@@ -1,5 +1,6 @@
 class Kind {
     static var kinds = [Kind]()
+    private static var ks = Kinds()
         static func has(_ g: Gtype) -> Kind? {
             let ki = kinds.firstIndex {
                 $0.gtype.gEquivalent(g)
@@ -10,6 +11,9 @@ class Kind {
             return kinds[ki!]
         }
     static func produceKind(_ g: Gtype) throws -> Kind {
+        if !g.isValid() {
+            throw Perr(ETYPE)
+        }
             let k = has(g)
             if k != nil {
                 return k!
@@ -24,7 +28,6 @@ class Kind {
         gtype = g
     }
     
-
     func assignable(_ k: Kind) -> Bool {
         if self === k {
             return true
@@ -58,5 +61,21 @@ class Kind {
         }
         
         return false
+    }
+    func isNr() -> Bool {
+        return self === gOne.nkind || self === gOne.rkind
+    }
+
+    private class Kinds {
+        private var kd = [Kind]()
+        func has(_ g: Gtype) -> Kind? {
+            let ki = kinds.firstIndex {
+                $0.gtype.gEquivalent(g)
+            }
+            guard ki != nil else {
+                return nil
+            }
+            return kinds[ki!]
+        }
     }
 }

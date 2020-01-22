@@ -989,10 +989,9 @@ sdns := [4, f()];
 
 
 
-/*
+
 ng("Wrong self declaration");
 var n self;
-//
 
 ng("Wrong self declaration:");
 var n [3]self;
@@ -1006,7 +1005,6 @@ var n [map]self;
 ng("Wrong self declaration:");
 var n (int, self);
 
-*/
 
 
 

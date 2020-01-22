@@ -433,6 +433,9 @@ class Pvisitor {
         var k: Kind?
         if let kctx = sctx.kind() {
             k = try visitKind(kctx)
+            if k === gOne.rkind {
+                throw Perr(ETYPE, sctx)
+            }
         }
         var fkinds = [FKind]()
         for (index, child) in sctx.fvarDecl().enumerated() {
@@ -492,6 +495,9 @@ class Pvisitor {
         
         let str = sctx.ID()!.getText()
         let k = try visitKind(sctx.kind()!)
+        if k === gOne.rkind {
+            throw Perr(ETYPE, sctx)
+        }
         return FKind(k: k, s: str, variadic: sctx.THREEDOT() != nil, prc: sctx)
     }
     private func visitKindList(_ sctx: PinnParser.KindListContext) throws -> [Kind]
@@ -1081,6 +1087,9 @@ class Pvisitor {
 
             } else {
                 let k = try visitKind(sctx.kind()!)
+                if k === gOne.rkind {
+                    throw Perr(ETYPE, sctx)
+                }
                 newV = try Pval(sctx, k)
             }
             if newV.getKind() === gOne.nkind {

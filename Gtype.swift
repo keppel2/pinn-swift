@@ -7,16 +7,16 @@ enum Gtype {
     case gPointer([Kind])
     func isValid() -> Bool {
         switch self {
-        case .gScalar:
+        case .gScalar(let pt):
             return true
         case .gArray(let k, let x):
             _ = x
-            return k !== gOne.nkind
+            return !k.isNr()
         case .gSlice(let k), .gMap(let k):
-            return k !== gOne.nkind
+            return !k.isNr()
         case .gTuple(let ka):
             return !ka.contains {
-                $0 === gOne.nkind
+                $0 === gOne.rkind
             }
         case .gPointer:
             return true
