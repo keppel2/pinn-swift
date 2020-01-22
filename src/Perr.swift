@@ -5,14 +5,14 @@ class Perr : Error {
     private var pval: Pval?
     private var prc: ParserRuleContext?
     private var tok: Token?
-    init (_ s: String, _ p2: ParserRuleContext? = nil, _ p: Pval? = nil, _ p3: Token? = nil) {
+    init (_ s: String, _ prc: ParserRuleContext? = nil, _ pval: Pval? = nil, _ token: Token? = nil) {
         if s == EX {
             print(s)
         }
         str = s
-        pval = p
-        prc = p2
-        tok = p3
+        self.pval = pval
+        self.prc = prc
+        self.tok = token
         let _str = string
         _ = _str
     }
