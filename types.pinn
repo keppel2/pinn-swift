@@ -914,8 +914,8 @@ print(depthString(npt2));
 
 
 
-
-
+println();
+println("Positives ok.");
 
 
 ng("Send parameter to function without any:");

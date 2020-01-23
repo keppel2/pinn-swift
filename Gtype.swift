@@ -7,7 +7,7 @@ enum Gtype {
     case gPointer([Kind])
     func isValid() -> Bool {
         switch self {
-        case .gScalar(let pt):
+        case .gScalar:
             return true
         case .gArray(let k, let x):
             _ = x
@@ -34,6 +34,23 @@ enum Gtype {
         }
         return false
     }
+    func toFill(_ k: Kind) -> Gtype {
+        if case .gPointer(let ka) = self {
+            let ka2: [Kind] = ka.map {
+                if $0 === gOne.rkind {
+                    return k
+                }
+                return $0
+            }
+            return Gtype.gPointer(ka2)
+        }
+        aden()
+    }
+//    func refMatch(_ k: Kind) -> Bool {
+//        if case .gPointer(let ka) = self {
+//            
+//        }
+//    }
     func openString() -> String {
         switch self {
         case .gArray, .gSlice:
@@ -105,7 +122,7 @@ enum Gtype {
         }
     }
     
-    func gEquivalent(_ g2: Gtype) -> Bool {
+    func gEquivalent(_ g2: Gtype, _ k: Kind) -> Bool {
         switch self {
         case .gScalar(let pt):
             if case .gScalar(let pt2) = g2 {
@@ -130,9 +147,11 @@ enum Gtype {
             
         case .gPointer(let ka):
             if case .gPointer(let ka2) = g2 {
-                
                 return ka.elementsEqual(ka2) {
-                    $0 === $1
+                    if $1 === gOne.rkind {
+                        return $0 === k
+                    }
+                    return $0 === $1
                 }
             }
             return false

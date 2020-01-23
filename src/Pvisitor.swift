@@ -385,7 +385,7 @@ class Pvisitor {
                         do {
                             try visit(spec)
                         } catch let err where err is Perr {
-                            var perr = err as! Perr
+                            let perr = err as! Perr
                             if perr.str == ENEGTEST_FAIL {
                                 perr.str += ", " + neg
                                 throw perr

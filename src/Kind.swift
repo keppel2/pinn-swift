@@ -1,34 +1,28 @@
 class Kind {
-    static var kinds = [Kind]()
-    private static var ks = Kinds()
-        static func has(_ g: Gtype) -> Kind? {
-            let ki = kinds.firstIndex {
-                $0.gtype.gEquivalent(g)
-            }
-            guard ki != nil else {
-                return nil
-            }
-            return kinds[ki!]
-        }
     static func produceKind(_ g: Gtype) throws -> Kind {
         if !g.isValid() {
             throw Perr(ETYPE)
         }
-            let k = has(g)
+        let k = Kinds.ks.has(g)
             if k != nil {
                 return k!
             }
             let k2 = Kind(g)
-            kinds.append(k2)
+        Kinds.ks.append(k2)
             return k2
         }
     var gtype: Gtype
 
     private init(_ g: Gtype) {
         gtype = g
+        if g.isPointer() {
+            gtype = g.toFill(self)
+        }
     }
     
     func assignable(_ k: Kind) -> Bool {
+        _ = Kinds.ks
+
         if self === k {
             return true
         }
@@ -67,15 +61,26 @@ class Kind {
     }
 
     private class Kinds {
+        fileprivate static var ks = Kinds()
         private var kd = [Kind]()
         func has(_ g: Gtype) -> Kind? {
-            let ki = kinds.firstIndex {
-                $0.gtype.gEquivalent(g)
+            let ki = kd.firstIndex {
+                
+                $0.gtype.gEquivalent(g, $0)
             }
             guard ki != nil else {
                 return nil
             }
-            return kinds[ki!]
+            return kd[ki!]
         }
+        func append(_ k: Kind) {
+            kd.append(k)
+        }
+        private init() {}
+        
+        
+        
+        
+        
     }
 }
