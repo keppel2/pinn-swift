@@ -1,6 +1,9 @@
-var point *(int, *(bool));
+/*var point *(int, *(bool));
 point = *(42, nil);
-point = *(24, *(true));
-point[1] = *(false);
-println(point);
-println(point[1]);
+*/
+var v *(int, self);
+ce := *(42, nil);
+v = ce;
+println(v, ce);
+debug();
+//println(ce, ce[1]);

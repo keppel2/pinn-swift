@@ -21,17 +21,16 @@ class Pval {
     }
     
     init(_ c: ParserRuleContext, _ ar: [Pval], _ pointer: Bool) throws {
-        let mar = ar
         let ka = ar.map {$0.getKind() }
         let k = try Kind.produceKind(pointer ? Gtype.gPointer(ka) : Gtype.gTuple(ka))
         if pointer {
-            for value in mar {
+            for value in ar {
                 if value.getKind() === gOne.nkind {
                     value.e.k = k
                 }
             }
         }
-        e = Pvalp(k, .multi(Wrap(mar)), c)
+        e = Pvalp(k, .multi(Wrap(ar)), c)
     }
     
     init(_ c: ParserRuleContext, _ a: Ptype) {
