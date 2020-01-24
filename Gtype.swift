@@ -78,7 +78,7 @@ enum Gtype {
             aden()
         }
     }
-    func gAssignable(_ g2: Gtype) -> Bool {
+    func gAssignable(_ g2: Gtype, _ ik: Kind) -> Bool {
         switch self {
         case .gScalar(let pt):
             if case .gScalar(let pt2) = g2 {

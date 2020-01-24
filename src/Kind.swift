@@ -26,8 +26,7 @@ class Kind {
         if self === k {
             return true
         }
-
-        var ke = k
+      /*  var ke = k
         if ke === gOne.rkind {
             ke = gOne.nkind
         } else if ke === gOne.nkind {
@@ -36,12 +35,12 @@ class Kind {
         if self === ke {
             return true
         }
-        
+        */
         if gtype.isPointer() && k === gOne.nkind || self === gOne.nkind && k.gtype.isPointer() {
             return true
         }
         
-        return gtype.gAssignable(k.gtype)
+        return gtype.gAssignable(k.gtype, self)
 
     }
     func equivalent(_ k: Kind) -> Bool {
