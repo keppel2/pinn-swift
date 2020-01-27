@@ -37,7 +37,7 @@ enum Gtype {
     func toFill(_ k: Kind) -> Gtype {
         if case .gPointer(let ka) = self {
             let ka2: [Kind] = ka.map {
-                if $0 === gOne.rkind {
+                if $0 === gOne.rkind || $0 === gOne.nkind {
                     return k
                 }
                 return $0
@@ -105,7 +105,12 @@ enum Gtype {
             if case .gPointer(let ka2) = g2 {
                 
                 return ka.elementsEqual(ka2) {
-                    $0.assignable($1)
+                    if $0.gtype.isPointer() {
+                        if $1 === ik {
+                            return true
+                        }
+                    }
+                    return $0.assignable($1)
                 }
             }
             return false

@@ -158,7 +158,8 @@ class Pval {
         if !getKind().assignable(v.getKind()) {
             throw Perr(ETYPE, v)
         }
-        e = v.e
+        
+        e.con = v.e.con
     }
     
     func delKey(_ s: String) throws {

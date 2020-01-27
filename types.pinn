@@ -839,6 +839,7 @@ print(x);
 print(x[1]);
 print(x[1][1]);
 
+/*
 ft("Binary search tree", "1 2 3 5 7 10 ");
 var i int;
 bst := *(nil, 7, nil);
