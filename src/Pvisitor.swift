@@ -34,6 +34,13 @@ class Pvisitor {
                 let xa = pv.getPv(str)
                 fatalError()
             },
+            "xam2": { sctx, pv, s in try assertPvals(s, 2)
+                let str1: String = try tryCast(s[0])
+                let xa1 = pv.getPv(str1)
+                let str2: String = try tryCast(s[1])
+                let xa2 = pv.getPv(str2)
+                fatalError()
+            },
             "ft": { sctx, pv, s in try assertPvals(s, 2)
                 if pv.lfc != nil {
                     throw Perr(ESTATEMENT, sctx)
@@ -343,7 +350,7 @@ class Pvisitor {
             if let pv = lfc!.m[fh.fkinds[index].s]  {
                 throw Perr(EREDECLARE, sctx, pv)
             }
-            lfc!.m[fh.fkinds[index].s] = Pval(s[index])
+            lfc!.m[fh.fkinds[index].s] = try Pval(s[index]).cloneType()
         }
         try visit(ctx.block()!)
         switch lfc!.path {
@@ -1083,7 +1090,7 @@ class Pvisitor {
                 throw Perr(EREDECLARE, sctx, prev)
             }
             if sctx.CE() != nil {
-                newV = try _visitPval(sctx.expr()!)
+                newV = try _visitPval(sctx.expr()!).cloneType()
 
             } else {
                 let k = try visitKind(sctx.kind()!)

@@ -826,6 +826,22 @@ p2 = p;
 p2[0] = 101;
 print(p, p2);
 
+ft("Function copies pointer", "*(23)*(202)");
+func f(p *(int)) {
+  p = *(10);
+}
+func g(p *(int)) {
+  p[0] = 202;
+}
+var z *(int);
+z = *(23);
+f(z);
+print(z);
+g(z);
+print(z);
+
+
+
 ft("Pointer in tuple", "(0 N) (0 P) *(true N) ");
 var tup (int, *(bool, self));
 print(tup, "");
@@ -839,7 +855,7 @@ print(x);
 print(x[1]);
 print(x[1][1]);
 
-/*
+
 ft("Binary search tree", "1 2 3 5 7 10 ");
 var i int;
 bst := *(nil, 7, nil);
@@ -879,6 +895,7 @@ func dfs(node  *(self, int, self)) {
 }
 dfs(bst);
 
+
 ft("Linked list", "5 8 23 ");
 var LL *(int, self);
 LL = *(5, nil);
@@ -897,32 +914,22 @@ func pll(node *(int, self)) {
 }
 pll(base);
 
-/*
-ft("Doubly linked list", "(P 7 P)(E 5 P)(E 5 P)");
+
+ft("Nested pointer types, depth and flat", "*(aap N P)*(noot N N)");
+npt := *("aap", nil, *("noot", nil, nil));
+print(npt);
+print(npt[2]);
+
+
+ft("Doubly linked list", "*(N 5 P)*(P 7 N)*(N 5 P)");
 var dll *(self, int, self);
 dll = *(nil, 5, nil);
-base7 := dll;
 dll[2] = *(dll, 7, nil);
-dll = dll[2];
-dll[2] = *(dll, 1, nil);
-dll = dll[2];
-print(base7[2]);
-print(base7[2][0]);
-print(base7[2][2][0][0]);
-/*
-ft("Nested pointer types, depth and flat", "(aap E P)(aap N (noot N N))(42 P E)(42 (101 N N) N)");
-npt := ("aap", nil, ("noot", nil, nil));
-print(npt);
-print(depthString(npt));
-npt2 := (42, (101, nil, nil), nil);
-print(npt2);
-print(depthString(npt2));
+print(dll);
+print(dll[2]);
+print(dll[2][0]);
 
-*/
-
-
-
-
+ft("", "");
 
 println();
 println("Positives ok.");
@@ -977,6 +984,10 @@ sdns := [[2, 1], 24];
 
 ng("Wrong short declaration:");
 sd := nil;
+
+//ng("Tuple with nil");
+//sd := (4, nil);
+
 
 ng("Wrong short declaration:");
 func f() {}
@@ -1198,6 +1209,7 @@ func f() {
 }
 f();
 
+
 ng("Binary op:");
 4 + true;
 
@@ -1207,9 +1219,9 @@ ng("Binary op:");
 ng("Binary op:");
 true + false;
 
-//("Binary op:");
-//true && 1;
-//
+ng("Binary op:");
+true && 1;
+
 ng("Binary op:");
 func f() {}
 3 + f();

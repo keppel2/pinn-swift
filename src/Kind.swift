@@ -39,7 +39,6 @@ class Kind {
         if gtype.isPointer() && k === gOne.nkind {
             return true
         }
-        
         return gtype.gAssignable(k.gtype, k)
 
     }

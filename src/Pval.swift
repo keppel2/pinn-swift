@@ -29,6 +29,12 @@ class Pval {
                     value.e.k = k
                 }
             }
+        } else {
+            if (ar.contains {
+                $0.getKind() === gOne.nkind
+            }) {
+              //  throw Perr(ENIL)
+            }
         }
         e = Pvalp(k, .multi(Wrap(ar)), c)
     }
@@ -82,6 +88,11 @@ class Pval {
         
     }
     var prc: ParserRuleContext {e.prc}
+    func cloneType() throws -> Pval {
+        let rt = try Pval(self.prc, self.e.k)
+        try rt.setPV(self)
+        return rt
+    }
     func equal(_ p: Pval) throws -> Bool {
         if !getKind().equivalent(p.getKind()) {
             throw Perr(ETYPE, self)

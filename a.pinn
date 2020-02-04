@@ -1,6 +1,9 @@
-var pb *(int, *(bool));
-//pb = *(42, nil);
-pb = *(42, *(true));
-var ps *(int, self);
-ps = *(23, nil);
-//ps = *(23, *(true));
+var a *(int);
+a = *(10);
+
+//var b *(int);
+//b = a;
+b := a; // var b *(int) = a
+a = *(100);
+println(a, b);
+
