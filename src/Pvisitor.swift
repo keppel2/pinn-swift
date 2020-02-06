@@ -728,7 +728,7 @@ class Pvisitor {
                     kind = try Kind.produceKind(Gtype.gMap(ckind!))
                     rt = try Pval(sctx, kind!)
                 }
-                if pv.getKind() !== ckind {
+                if !pv.getKind().equivalent(ckind!) {
                     throw Perr(ETYPE, sctx)
                 }
                 try rt!.set(str, pv)

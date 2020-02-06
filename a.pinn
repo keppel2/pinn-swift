@@ -1,9 +1,2 @@
-var a *(int);
-a = *(10);
-
-//var b *(int);
-//b = a;
-b := a; // var b *(int) = a
-a = *(100);
-println(a, b);
-
+bad := nil;
+bad := (4, nil);

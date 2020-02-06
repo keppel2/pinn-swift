@@ -244,7 +244,7 @@ class Pval {
                 if inner != "" {
                     inner += " "
                 }
-                inner += try key + ":" + map.w[key]!.string()
+                inner += try key + ":" + map.w[key]!.stringOrLetter()
             }
             rt += inner
             rt += getKind().gtype.closeString()
