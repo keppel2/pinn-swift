@@ -57,6 +57,10 @@ class Kind {
     func isNr() -> Bool {
         return self === gOne.nkind || self === gOne.rkind
     }
+    func hasNil() -> Bool {
+        return self === gOne.nkind
+    }
+    
 
     private class Kinds {
         fileprivate static var ks = Kinds()

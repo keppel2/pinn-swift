@@ -1,2 +1,2 @@
-bad := nil;
-bad := (4, nil);
+bad := (3, nil);
+bad := {"a": ^(3), "b": nil};

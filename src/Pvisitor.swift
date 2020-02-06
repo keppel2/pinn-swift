@@ -1091,7 +1091,9 @@ class Pvisitor {
             }
             if sctx.CE() != nil {
                 newV = try _visitPval(sctx.expr()!).cloneType()
-
+                if newV.getKind().hasNil() {
+                    throw Perr(ETYPE, sctx)
+                }
             } else {
                 let k = try visitKind(sctx.kind()!)
                 if k === gOne.rkind {
@@ -1099,9 +1101,7 @@ class Pvisitor {
                 }
                 newV = try Pval(sctx, k)
             }
-            if newV.getKind() === gOne.nkind {
-                throw Perr(ETYPE, sctx)
-            }
+
             if lfc != nil {
                 lfc!.m[str] = newV
             } else {
