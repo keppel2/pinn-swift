@@ -40,6 +40,37 @@ ft("Short declaration", "true");
 shortBool := true;
 print(shortBool);
 
+ng("Wrong short declaration:");
+sdns := [[2, 1], 24];
+
+ng("Wrong short declaration:");
+sd := nil;
+
+//#5
+//ng("Tuple with nil");
+//sd := (4, nil);
+
+
+ng("Wrong short declaration:");
+func f() {}
+sd := f();
+
+ng("Wrong short declaration:");
+sdns := (5, (true, "foo"), [true, "foo"]);
+
+ng("Wrong short declaration:");
+sdns := [[2, 1], [true, true, true]];
+
+ng("Wrong short declaration:");
+sdns := {"aap": 5, "noot": false};
+
+ng("Wrong short declaration:");
+func f() {}
+sdns := [4, f()];
+
+
+
+
 ft("Create map", "{answer:true} true false");
 var newMap [map]bool;
 newMap["answer"] = true;
@@ -72,7 +103,6 @@ print(cdn);
 
 ft("Deep nesting and length", "[(0 {} [[0 0 0 0 42]])] 1 5 [(42 {key:true} [12 101]) (101 {aap:false} [202])]");
 var cx [](int, [map]bool, [][5]int);
-//xam("cx");
 cx2 := ...[(42, {"key": true}, ...[12, 101])];
 cx2[1] = (101, {"aap": false}, ...[202]);
 cx[0][2][0][4] = 42;
@@ -985,32 +1015,6 @@ x := ...[1, 5];
 var y [2]int;
 y = x;
 
-ng("Wrong short declaration:");
-sdns := [[2, 1], 24];
-
-ng("Wrong short declaration:");
-sd := nil;
-
-//ng("Tuple with nil");
-//sd := (4, nil);
-
-
-ng("Wrong short declaration:");
-func f() {}
-sd := f();
-
-ng("Wrong short declaration:");
-sdns := (5, (true, "foo"), [true, "foo"]);
-
-ng("Wrong short declaration:");
-sdns := [[2, 1], [true, true, true]];
-
-ng("Wrong short declaration:");
-sdns := {"aap": 5, "noot": false};
-
-ng("Wrong short declaration:");
-func f() {}
-sdns := [4, f()];
 
 
 
