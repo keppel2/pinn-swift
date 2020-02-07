@@ -797,11 +797,14 @@ print(x, "");
 x = *(42);
 print(x);
 
-ft("Tuple of pointer", "(N) (N)");
+ft("Tuple of pointer", "(N) (N)(P)");
 var tup (*(int));
 print(tup, "");
 tup = ^(nil);
 print(tup);
+tup = ^(*(42));
+print(tup);
+
 
 ft("Declared pointer","N true *(24 N) N N true");
 var two *(int, self);
