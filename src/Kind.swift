@@ -46,7 +46,10 @@ class Kind {
         return self === gOne.nkind || self === gOne.rkind
     }
     func hasNil() -> Bool {
-        return self === gOne.nkind
+        if self === gOne.nkind {
+            return true
+        }
+        return gtype.hasNil(self)
     }
     
 
