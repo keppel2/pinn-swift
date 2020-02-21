@@ -49,7 +49,7 @@ class Kind {
         if self === gOne.nkind {
             return true
         }
-        return gtype.hasNil(self)
+        return false //gtype.hasNil(self)
     }
     
 
