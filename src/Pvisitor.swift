@@ -812,6 +812,32 @@ class Pvisitor {
                 if let lh = sctx.first {
                     lhsv = try tryCast(try _visitPval(lh))
                 }
+                
+                
+                if case .gScalar(let pt) = v.getKind().gtype {
+                    if pt == String.self {
+                        let str = try v.getUnwrap() as! String
+                        var rhsv = str.count
+                        if let rh = sctx.second {
+                            rhsv = try tryCast(_visitPval(rh))
+                        }
+                        if (sctx.AT() != nil) {
+                            rhsv += 1
+                        }
+                        let start = str.index(str.startIndex, offsetBy: lhsv)
+                        let end = str.index(str.startIndex, offsetBy: rhsv)
+                        let newstr = str[start..<end]
+                        rt = Pval(sctx, String(newstr))
+                        return rt
+
+
+                    }
+                }
+                
+                
+                
+                
+                
                 var rhsv = try v.getCount()
                 if let rh = sctx.second {
                     rhsv = try tryCast(_visitPval(rh))
