@@ -525,9 +525,19 @@ class Pvisitor {
         
         var rt = [Pval]()
         for child in sctx.expr() {
-            guard let v = try visitPval(child) else {
-                throw Perr(ENIL, sctx)
-            }
+            let v = try _visitPval(child)
+            rt.append(v)
+        }
+        return rt
+    }
+    
+    private func visitLList(_ sctx: PinnParser.LExprListContext) throws -> [Pval] {
+        loadDebug(sctx)
+        defer {popDebug()}
+        
+        var rt = [Pval]()
+        for child in sctx.lExpr() {
+            let v = try _visitPval(child)
             rt.append(v)
         }
         return rt
@@ -979,9 +989,31 @@ class Pvisitor {
                 }
             }
         case let sctx as PinnParser.SimpleSetContext:
-            let lh = try visitPval(sctx.lExpr()!)!
-            let rh = try _visitPval(sctx.expr()!)
-            return try lh.setPV(rh)
+            
+            
+
+                let el = sctx.exprList()!
+                let lel = sctx.lExprList()!
+                
+                let ae = try visitList(el)
+                let lae = try visitLList(lel)
+
+                if ae.count != lae.count {
+                    throw Perr(ERANGE, sctx)
+                }
+                    for (k, v) in ae.enumerated() {
+                        try lae[k].setPV(v)
+
+                    }
+            
+            
+            
+            
+            
+            
+//            let lh = try visitPval(sctx.lExpr()!)!
+//            let rh = try _visitPval(sctx.expr()!)
+//            return try lh.setPV(rh)
             
         case let sctx as PinnParser.IfStatementContext:
             

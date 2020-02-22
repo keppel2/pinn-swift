@@ -23,7 +23,7 @@ kind
 
 
 simpleStatement
-  : lExpr '=' expr #simpleSet
+  : lExprList '=' exprList #simpleSet
   | lExpr ('+' | '-' | '*' | '/' | '%') '=' expr #compoundSet
   | lExpr ('++' | '--') #doubleSet ;
 
@@ -51,6 +51,8 @@ expr
   
 exprList
   : expr (',' expr)* ;
+lExprList
+  : lExpr (',' lExpr)* ;
 kindList
   : kind (',' kind)* ;
 returnStatement

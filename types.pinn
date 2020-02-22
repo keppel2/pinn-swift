@@ -56,6 +56,10 @@ a, b, c := 1, 5;
 
 ng("Wrong multi");
 a, b := 101, 202, 303;
+ft("Multi swap:", "101 42");
+x, y := 42, 101;
+x, y = y, x;
+print(x, y);
 
 //#5
 //ng("Tuple with nil");
