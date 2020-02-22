@@ -87,6 +87,7 @@
 		E2D2DBFB2366B76500E0CC35 /* Pinn.g4 */ = {isa = PBXFileReference; lastKnownFileType = text; path = Pinn.g4; sourceTree = "<group>"; };
 		E2E585B723C70BC80089A239 /* Gtype.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gtype.swift; sourceTree = "<group>"; };
 		E2E6B45D23A4CD1300BE7758 /* extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = extensions.swift; sourceTree = "<group>"; };
+		E2EB00842401163200593370 /* heap.pinn */ = {isa = PBXFileReference; lastKnownFileType = text; path = heap.pinn; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +105,7 @@
 		E2673959235BC825000CF830 = {
 			isa = PBXGroup;
 			children = (
+				E2EB00842401163200593370 /* heap.pinn */,
 				E22C2FA62399FD9E007AD1D5 /* Antlr4-swift */,
 				E2B5313E2398E3500041751D /* aux.swift */,
 				E21A841223D5412700B0F3F2 /* function.swift */,

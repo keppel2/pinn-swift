@@ -13,8 +13,7 @@ fvarDecl
 
 varDecl
   : 'var' ID kind
-  | ID CE expr
-  | LPAREN ID ( ',' ID )* RPAREN CE expr;
+  | ID ( ',' ID )* CE exprList;
 
 
 kind

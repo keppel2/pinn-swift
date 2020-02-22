@@ -1099,23 +1099,33 @@ class Pvisitor {
             
         case let sctx as PinnParser.VarDeclContext:
             let map = lfc?.m ?? fc.m
+
             
-            if sctx.LPAREN() != nil {
-                let e = try _visitPval(sctx.expr()!)
-                for (k, v) in sctx.ID().enumerated() {
-                    let str = v.getText()
-                    let te = try e.get(k)
-                    if let prev = map[str] {
-                        throw Perr(EREDECLARE, sctx, prev)
+            if sctx.CE() != nil {
+                    
+                    
+                    let el = sctx.exprList()!
+                    let ae = try visitList(el)
+                    for (k, v) in sctx.ID().enumerated() {
+                            let str = v.getText()
+                        let pv = try ae[k].cloneType()
+                            if let prev = map[str] {
+                                throw Perr(EREDECLARE, sctx, prev)
+                            }
+                        if pv.getKind().hasNil() {
+                            throw Perr(ETYPE, sctx)
+                        }
+                            if lfc != nil {
+                                lfc!.m[str] = pv
+                            } else {
+                                fc.m[str] = pv
+                            }
                     }
-                    if lfc != nil {
-                        lfc!.m[str] = te
-                    } else {
-                        fc.m[str] = te
-                    }
-                }
-                return
+                        return
             }
+            
+            
+
             
             let str = sctx.ID(0)!.getText()
             
@@ -1123,18 +1133,21 @@ class Pvisitor {
             if let prev = map[str] {
                 throw Perr(EREDECLARE, sctx, prev)
             }
-            if sctx.CE() != nil {
-                newV = try _visitPval(sctx.expr()!).cloneType()
-                if newV.getKind().hasNil() {
-                    throw Perr(ETYPE, sctx)
-                }
-            } else {
+    
+                
+                
+                
+                
+                
+//                newV = try _visitPval(sctx.expr()!).cloneType()
+//                if newV.getKind().hasNil() {
+//                    throw Perr(ETYPE, sctx)
+//                }
                 let k = try visitKind(sctx.kind()!)
                 if k === gOne.rkind {
                     throw Perr(ETYPE, sctx)
                 }
                 newV = try Pval(sctx, k)
-            }
 
             if lfc != nil {
                 lfc!.m[str] = newV
