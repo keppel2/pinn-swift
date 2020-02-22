@@ -51,6 +51,12 @@ ft("Multi short declaration:", "1 5 10");
 a, b, c := 1, 5, 10;
 print(a, b, c);
 
+ng("Wrong multi short");
+a, b, c := 1, 5;
+
+ng("Wrong multi");
+a, b := 101, 202, 303;
+
 //#5
 //ng("Tuple with nil");
 //sd := (4, nil);

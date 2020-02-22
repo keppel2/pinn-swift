@@ -1106,6 +1106,9 @@ class Pvisitor {
                     
                     let el = sctx.exprList()!
                     let ae = try visitList(el)
+                if ae.count != sctx.ID().count {
+                    throw Perr(ERANGE, sctx)
+                }
                     for (k, v) in sctx.ID().enumerated() {
                             let str = v.getText()
                         let pv = try ae[k].cloneType()
