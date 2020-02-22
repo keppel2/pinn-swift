@@ -305,8 +305,8 @@ repeat {
     wstr += wstr;
 } while len(wstr) < 8;
 
-ft("Slice string", "apn foo oot");
-print("aapnoot"[1:4], "foobar"[@2], "noot"[1:]);
+ft("Slice string", "apn foo oot every");
+print("aapnoot"[1:4], "foobar"[@2], "noot"[1:], "every"[0:5]);
 
 ft("Slice middle of slice", "[4 5]");
 ar := [1, 4, 5, 14, 23, 32];

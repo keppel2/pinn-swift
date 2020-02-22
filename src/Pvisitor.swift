@@ -824,6 +824,14 @@ class Pvisitor {
                         if (sctx.AT() != nil) {
                             rhsv += 1
                         }
+                        
+                        if lhsv < 0 || lhsv >= str.count {
+                            throw Perr(ERANGE)
+                        }
+                        if rhsv <= lhsv || rhsv > str.count {
+                            throw Perr(ERANGE)
+                        }
+                        
                         let start = str.index(str.startIndex, offsetBy: lhsv)
                         let end = str.index(str.startIndex, offsetBy: rhsv)
                         let newstr = str[start..<end]
