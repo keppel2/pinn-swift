@@ -910,44 +910,49 @@ print(x[1]);
 print(x[1][1]);
 
 
-ft("Binary search tree", "1 2 3 5 7 10 ");
+ft("Binary search tree", "1 2 3 5 5 5 10 ");
 var i int;
-bst := *(nil, 7, nil);
-cur := bst;
-for i = range [1, 5, 10, 2, 3] {
-    cur = bst;
-    loop {
-        if i < cur[1] {
-            if cur[0] == nil {
-                cur[0] = *(nil, i, nil);
-                break;
-            } else {
-                cur = cur[0];
-                continue;
+var mbst *(self, int, self);
+func tree_insert(x int) {
+    if mbst == nil {
+            mbst = *(nil, x, nil);
+            return;
+    }
+        cur := mbst;
+        loop {
+            if i < cur[1] {
+                if cur[0] == nil {
+                    cur[0] = *(nil, i, nil);
+                    break;
+                } else {
+                    cur = cur[0];
+                    continue;
+                }
+            } else if i >= cur[1] {
+                if cur[2] == nil {
+                    cur[2] = *(nil, i, nil);
+                    break;
+                } else {
+                    cur = cur[2];
+                    continue;
+                }
             }
-        } else if i > cur[1] {
-            if cur[2] == nil {
-                cur[2] = *(nil, i, nil);
-                break;
-            } else {
-                cur = cur[2];
-                continue;
-            }
-        } else {
-            break;
-        }
+            debug();
     }
 }
-
+for i = range [1, 5, 5, 5, 10, 2, 3] {
+    tree_insert(i);
+}
 func dfs(node  *(self, int, self)) {
     if node == nil {
         return;
     }
-        dfs(node[0]);
-        print(node[1], "");
-        dfs(node[2]);
+    dfs(node[0]);
+    print(node[1], "");
+    dfs(node[2]);
 }
-dfs(bst);
+dfs(mbst);
+
 
 
 ft("Linked list", "5 8 23 ");
