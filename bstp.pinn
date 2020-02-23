@@ -1,0 +1,47 @@
+
+var i int;
+var mbst *(self, int, self, self);
+func tree_insert(x int) {
+    if mbst == nil {
+            mbst = *(nil, x, nil, nil);
+            return;
+    }
+        
+        cur := mbst;
+        parent := mbst;
+        loop {
+            if i < cur[1] {
+                if cur[0] == nil {
+                    cur[0] = *(nil, i, nil, parent);
+                    break;
+                } else {
+                    cur = cur[0];
+                    parent = cur;
+                    continue;
+                }
+            } else if i >= cur[1] {
+                if cur[2] == nil {
+                    cur[2] = *(nil, i, nil, parent);
+                    break;
+                } else {
+                    cur = cur[2];
+                    parent = cur;
+                    continue;
+                }
+            }
+            debug();
+    }
+}
+for i = range [1, 5, 5, 5, 10, 2, 3] {
+    tree_insert(i);
+}
+func dfs(node  *(self, int, self, self)) {
+    if node == nil {
+        return;
+    }
+    dfs(node[0]);
+    print(node[1], "");
+    dfs(node[2]);
+}
+dfs(mbst);
+println(mbst, mbst[2], mbst[2][3]);

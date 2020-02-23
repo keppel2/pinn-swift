@@ -863,6 +863,22 @@ print(two[1], "");
 two = nil;
 print(two, two == nil);
 
+
+ft("Pointer compare", "false true*(4) *(4) *(4)false true*(4) *(12) *(12)");
+x := *(4);
+y := *(4);
+z := y;
+print(x == y, y == z);
+print(x, y, z);
+y[0] = 12;
+print(x == y, y == z);
+
+print(x, y, z);
+
+
+
+
+
 ft("Assignability of recursive pointers", "*(42 N) *(42 N)*(101 P) *(42 N) *(42 N)");
 var point1 *(int, self);
 var point2 *(int, self);
@@ -908,6 +924,25 @@ x := (4, (10, *(12, nil)));
 print(x);
 print(x[1]);
 print(x[1][1]);
+
+
+
+
+ft("Bubble sort", "[1 20 101 202 1081]");
+bub := [1, 1081, 20, 101, 202];
+
+var i int;
+var j int;
+for i = range 0:len(bub) - 1 {
+    for j = len(bub) - 1; j > i; j-- {
+      if bub[j] < bub[j - 1] {
+        bub[j - 1], bub[j] = bub[j], bub[j - 1];
+      }
+    }
+}
+print(bub);
+
+
 
 
 ft("Binary search tree", "1 2 3 5 5 5 10 ");

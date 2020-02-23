@@ -1,41 +1,9 @@
-var i int;
-var mbst *(self, int, self);
-func tree_insert(x int) {
-    if mbst == nil {
-            mbst = *(nil, x, nil);
-            return;
-    }
-        cur := mbst;
-        loop {
-            if i < cur[1] {
-                if cur[0] == nil {
-                    cur[0] = *(nil, i, nil);
-                    break;
-                } else {
-                    cur = cur[0];
-                    continue;
-                }
-            } else if i >= cur[1] {
-                if cur[2] == nil {
-                    cur[2] = *(nil, i, nil);
-                    break;
-                } else {
-                    cur = cur[2];
-                    continue;
-                }
-            }
-            debug();
-    }
-}
-for i = range [1, 5, 5, 5, 10, 2, 3] {
-    tree_insert(i);
-}
-func dfs(node  *(self, int, self)) {
-    if node == nil {
-        return;
-    }
-    dfs(node[0]);
-    print(node[1], "");
-    dfs(node[2]);
-}
-dfs(mbst);
+ft("Declared pointer","N true *(24 N) N N true");
+var two *(int, self);
+print(two, two == nil, "");
+two = *(24, nil);
+print(two, "");
+print(two[1], "");
+two = nil;
+print(two, two == nil);
+

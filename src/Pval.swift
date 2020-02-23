@@ -97,6 +97,13 @@ class Pval {
         if !getKind().equivalent(p.getKind()) {
             throw Perr(ETYPE, self)
         }
+        
+        
+        if case .gPointer = getKind().gtype {
+            return try e.con.pEqual(p.e.con)
+//            pv.w.append(v)
+        }
+        
         return try e.con.equal(p.e.con)
     }
     
@@ -346,6 +353,26 @@ class Pval {
         }
         func isNull() throws -> Bool {
             return try equal(Contents.single(Pwrap(Nil())))
+        }
+        func pEqual(_ co: Contents) throws -> Bool {
+            switch self {
+            case .single(let pw):
+                if case .multi(let x) = co {
+                    _ = x
+                    return false
+                }
+                return pw.equal(co.getPw())
+            case .multi(let ar):
+                if case .single(let x) = co {
+                    _ = x
+                    return false
+                }
+                return try ar.w.elementsEqual(co.getAr(), by: {$0 === $1})
+                        default:
+            aden()
+            }
+
+            return false
         }
         func equal(_ co: Contents) throws -> Bool {
             switch self {
