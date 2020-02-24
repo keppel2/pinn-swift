@@ -1076,6 +1076,21 @@ class Pvisitor {
                 
                 let ranger = try _visitPval(sctx.expr()!)
                 switch ranger.getKind().gtype {
+                case .gScalar(let pt):
+                    if pt != String.self {
+                        throw Perr(ETYPE, sctx)
+                    }
+                    let str: String = try tryCast(ranger)
+                    for (k, ch) in str.enumerated() {
+                        try value!.setPV(Pval(sctx, String(ch)))
+                        try key?.setPV(Pval(sctx, k))
+                                        try visit(sctx.block()!)
+                        if cfc.toEndBlock() {
+                            break
+                        }
+                    }
+                    
+                    
                 case .gSlice, .gArray:
                     for x in try 0..<ranger.getCount() {
                         try value!.setPV(ranger.get(x))

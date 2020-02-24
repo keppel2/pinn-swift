@@ -1,9 +1,5 @@
-ft("Declared pointer","N true *(24 N) N N true");
-var two *(int, self);
-print(two, two == nil, "");
-two = *(24, nil);
-print(two, "");
-print(two[1], "");
-two = nil;
-print(two, two == nil);
-
+ar := "RLRRLLRLRL";
+var s string;
+for s = range ar {
+    println(s);
+}
