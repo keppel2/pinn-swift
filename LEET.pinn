@@ -38,3 +38,23 @@ for i = range ar {
 }
 println(numevens);
 
+
+
+
+
+//LC1221
+ar := "RLRRRLLRLL";
+var s string;
+subs := 0;
+bal := 0;
+for s = range ar {
+    if s == "R" {
+        bal++;
+    } else {
+        bal--;
+    }
+    if bal == 0 {
+    subs++;
+}
+}
+println(subs);

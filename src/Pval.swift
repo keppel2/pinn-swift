@@ -402,6 +402,9 @@ class Pval {
             }
         }
         func getSlice(_ a: Int, _ b: Int) throws -> [Pval] {
+            if a == b {
+                return [Pval]()
+            }
             switch self {
             case .multi(let pvs):
                 if !pvs.w.indices.contains(a) || !pvs.w.indices.contains(b - 1) {
