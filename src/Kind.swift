@@ -4,13 +4,13 @@ class Kind {
             throw Perr(ETYPE)
         }
         let k = Kinds.ks.has(g)
-            if k != nil {
-                return k!
-            }
-            let k2 = Kind(g)
-        Kinds.ks.append(k2)
-            return k2
+        if k != nil {
+            return k!
         }
+        let k2 = Kind(g)
+        Kinds.ks.append(k2)
+        return k2
+    }
     var gtype: Gtype
 
     private init(_ g: Gtype) {
