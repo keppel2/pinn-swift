@@ -15,9 +15,10 @@ enum Gtype {
         case .gSlice(let k), .gMap(let k):
             return !k.isNr()
         case .gTuple(let ka):
-            return !ka.contains {
-                $0 === gOne.rkind
-            }
+            return true
+//            !ka.contains {
+//                $0 === gOne.rkind
+//            }
         case .gPointer:
             return true
         }

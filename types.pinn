@@ -845,14 +845,14 @@ print(x, "");
 x = *(42);
 print(x);
 
-ft("Tuple of pointer", "(N) (N)(P)");
+/*ft("Tuple of pointer", "(N) (N)(P)");
 var tup (*(int));
 print(tup, "");
 tup = ^(nil);
 print(tup);
 tup = ^(*(42));
 print(tup);
-
+*/
 
 ft("Declared pointer","N true *(24 N) N N true");
 var two *(int, self);
@@ -1032,6 +1032,7 @@ println("Positives ok.");
 ng("Send parameter to function without any:");
 func f() {}
 x := f(5);
+println("sf");
 
 ng("Send no parameter to function with one:");
 func f(i int) {}
@@ -1091,16 +1092,14 @@ var n []self;
 ng("Wrong self declaration:");
 var n [map]self;
 
-ng("Wrong self declaration:");
+/*ng("Wrong self declaration:");
 var n (int, self);
-
-
+*/
 
 
 
 ng("Wrong array declaration:");
 var ar [true]int;
-
 ng("Wrong array declaration:");
 func f() {}
 var ar [f()]int;
@@ -1264,7 +1263,6 @@ arStr[0] = "alpha";
 arStr[1] = "bravo";
 arStr[2] = 42;
 print(arStr);
-
 ng("Slice literal with different types:");
 s := [4, 1, true];
 
@@ -1444,7 +1442,6 @@ len(true);
 ng("len:");
 len(nil);
 
-
 ng("len:");
 len("abc", "def");
 
@@ -1479,18 +1476,18 @@ m := {"key": 42};
 x := delete(m, "k");
 x = 101;
 
+
 ng("key:");
 m := {"key": 42};
 key(m);
-
+println("here");
 ng("Pointer:");
 s := (10, nil);
 s = (false, nil);
-
+println("there");
 ng("Pointer:");
 s := *(4, nil);
 s[1] = *(true, nil);
-
 
 ng("Deeply nested bad assignment:");
 var dnt [2](bool, int, [map](int, string));
