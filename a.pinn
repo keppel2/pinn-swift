@@ -106,8 +106,10 @@ func nra(node *(self, int, self, self)) {
     }
 }
 
+
 LEFT := 1;
-RIGHT := 2;
+CENTER := 2;
+RIGHT := 3;
 
 
 func nrio() {
@@ -115,14 +117,14 @@ func nrio() {
     cur := mbst;
     last := 0;
     loop {
-        if cur[0] != nil {
+        if cur[0] != nil && LEFT {
             cur = cur[0];
             last = LEFT;
-            
             continue;
         }
         print(cur[1]);
         if cur[2] != nil {
+            last = LEFT;
             cur = cur[2];
             continue;
         }
