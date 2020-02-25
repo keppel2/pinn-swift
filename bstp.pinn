@@ -1,6 +1,46 @@
 
+var A1 *(int, self);
+var A2 *(int, self);
+A1 = *(101, nil);
+A2 = *(202, nil);
+println(A1 == A2);
+p1 := *(42, nil);
+p2 := *(101, nil);
+println(p1 == p2);
+
 var i int;
 var mbst *(self, int, self, self);
+func tree_search(x int) *(self, int, self, self) {
+    cur := mbst;
+    while cur != nil && cur[1] != x {
+        if x < cur[1] {
+            cur = cur[0];
+        } else {
+            cur = cur[2];
+        }
+    }
+    return cur;
+}
+func tmin(node *(self, int, self, self)) *(self, int, self, self) {
+    while node[0] != nil {
+        node = node[0];
+    }
+    return node;
+}
+
+func succ(node *(self, int, self, self)) *(self, int, self, self) {
+    if node[2] != nil {
+        return tmin(node[2]);
+    }
+    node2 := node[3];
+//    println(node, node2[2]);
+    while node2 != nil &&
+        node == node2[2] {
+        node = node2;
+        node2 = node2[3];
+    }
+    return node2;
+}
 func tree_insert(x int) {
     if mbst == nil {
             mbst = *(nil, x, nil, nil);
@@ -32,7 +72,7 @@ func tree_insert(x int) {
             debug();
     }
 }
-for i = range [1, 5, 5, 5, 10, 2, 3] {
+for i = range [10, 101, 1024, 3, 7, 8, 9, 5, 1, 12] {
     tree_insert(i);
 }
 func dfs(node  *(self, int, self, self)) {
@@ -43,5 +83,112 @@ func dfs(node  *(self, int, self, self)) {
     print(node[1], "");
     dfs(node[2]);
 }
+var stack []*(self, int, self, self);
+func push(node *(self, int, self, self)) {
+    stack[len(stack)] = node;
+}
+func pop() *(self, int, self, self) {
+    rt := stack[len(stack) - 1];
+    stack = stack[0:len(stack) - 1];
+    return rt;
+}
+
+func nra(node *(self, int, self, self)) {
+    while len(stack) > 0 || node != nil {
+        if node != nil {
+            push(node);
+            node = node[0];
+        } else {
+            node = pop();
+            print(node[1], "");
+            node = node[2];
+        }
+    }
+}
+
+LEFT := 1;
+RIGHT := 2;
+
+
+func nrio() {
+    top := mbst;
+    cur := mbst;
+    last := 0;
+    loop {
+        if cur[0] != nil {
+            cur = cur[0];
+            last = LEFT;
+            
+            continue;
+        }
+        print(cur[1]);
+        if cur[2] != nil {
+            cur = cur[2];
+            continue;
+        }
+        if cur == top {
+            return;
+        }
+        while cur == cur[3][2] {
+            cur = cur[3];
+        }
+        if cur == cur[3][0] {
+            last := LEFT;
+        } else {
+        }
+        cur = cur[3];
+    }
+}
+
+
+
+func transplant(u *(self, int, self, self), v *(self, int, self, self)) {
+    if u[3] == nil {
+        mbst = v;
+    } else if u == u[3][0] {
+        u[3][0] = v;
+    } else {
+        u[3][2] = v;
+    }
+    if v != nil {
+        v[3] = u[3];
+    }
+}
+
+func treeDelete(z *(self, int, self, self)) {
+    if z[0] == nil {
+        transplant(z, z[2]);
+    } else if z[2] == nil {
+        transplant(z, z[0]);
+    } else {
+        y := tmin(z[2]);
+        if y[3] != z {
+            transplant(y, y[2]);
+            y[2] = z[2];
+            y[2][3] = y;
+        }
+        transplant(z, y);
+        y[0] = z[0];
+        y[0][3] = y;
+    }
+}
+
+
+//dfs(mbst);
+//println(mbst, mbst[2], mbst[2][3]);
+/*
+println(mbst, mbst[0]);
+nra(mbst);
+println();
+println(tree_search(10), succ(tree_search(10)));
+node := tmin(mbst);
+while node != nil {
+    println(node);
+    node = succ(node);
+}
+*/
+node := tree_search(10);
+println(node);
+treeDelete(tree_search(10));
+
 dfs(mbst);
-println(mbst, mbst[2], mbst[2][3]);
