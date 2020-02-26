@@ -370,12 +370,12 @@ class Pval {
                     _ = x
                     return false
                 }
-                return try ar.w.elementsEqual(co.getAr(), by: {$0 === $1})
+                return ar.w.elementsEqual(co.getAr(), by: {$0 === $1})
                         default:
             aden()
             }
 
-            return false
+          //  return false
         }
         func equal(_ co: Contents) throws -> Bool {
             switch self {
