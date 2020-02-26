@@ -14,7 +14,7 @@ enum Gtype {
             return !k.isNr()
         case .gSlice(let k), .gMap(let k):
             return !k.isNr()
-        case .gTuple(let ka):
+        case .gTuple://(let ka):
             return true
 //            !ka.contains {
 //                $0 === gOne.rkind
