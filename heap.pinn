@@ -161,3 +161,40 @@ func quicksort(p int, r int) {
 
 quicksort(1, len(ar) - 1);
 println(ar);
+
+
+
+
+
+
+
+//O(n^3) time, O(N) space
+func contains(s string, sub string) bool {
+    index := 0;
+    while index + len(sub) <= len(s) {
+        if s[index:index + len(sub)] == sub {
+        return true;
+        }
+        index++;
+    }
+    return false;
+}
+a := "this is a long text the text is boring and long";
+println("Size", len(a));
+var i int;
+var size int;
+var substr string;
+for  size = range 1@len(a) {
+    for i = range 0@len(a) - size {
+        substr = a[i:i + size];
+        if contains(substr, "boring")
+           && contains(substr, "long")
+           && contains(substr, "text") {
+           println(size);
+           println(substr);
+           exit();
+        }
+    }
+}
+println(contains(a, "text"));
+println(contains(a, "afaf"));
