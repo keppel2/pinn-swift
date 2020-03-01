@@ -838,7 +838,7 @@ class Pvisitor {
                         if lhsv < 0 || lhsv >= str.count {
                             throw Perr(ERANGE)
                         }
-                        if rhsv <= lhsv || rhsv > str.count {
+                        if rhsv < lhsv || rhsv > str.count {
                             throw Perr(ERANGE)
                         }
                         
