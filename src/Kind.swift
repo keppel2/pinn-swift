@@ -55,6 +55,7 @@ class Kind {
 
     private class Kinds {
         fileprivate static var ks = Kinds()
+        private static var km = [String: Kind]()
         private var kd = [Kind]()
         func has(_ g: Gtype) -> Kind? {
             let ki = kd.firstIndex {
