@@ -71,10 +71,5 @@ class Kind {
             kd.append(k)
         }
         private init() {}
-        
-        
-        
-        
-        
     }
 }
