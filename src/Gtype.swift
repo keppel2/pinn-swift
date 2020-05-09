@@ -170,10 +170,6 @@ enum Gtype {
 //            return false
 //        }
 //    }
-
-    
-    
-    
     
     func gEquivalent(_ g2: Gtype, _ k: Kind) -> Bool {
         switch self {

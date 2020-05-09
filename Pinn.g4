@@ -11,9 +11,12 @@ block
 fvarDecl
   : ID THREEDOT? kind ;
 
+typeDecl
+  : 'type' ID kind ;
+
 varDecl
   : 'var' ID kind
-  | ID ( ',' ID )* CE exprList;
+  | ID ( ',' ID )* CE exprList ;
 
 
 kind
@@ -79,6 +82,7 @@ switchStatement
 
 statement
   :  expr ';'
+  | typeDecl ';'
   | varDecl ';' 
   | simpleStatement ';'
   | ifStatement

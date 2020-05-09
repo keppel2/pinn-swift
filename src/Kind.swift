@@ -1,4 +1,7 @@
 class Kind {
+    static func storeKind(_ s: String, _ k: Kind) throws {
+        
+    }
     static func produceKind(_ g: Gtype) throws -> Kind {
         if !g.isValid() {
             throw Perr(ETYPE)
@@ -55,8 +58,14 @@ class Kind {
 
     private class Kinds {
         fileprivate static var ks = Kinds()
-        private static var km = [String: Kind]()
+        private var km = [String: Kind]()
         private var kd = [Kind]()
+        func hasKind(_ s: String) -> Bool {
+            return km.keys.contains(s)
+        }
+        func getKind(_ s: String) throws -> Kind {
+            return km[s]!
+        }
         func has(_ g: Gtype) -> Kind? {
             let ki = kd.firstIndex {
                 
