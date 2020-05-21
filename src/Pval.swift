@@ -71,6 +71,9 @@ class Pval {
             e = Pvalp(k, Contents.multi(Wrap(ar)), c)
         case .gPointer:
             e = Pvalp(k, Contents.single(Pwrap(Nil())), c)
+        case .gDefined(let s):
+            let pv = try Pval(c, Kind.getKind(s))
+            e = Pvalp(k, pv.e.con, c)
         }
     }
         

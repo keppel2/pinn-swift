@@ -1,7 +1,17 @@
 class Kind {
     static func storeKind(_ s: String, _ k: Kind) throws {
-        
+        if Kinds.ks.hasKind(s) {
+            throw Perr(EREDECLARE)
+        }
+        if Pvisitor.litToType.keys.contains(s) {
+            throw Perr(ETYPE)
+        }
+        Kinds.ks.addKind(s, k)
     }
+    static func getKind(_ s: String) throws -> Kind {
+        return try Kinds.ks.getKind(s)
+    }
+    
     static func produceKind(_ g: Gtype) throws -> Kind {
         if !g.isValid() {
             throw Perr(ETYPE)
@@ -62,6 +72,9 @@ class Kind {
         private var kd = [Kind]()
         func hasKind(_ s: String) -> Bool {
             return km.keys.contains(s)
+        }
+        func addKind(_ s: String, _ k: Kind) {
+            km[s] = k
         }
         func getKind(_ s: String) throws -> Kind {
             return km[s]!

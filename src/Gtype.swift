@@ -5,6 +5,7 @@ enum Gtype {
     case gMap(Kind)
     case gTuple([Kind])
     case gPointer([Kind])
+    case gDefined(String)
     func isValid() -> Bool {
         switch self {
         case .gScalar:
@@ -19,8 +20,9 @@ enum Gtype {
 //            !ka.contains {
 //                $0 === gOne.rkind
 //            }
-        case .gPointer:
+        case .gPointer, .gDefined:
             return true
+        
         }
     }
     func isPointer() -> Bool {
@@ -125,7 +127,11 @@ enum Gtype {
                 }
             }
             return false
+            case .gDefined(let s):
+                return true
+
         }
+        
     }
   
     
@@ -212,6 +218,9 @@ enum Gtype {
                 }
             }
             return false
+            
+                        case .gDefined(let s):
+                return true
         }
     }
 }

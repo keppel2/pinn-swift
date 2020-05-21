@@ -3,7 +3,7 @@ import Antlr4
 
 class Pvisitor {
     
-    private static let litToType: [String: Ptype.Type] = ["int": Int.self, "bool": Bool.self, "string": String.self, "decimal": Decimal.self, "self": Ref.self]
+    static let litToType: [String: Ptype.Type] = ["int": Int.self, "bool": Bool.self, "string": String.self, "decimal": Decimal.self, "self": Ref.self]
     private static let builtIns
         : [String: (ParserRuleContext, Pvisitor, [Pval]) throws -> Pval?] =
         [
@@ -1145,12 +1145,10 @@ class Pvisitor {
             }
             
         case let sctx as PinnParser.TypeDeclContext:
-            let map = lfc?.m ?? fc.m
-
-            
             let str = sctx.ID()!.getText()
             
             let k = try visitKind(sctx.kind()!)
+            try Kind.storeKind(str, k)
                 
             
         case let sctx as PinnParser.VarDeclContext:

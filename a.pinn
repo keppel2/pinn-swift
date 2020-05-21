@@ -1,2 +1,3 @@
 var y int;
 type x int;
+var z x;
