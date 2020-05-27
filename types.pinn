@@ -1047,6 +1047,9 @@ println();
 println("Positives ok.");
 
 
+
+
+
 ng("Send parameter to function without any:");
 func f() {}
 x := f(5);

@@ -1,3 +1,11 @@
 var y int;
 type x int;
 var z x;
+var zz [2]x;
+z = 42;
+println(z);
+zz[0] = 101;
+println(zz);
+type xx [2]int;
+var v xx;
+println(v);

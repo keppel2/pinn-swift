@@ -21,6 +21,7 @@ varDecl
 
 kind
   : TYPES
+  | ID
   | (LSQUARE ( MAP | expr)? RSQUARE) kind
   |  AST? LPAREN kindList RPAREN ;
 

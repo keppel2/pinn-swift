@@ -479,7 +479,12 @@ class Pvisitor {
                 let vtype = Self.litToType[strType]!
                 rt = try Kind.produceKind(Gtype.gScalar(vtype))
                 //            return Kind(vtype)
-            } else {
+            } else if let type = sctx.ID() {
+                let strType = type.getText()
+                rt = try Kind.getKind(strType)
+
+            }
+                else {
                 let kind = try visitKind(sctx.kind()!)
                 if sctx.MAP() != nil {
                     rt = try Kind.produceKind(Gtype.gMap(kind))
