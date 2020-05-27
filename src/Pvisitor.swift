@@ -45,6 +45,7 @@ class Pvisitor {
                 if pv.lfc != nil {
                     throw Perr(ESTATEMENT, sctx)
                 }
+                pv.trip = false
                 pv.reset()
                 try pv.test()
 
@@ -260,6 +261,7 @@ class Pvisitor {
         fc = Fc()
         lfc = nil
         fkmap = [String:Fheader]()
+        Kind.clear()
         for str in Self.builtIns.keys {
             reserveFunction(str)
         }

@@ -1,11 +1,6 @@
-var y int;
-type x int;
-var z x;
-var zz [2]x;
-z = 42;
-println(z);
-zz[0] = 101;
-println(zz);
-type xx [2]int;
-var v xx;
-println(v);
+ft("Named type test", "5");
+type tInt int;
+var x tInt;
+x = 5;
+print(5);
+ft("", "");

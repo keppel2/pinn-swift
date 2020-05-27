@@ -1041,10 +1041,31 @@ print(dll);
 print(dll[2]);
 print(dll[2][0]);
 
-ft("", "");
+ft("", "
+Positives ok.
+");
 
 println();
 println("Positives ok.");
+
+
+
+
+ft("", "");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1053,7 +1074,6 @@ println("Positives ok.");
 ng("Send parameter to function without any:");
 func f() {}
 x := f(5);
-println("sf");
 
 ng("Send no parameter to function with one:");
 func f(i int) {}
@@ -1283,7 +1303,6 @@ var arStr [3]string;
 arStr[0] = "alpha";
 arStr[1] = "bravo";
 arStr[2] = 42;
-print(arStr);
 ng("Slice literal with different types:");
 s := [4, 1, true];
 
@@ -1501,11 +1520,24 @@ x = 101;
 ng("key:");
 m := {"key": 42};
 key(m);
-println("here");
 ng("Pointer:");
 s := (10, nil);
 s = (false, nil);
-println("there");
+
+
+ft("Named type test", "5");
+type tInt int;
+var x tInt;
+x = 5;
+print(5);
+ft("", "");
+
+
+ng("Bad named type");
+type tInt int;
+var x tInt;
+x = true;
+
 ng("Pointer:");
 s := *(4, nil);
 s[1] = *(true, nil);
@@ -1514,4 +1546,4 @@ ng("Deeply nested bad assignment:");
 var dnt [2](bool, int, [map](int, string));
 dnt[1][2]["aap"] = (42, true);
 ng("");
-    
+//ng("");

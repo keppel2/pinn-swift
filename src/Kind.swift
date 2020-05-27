@@ -1,4 +1,7 @@
 class Kind {
+    static func clear() {
+        Kinds.ks.clear()
+    }
     static func storeKind(_ s: String, _ k: Kind) throws {
         if Kinds.ks.hasKind(s) {
             throw Perr(EREDECLARE)
@@ -70,6 +73,9 @@ class Kind {
         fileprivate static var ks = Kinds()
         private var km = [String: Kind]()
         private var kd = [Kind]()
+        func clear() {
+            km = [String: Kind]()
+        }
         func hasKind(_ s: String) -> Bool {
             return km.keys.contains(s)
         }
