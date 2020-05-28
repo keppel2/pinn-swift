@@ -1,5 +1,13 @@
+
+
 ft("Create int", "0");
 var x int;
+print(x);
+
+ft("Named type test", "5");
+type tInt int;
+var x tInt;
+x = 5;
 print(x);
 
 ft("Print", "a \\ slash");
@@ -1524,14 +1532,44 @@ ng("Pointer:");
 s := (10, nil);
 s = (false, nil);
 
+ng("");
 
 ft("Named type test", "5");
 type tInt int;
 var x tInt;
 x = 5;
-print(5);
-ft("", "");
+print(x);
 
+
+
+ft("Named type test", "5");
+type tInt int;
+var x tInt;
+x = 5;
+print(x);
+
+
+
+ft("Named type tuple string", "(foo bar)");
+type tTuple (string, string);
+var x tTuple;
+x[0] = "foo";
+x[1] = "bar";
+print(x);
+ft("Named type equality", "12 12");
+type tInt int;
+var x tInt;
+var y tInt;
+x = 12;
+y = x;
+print(x, y);
+ft("", "");
+ng("Bad named type");
+type tInt int;
+var x tInt;
+var y tInt;
+x = 12;
+y = true;
 
 ng("Bad named type");
 type tInt int;

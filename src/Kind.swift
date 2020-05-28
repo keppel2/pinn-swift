@@ -11,9 +11,19 @@ class Kind {
         }
         Kinds.ks.addKind(s, k)
     }
+    static func storeDkind(_ s: String, _ k: Kind) throws {
+        Kinds.ks.append(Kind(Gtype.gDefined(s)))
+        if Kinds.ks.hasKind(s) {
+            throw Perr(EREDECLARE)
+        }
+        Kinds.ks.addKind(s, k)
+    }
     static func getKind(_ s: String) throws -> Kind {
         return try Kinds.ks.getKind(s)
     }
+//    static func getDkind(_ s: String) throws -> Kind {
+//        
+//    }
     
     static func produceKind(_ g: Gtype) throws -> Kind {
         if !g.isValid() {
@@ -28,6 +38,12 @@ class Kind {
         return k2
     }
     var gtype: Gtype
+    var str: String?
+
+    private init(_ s: String) {
+        gtype = Gtype.gScalar(Nil.self)
+        str = s
+    }
 
     private init(_ g: Gtype) {
         gtype = g

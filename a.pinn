@@ -1,6 +1,6 @@
-ft("Named type test", "5");
-type tInt int;
-var x tInt;
+println("hello");
+var x int;
 x = 5;
-print(5);
-ft("", "");
+println(x);
+x = x + 5;
+println(x);

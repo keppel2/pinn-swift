@@ -6,7 +6,7 @@ func exe(_ s: String, _ failReason: String? = nil) throws {
     gparser = parser
     if tree != nil {
         //        gtree = tree
-        let pv = Pvisitor()
+        let pv = try Pvisitor()
         
         if let fr = failReason {
             if (try? pv.visitFile(tree!)) != nil {
@@ -66,12 +66,17 @@ func stringDequote(_ s: String) -> String {
 }
 
 func tryCast<T> (_ pv: Pval) throws -> T {
+    if case .gDefined (let s) = pv.getKind().gtype {
+        
+    }
     if case .gScalar = pv.getKind().gtype {
         if !(try pv.getUnwrap() is T) {
             throw Perr(ETYPE, pv)
         }
         return try pv.getUnwrap() as! T
     }
+
+    
     throw Perr(ETYPE, pv)
 }
 

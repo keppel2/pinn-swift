@@ -24,7 +24,7 @@ class Pvisitor {
                 if pv.trip {
                     throw Perr(ENEGTEST_FAIL, sctx)
                 }
-                pv.reset()
+                try pv.reset()
                 pv.trip = true
                 pv.neg = str
                 return nil
@@ -46,7 +46,7 @@ class Pvisitor {
                     throw Perr(ESTATEMENT, sctx)
                 }
                 pv.trip = false
-                pv.reset()
+                try pv.reset()
                 try pv.test()
 
                 print("--", sctx.getStart()!.getLine())
@@ -243,9 +243,9 @@ class Pvisitor {
     private var oldPrc: ParserRuleContext?
     private var cfc: Fc {return lfc ?? fc}
 
-    init() {
+    init() throws {
         li = printed.startIndex
-        reset()
+        try reset()
     }
 
     
@@ -257,7 +257,7 @@ class Pvisitor {
             }
         }
     }
-    private func reset() {
+    private func reset() throws {
         fc = Fc()
         lfc = nil
         fkmap = [String:Fheader]()
@@ -265,6 +265,10 @@ class Pvisitor {
         for str in Self.builtIns.keys {
             reserveFunction(str)
         }
+        for (str, x) in Self.litToType {
+            try Kind.storeDkind(str, Kind.produceKind(Gtype.gScalar(x)))
+        }
+        
     }
     
 
@@ -483,7 +487,7 @@ class Pvisitor {
                 //            return Kind(vtype)
             } else if let type = sctx.ID() {
                 let strType = type.getText()
-                rt = try Kind.getKind(strType)
+                rt = try Kind.produceKind(Gtype.gDefined(strType))
 
             }
                 else {
