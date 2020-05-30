@@ -7,6 +7,7 @@ func exe(_ s: String, _ failReason: String? = nil) throws {
     if tree != nil {
         //        gtree = tree
         let pv = try Pvisitor()
+        pvisitor = pv
         
         if let fr = failReason {
             if (try? pv.visitFile(tree!)) != nil {

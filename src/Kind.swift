@@ -3,23 +3,14 @@ class Kind {
         Kinds.ks.clear()
     }
     static func storeKind(_ s: String, _ k: Kind) throws {
-        if Kinds.ks.hasKind(s) {
-            throw Perr(EREDECLARE)
-        }
-        if Pvisitor.litToType.keys.contains(s) {
-            throw Perr(ETYPE)
-        }
-        Kinds.ks.addKind(s, k)
+        try Kinds.ks.addKind(s, k)
     }
-    static func storeDkind(_ s: String, _ k: Kind) throws {
-        Kinds.ks.append(Kind(Gtype.gDefined(s)))
-        if Kinds.ks.hasKind(s) {
-            throw Perr(EREDECLARE)
-        }
-        Kinds.ks.addKind(s, k)
-    }
+
     static func getKind(_ s: String) throws -> Kind {
         return try Kinds.ks.getKind(s)
+    }
+    static func getPKind(_ s: String)  -> Kind {
+        return Kinds.ks.getPkind(s)
     }
 //    static func getDkind(_ s: String) throws -> Kind {
 //        
@@ -45,21 +36,22 @@ class Kind {
         str = s
     }
 
-    private init(_ g: Gtype) {
+    init(_ g: Gtype) {
         gtype = g
         if g.isPointer() {
             gtype = g.toFill(self)
         }
     }
     
-    func assignable(_ k: Kind) -> Bool {
+    func assignable(_ k: Kind)  -> Bool {
         if self === k {
             return true
         }
+        
         if gtype.isPointer() && k === gOne.nkind {
             return true
         }
-        return gtype.gAssignable(k.gtype, k)
+        return try gtype.gAssignable(k.gtype, k)
 
     }
     func equivalent(_ k: Kind) -> Bool {
@@ -89,17 +81,28 @@ class Kind {
         fileprivate static var ks = Kinds()
         private var km = [String: Kind]()
         private var kd = [Kind]()
+//        private var kset = Set<Kind>()
         func clear() {
             km = [String: Kind]()
         }
         func hasKind(_ s: String) -> Bool {
             return km.keys.contains(s)
         }
-        func addKind(_ s: String, _ k: Kind) {
+        func addKind(_ s: String, _ k: Kind) throws {
+            if km.keys.contains(s) {
+                throw Perr(EREDECLARE)
+            }
             km[s] = k
         }
         func getKind(_ s: String) throws -> Kind {
             return km[s]!
+        }
+        func getPkind(_ s: String) -> Kind {
+            var k = km[s]!
+            while case .gDefined(let s2) = k.gtype {
+                k = km[s2]!
+            }
+            return k
         }
         func has(_ g: Gtype) -> Kind? {
             let ki = kd.firstIndex {

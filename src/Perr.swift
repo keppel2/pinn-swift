@@ -15,6 +15,7 @@ class Perr : Error {
         self.tok = token
         let _str = string
         _ = _str
+        
     }
     convenience init(_ s: String, _ p: Pval?) {
         self.init(s, nil, p, nil)

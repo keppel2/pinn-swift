@@ -81,8 +81,16 @@ enum Gtype {
             aden()
         }
     }
-    func gAssignable(_ g2: Gtype, _ ik: Kind) -> Bool {
-        switch self {
+    func toPGtype() -> Gtype {
+        if case .gDefined(let s) = self {
+            return Kind.getPKind(s).gtype
+        }
+        return self
+    }
+    func gAssignable(_ gB: Gtype, _ ik: Kind)  -> Bool {
+        let gA = self.toPGtype()
+        let g2 = gB.toPGtype()
+        switch gA {
         case .gScalar(let pt):
             if case .gScalar(let pt2) = g2 {
                 return pt == pt2
@@ -127,9 +135,8 @@ enum Gtype {
                 }
             }
             return false
-            case .gDefined(let s):
-                return true
-
+        case .gDefined:
+            aden()
         }
         
     }

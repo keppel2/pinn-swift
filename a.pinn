@@ -1,6 +1,8 @@
-println("hello");
-var x int;
-x = 5;
-println(x);
-x = x + 5;
-println(x);
+ft("Deep return", "203");
+func deepReturn() int {
+    var i int;
+    for i = range 202@205 {
+        if i == 203 return i;
+    }
+}
+print(deepReturn());

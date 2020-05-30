@@ -139,9 +139,10 @@ class Pval {
     }
     
     func get(_ k: Ktype, _ lh: Bool = false) throws -> Pval {
+        let g = getKind().gtype.toPGtype()
         switch k {
         case let v1v as Int:
-            switch getKind().gtype {
+            switch g {
             case .gSlice(let k):
                 if lh && v1v == e.con.count() {
                     try e.con.appendCon(Pval(e.prc, k))
@@ -159,7 +160,7 @@ class Pval {
                 throw Perr(ETYPE, self)
             }
         case let v1v as String:
-            if case .gMap(let k) = getKind().gtype {
+            if case .gMap(let k) = g {
                 if e.con.getMap()[v1v] == nil {
                     if lh {
                         try e.con.setCon(v1v, Pval(e.prc, k))

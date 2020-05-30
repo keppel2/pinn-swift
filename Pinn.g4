@@ -20,8 +20,8 @@ varDecl
 
 
 kind
-  : TYPES
-  | ID
+  :
+  ID
   | (LSQUARE ( MAP | expr)? RSQUARE) kind
   |  AST? LPAREN kindList RPAREN ;
 
@@ -100,8 +100,6 @@ statement
   | 'fallthrough' ';'
   | ';' ;
 
-TYPES
-  : ('int' | 'bool' |'string' | 'decimal' | 'self' ) ;
 BOOL : 'true' | 'false' ;
 
 MAP

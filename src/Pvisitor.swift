@@ -266,7 +266,7 @@ class Pvisitor {
             reserveFunction(str)
         }
         for (str, x) in Self.litToType {
-            try Kind.storeDkind(str, Kind.produceKind(Gtype.gScalar(x)))
+            try Kind.storeKind(str, Kind.produceKind(Gtype.gScalar(x)))
         }
         
     }
@@ -339,8 +339,8 @@ class Pvisitor {
                 let par = try Pval(ctx, Kind.produceKind(Gtype.gArray(v.k, s.count - index)))
                 
                 for (key, varadds) in s[index...].enumerated() {
-                    if varadds.getKind() !== v.k {
-                        throw Perr(ETYPE, sctx)
+                    if !v.k.assignable(varadds.getKind())  {
+                                    throw Perr(ETYPE, sctx)
                     }
                     try par.set(key, varadds)
                 }
@@ -369,7 +369,7 @@ class Pvisitor {
             guard let rp = lfc!.rt else {
                 throw Perr(ETYPE, sctx)
             }
-            if k !== rp.getKind()  {
+            if !k.assignable(rp.getKind())  {
                 throw Perr(ETYPE, sctx)
             }
         } else {
@@ -480,14 +480,9 @@ class Pvisitor {
                 rt = try Kind.produceKind(Gtype.gTuple(kL))
             }
         } else
-            if let type = sctx.TYPES() {
+            if let type = sctx.ID() {
                 let strType = type.getText()
-                let vtype = Self.litToType[strType]!
-                rt = try Kind.produceKind(Gtype.gScalar(vtype))
-                //            return Kind(vtype)
-            } else if let type = sctx.ID() {
-                let strType = type.getText()
-                rt = try Kind.produceKind(Gtype.gDefined(strType))
+                rt = try Kind(Gtype.gDefined(strType))
 
             }
                 else {

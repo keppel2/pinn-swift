@@ -1,6 +1,7 @@
 //import Foundation
 var test = false
 var gparser: PinnParser? = nil
+var pvisitor: Pvisitor? = nil
 let ENIL = "Unexpected nil"
 let EPARAM_LENGTH = "Parameter length mismatch"
 let ESTATEMENT = "Wrong statement"
