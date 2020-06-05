@@ -482,8 +482,13 @@ class Pvisitor {
         } else
             if let type = sctx.ID() {
                 let strType = type.getText()
+                if Kind.isRef(strType) {
+                    rt = gOne.rkind
+                } else if Kind.isNil(strType) {
+                    rt = gOne.nkind
+                } else {
                 rt = try Kind(Gtype.gDefined(strType))
-
+                }
             }
                 else {
                 let kind = try visitKind(sctx.kind()!)
@@ -792,6 +797,8 @@ class Pvisitor {
                 guard let pv = getPv(str) else {
                     throw Perr(EUNDECLARED, sctx)
                 }
+                pv.resolve()
+                
                 rt = try pv.cloneIf()
             default:
                 aden()

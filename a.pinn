@@ -1,8 +1,1 @@
-ft("Deep return", "203");
-func deepReturn() int {
-    var i int;
-    for i = range 202@205 {
-        if i == 203 return i;
-    }
-}
-print(deepReturn());
+println(42);

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E2A0AB612489F8780014DB28 /* a.pinn in Sources */ = {isa = PBXBuildFile; fileRef = E2BC3DB42387733B002D9413 /* a.pinn */; };
 		E2B531442398E3500041751D /* PinnParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B531382398E3500041751D /* PinnParser.swift */; };
 		E2B531452398E3500041751D /* PinnParserATN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B531392398E3500041751D /* PinnParserATN.swift */; };
 		E2B531462398E3500041751D /* Kind.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B5313A2398E3500041751D /* Kind.swift */; };
@@ -67,8 +68,10 @@
 /* Begin PBXFileReference section */
 		E22C2FA62399FD9E007AD1D5 /* Antlr4-swift */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Antlr4-swift"; sourceTree = "<group>"; };
 		E2673962235BC825000CF830 /* pinn */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = pinn; sourceTree = BUILT_PRODUCTS_DIR; };
-		E2688094244834290036BEF4 /* baduk.pinn */ = {isa = PBXFileReference; lastKnownFileType = text; path = baduk.pinn; sourceTree = "<group>"; };
-		E28CB40423680A0B0045FA67 /* types.pinn */ = {isa = PBXFileReference; lastKnownFileType = text; path = types.pinn; sourceTree = "<group>"; };
+		E2688094244834290036BEF4 /* baduk.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = baduk.cpp; sourceTree = "<group>"; };
+		E28CB40423680A0B0045FA67 /* types.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = types.cpp; sourceTree = "<group>"; };
+		E2A0AB622489F94D0014DB28 /* mt.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = mt.c; sourceTree = "<group>"; };
+		E2A0AB632489F9DC0014DB28 /* a.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = a.cpp; sourceTree = "<group>"; };
 		E2B531382398E3500041751D /* PinnParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PinnParser.swift; path = src/PinnParser.swift; sourceTree = "<group>"; };
 		E2B531392398E3500041751D /* PinnParserATN.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PinnParserATN.swift; path = src/PinnParserATN.swift; sourceTree = "<group>"; };
 		E2B5313A2398E3500041751D /* Kind.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Kind.swift; path = src/Kind.swift; sourceTree = "<group>"; };
@@ -81,17 +84,17 @@
 		E2B531412398E3500041751D /* PinnLexer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PinnLexer.swift; path = src/PinnLexer.swift; sourceTree = "<group>"; };
 		E2B531422398E3500041751D /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = main.swift; path = src/main.swift; sourceTree = "<group>"; };
 		E2B531432398E3500041751D /* global.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = global.swift; path = src/global.swift; sourceTree = "<group>"; };
-		E2BC3DB42387733B002D9413 /* a.pinn */ = {isa = PBXFileReference; lastKnownFileType = text; path = a.pinn; sourceTree = "<group>"; };
-		E2C2CCED2382412100C6D2A2 /* tic.pinn */ = {isa = PBXFileReference; lastKnownFileType = text; path = tic.pinn; sourceTree = "<group>"; };
+		E2BC3DB42387733B002D9413 /* a.pinn */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; path = a.pinn; sourceTree = "<group>"; };
+		E2C2CCED2382412100C6D2A2 /* tic.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = tic.cpp; sourceTree = "<group>"; };
 		E2D2DBFB2366B76500E0CC35 /* Pinn.g4 */ = {isa = PBXFileReference; lastKnownFileType = text; path = Pinn.g4; sourceTree = "<group>"; };
 		E2D5848D2405ECE2002ED255 /* extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = extensions.swift; path = src/extensions.swift; sourceTree = "<group>"; };
 		E2D5848E2405ECE2002ED255 /* function.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = function.swift; path = src/function.swift; sourceTree = "<group>"; };
 		E2D5848F2405ECE2002ED255 /* Single.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Single.swift; path = src/Single.swift; sourceTree = "<group>"; };
 		E2D584902405ECE2002ED255 /* Gtype.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Gtype.swift; path = src/Gtype.swift; sourceTree = "<group>"; };
-		E2EB00842401163200593370 /* heap.pinn */ = {isa = PBXFileReference; lastKnownFileType = text; path = heap.pinn; sourceTree = "<group>"; };
-		E2EB008524021EE800593370 /* bstp.pinn */ = {isa = PBXFileReference; lastKnownFileType = text; path = bstp.pinn; sourceTree = "<group>"; };
+		E2EB00842401163200593370 /* heap.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = heap.cpp; sourceTree = "<group>"; };
+		E2EB008524021EE800593370 /* bstp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bstp.cpp; sourceTree = "<group>"; };
 		E2EB00862403246D00593370 /* snip.pinn */ = {isa = PBXFileReference; lastKnownFileType = text; path = snip.pinn; sourceTree = "<group>"; };
-		E2EB008724033E5600593370 /* LEET.pinn */ = {isa = PBXFileReference; lastKnownFileType = text; path = LEET.pinn; sourceTree = "<group>"; };
+		E2EB008724033E5600593370 /* LEET.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LEET.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,12 +112,14 @@
 		E2673959235BC825000CF830 = {
 			isa = PBXGroup;
 			children = (
+				E2A0AB632489F9DC0014DB28 /* a.cpp */,
 				E2EB00862403246D00593370 /* snip.pinn */,
 				E2D5848D2405ECE2002ED255 /* extensions.swift */,
 				E2D5848E2405ECE2002ED255 /* function.swift */,
 				E2D584902405ECE2002ED255 /* Gtype.swift */,
+				E2A0AB622489F94D0014DB28 /* mt.c */,
 				E2D5848F2405ECE2002ED255 /* Single.swift */,
-				E2EB00842401163200593370 /* heap.pinn */,
+				E2EB00842401163200593370 /* heap.cpp */,
 				E22C2FA62399FD9E007AD1D5 /* Antlr4-swift */,
 				E2B5313E2398E3500041751D /* aux.swift */,
 				E2B531432398E3500041751D /* global.swift */,
@@ -128,12 +133,12 @@
 				E2B5313B2398E3500041751D /* protocols.swift */,
 				E2B5313F2398E3500041751D /* Pval.swift */,
 				E2B5313C2398E3500041751D /* Pvisitor.swift */,
-				E28CB40423680A0B0045FA67 /* types.pinn */,
+				E28CB40423680A0B0045FA67 /* types.cpp */,
 				E2BC3DB42387733B002D9413 /* a.pinn */,
-				E2688094244834290036BEF4 /* baduk.pinn */,
-				E2EB008724033E5600593370 /* LEET.pinn */,
-				E2EB008524021EE800593370 /* bstp.pinn */,
-				E2C2CCED2382412100C6D2A2 /* tic.pinn */,
+				E2688094244834290036BEF4 /* baduk.cpp */,
+				E2EB008724033E5600593370 /* LEET.cpp */,
+				E2EB008524021EE800593370 /* bstp.cpp */,
+				E2C2CCED2382412100C6D2A2 /* tic.cpp */,
 				E2D2DBFB2366B76500E0CC35 /* Pinn.g4 */,
 				E2673963235BC825000CF830 /* Products */,
 			);
@@ -238,6 +243,7 @@
 				E2B531442398E3500041751D /* PinnParser.swift in Sources */,
 				E2D584922405ECE2002ED255 /* function.swift in Sources */,
 				E2B531482398E3500041751D /* Pvisitor.swift in Sources */,
+				E2A0AB612489F8780014DB28 /* a.pinn in Sources */,
 				E2B531492398E3500041751D /* Perr.swift in Sources */,
 				E2B531452398E3500041751D /* PinnParserATN.swift in Sources */,
 				E2B5314C2398E3500041751D /* PinnLexerATN.swift in Sources */,

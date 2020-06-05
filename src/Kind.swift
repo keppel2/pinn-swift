@@ -48,7 +48,7 @@ class Kind {
             return true
         }
         
-        if gtype.isPointer() && k === gOne.nkind {
+        if gtype.toPGtype().isPointer() && k === gOne.nkind {
             return true
         }
         return try gtype.gAssignable(k.gtype, k)
@@ -75,6 +75,12 @@ class Kind {
         }
         return false //gtype.hasNil(self)
     }
+    static func isRef( _ s: String) -> Bool {
+        return Kinds.ks.isRef(s)
+    }
+    static func isNil( _ s: String) -> Bool {
+        return Kinds.ks.isNil(s)
+    }
     
 
     private class Kinds {
@@ -93,6 +99,12 @@ class Kind {
                 throw Perr(EREDECLARE)
             }
             km[s] = k
+        }
+        func isRef(_ s: String) -> Bool {
+            return km[s] === gOne.rkind
+        }
+                func isNil(_ s: String) -> Bool {
+                    return km[s] === gOne.nkind
         }
         func getKind(_ s: String) throws -> Kind {
             return km[s]!
