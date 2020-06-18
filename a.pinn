@@ -1,1 +1,100 @@
-println(42);
+E := 0;
+B := 1;
+W := 2;
+INV := 3;
+SIZE := 3;
+type bt [SIZE][SIZE]int;
+
+func printBoard (board bt) {
+	var y int;
+	var x int;
+	for y = range 0:SIZE {
+        print (board[0][y]);
+		for x = range 1:SIZE {
+        print (" ");
+        print (board[x][y]);
+		}
+        println();
+	}
+	println ("---");
+}
+func color (board bt, b bt, current int, currentScore int, x int, y int) (bt, int, int) {
+    var tup (bt, int, int);
+    if x < 0 || x >= SIZE || y < 0 || y >= SIZE || b[x][y] == 23 {
+        return (b, current, currentScore);
+    }
+
+      if current == INV {
+        return (b, current, 0);
+      }
+    if board[x][y] == E {
+          b[x][y] = 23;
+        currentScore++;
+      tup = color(board, b, current, currentScore, x + 1, y);
+      b, current, currentScore = tup[0], tup[1], tup[2];
+      tup = color(board, b, current, currentScore, x - 1, y);
+      b, current, currentScore = tup[0], tup[1], tup[2];
+      tup = color(board, b, current, currentScore, x, y + 1);
+      b, current, currentScore = tup[0], tup[1], tup[2];
+      tup = color(board, b, current, currentScore, x, y - 1);
+      b, current, currentScore = tup[0], tup[1], tup[2];
+
+    } else {
+      if current == E {
+        current = board[x][y];
+      } else if board[x][y] != current {
+        current = INV;
+        currentScore = 0;
+      }
+    }
+        return (b, current , currentScore);
+      
+        
+    
+}
+func score (board bt) (int, int) {
+    var x int;
+    var y int;
+    b := 0;
+    w := 0;
+    var b2 bt;
+                    var c int;
+                  var cs int;
+  var tup (bt, int, int);
+    for x = range 0:SIZE {
+        for y = range 0:SIZE {
+          println(x, y);
+            if board[x][y] == B {b++;} else
+                if board[x][y] == W {w++;} else {
+
+                  
+                  tup = color(board, b2, E, 0, x, y);
+                  b2, c, cs = tup[0], tup[1], tup[2];
+//                  println(tup);
+                  if c == B b += cs;
+                  if c == W w += cs;
+                }
+            
+        }
+    }
+        return (b, w);
+}
+
+func main() {
+    var    board bt;
+    board = [[0, B, 0],
+             [B, W, W],
+             [0, W, 0]];
+    println("Initial board");
+
+    printBoard(board);
+  var b2 bt;
+  println(color(board, b2, 0, 0, 2, 0));
+  
+  
+  
+  
+    println(score(board));
+    }
+main();
+

@@ -113,7 +113,9 @@ class Pval {
         return try e.con.equal(p.e.con)
     }
     func resolve() {
-        e.k = Kind(e.k.gtype.toPGtype())
+        if case .gDefined = getKind().gtype {
+            e.k = Kind(e.k.gtype.toPGtype())
+        }
     }
     func getUnwrap() throws -> Ptype {
         return try get().unwrap()
