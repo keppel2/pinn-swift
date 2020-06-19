@@ -1,3 +1,9 @@
+var pi *(int);
+print(pi);
+pi = *(42);
+print(pi);
+exit();
+
 E := 0;
 B := 1;
 W := 2;
@@ -7,9 +13,9 @@ type bt [SIZE][SIZE]int;
 
 var bh []bt;
 
-func ih(board bt) bool {
+func ih(board bt, bhist bt) bool {
   var b2 bt;
-  for b2 = range bh {
+  for b2 = range bhist {
     if board == b2 {
       return false;
     }
@@ -17,12 +23,13 @@ func ih(board bt) bool {
     return true;
 
 }
-func ie(board bt) {
-  if !ih(board) {
+func ie(board bt, bhist bt) bt {
+  if !ih(board, bhist) {
     println("dup");
     exit();
   }
-    bh[len(bh)] = board;
+    bhist[len(bh)] = board;
+    return bhist;
 }
 var boardA bt;
 //boardA = [[B, 0, B, W, 0],
@@ -139,6 +146,10 @@ func color (board bt, b bt, current int, currentScore int, x int, y int) (bt, in
     
 }
 //func cap (board bt) (
+func pscore (board bt, player int) int {
+  result := score(board);
+  return player == B ? result[0] - result[1] : result[1] - result[0];
+}
 func score (board bt) (int, int) {
     var x int;
     var y int;
@@ -169,16 +180,24 @@ func score (board bt) (int, int) {
 
 
 
-
+func play (board bt, player int, x int, y int) {}
 
 
 
 func opposite (x int) int { return x == B ? W : B; }
 			
-func minimax (player int, board bt) int
+func minimax (player int, board bt, passed bool) int
 {
-  result := score(board);
-  return 23;
+  var best *(int);
+  if passed {
+    best = *(pscore(board, player));
+  }
+  for x = range 0:SIZE {
+    for y = range 0:SIZE {
+      
+      
+    }
+  }
 }
 
 
@@ -192,13 +211,6 @@ func minimax (player int, board bt) int
 func main() {
   
     println("Initial board");
-  println(ih(boardA));
-  println(boardA == boardA);
-  ie(boardA);
-    printBoard(boardA);
-  println(ih(boardA));
-  
-  println(ih(boardA));
   var b2 bt;
   println(color(boardA, b2, 0, 0, 2, 0));
   boardA = cap(boardA, B);

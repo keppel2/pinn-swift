@@ -199,6 +199,16 @@ print(aInt);
 ft("Create literal of pointer and nil", "[P N]");
 ar := [*(42), nil];
 print(ar);
+
+ft("Pointer as nullable it:", "N true *(42) false");
+var pi *(int);
+print(pi, pi == nil, "");
+pi = *(42);
+print(pi, pi == nil);
+
+
+
+
 ft("Create map to pointer and nil", "{a:P b:N}");
 m := {"a": *(101), "b": nil};
 print(m);
@@ -1588,6 +1598,7 @@ x = true;
 ng("Pointer:");
 s := *(4, nil);
 s[1] = *(true, nil);
+
 
 ng("Deeply nested bad assignment:");
 var dnt [2](bool, int, [map](int, string));
