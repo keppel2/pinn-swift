@@ -37,6 +37,8 @@ var y int;
 (x, y) = (42, 101);
 print(x, y);
 
+
+
 ft("Create bool", "false");
 var b bool;
 print(b);
@@ -54,6 +56,9 @@ ft("Short declaration", "true");
 shortBool := true;
 print(shortBool);
 
+ft("Short destructure", "101 false");
+(a, b) := (101, false);
+print(a, b);
 
 ng("Wrong short declaration:");
 sdns := [[2, 1], 24];

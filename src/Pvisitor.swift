@@ -1187,10 +1187,19 @@ class Pvisitor {
 
             
             if sctx.CE() != nil {
-                    
-                    
+                var ae = [Pval]()
+                if sctx.LPAREN() != nil {
+                    let pv = try visitPval(sctx.expr()!)!
+                    if !pv.getKind().gtype.isTuple() {
+                        throw Perr(ETYPE, sctx)
+                    }
+                    for index in try 0..<pv.getCount() {
+                        try ae.append(pv.get(index))
+                    }
+                } else {
                     let el = sctx.exprList()!
-                    let ae = try visitList(el)
+                    ae = try visitList(el)
+                }
                 if ae.count != sctx.ID().count {
                     throw Perr(ERANGE, sctx)
                 }
