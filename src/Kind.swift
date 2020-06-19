@@ -64,7 +64,7 @@ class Kind {
             return true
         }
         
-        return false
+        return try gtype.gEquivalent(k.gtype, k)
     }
     func isNr() -> Bool {
         return self === gOne.nkind || self === gOne.rkind

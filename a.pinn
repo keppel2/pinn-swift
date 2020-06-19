@@ -1,4 +1,3 @@
-
 E := 0;
 B := 1;
 W := 2;
@@ -6,16 +5,35 @@ INV := 3;
 SIZE := 3;
 type bt [SIZE][SIZE]int;
 
+var bh []bt;
 
+func ih(board bt) bool {
+  var b2 bt;
+  for b2 = range bh {
+    if board == b2 {
+      return false;
+    }
+  }
+    return true;
+
+}
+func ie(board bt) {
+  if !ih(board) {
+    println("dup");
+    exit();
+  }
+    bh[len(bh)] = board;
+}
 var boardA bt;
 //boardA = [[B, 0, B, W, 0],
 //             [0, B, B, W, W],
 //             [B, B, W, 0, W],
 //             [B, B, W, W, W],
 //             [0, B, W, W, 0]];
-boardA = [[0, B, W],
+boardA = [[0, B, B],
           [B, B, B],
           [W, W, W]];
+
 
 
 
@@ -23,61 +41,73 @@ func printBoard (board bt) {
 	var y int;
 	var x int;
 	for y = range 0:SIZE {
-        print (board[0][y]);
+        print (board[y][0]);
 		for x = range 1:SIZE {
         print (" ");
-        print (board[x][y]);
+        print (board[y][x]);
 		}
         println();
 	}
 	println ("---");
 }
-func cap (board bt, current int) (bt) {
-
+func cap (board bt, current int) bt {
       var x int;
     var y int;
-    b := 0;
     w := 0;
     var b2 bt;
+  var be bt;
+  var b bool;
                     var c int;
                   var cs int;
     for x = range 0:SIZE {
         for y = range 0:SIZE {
-            if board[x][y] == B {b++;} else
-                if board[x][y] == W {w++;} else {
-
-                  
-                  (b2, c, cs) = color(board, b2, E, 0, x, y);
-                     // (b2, c, cs) = color()
-//                  println(tup);
-                  if c == B b += cs;
-                  if c == W w += cs;
-                }
-            
+          if board[x][y] != current {
+            continue;
+          }
+          b2 = be;
+          current = board[x][y];
+          (b2, b) = hasLib(board, b2, current, x, y, false);
+          if !b {
+            board = clear(board, b2, current);
+          }
         }
     }
-        return (b, w);
+      return board;
   
   
   
   
 }
 func hasLib (board bt, b bt, current int, x int, y int, lib bool) (bt, bool) {
-      if x < 0 || x >= SIZE || y < 0 || y >= SIZE {
-        return (board, lib);
+      if x < 0 || x >= SIZE || y < 0 || y >= SIZE || b[x][y] == 23{
+        return (b, lib);
     }
-    if board[x][y] != current {
-      return (board, lib);
+    if board[x][y] == opposite(current) {
+      return (b, lib);
     }
         if board[x][y] == E {
-          return (board, true);
-        }
-        (board, lib) = clear(board, current, x + 1, y, lib);
-        (board, lib) = clear(board, current, x - 1, y, lib);
-        (board, lib) = clear(board, current, y + 1, y, lib);
-        (board, lib) = clear(board, current, y - 1, y, lib);
-  
+          return (b, true);
+      }
+        b[x][y] = 23;
+        (b, lib) = hasLib(board, b, current, x + 1, y, lib);
+        (b, lib) = hasLib(board, b, current, x - 1, y, lib);
+        (b, lib) = hasLib(board, b, current, x, y + 1, lib);
+        (b, lib) = hasLib(board, b, current, x, y - 1, lib);
+        return (b, lib);
 }
+func clear (board bt, b bt, current int) bt {
+  var x int;
+  var y int;
+  for x = range 0:SIZE {
+    for y = range 0:SIZE {
+      if b[x][y] == 23 {
+        board[x][y] = E;
+      }
+    }
+  }
+    return board;
+}
+
 func color (board bt, b bt, current int, currentScore int, x int, y int) (bt, int, int) {
     var tup (bt, int, int);
     if x < 0 || x >= SIZE || y < 0 || y >= SIZE || b[x][y] == 23 {
@@ -162,11 +192,17 @@ func minimax (player int, board bt) int
 func main() {
   
     println("Initial board");
-
+  println(ih(boardA));
+  println(boardA == boardA);
+  ie(boardA);
     printBoard(boardA);
+  println(ih(boardA));
+  
+  println(ih(boardA));
   var b2 bt;
   println(color(boardA, b2, 0, 0, 2, 0));
-  
+  boardA = cap(boardA, B);
+  printBoard(boardA);
   
   
   

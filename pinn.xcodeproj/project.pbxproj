@@ -85,7 +85,7 @@
 		E2B531412398E3500041751D /* PinnLexer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PinnLexer.swift; path = src/PinnLexer.swift; sourceTree = "<group>"; };
 		E2B531422398E3500041751D /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = main.swift; path = src/main.swift; sourceTree = "<group>"; };
 		E2B531432398E3500041751D /* global.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = global.swift; path = src/global.swift; sourceTree = "<group>"; };
-		E2BC3DB42387733B002D9413 /* a.pinn */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; fileEncoding = 4; indentWidth = 2; path = a.pinn; sourceTree = "<group>"; tabWidth = 2; usesTabs = 0; };
+		E2BC3DB42387733B002D9413 /* a.pinn */ = {isa = PBXFileReference; explicitFileType = sourcecode.c; fileEncoding = 4; indentWidth = 2; path = a.pinn; sourceTree = "<group>"; tabWidth = 2; usesTabs = 0; };
 		E2D2DBFB2366B76500E0CC35 /* Pinn.g4 */ = {isa = PBXFileReference; lastKnownFileType = text; path = Pinn.g4; sourceTree = "<group>"; };
 		E2D5848D2405ECE2002ED255 /* extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = extensions.swift; path = src/extensions.swift; sourceTree = "<group>"; };
 		E2D5848E2405ECE2002ED255 /* function.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = function.swift; path = src/function.swift; sourceTree = "<group>"; };

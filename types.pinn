@@ -1553,14 +1553,6 @@ print(x);
 
 
 
-ft("Named type test", "5");
-type tInt int;
-var x tInt;
-x = 5;
-print(x);
-
-
-
 ft("Named type tuple string", "(foo bar)");
 type tTuple (string, string);
 var x tTuple;
@@ -1574,7 +1566,13 @@ var y tInt;
 x = 12;
 y = x;
 print(x, y);
-ft("", "");
+ft("Named type array equality", "true false");
+type tArray [2]int;
+var a tArray;
+var b tArray;
+print(a == b, "");
+a[0] = 23;
+print(a == b, "");
 ng("Bad named type");
 type tInt int;
 var x tInt;
