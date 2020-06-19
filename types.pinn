@@ -31,6 +31,12 @@ var x2 int;
 x2 = 10;
 print(x2);
 
+ft("Create and tuple destructure", "42 101");
+var x int;
+var y int;
+(x, y) = (42, 101);
+print(x, y);
+
 ft("Create bool", "false");
 var b bool;
 print(b);

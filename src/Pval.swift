@@ -220,7 +220,7 @@ class Pval {
     func getCount() throws -> Int {
         
         switch getKind().gtype {
-        case .gSlice, .gPointer, .gArray:
+        case .gSlice, .gPointer, .gArray, .gTuple:
             return e.con.getAr().count
         case .gMap:
             return e.con.getMap().count

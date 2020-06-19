@@ -1001,6 +1001,24 @@ class Pvisitor {
                     break
                 }
             }
+        case let sctx as PinnParser.DestructureSetContext:
+      
+                let lel = sctx.lExprList()!
+                
+                let ae = try visitLList(lel)
+                let lae = try _visitPval(sctx.expr()!)
+            
+                if !lae.getKind().gtype.isTuple() {
+                    throw Perr(ETYPE, sctx)
+                }
+                if try ae.count != lae.getCount() {
+                    throw Perr(ERANGE, sctx)
+                }
+                                for (k, v) in ae.enumerated() {
+                                    try v.setPV(lae.get(k))
+                }
+
+            
         case let sctx as PinnParser.SimpleSetContext:
             
             

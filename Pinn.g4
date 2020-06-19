@@ -16,8 +16,8 @@ typeDecl
 
 varDecl
   : 'var' ID kind
-  | ID ( ',' ID )* CE exprList ;
-
+  | ID ( ',' ID )* CE exprList
+  | LPAREN ID ( ',' ID )* RPAREN CE expr;
 
 kind
   :
@@ -28,6 +28,7 @@ kind
 
 simpleStatement
   : lExprList '=' exprList #simpleSet
+  | LPAREN lExprList RPAREN '=' expr #destructureSet
   | lExpr ('+' | '-' | '*' | '/' | '%') '=' expr #compoundSet
   | lExpr ('++' | '--') #doubleSet ;
 
