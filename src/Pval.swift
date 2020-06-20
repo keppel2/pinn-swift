@@ -159,7 +159,11 @@ class Pval {
                 if !e.con.getAr().indices.contains(v1v) {
                     throw Perr(ERANGE, self)
                 }
-                return e.con.getAr()[v1v]
+//                if g.isArray() {
+//                    return try e.con.getAr()[v1v].cloneIf()
+//                } else {
+                    return e.con.getAr()[v1v]
+//            }
             default:
                 throw Perr(ETYPE, self)
             }

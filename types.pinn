@@ -832,6 +832,16 @@ ssAr2 := ssAr1[1@2];
 ssAr2[0] = 777;
 print(ssAr1, ssAr2);
 
+/*
+ft("Slice of arrays does not share (bug)", "[[23]] [42]");
+var j [][1]int;
+j[0] = [23];
+var k [1]int;
+k = j[0];
+k[0] = 42;
+println(j, k);
+*/
+
 ft("Slice to slice shares", "[101 23 42] [101 23 42]");
 sss := ...[7, 23, 42];
 sss2 := sss[:];

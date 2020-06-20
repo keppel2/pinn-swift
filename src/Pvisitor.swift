@@ -74,6 +74,10 @@ class Pvisitor {
                     let rt = Pvisitor.printSpace(try s.map {try $0.string()})
                     pv.textout(rt)
                     return nil
+            }, "rand":
+                             { sctx, pv, s in try assertPvals(s, 1)
+                let str: Int = try tryCast(s[0])
+                                return Pval(sctx, Int.random(in: 0..<str))
             },
             "println":
                 {sctx, pv, s in

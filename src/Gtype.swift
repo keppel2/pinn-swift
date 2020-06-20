@@ -37,6 +37,12 @@ enum Gtype {
         }
         return false
     }
+    func isArray() -> Bool {
+        if case .gArray = self {
+            return true
+        }
+        return false
+    }
     func toFill(_ k: Kind) -> Gtype {
         if case .gPointer(let ka) = self {
             let ka2: [Kind] = ka.map {

@@ -1,7 +1,10 @@
-var pi *(int);
-print(pi);
-pi = *(42);
-print(pi);
+var j [][1]int;
+j[0] = [23];
+println(j);
+var k [1]int;
+//k = j[0];
+k[0] = 42;
+println(j, k);
 exit();
 
 E := 0;
@@ -22,10 +25,15 @@ func bhc(bh []bt) []bt {
   }
 }
 
-func ih(board bt, bhist bt) bool {
+func ih(board bt, bhist []bt) bool {
+  printBoard(board);
+//  println(last(bhist));
   var b2 bt;
   for b2 = range bhist {
     if board == b2 {
+      println("beeb", len(bhist));
+      printBoard(board);
+      printBoard(b2);
       return false;
     }
   }
@@ -199,12 +207,17 @@ func play (board bt, player int, x int, y int) bt {
   board = cap(board, player);
   return board;
 }
+
 func last (bh []bt) bt {
   return bh[len(bh) - 1];
+}
+func add (bh []bt, b bt) {
+  bh[len(bh)] = b;
 }
 
 func playb (bh []bt, player int, x int, y int) bool {
   board := play(last(bh), player, x, y);
+  printBoard(board);
   if ih(board, bh) {
     ie(board, bh);
     return true;
@@ -255,16 +268,20 @@ func minimax (player int, board bt, bh []bt, passed bool) int
 
 
 func main() {
-  
-    println("Initial board");
+  var ok bool;
+  println("Initial board");
   var b2 bt;
-  println(color(boardA, b2, 0, 0, 2, 0));
-  boardA = cap(boardA, B);
-  printBoard(boardA);
-  
-  
-  
-    println(score(boardA));
-    }
+  var bh []bt;
+  add(bh, b2);
+  player := B;
+  repeat {
+    printBoard(last(bh));
+    ok = playb(bh, player, rand(SIZE), rand(SIZE));
+    player = opposite(player);
+    printBoard(last(bh));
+    
+  } while ok;
+
+}
 main();
 
