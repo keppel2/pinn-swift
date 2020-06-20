@@ -13,6 +13,15 @@ type bt [SIZE][SIZE]int;
 
 var bh []bt;
 
+func bhc(bh []bt) []bt {
+  var rt []bt;
+  var k int;
+  var v bt;
+  for k, v = range bh {
+    rt[k] = v;
+  }
+}
+
 func ih(board bt, bhist bt) bool {
   var b2 bt;
   for b2 = range bhist {
@@ -23,13 +32,13 @@ func ih(board bt, bhist bt) bool {
     return true;
 
 }
-func ie(board bt, bhist bt) bt {
+
+func ie(board bt, bhist []bt) {
   if !ih(board, bhist) {
     println("dup");
     exit();
   }
     bhist[len(bh)] = board;
-    return bhist;
 }
 var boardA bt;
 //boardA = [[B, 0, B, W, 0],
@@ -179,21 +188,58 @@ func score (board bt) (int, int) {
 
 
 
+func play (board bt, player int, x int, y int) bt {
+  if board[x][y] != E {
+    return bt;
+  }
+    
+  board[x][y] = player;
+    
+  board = cap(board, opposite(player));
+  board = cap(board, player);
+  return board;
+}
+func last (bh []bt) bt {
+  return bh[len(bh) - 1];
+}
 
-func play (board bt, player int, x int, y int) {}
-
+func playb (bh []bt, player int, x int, y int) bool {
+  board := play(last(bh), player, x, y);
+  if ih(board, bh) {
+    ie(board, bh);
+    return true;
+  }
+  return false;
+}
 
 
 func opposite (x int) int { return x == B ? W : B; }
 			
-func minimax (player int, board bt, passed bool) int
+func minimax (player int, board bt, bh []bt, passed bool) int
 {
-  var best *(int);
+  var pb bt;
+  var best int;
+  var s int;
+  var b bool;
+  var bh2 []bt;
   if passed {
-    best = *(pscore(board, player));
+    best = pscore(board, player);
+  } else {
+    best = -minimax(opposite(player), board, true);
   }
+  
   for x = range 0:SIZE {
     for y = range 0:SIZE {
+      bh2 = bhc(bh);
+      if board[x][y] == E {
+        b = playb(board, bh2, player, x, y);
+        if !b { continue; }
+//        s = -minimax
+        pb = play(board, player, x, y);
+        if pscore(pb, player) > best {
+          best = pscore(pb, player);
+        }
+      }
       
       
     }
