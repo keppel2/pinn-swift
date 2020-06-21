@@ -1,8 +1,27 @@
+//var x int;
+//var y int;
+//x = 23;
+//y = x;
+//y = 42;
+//print(x, y);
+//
+//
+//var a int;
+//var b int;
+//a = 42;
+//b = 101;
+//a, b = b, a;
+//print(a, b);
+//
+//
+//
+//exit();
+
 var j [][1]int;
 j[0] = [23];
 println(j);
 var k [1]int;
-//k = j[0];
+k = j[0];
 k[0] = 42;
 println(j, k);
 exit();

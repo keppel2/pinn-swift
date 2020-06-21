@@ -3,6 +3,7 @@ protocol Ptype {
     static func zeroValue() -> Ptype
     func equal(_: Ptype) -> Bool
 }
+
 protocol Ktype {}
 
 protocol Plus: Ptype {

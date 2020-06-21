@@ -1,8 +1,29 @@
-
+//Create all with defaults
 
 ft("Create int", "0");
 var x int;
 print(x);
+
+ft("Create bool", "false");
+var b bool;
+print(b);
+
+ft("Create string", "");
+var str string;
+print(str);
+
+ft("Create decimal", "0");
+var d decimal;
+print(d);
+
+ft("Int copies by value", "23 42");
+var x int;
+var y int;
+x = 23;
+y = x;
+y = 42;
+print(x, y);
+
 
 ft("Named type test", "5");
 type tInt int;
@@ -39,13 +60,6 @@ print(x, y);
 
 
 
-ft("Create bool", "false");
-var b bool;
-print(b);
-
-ft("Create string", "");
-var str string;
-print(str);
 
 ft("Set string", "value");
 var str2 string;

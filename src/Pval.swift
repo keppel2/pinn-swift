@@ -192,7 +192,7 @@ class Pval {
             throw Perr(ETYPE, v)
         }
         
-        e.con = v.e.con
+        try e.con = v.e.con
     }
     
     func delKey(_ s: String) throws {
