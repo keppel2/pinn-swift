@@ -17,14 +17,27 @@
 //
 //exit();
 
-var j [][1]int;
-j[0] = [23];
-println(j);
-var k [1]int;
-k = j[0];
-k[0] = 42;
-println(j, k);
+//ft("Slice of arrays", "[[0 42] [101 0]] [[0 42] [0 42]] [[202 42] [202 42]]");
+var soa [][1]int;
+
+soa[0][0] = 42;
+soa[1][0] = 23;
+println(soa, "");
+soa[1] = soa[0];
+println(soa, "");
+soa[0][0] = 202;
+println(soa);
 exit();
+
+
+//var j [][1]int;
+//j[0] = [23];
+//println(j[0][0]);
+//var k [1]int;
+//k = j[0];
+//k[0] = 42;
+//println(j, k);
+//exit();
 
 E := 0;
 B := 1;

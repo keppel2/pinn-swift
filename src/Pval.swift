@@ -162,7 +162,11 @@ class Pval {
 //                if g.isArray() {
 //                    return try e.con.getAr()[v1v].cloneIf()
 //                } else {
+                if !lh {
+                    return try cloneIf().e.con.getAr()[v1v]
+                } else {
                     return e.con.getAr()[v1v]
+                }
 //            }
             default:
                 throw Perr(ETYPE, self)
@@ -278,7 +282,7 @@ class Pval {
         switch e.con {
         case .single(let pw):
             if getKind().gtype.isPointer() {
-                return Pval(self)
+                return self
             }
             return Pval(e.prc, pw.clone().unwrap())
         case .multi(let ar):
@@ -286,7 +290,7 @@ class Pval {
             case .gSlice, .gPointer:
                 return Pval(self)
             case .gArray, .gTuple:
-                let con = try Contents.multi(Wrap(ar.w.map { try $0.cloneIf() }))
+                let con = try Contents.multi(Wrap(ar.w.map { try $0.cloneType() }))
                 let pvp = Pvalp(e.k, con, e.prc)
                 return Pval(pvp)
             default: aden()
