@@ -20,22 +20,34 @@ print(d);
 
 
 
-ft("Named type test", "5");
+ft("Named type test", "0");
 type tInt int;
 var x tInt;
-x = 5;
 print(x);
 
-ft("Chained named type", "true");
+ft("Chained named type", "false");
 type tA bool;
 type tB tA;
 
 var x tB;
-x = true;
 print(x);
 
 
 //Printing
+ft("Print one item", "101");
+print(101);
+
+ft("Print multiple items", "23 42 101");
+print(23, 42, 101);
+
+ft("Print multiple times", "125");
+print(1);
+print(2);
+print(5);
+
+ft("Print nothing", "");
+print();
+
 ft("Print literals IBSD", "42 true str 1.5");
 print(42, true, "str", 1.5);
 
@@ -49,10 +61,19 @@ ft("Print single element object", "{foo:42}");
 print({"foo": 42});
 
 
+//Create and set
+
 ft("Create and set to 10", "10");
 var x2 int;
 x2 = 10;
 print(x2);
+
+ft("Create and set ints", "27");
+var x int;
+x = 2;
+print(x);
+x = 7;
+print(x);
 
 ft("Create and set BSD", "true value 42.5");
 var b bool;
@@ -63,6 +84,51 @@ var d decimal;
 d = 42.5;
 print(b, str, d);
 
+ft("Create and set named type", "101.5");
+type t decimal;
+var d t;
+d = 101.5;
+print(d);
+
+ft("Create and set differently named types", "101 101 42 42");
+type t int;
+var x1 t;
+x1 = 101;
+var x2 int;
+x2 = x1;
+print(x1, x2, "");
+var xA int;
+xA = 42;
+var xB t;
+xB = xA;
+print(xA, xB);
+
+ft("Create and set two named types derived from int", "202 202");
+type tA int;
+type tB int;
+var vA tA;
+vA = 202;
+var vB tB;
+vB = vA;
+print(vA, vB);
+
+ft("Create and chain set int from default", "0 0");
+var i1 int;
+var i2 int;
+i2 = i1;
+print(i1, i2);
+
+
+ft("Create and chain set ints", "10 10");
+var i1 int;
+var i2 int;
+i1 = 10;
+i2 = i1;
+print(i1, i2);
+
+
+
+
 ft("Create and tuple destructure", "42 true");
 var x int;
 var y bool;
@@ -72,9 +138,12 @@ print(x, y);
 
 
 
-ft("Short declaration", "true");
-shortBool := true;
-print(shortBool);
+ft("Short declaration", "42 true str 98.5");
+i := 42;
+b := true;
+s := "str";
+d := 98.5;
+print(i, b, s, d);
 
 ft("Short destructure", "101 false");
 (a, b) := (101, false);
@@ -111,6 +180,12 @@ x = 23;
 y = x;
 y = 42;
 print(x, y);
+
+ft("Set to self", "42");
+var x int;
+x = 42;
+x = x;
+print(x);
 
 
 ng("Wrong short declaration:");
