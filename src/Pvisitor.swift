@@ -945,6 +945,7 @@ class Pvisitor {
             guard let lh = try visitPval(sctx.lExpr()!) else {
                 throw Perr(ENIL, sctx)
             }
+            lh.resolve();
             let rh = try _visitPval(sctx.expr()!)
             
             let op = sctx.children![sctx.children!.count - 3].getText()

@@ -16,13 +16,8 @@ ft("Create decimal", "0");
 var d decimal;
 print(d);
 
-ft("Int copies by value", "23 42");
-var x int;
-var y int;
-x = 23;
-y = x;
-y = 42;
-print(x, y);
+
+
 
 
 ft("Named type test", "5");
@@ -31,40 +26,51 @@ var x tInt;
 x = 5;
 print(x);
 
+ft("Chained named type", "true");
+type tA bool;
+type tB tA;
+
+var x tB;
+x = true;
+print(x);
+
+
+//Printing
+ft("Print literals IBSD", "42 true str 1.5");
+print(42, true, "str", 1.5);
+
 ft("Print", "a \\ slash");
 print("a \\ slash");
 
-ft("Print empty array", "[]");
-var empty [0]int;
-print(empty);
-
-ft("Print singleton array", "[23]");
-print([23]);
-
-ft("Print two in array", "[101 777]");
-print([101, 777]);
+ft("Print arrays", "[23] [true true] [aa bb cc] [0.5 1.5]");
+print([23], [true, true], ["aa", "bb", "cc"], [0.5, 1.5]);
 
 ft("Print single element object", "{foo:42}");
 print({"foo": 42});
+
 
 ft("Create and set to 10", "10");
 var x2 int;
 x2 = 10;
 print(x2);
 
-ft("Create and tuple destructure", "42 101");
+ft("Create and set BSD", "true value 42.5");
+var b bool;
+b = true;
+var str string;
+str = "value";
+var d decimal;
+d = 42.5;
+print(b, str, d);
+
+ft("Create and tuple destructure", "42 true");
 var x int;
-var y int;
-(x, y) = (42, 101);
+var y bool;
+(x, y) = (42, true);
 print(x, y);
 
 
 
-
-ft("Set string", "value");
-var str2 string;
-str2 = "value";
-print(str2);
 
 ft("Short declaration", "true");
 shortBool := true;
@@ -97,6 +103,14 @@ print(x, y);
 //#5
 //ng("Tuple with nil");
 //sd := (4, nil);
+
+ft("Int copies by value", "23 42");
+var x int;
+var y int;
+x = 23;
+y = x;
+y = 42;
+print(x, y);
 
 
 ng("Wrong short declaration:");
@@ -642,10 +656,14 @@ print (true && true, true && false, true || false, false || false);
 func bad() bool {print("bad"); return false;}
 ft("bad test", "false true");
 print (false && bad(), true || bad());
-
+ft("Negate", "-42");
+var x int;
+x = 42;
+x *= -1;
+print(x);
 ft("Compound + - * % /", "7 4 8 2 1");
-
-comp := 5;
+var comp int;
+comp = 5;
 comp += 2;
 print(comp, "");
 comp -= 3;
@@ -975,7 +993,7 @@ p2 = p;
 p2[0] = 101;
 print(p, p2);
 
-ft("Function copies pointer", "*(23)*(202)");
+ft("Function copies pointer", "*(23)*(23)*(202)");
 func f(p *(int)) {
   p = *(10);
 }
@@ -984,6 +1002,7 @@ func g(p *(int)) {
 }
 var z *(int);
 z = *(23);
+   print(z);
 f(z);
 print(z);
 g(z);
