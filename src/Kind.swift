@@ -29,11 +29,9 @@ class Kind {
         return k2
     }
     var gtype: Gtype
-    var str: String?
 
     private init(_ s: String) {
         gtype = Gtype.gScalar(Nil.self)
-        str = s
     }
 
     init(_ g: Gtype) {

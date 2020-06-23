@@ -321,9 +321,21 @@ class Pvisitor {
     }
     private func callFunction(_ sctx: ParserRuleContext, _ str: String, _ s: [Pval]) throws -> Pval? {
         var rt: Pval?
-        guard let fh = fkmap[str] else {
+        guard var fh = fkmap[str] else {
             throw Perr(EUNDECLAREDF, sctx)
         }
+        
+        
+        
+        
+        if let fx = fh.kind {
+            fh.kind = Kind(fx.gtype.toPGR())
+        }
+                for (index, v) in fh.fkinds.enumerated() {
+                    fh.fkinds[index].k = Kind(v.k.gtype.toPGR())
+        }
+        
+        
         guard let ctx = fh.funcContext else {
             return try Self.builtIns[str]!(sctx, self, s)
         }
@@ -370,6 +382,7 @@ class Pvisitor {
         }
         
         if let k = fh.kind {
+            
             guard let rp = lfc!.rt else {
                 throw Perr(ETYPE, sctx)
             }
@@ -764,7 +777,7 @@ class Pvisitor {
             let ae = try visitList(el)
             let aeFirstk = ae.first!.getKind()
             
-            rt = try Pval(sctx, ae, aeFirstk, sctx.THREEDOT() != nil)
+            rt = try Pval(sctx, ae, sctx.THREEDOT() != nil, aeFirstk)
         
             return rt
             
@@ -801,7 +814,7 @@ class Pvisitor {
                 guard let pv = getPv(str) else {
                     throw Perr(EUNDECLARED, sctx)
                 }
-                pv.resolve()
+//                pv.resolve()
                 
                 rt = try pv.cloneIf()
             default:
@@ -945,7 +958,7 @@ class Pvisitor {
             guard let lh = try visitPval(sctx.lExpr()!) else {
                 throw Perr(ENIL, sctx)
             }
-            lh.resolve();
+//            lh.resolve();
             let rh = try _visitPval(sctx.expr()!)
             
             let op = sctx.children![sctx.children!.count - 3].getText()

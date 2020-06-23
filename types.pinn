@@ -84,11 +84,28 @@ var d decimal;
 d = 42.5;
 print(b, str, d);
 
+ft("Create and chain set int from default", "0 0");
+var i1 int;
+var i2 int;
+i2 = i1;
+print(i1, i2);
+
+
+ft("Create and chain set ints", "10 10");
+var i1 int;
+var i2 int;
+i1 = 10;
+i2 = i1;
+print(i1, i2);
+
 ft("Create and set named type", "101.5");
 type t decimal;
 var d t;
 d = 101.5;
 print(d);
+
+
+
 
 ft("Create and set differently named types", "101 101 42 42");
 type t int;
@@ -112,19 +129,7 @@ var vB tB;
 vB = vA;
 print(vA, vB);
 
-ft("Create and chain set int from default", "0 0");
-var i1 int;
-var i2 int;
-i2 = i1;
-print(i1, i2);
 
-
-ft("Create and chain set ints", "10 10");
-var i1 int;
-var i2 int;
-i1 = 10;
-i2 = i1;
-print(i1, i2);
 
 
 

@@ -93,9 +93,41 @@ enum Gtype {
         }
         return self
     }
+    func toPGR() -> Gtype {
+        switch self {
+        case .gScalar:
+            return self
+            
+        case .gArray(let k, let i):
+            return Gtype.gArray(Kind(k.gtype.toPGR()), i)
+        case .gSlice(let k):
+            return Gtype.gSlice(Kind(k.gtype.toPGR()))
+        case .gMap(let k):
+            return Gtype.gMap(Kind(k.gtype.toPGR()))
+
+            
+        case .gPointer(let ka):
+            return Gtype.gPointer(ka.map { Kind($0.gtype.toPGR())})
+
+        case .gTuple(let ka):
+            return Gtype.gTuple(ka.map { Kind($0.gtype.toPGR())})
+            
+        case .gDefined(let s):
+            return Kind.getPKind(s).gtype.toPGR()
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    }
     func gAssignable(_ gB: Gtype, _ ik: Kind)  -> Bool {
-        let gA = self.toPGtype()
-        let g2 = gB.toPGtype()
+        let gA = self//.toPGtype()
+        let g2 = gB//.toPGtype()
         switch gA {
         case .gScalar(let pt):
             if case .gScalar(let pt2) = g2 {
@@ -233,7 +265,8 @@ enum Gtype {
             return false
             
                         case .gDefined(let s):
-                return true
+aden()
+            
         }
     }
 }
