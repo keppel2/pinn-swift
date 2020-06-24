@@ -20,13 +20,7 @@ class Kind {
         if !g.isValid() {
             throw Perr(ETYPE)
         }
-        let k = Kinds.ks.has(g)
-        if k != nil {
-            return k!
-        }
-        let k2 = Kind(g)
-        Kinds.ks.append(k2)
-        return k2
+        return Kind(g)
     }
     var gtype: Gtype
 
@@ -36,45 +30,40 @@ class Kind {
 
     init(_ g: Gtype) {
         gtype = g
-        if g.isPointer() {
-            gtype = g.toFill(self)
-        }
     }
     
     func assignable(_ k: Kind)  -> Bool {
-        if self === k {
-            return true
-        }
-        
-        if gtype.toPGtype().isPointer() && k === gOne.nkind {
-            return true
-        }
-        return try gtype.gAssignable(k.gtype, k)
+        return equivalent(k)
+//        if self === k {
+//            return true
+//        }
+//
+//        if gtype.toPGtype().isPointer() && k === gOne.nkind {
+//            return true
+//        }
+//        return try gtype.gAssignable(k.gtype, k)
 
     }
     func equivalent(_ k: Kind) -> Bool {
-        if self === k {
-            return true
-        }
+//        if self === k {
+//            return true
+//        }
         
         
         if gtype.isPointer() && k === gOne.nkind || self === gOne.nkind && k.gtype.isPointer() {
             return true
         }
         
-        return try gtype.gEquivalent(k.gtype, k)
+        return try gtype.gEquivalent(k.gtype)
     }
     func isNr() -> Bool {
-        return self === gOne.nkind || self === gOne.rkind
+        return self === gOne.nkind
     }
     func hasNil() -> Bool {
         if self === gOne.nkind {
             return true
         }
         return false //gtype.hasNil(self)
-    }
-    static func isRef( _ s: String) -> Bool {
-        return Kinds.ks.isRef(s)
     }
     static func isNil( _ s: String) -> Bool {
         return Kinds.ks.isNil(s)
@@ -84,7 +73,6 @@ class Kind {
     private class Kinds {
         fileprivate static var ks = Kinds()
         private var km = [String: Kind]()
-        private var kd = [Kind]()
 //        private var kset = Set<Kind>()
         func clear() {
             km = [String: Kind]()
@@ -98,9 +86,7 @@ class Kind {
             }
             km[s] = k
         }
-        func isRef(_ s: String) -> Bool {
-            return km[s] === gOne.rkind
-        }
+        
                 func isNil(_ s: String) -> Bool {
                     return km[s] === gOne.nkind
         }
@@ -113,19 +99,6 @@ class Kind {
                 k = km[s2]!
             }
             return k
-        }
-        func has(_ g: Gtype) -> Kind? {
-            let ki = kd.firstIndex {
-                
-                $0.gtype.gEquivalent(g, $0)
-            }
-            guard ki != nil else {
-                return nil
-            }
-            return kd[ki!]
-        }
-        func append(_ k: Kind) {
-            kd.append(k)
         }
         private init() {}
     }

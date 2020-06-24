@@ -25,6 +25,12 @@ enum Gtype {
         
         }
     }
+    func isNil() -> Bool {
+        if case .gScalar(let pt) = self {
+                return pt == Nil.self
+            }
+        return false
+    }
     func isPointer() -> Bool {
         if case .gPointer = self {
             return true
@@ -43,18 +49,7 @@ enum Gtype {
         }
         return false
     }
-    func toFill(_ k: Kind) -> Gtype {
-        if case .gPointer(let ka) = self {
-            let ka2: [Kind] = ka.map {
-                if $0 === gOne.rkind || $0 === gOne.nkind {
-                    return k
-                }
-                return $0
-            }
-            return Gtype.gPointer(ka2)
-        }
-        aden()
-    }
+
 //    func refMatch(_ k: Kind) -> Bool {
 //        if case .gPointer(let ka) = self {
 //            
@@ -125,104 +120,62 @@ enum Gtype {
         
         
     }
-    func gAssignable(_ gB: Gtype, _ ik: Kind)  -> Bool {
-        let gA = self//.toPGtype()
-        let g2 = gB//.toPGtype()
-        switch gA {
-        case .gScalar(let pt):
-            if case .gScalar(let pt2) = g2 {
-                return pt == pt2
-            }
-            return false
-        case .gArray(let k, let i):
-            if case .gArray(let k2, let i2) = g2 {
-                return i == i2 && k.assignable(k2)
-            }
-            return false
-        case .gSlice(let k):
-            if case .gSlice(let k2) = g2 {
-                return k.assignable(k2)
-            }
-            return false
-        case .gMap(let k):
-            if case .gMap(let k2) = g2 {
-                return k.assignable(k2)
-            }
-            return false
-            
-        case .gPointer(let ka):
-            if case .gPointer(let ka2) = g2 {
-                
-                return ka.elementsEqual(ka2) {
-                    if $0.gtype.isPointer() {
-                        if $1 === ik {
-                            return true
-                        }
-                    }
-                    return $0.assignable($1)
-                }
-            }
-            return false
-            
-            
-        case .gTuple(let ka):
-            if case .gTuple(let ka2) = g2 {
-                
-                return ka.elementsEqual(ka2) {
-                    $0.assignable($1)
-                }
-            }
-            return false
-        case .gDefined:
-            aden()
-        }
-        
-    }
-  
-    
-    
-//    func hasNil(_ k: Kind) -> Bool {
-//        switch self {
+//    func gAssignable(_ gB: Gtype, _ ik: Kind)  -> Bool {
+//        let gA = self//.toPGtype()
+//        let g2 = gB//.toPGtype()
+//        switch gA {
 //        case .gScalar(let pt):
-//            return pt == Nil.self
+//            if case .gScalar(let pt2) = g2 {
+//                return pt == pt2
+//            }
+//            return false
 //        case .gArray(let k, let i):
 //            if case .gArray(let k2, let i2) = g2 {
-//                return i == i2 && k === k2
+//                return i == i2 && k.assignable(k2)
 //            }
 //            return false
 //        case .gSlice(let k):
 //            if case .gSlice(let k2) = g2 {
-//                return k === k2
+//                return k.assignable(k2)
 //            }
 //            return false
 //        case .gMap(let k):
 //            if case .gMap(let k2) = g2 {
-//                return k === k2
+//                return k.assignable(k2)
 //            }
 //            return false
-//            
+//
 //        case .gPointer(let ka):
 //            if case .gPointer(let ka2) = g2 {
+//
 //                return ka.elementsEqual(ka2) {
-//                    if $1 === gOne.rkind {
-//                        return $0 === k
+//                    if $0.gtype.isPointer() {
+//                        if $1 === ik {
+//                            return true
+//                        }
 //                    }
-//                    return $0 === $1
+//                    return $0.assignable($1)
 //                }
 //            }
 //            return false
+//
+//
 //        case .gTuple(let ka):
 //            if case .gTuple(let ka2) = g2 {
-//                
+//
 //                return ka.elementsEqual(ka2) {
-//                    $0 === $1
+//                    $0.assignable($1)
 //                }
 //            }
 //            return false
+//        case .gDefined:
+//            aden()
 //        }
+//
 //    }
+  
     
-    func gEquivalent(_ g2: Gtype, _ k: Kind) -> Bool {
+    func gEquivalent(_ g2: Gtype) -> Bool {
         switch self {
         case .gScalar(let pt):
             if case .gScalar(let pt2) = g2 {
@@ -231,35 +184,32 @@ enum Gtype {
             return false
         case .gArray(let k, let i):
             if case .gArray(let k2, let i2) = g2 {
-                return i == i2 && k === k2
+                return i == i2 && k.gtype.gEquivalent(k2.gtype)
             }
             return false
         case .gSlice(let k):
             if case .gSlice(let k2) = g2 {
-                return k === k2
+                return k.gtype.gEquivalent(k2.gtype)
             }
             return false
         case .gMap(let k):
             if case .gMap(let k2) = g2 {
-                return k === k2
+                return k.gtype.gEquivalent(k2.gtype)
             }
             return false
-            
         case .gPointer(let ka):
             if case .gPointer(let ka2) = g2 {
                 return ka.elementsEqual(ka2) {
-                    if $1 === gOne.rkind {
-                        return $0 === k
-                    }
-                    return $0 === $1
+
+                    return $0.gtype.gEquivalent($1.gtype)
                 }
             }
-            return false
+            return g2.isNil()
         case .gTuple(let ka):
             if case .gTuple(let ka2) = g2 {
                 
                 return ka.elementsEqual(ka2) {
-                    $0 === $1
+                    return $0.gtype.gEquivalent($1.gtype)
                 }
             }
             return false

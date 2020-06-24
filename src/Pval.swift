@@ -23,24 +23,18 @@ class Pval {
         } else {
             
             
-        let ka = ar.map { $0.getKind() === gOne.nkind ? gOne.rkind : $0.getKind() }
+        let ka = ar.map { $0.getKind() }
 //        if pointer {
 //            let gt = Gtype.gPointer(ka)
 //        }
         let ki = try Kind.produceKind(sp ? Gtype.gPointer(ka) : Gtype.gTuple(ka))
-        if sp {
-            for value in ar {
-                if value.getKind() === gOne.nkind {
-                    value.e.k = ki
-                }
-            }
-        } else {
-            if (ar.contains {
-                $0.getKind() === gOne.nkind
-            }) {
-              //  throw Perr(ENIL)
-            }
-        }
+//        if sp {
+//            for value in ar {
+//                if value.getKind() === gOne.nkind {
+//                    throw Perr(ENIL)
+//                }
+//            }
+//        }
         e = Pvalp(ki, .multi(Wrap(ar)), c)
 
         }
@@ -111,11 +105,16 @@ class Pval {
             throw Perr(ETYPE, self)
         }
         
-        
-        if case .gPointer = getKind().gtype {
-            return try e.con.pEqual(p.e.con)
-//            pv.w.append(v)
+        if case .gSlice = getKind().gtype {
+            return e === p.e
         }
+        if case .gPointer = getKind().gtype {
+//            return try e.con.pEqual(p.e.con)
+
+            return e === p.e
+            //            pv.w.append(v)
+        }
+        
         
         return try e.con.equal(p.e.con)
     }
@@ -199,8 +198,12 @@ class Pval {
         if !getKind().assignable(v.getKind()) {
             throw Perr(ETYPE, v)
         }
-        
-        try e.con = v.e.con
+        if v.getKind().gtype.isNil() {
+            e.con = v.e.con
+        } else {
+//        try e.con = v.e.con
+        e = v.e
+        }
     }
     
     func delKey(_ s: String) throws {

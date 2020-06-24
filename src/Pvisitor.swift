@@ -3,7 +3,7 @@ import Antlr4
 
 class Pvisitor {
     
-    static let litToType: [String: Ptype.Type] = ["int": Int.self, "bool": Bool.self, "string": String.self, "decimal": Decimal.self, "self": Ref.self]
+    static let litToType: [String: Ptype.Type] = ["int": Int.self, "bool": Bool.self, "string": String.self, "decimal": Decimal.self]
     private static let builtIns
         : [String: (ParserRuleContext, Pvisitor, [Pval]) throws -> Pval?] =
         [
@@ -463,9 +463,9 @@ class Pvisitor {
         var k: Kind?
         if let kctx = sctx.kind() {
             k = try visitKind(kctx)
-            if k === gOne.rkind {
-                throw Perr(ETYPE, sctx)
-            }
+//            if k === gOne.rkind {
+//                throw Perr(ETYPE, sctx)
+//            }
         }
         var fkinds = [FKind]()
         for (index, child) in sctx.fvarDecl().enumerated() {
@@ -499,9 +499,7 @@ class Pvisitor {
         } else
             if let type = sctx.ID() {
                 let strType = type.getText()
-                if Kind.isRef(strType) {
-                    rt = gOne.rkind
-                } else if Kind.isNil(strType) {
+                if Kind.isNil(strType) {
                     rt = gOne.nkind
                 } else {
                 rt = try Kind(Gtype.gDefined(strType))
@@ -530,9 +528,9 @@ class Pvisitor {
         
         let str = sctx.ID()!.getText()
         let k = try visitKind(sctx.kind()!)
-        if k === gOne.rkind {
-            throw Perr(ETYPE, sctx)
-        }
+//        if k === gOne.rkind {
+//            throw Perr(ETYPE, sctx)
+//        }
         return FKind(k: k, s: str, variadic: sctx.THREEDOT() != nil, prc: sctx)
     }
     private func visitKindList(_ sctx: PinnParser.KindListContext) throws -> [Kind]
@@ -1259,9 +1257,9 @@ class Pvisitor {
 //                    throw Perr(ETYPE, sctx)
 //                }
                 let k = try visitKind(sctx.kind()!)
-                if k === gOne.rkind {
-                    throw Perr(ETYPE, sctx)
-                }
+//                if k === gOne.rkind {
+//                    throw Perr(ETYPE, sctx)
+//                }
                 newV = try Pval(sctx, k)
 
             if lfc != nil {

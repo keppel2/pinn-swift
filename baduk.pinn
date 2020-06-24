@@ -4,7 +4,7 @@ B := 1;
 W := 2;
 INV := 3;
 SIZER := 1;
-SIZEC := 4;
+SIZEC := 3;
 type bt [SIZER][SIZEC]int;
 
 //var bh []bt;

@@ -69,7 +69,7 @@
 		E2673962235BC825000CF830 /* pinn */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = pinn; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2B287D3248A1351000A968F /* homework.pinn */ = {isa = PBXFileReference; lastKnownFileType = text; path = homework.pinn; sourceTree = "<group>"; };
 		E2B287D4248A1351000A968F /* types.pinn */ = {isa = PBXFileReference; explicitFileType = sourcecode.c; path = types.pinn; sourceTree = "<group>"; };
-		E2B287D5248A1351000A968F /* baduk.pinn */ = {isa = PBXFileReference; lastKnownFileType = text; path = baduk.pinn; sourceTree = "<group>"; };
+		E2B287D5248A1351000A968F /* baduk.pinn */ = {isa = PBXFileReference; explicitFileType = sourcecode.c; path = baduk.pinn; sourceTree = "<group>"; };
 		E2B287D6248A1351000A968F /* heap.pinn */ = {isa = PBXFileReference; lastKnownFileType = text; path = heap.pinn; sourceTree = "<group>"; };
 		E2B287D7248A1351000A968F /* bstp.pinn */ = {isa = PBXFileReference; lastKnownFileType = text; path = bstp.pinn; sourceTree = "<group>"; };
 		E2B287D8248A1351000A968F /* tic.pinn */ = {isa = PBXFileReference; lastKnownFileType = text; path = tic.pinn; sourceTree = "<group>"; };

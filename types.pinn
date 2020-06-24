@@ -20,19 +20,6 @@ print(d);
 
 
 
-ft("Named type test", "0");
-type tInt int;
-var x tInt;
-print(x);
-
-ft("Chained named type", "false");
-type tA bool;
-type tB tA;
-
-var x tB;
-print(x);
-
-
 //Printing
 ft("Print one item", "101");
 print(101);
@@ -98,13 +85,29 @@ i1 = 10;
 i2 = i1;
 print(i1, i2);
 
+
+
+
+
+
+
+
+ft("Named type test", "0");
+type tInt int;
+var x tInt;
+print(x);
+
+ft("Chained named type", "false");
+type tA bool;
+type tB tA;
+var x tB;
+print(x);
+
 ft("Create and set named type", "101.5");
 type t decimal;
 var d t;
 d = 101.5;
 print(d);
-
-
 
 
 ft("Create and set differently named types", "101 101 42 42");
@@ -129,6 +132,22 @@ var vB tB;
 vB = vA;
 print(vA, vB);
 
+ft("Xtra--named", "true true true0 0 0");
+
+type tA int;
+type tB tA;
+type tC tB;
+var vA tA;
+var vB tB;
+var vC tC;
+print(vA == vB, vA == vC, vB == vC);
+vA = vB;
+vB = vA;
+vA = vC;
+vC = vA;
+vB = vC;
+vC = vB;
+print(vA, vB, vC);
 
 
 
@@ -154,21 +173,41 @@ ft("Short destructure", "101 false");
 (a, b) := (101, false);
 print(a, b);
 
-ng("Wrong short declaration:");
-sdns := [[2, 1], 24];
-
-ng("Wrong short declaration:");
-sd := nil;
-
 ft("Multi short declaration:", "1 5 10");
 a, b, c := 1, 5, 10;
 print(a, b, c);
 
+ft("Short declaration and created", "42 42 true true");
+x := 42;
+var y int;
+y = x;
+x = y;
+print(x, y, x == y, y == x);
+ft("Short declaration and named", "101 101 true");
+s := 101;
+type t int;
+var x t;
+x = s;
+s = x;
+print(s, x, s == x);
+
+
+
+ng("Wrong short declaration");
+sdns := [[2, 1], 24];
+
+//ng("Wrong short declaration");
+//sd := nil;
+
+
 ng("Wrong multi short");
 a, b, c := 1, 5;
 
-ng("Wrong multi");
-a, b := 101, 202, 303;
+//ng("Wrong multi");
+//a, b := 101, 202, 303;
+//
+
+
 ft("Multi swap:", "101 42");
 x, y := 42, 101;
 x, y = y, x;
@@ -211,6 +250,259 @@ func f() {}
 sdns := [4, f()];
 
 
+ft("Create array", "[0 0]");
+var newArray [2]int;
+print(newArray);
+
+ft("Create 2 array", "[0 0] [0 0] true");
+var a [2]int;
+var b [2]int;
+a = b;
+b = a;
+print(a, b, a == b);
+
+ft("Xtra--1 and zero size array", "[0] []");
+var a1 [1]int;
+var a2 [0]int;
+print(a1, a2);
+
+ft("Xtra--variable array bounds", "[0 0][0 0 0]");
+var x int;
+x = 2;
+var y [x]int;
+print(y);
+x = 3;
+var y2 [x]int;
+print(y2);
+
+ft("Create array and set", "[42 101]");
+var na [2]int;
+na[0] = 42;
+na[1] = 101;
+print(na);
+
+ft("Create/set 2-dimensional array", "[[0 0 0] [0 0 0]][[0 0 20] [0 0 0]]");
+var a [2][3]int;
+print(a);
+a[0][2] = 20;
+print(a);
+
+ft("Multi", "[[42 0] [0 0]] [42 0][[42 0] [0 101]] [0 101]");
+var a [2][2]int;
+var b [2]int;
+b[0] = 42;
+a[0] = b;
+print(a, b);
+a[1][1] = 101;
+b = a[1];
+print(a, b);
+
+ft("Named", "[0 0][42 0][42 0] [42 0] true");
+type t [2]int;
+var v t;
+print(v);
+v[0] = 42;
+print(v);
+var v2 [2]int;
+v2 = v;
+v = v2;
+print(v, v2, v == v2);
+
+ft("Xtra--named", "[[0 42] [0 0]][[0 42] [0 0]] [[0 42] [0 0]] true");
+type t [2]int;
+var v [2]t;
+v[0][1] = 42;
+print(v);
+
+var v2 [2][2]int;
+v2 = v;
+v = v2;
+print(v, v2, v == v2);
+
+ft("Array copies on set", "[23] [42][[42 23] [202 0]] [[42 23] [202 101]]");
+var a[1]int;
+var b[1]int;
+a[0] = 23;
+b = a;
+b[0] = 42;
+   print(a, b);
+
+var c[2][2]int;
+var d[2][2]int;
+c[0][0] = 42;
+c[0][1] = 23;
+c[1][0] = 202;
+d = c;
+d[1][1] = 101;
+print(c, d);
+
+ft("Stress--named array", "");
+type tA [3][2][3][2]decimal;
+type tB [2][5]tA;
+type tC [2]tA;
+var vA tA;
+var vB tB;
+var vC tC;
+
+ft("Create slice", "[]");
+var s []int;
+print(s);
+
+
+ft("Create 2 slice", "false[] [] true");
+var a[]int;
+var b[]int;
+print(a == b);
+a = b;
+b = a;
+print(a, b, a == b);
+
+
+
+ft("Create slice and set", "[42]");
+var a[]int;
+
+a[0] = 42;
+print(a);
+
+ft("Create/set 2-dimensional slice", "[][[42]][[42] [101 202]]");
+var s[][]int;
+print(s);
+s[0][0] = 42;
+print(s);
+s[1][0] = 101;
+s[1][1] = 202;
+print(s);
+
+ft("Named slice", "[[42]]");
+type ts []int;
+type tsa []ts;
+
+var v tsa;
+v[0][0] = 42;
+print(v);
+
+ft("Slice shares", "[42] [42][101] [101]");
+var s []int;
+s[0] = 42;
+var t []int;
+t = s;
+print(s, t);
+t[0] = 101;
+print(s, t);
+
+
+
+ft("Array slice mixes", "[[] []] [] ,[[] [42]] [[0 101]][[0 101] [202 0]]");
+var asm [2][]int;
+var asm2 [][2]int;
+print(asm, asm2, ",");
+asm[1][0] = 42;
+asm2[0][1] = 101;
+
+print(asm, asm2);
+asm2[1][0] = 202;
+print(asm2);
+
+ft("Xtra array/slice", "[[] []] ,[[] [[0 42]]] ,[] ,[[[] [101]]] ,");
+var arsl [2][][2]int;
+print(arsl, ",");
+arsl[1][0][1] = 42;
+print(arsl, ",");
+var arsl2 [][2][]int;
+print(arsl2, ",");
+arsl2[0][1][0] = 101;
+print(arsl2, ",");
+
+ft("Create tuple", "(0 false)(0 0)");
+var t (int, bool);
+print(t);
+var t2 (int, int);
+print(t2);
+
+ft("Create 2 tuples", "(0 false) (0 false) true");
+var t (int, bool);
+var t2 (int, bool);
+t = t2;
+t2 = t;
+print(t, t2, t == t2);
+
+ft("Create tuple and set", "(42 true)");
+var t (int, bool);
+t[0] = 42;
+t[1] = true;
+print(t);
+
+ft("Create/set tuple of tuples", "((0 false) (false 0))((42 false) (true 0))");
+var tt ((int, bool), (bool, int));
+print(tt);
+tt[0][0] = 42;
+tt[1][0] = true;
+print(tt);
+
+ft("Tuple copies", "(42 0) (42 101)");
+var t (int, int);
+var t2 (int, int);
+t[0] = 42;
+t2 = t;
+t2[1] = 101;
+print(t, t2);
+
+ft("Named tuple", "(105 0)((0 0) 0)");
+type t (int, int);
+var v t;
+v[0] = 105;
+print(v);
+type t2 (t, int);
+var v2 t2;
+print(v2);
+
+ft("Stress-mixed", "");
+var v [2]((int, bool, [7](int, bool), [3][]int));
+
+ft("Create pointer", "N");
+var v *(int, bool);
+print(v);
+
+ft("Create and set pointer", "N*(true 42)N");
+var v *(bool, int);
+print(v);
+v = *(true, 42);
+print(v);
+v = nil;
+print(v);
+v = *(false, 101);
+print(v);
+
+ft("Create 2 pointers", "*(false 101) *(false 101) true");
+var v *(bool, int);
+var v2 *(bool, int);
+v = *(false, 101);
+v2 = v;
+v = v2;
+print(v, v2, v == v2);
+
+ft("Composite pointers", "N*(42 true P) *(101 202)*(303 false N)");
+var v *(int, bool, *(int, int));
+print(v);
+v = *(42, true, *(101, 202));
+print(v, v[2]);
+v = *(303, false, nil);
+print(v);
+
+ft("Pointers and slices", "[][N][N P] N *(42 true)");
+var ps []*(int, bool);
+print(ps);
+ps[0] = nil;
+print(ps);
+ps[1] = *(42, true);
+print(ps, ps[0], ps[1]);
+
+ft("Slices and pointers", "");
+var sp *([]int, bool);
+print(sp);
+sp = *(...[4], true);
+print(sp);
 
 
 ft("Create map", "{answer:true} true false");
@@ -218,15 +510,18 @@ var newMap [map]bool;
 newMap["answer"] = true;
 print(newMap, key(newMap, "answer"), key(newMap, "not"));
 
-ft("Create slice", "[777]");
-var newSlice []int;
-newSlice[0] = 777;
-print(newSlice);
 
-ft("Create array", "aap");
-var newArray [3]string;
-newArray[1] = "aap";
-print(newArray[1]);
+ft("Short slice equals", "falsetrue[10] [5] false false");
+s := ...[5];
+a := ...[5];
+print(a == s);
+a = s;
+print(a == s);
+a = ...[10];
+print(a, s, a == s, s == a);
+
+
+
 
 ft("Create array of string", "[alpha bravo charlie]");
 var arStr [3]string;
@@ -235,13 +530,6 @@ arStr[1] = "bravo";
 arStr[2] = "charlie";
 print(arStr);
 
-ft("Create deep nesting", "[[42 101]]");
-var cdn [][]int;
-var cdns []int;
-cdns[0] = 42;
-cdns[1] = 101;
-cdn[0] = cdns;
-print(cdn);
 
 ft("Deep nesting and length", "[(0 {} [[0 0 0 0 42]])] 1 5 [(42 {key:true} [12 101]) (101 {aap:false} [202])]");
 var cx [](int, [map]bool, [][5]int);
@@ -820,13 +1108,6 @@ func giih(ar [GLOB]bool) {
 var glob [GLOB] bool;
 giih(glob);
 
-ft("Array copies on set", "[23] [42]");
-var a[1]int;
-var b[1]int;
-a[0] = 23;
-b = a;
-b[0] = 42;
-   print(a, b);
 
 ft("Array copies in call", "23");
 func arFunc(ar [1]int) {
