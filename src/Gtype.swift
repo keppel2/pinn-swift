@@ -6,27 +6,41 @@ enum Gtype {
     case gTuple([Kind])
     case gPointer([Kind])
     case gDefined(String)
-    func isValid() -> Bool {
-        switch self {
-        case .gScalar:
-            return true
-        case .gArray(let k, let x):
-            _ = x
-            return !k.isNr()
-        case .gSlice(let k), .gMap(let k):
-            return !k.isNr()
-        case .gTuple://(let ka):
-            return true
-//            !ka.contains {
-//                $0 === gOne.rkind
-//            }
-        case .gPointer, .gDefined:
-            return true
-        
-        }
+
+//    func isValid() -> Bool {
+//        switch self {
+//        case .gScalar:
+//            return true
+//        case .gArray(let k, let x):
+//            _ = x
+//            return !k.isNr()
+//        case .gSlice(let k), .gMap(let k):
+//            return !k.isNr()
+//        case .gTuple://(let ka):
+//            return true
+////            !ka.contains {
+////                $0 === gOne.rkind
+////            }
+//        case .gPointer, .gDefined:
+//            return true
+//        
+//        }
+//    }
+    func isNilSlice() -> Bool {
+                if case .gSlice(let k) = self {
+                    
+                    if case .gScalar(let pt) = k.gtype {
+                        return pt == Nil.self
+                    }
+                    
+            }
+        return false
     }
     func isNil() -> Bool {
         if case .gScalar(let pt) = self {
+            
+            
+            
                 return pt == Nil.self
             }
         return false
@@ -84,6 +98,7 @@ enum Gtype {
     }
     func toPGtype() -> Gtype {
         if case .gDefined(let s) = self {
+            
             return Kind.getPKind(s).gtype
         }
         return self
@@ -188,6 +203,9 @@ enum Gtype {
             }
             return false
         case .gSlice(let k):
+            if g2.isNilSlice() {
+                return true
+            }
             if case .gSlice(let k2) = g2 {
                 return k.gtype.gEquivalent(k2.gtype)
             }

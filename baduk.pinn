@@ -3,8 +3,8 @@ E := 0;
 B := 1;
 W := 2;
 INV := 3;
-SIZER := 1;
-SIZEC := 3;
+SIZER := 2;
+SIZEC := 2;
 type bt [SIZER][SIZEC]int;
 
 //var bh []bt;

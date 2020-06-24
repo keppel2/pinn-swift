@@ -198,8 +198,15 @@ class Pval {
         if !getKind().assignable(v.getKind()) {
             throw Perr(ETYPE, v)
         }
-        if v.getKind().gtype.isNil() {
+        if v.getKind().gtype.isNilSlice() {
             e.con = v.e.con
+        } else
+        if v.getKind().gtype.isNil() {
+            if !getKind().gtype.isPointer() {
+                e.con = Contents.multi(Wrap([Pval]()))
+            } else {
+            e.con = v.e.con
+            }
         } else {
 //        try e.con = v.e.con
         e = v.e

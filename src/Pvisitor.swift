@@ -499,11 +499,11 @@ class Pvisitor {
         } else
             if let type = sctx.ID() {
                 let strType = type.getText()
-                if Kind.isNil(strType) {
-                    rt = gOne.nkind
-                } else {
+//                if Kind.isNil(strType) {
+//                    rt = gOne.nkind
+//                } else {
                 rt = try Kind(Gtype.gDefined(strType))
-                }
+                
             }
                 else {
                 let kind = try visitKind(sctx.kind()!)
@@ -771,12 +771,18 @@ class Pvisitor {
             }
         //            let kind = Kind(vtype: list.first!.1)
         case let sctx as PinnParser.ArrayLiteralContext:
+            
+                     if sctx.exprList() == nil {
+                rt = try Pval(sctx, Kind.nilSlice())
+            } else {
+            
+            
             let el = sctx.exprList()!
             let ae = try visitList(el)
             let aeFirstk = ae.first!.getKind()
             
             rt = try Pval(sctx, ae, sctx.THREEDOT() != nil, aeFirstk)
-        
+                     }
             return rt
             
         case let sctx as PinnParser.LiteralExprContext:
@@ -898,11 +904,13 @@ class Pvisitor {
                 return rt
                 
             }
+   
             
             let e2 = try _visitPval(sctx.expr(1)!)
             let i: Ktype = try tryCast(e2)
             
             rt = try v.get(i)
+            
             
             
         case let sctx as PinnParser.ExprContext:
@@ -1225,9 +1233,9 @@ class Pvisitor {
                             if let prev = map[str] {
                                 throw Perr(EREDECLARE, sctx, prev)
                             }
-                        if pv.getKind().hasNil() {
-                            throw Perr(ETYPE, sctx)
-                        }
+//                        if pv.getKind().hasNil() {
+//                            throw Perr(ETYPE, sctx)
+//                        }
                             if lfc != nil {
                                 lfc!.m[str] = pv
                             } else {

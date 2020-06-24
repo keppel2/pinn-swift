@@ -392,6 +392,14 @@ t[0] = 101;
 print(s, t);
 
 
+ft("Xtra--slice", "[101][][42]");
+var s[]int;
+s[0] = 101;
+print(s);
+s = [];
+print(s);
+s[0] = 42;
+print(s);
 
 ft("Array slice mixes", "[[] []] [] ,[[] [42]] [[0 101]][[0 101] [202 0]]");
 var asm [2][]int;
@@ -460,11 +468,13 @@ print(v2);
 ft("Stress-mixed", "");
 var v [2]((int, bool, [7](int, bool), [3][]int));
 
-ft("Create pointer", "N");
+ft("Create pointer", "NN");
 var v *(int, bool);
 print(v);
+var v2 *(int);
+print(v2);
 
-ft("Create and set pointer", "N*(true 42)N");
+ft("Create and set pointer", "N*(true 42)N*(false 101)*(str)");
 var v *(bool, int);
 print(v);
 v = *(true, 42);
@@ -473,6 +483,9 @@ v = nil;
 print(v);
 v = *(false, 101);
 print(v);
+var v2 *(string);
+v2 = *("str");
+print(v2);
 
 ft("Create 2 pointers", "*(false 101) *(false 101) true");
 var v *(bool, int);
@@ -498,10 +511,13 @@ print(ps);
 ps[1] = *(42, true);
 print(ps, ps[0], ps[1]);
 
-ft("Slices and pointers", "");
+ft("Slices and pointers", "N*([] true)");
 var sp *([]int, bool);
 print(sp);
-sp = *(...[4], true);
+sp = *([], true);
+print(sp);
+print(sp[0]);
+sp[0][0] = 101;
 print(sp);
 
 

@@ -16,10 +16,13 @@ class Kind {
 //        
 //    }
     
+    static func nilSlice() -> Kind {
+        return Kind(Gtype.gSlice(Kind(Gtype.gScalar(Nil.self))))
+    }
     static func produceKind(_ g: Gtype) throws -> Kind {
-        if !g.isValid() {
-            throw Perr(ETYPE)
-        }
+//        if !g.isValid() {
+//            throw Perr(ETYPE)
+//        }
         return Kind(g)
     }
     var gtype: Gtype
@@ -56,18 +59,18 @@ class Kind {
         
         return try gtype.gEquivalent(k.gtype)
     }
-    func isNr() -> Bool {
-        return self === gOne.nkind
-    }
-    func hasNil() -> Bool {
-        if self === gOne.nkind {
-            return true
-        }
-        return false //gtype.hasNil(self)
-    }
-    static func isNil( _ s: String) -> Bool {
-        return Kinds.ks.isNil(s)
-    }
+//    func isNr() -> Bool {
+//        return self === gOne.nkind
+//    }
+//    func hasNil() -> Bool {
+//        if self === gOne.nkind {
+//            return true
+//        }
+//        return false //gtype.hasNil(self)
+//    }
+//    static func isNil( _ s: String) -> Bool {
+//        return Kinds.ks.isNil(s)
+//    }
     
 
     private class Kinds {
@@ -87,9 +90,9 @@ class Kind {
             km[s] = k
         }
         
-                func isNil(_ s: String) -> Bool {
-                    return km[s] === gOne.nkind
-        }
+//                func isNil(_ s: String) -> Bool {
+//                    return km[s] === gOne.nkind
+//        }
         func getKind(_ s: String) throws -> Kind {
             return km[s]!
         }

@@ -1,7 +1,6 @@
-var arsl2 [][2][]int;
-print(arsl2, ",");
-arsl2[0][1][0] = 101;
-print(arsl2, ",", arsl2[0], ",");
-var s []int;
-s[0] = 105;
-print(s);
+var sp *(*(int));
+print(sp);
+sp = *(nil);
+print(sp);
+sp[0][0] = *(42);
+print(sp);
