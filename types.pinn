@@ -92,64 +92,6 @@ print(i1, i2);
 
 
 
-ft("Named type test", "0");
-type tInt int;
-var x tInt;
-print(x);
-
-ft("Chained named type", "false");
-type tA bool;
-type tB tA;
-var x tB;
-print(x);
-
-ft("Create and set named type", "101.5");
-type t decimal;
-var d t;
-d = 101.5;
-print(d);
-
-
-ft("Create and set differently named types", "101 101 42 42");
-type t int;
-var x1 t;
-x1 = 101;
-var x2 int;
-x2 = x1;
-print(x1, x2, "");
-var xA int;
-xA = 42;
-var xB t;
-xB = xA;
-print(xA, xB);
-
-ft("Create and set two named types derived from int", "202 202");
-type tA int;
-type tB int;
-var vA tA;
-vA = 202;
-var vB tB;
-vB = vA;
-print(vA, vB);
-
-ft("Xtra--named", "true true true0 0 0");
-
-type tA int;
-type tB tA;
-type tC tB;
-var vA tA;
-var vB tB;
-var vC tC;
-print(vA == vB, vA == vC, vB == vC);
-vA = vB;
-vB = vA;
-vA = vC;
-vC = vA;
-vB = vC;
-vC = vB;
-print(vA, vB, vC);
-
-
 
 
 
@@ -392,14 +334,14 @@ t[0] = 101;
 print(s, t);
 
 
-ft("Xtra--slice", "[101][][42]");
-var s[]int;
-s[0] = 101;
-print(s);
-s = [];
-print(s);
-s[0] = 42;
-print(s);
+//ft("Xtra--slice", "[101][][42]");
+//var s[]int;
+//s[0] = 101;
+//print(s);
+//s = [];
+//print(s);
+//s[0] = 42;
+//print(s);
 
 ft("Array slice mixes", "[[] []] [] ,[[] [42]] [[0 101]][[0 101] [202 0]]");
 var asm [2][]int;
@@ -511,7 +453,7 @@ print(ps);
 ps[1] = *(42, true);
 print(ps, ps[0], ps[1]);
 
-ft("Slices and pointers", "N*([] true)");
+ft("Slices and pointers", "N*([] true)[]*([101] true)");
 var sp *([]int, bool);
 print(sp);
 sp = *([], true);
@@ -519,6 +461,91 @@ print(sp);
 print(sp[0]);
 sp[0][0] = 101;
 print(sp);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ft("Named type test", "0");
+type tInt int;
+var x tInt;
+print(x);
+
+ft("Chained named type", "false");
+type tA bool;
+type tB tA;
+var x tB;
+print(x);
+
+ft("Create and set named type", "101.5");
+type t decimal;
+var d t;
+d = 101.5;
+print(d);
+
+
+ft("Create and set differently named types", "101 101 42 42");
+type t int;
+var x1 t;
+x1 = 101;
+var x2 int;
+x2 = x1;
+print(x1, x2, "");
+var xA int;
+xA = 42;
+var xB t;
+xB = xA;
+print(xA, xB);
+
+ft("Create and set two named types derived from int", "202 202");
+type tA int;
+type tB int;
+var vA tA;
+vA = 202;
+var vB tB;
+vB = vA;
+print(vA, vB);
+
+ft("Xtra--named", "true true true0 0 0");
+
+type tA int;
+type tB tA;
+type tC tB;
+var vA tA;
+var vB tB;
+var vC tC;
+print(vA == vB, vA == vC, vB == vC);
+vA = vB;
+vB = vA;
+vA = vC;
+vC = vA;
+vB = vC;
+vC = vB;
+print(vA, vB, vC);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ft("Create map", "{answer:true} true false");

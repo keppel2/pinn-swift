@@ -1,6 +1,31 @@
-var sp *(*(int));
-print(sp);
-sp = *(nil);
-print(sp);
-sp[0][0] = *(42);
-print(sp);
+var mv (*(int), bool);
+mv = (nil, true);
+print(mv);
+mv = (*(42), false);
+print(mv, mv[0]);
+exit();
+
+print(1@4);
+var x int;
+for x = range 1@4 {
+  print(x);
+}
+SIZE := 10;
+var gar [SIZE][SIZE]int;
+var ag [](int, int);
+NUMAG := 3;
+//var x int;
+var i int;
+var j int;
+var k int;
+for x = range 1@NUMAG {
+  repeat {
+  i, j = rand(SIZE), rand(SIZE);
+  } while gar[i][j] != 0;
+    ag[len(ag)] = (i, j);
+}
+func printg() {
+  var x int;
+  var y int;
+  
+}

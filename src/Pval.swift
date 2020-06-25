@@ -194,23 +194,26 @@ class Pval {
     
     
     func setPV(_ v : Pval) throws {
+        let b = getKind().gtype.gEquivalent(v.gg())
 
-        if !getKind().assignable(v.getKind()) {
+
+        if !b {
             throw Perr(ETYPE, v)
         }
-        if v.getKind().gtype.isNilSlice() {
-            e.con = v.e.con
-        } else
-        if v.getKind().gtype.isNil() {
-            if !getKind().gtype.isPointer() {
-                e.con = Contents.multi(Wrap([Pval]()))
-            } else {
-            e.con = v.e.con
-            }
-        } else {
+        v.e.k = e.k
+        try v.gFix()
+//        if v.getKind().gtype.isNilSlice() {
+//            e.con = v.e.con
+//        } else
+//        if v.getKind().gtype.isNil() {
+//            if !getKind().gtype.isPointer() {
+//                e.con = Contents.multi(Wrap([Pval]()))
+//            } else {
+//            e.con = v.e.con
+//            }
+//        } else {
 //        try e.con = v.e.con
         e = v.e
-        }
     }
     
     func delKey(_ s: String) throws {
@@ -238,7 +241,68 @@ class Pval {
         }
     }
     
-    
+    func gFix() throws {
+        
+        
+
+                switch gg() {
+        case .gScalar(let pt):
+break
+        case .gArray(let k, let i):
+            try e.con.getAr().forEach {
+                $0.e.k = k
+                try $0.gFix()
+            }
+        case .gSlice(let k):
+         
+                    if try e.con.isNull() {
+            return
+        }
+            
+            
+            
+            try e.con.getAr().forEach {
+                $0.e.k = k
+                try $0.gFix()
+            }
+        case .gMap(let k):
+                    aden()
+
+                    
+                    
+                    
+                    
+        case .gPointer(let ka):
+            
+                    if try e.con.isNull() {
+            return
+        }
+            
+            
+           let pva = e.con.getAr()
+            for (k, v) in ka.enumerated() {
+                pva[k].e.k = v
+                try pva[k].gFix()
+            }
+        case .gTuple(let ka):
+            let pva = e.con.getAr()
+            for (k, v) in ka.enumerated() {
+                pva[k].e.k = v
+                try pva[k].gFix()
+            }
+            
+
+                        case .gDefined(let s):
+aden()
+            
+        }
+        
+        
+        
+        
+        
+        
+    }
     func getCount() throws -> Int {
         
         switch getKind().gtype {
@@ -252,6 +316,9 @@ class Pval {
     }
     func getKind() -> Kind {
         return e.k
+    }
+    func gg() -> Gtype {
+        return e.k.gtype
     }
     func stringOrLetter() throws -> String {
         if try getKind().gtype.isPointer() && !e.con.isNull() {
