@@ -90,6 +90,21 @@ i2 = i1;
 print(i1, i2);
 
 
+ft("Int copies by value", "23 42");
+var x int;
+var y int;
+x = 23;
+y = x;
+y = 42;
+print(x, y);
+
+ft("Set to self", "42");
+var x int;
+x = 42;
+x = x;
+print(x);
+
+
 
 
 
@@ -101,16 +116,11 @@ ft("Create string", "");
 var str string;
 
 
-
-
 ft("Create and tuple destructure", "42 true");
 var x int;
 var y bool;
 (x, y) = (42, true);
 print(x, y);
-
-
-
 
 ft("Short declaration", "42 true str 98.5");
 i := 42;
@@ -150,21 +160,6 @@ print(x, y);
 //#5
 //ng("Tuple with nil");
 //sd := (4, nil);
-
-ft("Int copies by value", "23 42");
-var x int;
-var y int;
-x = 23;
-y = x;
-y = 42;
-print(x, y);
-
-ft("Set to self", "42");
-var x int;
-x = 42;
-x = x;
-print(x);
-
 
 
 
@@ -276,14 +271,29 @@ t[0] = 101;
 print(s, t);
 
 
-//ft("Xtra--slice", "[101][][42]");
-//var s[]int;
-//s[0] = 101;
-//print(s);
-//s = [];
-//print(s);
-//s[0] = 42;
-//print(s);
+
+
+
+ft("Xtra--slice", "[101][][42]");
+var s[]int;
+s[0] = 101;
+print(s);
+s = ...[];
+print(s);
+s[0] = 42;
+print(s);
+
+ft("Nested nil slice", "[[42]][[]][[101]]");
+var s[][]int;
+s[0] = ...[42];
+print(s);
+
+s = ...[...[]];
+print(s);
+
+s[0] = ...[101];
+print(s);
+
 
 ft("Array slice mixes", "[[] []] [] ,[[] [42]] [[0 101]][[0 101] [202 0]]");
 var asm [2][]int;
@@ -305,6 +315,13 @@ var arsl2 [][2][]int;
 print(arsl2, ",");
 arsl2[0][1][0] = 101;
 print(arsl2, ",");
+
+ft("Array with nil slice", "[[42]]");
+   var ar [1][]int;
+   ar = [...[]];
+ar[0] = ...[42];
+   print(ar);
+
 
 ft("Create tuple", "(0 false)(0 0)");
 var t (int, bool);
@@ -344,18 +361,18 @@ print(t, t2);
 ft("Stress-mixed", "");
 var v [2]((int, bool, [7](int, bool), [3][]int));
 
-ft("Create pointer", "NN");
+ft("Create pointer", "*()*()");
 var v *(int, bool);
 print(v);
 var v2 *(int);
 print(v2);
 
-ft("Create and set pointer", "N*(true 42)N*(false 101)*(str)");
+ft("Create and set pointer", "*()*(true 42)*()*(false 101)*(str)");
 var v *(bool, int);
 print(v);
 v = *(true, 42);
 print(v);
-v = nil;
+v = *();
 print(v);
 v = *(false, 101);
 print(v);
@@ -363,10 +380,10 @@ var v2 *(string);
 v2 = *("str");
 print(v2);
 
-ft("Nil pointers", "N*(N true)*(P false) *(42)");
+ft("Nil pointers", "*()*(*() true)*(P false) *(42)");
 var v *(*(int), bool);
 print(v);
-v = *(nil, true);
+v = *(*(), true);
 print(v);
 v = *(*(42), false);
 print(v, v[0]);
@@ -381,12 +398,12 @@ v2 = v;
 v = v2;
 print(v, v2, v == v2);
 
-ft("Composite pointers", "N*(42 true P) *(101 202)*(303 false N)");
+ft("Composite pointers", "*()*(42 true P) *(101 202)*(303 false *())");
 var v *(int, bool, *(int, int));
 print(v);
 v = *(42, true, *(101, 202));
 print(v, v[2]);
-v = *(303, false, nil);
+v = *(303, false, *());
 print(v);
 
 ft("Pointers of single", "45");
@@ -411,20 +428,15 @@ ft("Self", "");
 var v *(self, int);
 
 
-
-
-
-
-
-ft("Pointers and slices", "[][N][N P] N *(42 true)");
+ft("Pointers and slices", "[][*()][*() P] *() *(42 true)");
 var ps []*(int, bool);
 print(ps);
-ps[0] = nil;
+ps[0] = *();
 print(ps);
 ps[1] = *(42, true);
 print(ps, ps[0], ps[1]);
 
-ft("Slices and pointers", "N*([] true)[]*([101] true)");
+ft("Slices and pointers", "*()*([] true)[]*([101] true)");
 var sp *([]int, bool);
 print(sp);
 sp = *(...[], true);
@@ -432,6 +444,14 @@ print(sp);
 print(sp[0]);
 sp[0][0] = 101;
 print(sp);
+
+ft("Tuple with nil pointer", "(P true)");
+var t (*(int), bool);
+
+t = (*(), true);
+t[0] = *(42);
+print(t);
+
 
 
 
@@ -476,8 +496,11 @@ t = *({}, true);
 t[0]["b"] = 101;
 
 ft("map", "");
-var t [map]*(int);
-t["a"] = nil;
+var t [map][map]int;
+t = {"a": {}};
+t["a"] = {"b": 5};
+
+
 
 
 
@@ -653,20 +676,20 @@ print(...[10], ...[23, 45], ...["ab", "bc"]);
 ft("Print tuple", "(1 true 10.5)");
 print((1, true, 10.5));
 
-ft("Print pointer", "*(5 N true)");
-print(*(5, nil, true));
+ft("Print pointer", "*(5 *() true)");
+print(*(5, *(), true));
 
 ft("Print single element object", "{foo:42}");
 print({"foo": 42});
 
 
-ft("Recursive named", "N*(N true) N*(P true) *(N false)");
+ft("Recursive named", "*()*(*() true) *()*(P true) *(*() false)");
 type node *(node, bool);
 var n node;
 print(n);
-n = *(nil, true);
+n = *(*(), true);
 print(n, n[0]);
-n[0] = *(nil, false);
+n[0] = *(*(), false);
 print(n, n[0]);
 
 
@@ -1888,7 +1911,7 @@ x = "bad";
 
 ng("Wrong type assignment from declaration:");
 var x int;
-x = nil;
+x = *();
 
 ng("Redeclare both short:");
 x := 5;
@@ -1965,11 +1988,7 @@ func f() {}
 
 ng("Binary op:");
 func f() {}
-3 + nil;
-
-ng("Binary op:");
-func f() {}
-+nil;
+3 + true;
 
 ng("Binary op:");
 3 + [1, 5];
@@ -1978,7 +1997,7 @@ ng("Equal with mismatched types:");
 3 == true;
 
 ng("Equal with mismatched types:");
-3 == nil;
+3 == "a";
 
 ng("Binary op:");
 4 > true;
@@ -1987,7 +2006,7 @@ ng("Ternary op:");
 10 ? 5 : false;
 
 ng("Ternary op:");
-nil ? true : false;
+5 ? true : false;
 
 ng("Unary op:");
 -true;
@@ -2005,7 +2024,7 @@ if (f()) {}
 
 ng("Nil for if:");
 func f() {}
-if (nil) {}
+if (10) {}
 
 ng("Zero for if:");
 if (0) {}
@@ -2110,8 +2129,6 @@ len(4);
 ng("len:");
 len(true);
 
-ng("len:");
-len(nil);
 
 ng("len:");
 len("abc", "def");
@@ -2151,11 +2168,7 @@ x = 101;
 ng("key:");
 m := {"key": 42};
 key(m);
-ng("Pointer:");
-s := (10, nil);
-s = (false, nil);
 
-ng("");
 
 ft("Named type test", "5");
 type tInt int;
@@ -2196,10 +2209,6 @@ ng("Bad named type");
 type tInt int;
 var x tInt;
 x = true;
-
-ng("Pointer:");
-s := *(4, nil);
-s[1] = *(true, nil);
 
 
 ng("Deeply nested bad assignment:");

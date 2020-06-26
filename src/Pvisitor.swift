@@ -754,10 +754,13 @@ class Pvisitor {
             
             
         case let sctx as PinnParser.TupleExprContext:
-            
+            if sctx.exprList() == nil {
+                rt = try Pval(sctx, Kind.nilPointer())
+            } else {
             let el = sctx.exprList()!
             let s = try visitList(el)
             rt = try Pval(sctx, s, sctx.AST() != nil)
+            }
         case let sctx as PinnParser.CallExprContext:
             var s = [Pval]()
             
@@ -829,9 +832,9 @@ class Pvisitor {
                 let d = Decimal(string: str)!
                 let pv = Pval(sctx, d)
                 rt = pv
-            case .NIL:
-                let pv = Pval(sctx, Nil())
-                rt = pv
+//            case .NIL:
+//                let pv = Pval(sctx, Nil())
+//                rt = pv
             case .BOOL:
                 let str = sctx.BOOL()!.getText()
                 let x = Bool(str)!

@@ -36,6 +36,12 @@ enum Gtype {
             }
         return false
     }
+    func isNilPointer() -> Bool {
+                if case .gPointer(let ka) = self {
+                    return ka.count == 0
+            }
+        return false
+    }
     func isNilMap() -> Bool {
                  if case .gMap(let k) = self {
                      
@@ -231,13 +237,16 @@ enum Gtype {
             }
             return false
         case .gPointer(let ka):
+            if g2.isNilPointer() {
+                return true
+            }
             if case .gPointer(let ka2) = g2 {
                 return ka.elementsEqual(ka2) {
 
                     return $0.gtype.gEquivalent($1.gtype)
                 }
             }
-            return g2.isNil()
+            return false
         case .gTuple(let ka):
             if case .gTuple(let ka2) = g2 {
                 

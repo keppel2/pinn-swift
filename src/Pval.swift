@@ -70,7 +70,7 @@ class Pval {
             }
             e = Pvalp(ke, Contents.multi(Wrap(ar)), c)
         case .gPointer:
-            e = Pvalp(ke, Contents.single(Pwrap(Nil())), c)
+            e = Pvalp(ke, Contents.multi(Wrap([Pval]())), c)
         case .gDefined(let s):
             let pv = try Pval(c, Kind.getPKind(s))
             e = Pvalp(ke, pv.e.con, c)
@@ -257,10 +257,7 @@ break
                 try $0.gFix()
             }
         case .gSlice(let k):
-         
-                    if try e.con.isNull() {
-            return
-        }
+
             
             
             
@@ -269,21 +266,20 @@ break
                 try $0.gFix()
             }
         case .gMap(let k):
-            
-            
-            break
-                    
-                    
-                    
+
+             for (k2, v) in e.con.getMap() {
+                v.e.k = k
+                try v.gFix()
+                
+             }
+                                
                     
         case .gPointer(let ka):
-            
-                    if try e.con.isNull() {
-            return
-        }
-            
-            
+
            let pva = e.con.getAr()
+           if pva.count == 0 {
+            return
+           }
             for (k, v) in ka.enumerated() {
                 pva[k].e.k = v
                 try pva[k].gFix()
@@ -326,7 +322,7 @@ break
         return e.k.gtype
     }
     func stringOrLetter() throws -> String {
-        if try getKind().gtype.isPointer() && !e.con.isNull() {
+        if try getKind().gtype.isPointer() && e.con.getAr().count != 0 {
             return "P"
         }
         return try string()
@@ -495,7 +491,8 @@ break
                 }
                 return try ar.w.elementsEqual(co.getAr(), by: {try $0.equal($1)})
             case .map(let map):
-//                let omap = co.getMap()
+
+                //                let omap = co.getMap()
 //                for (key, value) in map.w {
 //                    if omap[key] == nil {
 //                        return false

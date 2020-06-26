@@ -1,3 +1,16 @@
+var v *(*(int), bool);
+print(v);
+v = *(*(), true);
+print(v, v[0]);
+
+exit();
+
+var s[][]int;
+s = ...[...[]];
+print(s);
+
+exit();
+
 type node *(node, bool);
 var n node;
 print(n);

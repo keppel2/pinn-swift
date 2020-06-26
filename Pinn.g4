@@ -49,7 +49,7 @@ expr
   | expr ('&&' | '||') expr #boolExpr
   |   ID LPAREN exprList? RPAREN #callExpr
   |  LPAREN expr RPAREN #parenExpr
-  |  CARET? AST? LPAREN exprList RPAREN #tupleExpr
+  |  CARET? AST? LPAREN exprList? RPAREN #tupleExpr
   | expr (AT | COLON) expr #rangeExpr
   | expr '?' expr COLON expr #conditionalExpr
   | (ID | FLOAT | INT | BOOL | STRING | NIL ) #literalExpr ;
