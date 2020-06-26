@@ -47,7 +47,7 @@ class Pval {
         e = Pvalp(k, .single(w), c)
     }
     init( _ c: ParserRuleContext, _ kx: Kind) throws {
-        let ke = Kind(kx.gtype.toPGR())
+        let ke = kx.sk()
         switch ke.gtype {
         case .gSlice:
             e = Pvalp(ke, Contents.multi(Wrap([Pval]())), c)
@@ -72,7 +72,7 @@ class Pval {
         case .gPointer:
             e = Pvalp(ke, Contents.single(Pwrap(Nil())), c)
         case .gDefined(let s):
-            let pv = try Pval(c, Kind.getKind(s))
+            let pv = try Pval(c, Kind.getPKind(s))
             e = Pvalp(ke, pv.e.con, c)
         }
         
@@ -266,8 +266,7 @@ break
                 try $0.gFix()
             }
         case .gMap(let k):
-                    aden()
-
+            break
                     
                     
                     
@@ -293,7 +292,8 @@ break
             
 
                         case .gDefined(let s):
-aden()
+                            e.k = Kind.getPKind(s)
+                            try gFix()
             
         }
         

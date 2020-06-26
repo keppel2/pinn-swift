@@ -1,8 +1,10 @@
-var mv (*(int), bool);
-mv = (nil, true);
-print(mv);
-mv = (*(42), false);
-print(mv, mv[0]);
+type node *(node, bool);
+var n node;
+print(n);
+n = *(nil, true);
+print(n, n[0]);
+n[0] = *(nil, false);
+print(n, n[0]);
 exit();
 
 print(1@4);

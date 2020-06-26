@@ -15,7 +15,7 @@ typeDecl
   : 'type' ID kind ;
 
 varDecl
-  : 'var' ID kind
+  : 'var' idList kind
   | ID ( ',' ID )* CE exprList
   | LPAREN ID ( ',' ID )* RPAREN CE expr;
 
@@ -53,7 +53,9 @@ expr
   | expr (AT | COLON) expr #rangeExpr
   | expr '?' expr COLON expr #conditionalExpr
   | (ID | FLOAT | INT | BOOL | STRING | NIL ) #literalExpr ;
-  
+
+idList
+  : ID (',' ID)* ;
 exprList
   : expr (',' expr)* ;
 lExprList

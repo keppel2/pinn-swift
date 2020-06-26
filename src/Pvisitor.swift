@@ -3,7 +3,7 @@ import Antlr4
 
 class Pvisitor {
     
-    static let litToType: [String: Ptype.Type] = ["int": Int.self, "bool": Bool.self, "string": String.self, "decimal": Decimal.self]
+    static let litToType: [String: Ptype.Type] = ["int": Int.self, "bool": Bool.self, "string": String.self, "decimal": Decimal.self, "self": Ref.self]
     private static let builtIns
         : [String: (ParserRuleContext, Pvisitor, [Pval]) throws -> Pval?] =
         [
@@ -568,6 +568,17 @@ class Pvisitor {
         }
         return rt
     }
+
+    private func visitIdList(_ sctx: PinnParser.IdListContext) -> [String] {
+        loadDebug(sctx)
+        defer {popDebug()}
+        
+//        var rt = [String]()
+//        for s in sctx.ID() {
+//            rt.append(s.getText())
+//        }
+        return sctx.ID().map { $0.getText()}
+    }
     
     private func visitListCase(_ sctx: PinnParser.ExprListContext, _ v: Pval) throws -> Bool {
         loadDebug(sctx)
@@ -773,6 +784,9 @@ class Pvisitor {
         case let sctx as PinnParser.ArrayLiteralContext:
             
                      if sctx.exprList() == nil {
+                        if sctx.THREEDOT() == nil {
+                            throw Perr(ENIL, sctx)
+                        }
                 rt = try Pval(sctx, Kind.nilSlice())
             } else {
             
@@ -818,7 +832,6 @@ class Pvisitor {
                 guard let pv = getPv(str) else {
                     throw Perr(EUNDECLARED, sctx)
                 }
-//                pv.resolve()
                 
                 rt = try pv.cloneIf()
             default:
@@ -1247,34 +1260,26 @@ class Pvisitor {
             
             
 
-            
-            let str = sctx.ID(0)!.getText()
-            
-            var newV: Pval
-            if let prev = map[str] {
-                throw Perr(EREDECLARE, sctx, prev)
-            }
-    
-                
-                
-                
-                
-                
-//                newV = try _visitPval(sctx.expr()!).cloneType()
-//                if newV.getKind().hasNil() {
-//                    throw Perr(ETYPE, sctx)
-//                }
-                let k = try visitKind(sctx.kind()!)
-//                if k === gOne.rkind {
-//                    throw Perr(ETYPE, sctx)
-//                }
-                newV = try Pval(sctx, k)
+            let ai = try visitIdList(sctx.idList()!)
+            let k = try visitKind(sctx.kind()!)
 
-            if lfc != nil {
-                lfc!.m[str] = newV
-            } else {
-                fc.m[str] = newV
+            for v in ai {
+                
+            
+                            var newV: Pval
+                            if let prev = map[v] {
+                                throw Perr(EREDECLARE, sctx, prev)
+                            }
+                                newV = try Pval(sctx, k)
+
+                            if lfc != nil {
+                                lfc!.m[v] = newV
+                            } else {
+                                fc.m[v] = newV
+                            }
+                
             }
+
             
         default: break
         }

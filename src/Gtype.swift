@@ -104,32 +104,32 @@ enum Gtype {
         return self
     }
     func toPGR() -> Gtype {
-        switch self {
-        case .gScalar:
-            return self
-            
-        case .gArray(let k, let i):
-            return Gtype.gArray(Kind(k.gtype.toPGR()), i)
-        case .gSlice(let k):
-            return Gtype.gSlice(Kind(k.gtype.toPGR()))
-        case .gMap(let k):
-            return Gtype.gMap(Kind(k.gtype.toPGR()))
-
-            
-        case .gPointer(let ka):
-            return Gtype.gPointer(ka.map { Kind($0.gtype.toPGR())})
-
-        case .gTuple(let ka):
-            return Gtype.gTuple(ka.map { Kind($0.gtype.toPGR())})
-            
-        case .gDefined(let s):
-            return Kind.getPKind(s).gtype.toPGR()
-        }
+//        switch self {
+//        case .gScalar:
+//            return self
+//
+//        case .gArray(let k, let i):
+//            return Gtype.gArray(Kind(k.gtype.toPGR()), i)
+//        case .gSlice(let k):
+//            return Gtype.gSlice(Kind(k.gtype.toPGR()))
+//        case .gMap(let k):
+//            return Gtype.gMap(Kind(k.gtype.toPGR()))
+//
+//
+//        case .gPointer(let ka):
+//            return Gtype.gPointer(ka.map { Kind($0.gtype.toPGR())})
+//
+//        case .gTuple(let ka):
+//            return Gtype.gTuple(ka.map { Kind($0.gtype.toPGR())})
+//
+//        case .gDefined(let s):
+//            return Kind.getPKind(s).gtype.toPGR()
+//        }
+//
+//
+//
         
-        
-        
-        
-        
+        return self
         
         
         
@@ -190,7 +190,8 @@ enum Gtype {
 //    }
   
     
-    func gEquivalent(_ g2: Gtype) -> Bool {
+    func gEquivalent(_ g2x: Gtype) -> Bool {
+        let g2 = g2x.toPGtype()
         switch self {
         case .gScalar(let pt):
             if case .gScalar(let pt2) = g2 {
@@ -231,10 +232,8 @@ enum Gtype {
                 }
             }
             return false
-            
-                        case .gDefined(let s):
-aden()
-            
+            case .gDefined(let s):
+                return Kind.getPKind(s).gtype.gEquivalent(g2)
         }
     }
 }

@@ -1,66 +1,35 @@
 //Create all with defaults
 
-ft("Create int", "0");
+ft("Literal zero", "");
+0;
+
+ft("Literals", "");
+0;
+5;
+
+ft("Create int", "");
 var x int;
-print(x);
 
-ft("Create bool", "false");
-var b bool;
-print(b);
+ft("Set x to itself", "");
+var x int;
+x = x;
 
-ft("Create string", "");
-var str string;
-print(str);
+ft("Create and set 2 ints", "");
+var x int;
+var y int;
+x = y;
 
-ft("Create decimal", "0");
-var d decimal;
-print(d);
+ft("Create and set 3 ints", "");
+var x int;
+var y int;
+var z int;
+y = x;
+z = y;
 
-
-
-
-
-//Printing
-ft("Print one item", "101");
-print(101);
-
-ft("Print multiple items", "23 42 101");
-print(23, 42, 101);
-
-ft("Print multiple times", "125");
-print(1);
-print(2);
-print(5);
-
-ft("Print nothing", "");
-print();
-
-ft("Print literals IBSD", "42 true str 1.5");
-print(42, true, "str", 1.5);
-
-ft("Print", "a \\ slash");
-print("a \\ slash");
-
-ft("Print arrays", "[23] [true true] [aa bb cc] [0.5 1.5]");
-print([23], [true, true], ["aa", "bb", "cc"], [0.5, 1.5]);
-
-ft("Print single element object", "{foo:42}");
-print({"foo": 42});
-
-
-//Create and set
-
-ft("Create and set to 10", "10");
-var x2 int;
-x2 = 10;
-print(x2);
-
-ft("Create and set ints", "27");
+ft("Create and set ints", "");
 var x int;
 x = 2;
-print(x);
-x = 7;
-print(x);
+
 
 ft("Create and set BSD", "true value 42.5");
 var b bool;
@@ -89,8 +58,12 @@ print(i1, i2);
 
 
 
+ft("Create bool", "");
+var b bool;
 
 
+ft("Create string", "");
+var str string;
 
 
 
@@ -125,25 +98,9 @@ var y int;
 y = x;
 x = y;
 print(x, y, x == y, y == x);
-ft("Short declaration and named", "101 101 true");
-s := 101;
-type t int;
-var x t;
-x = s;
-s = x;
-print(s, x, s == x);
 
 
 
-ng("Wrong short declaration");
-sdns := [[2, 1], 24];
-
-//ng("Wrong short declaration");
-//sd := nil;
-
-
-ng("Wrong multi short");
-a, b, c := 1, 5;
 
 //ng("Wrong multi");
 //a, b := 101, 202, 303;
@@ -174,22 +131,6 @@ x = x;
 print(x);
 
 
-ng("Wrong short declaration:");
-func f() {}
-sd := f();
-
-ng("Wrong short declaration:");
-sdns := (5, (true, "foo"), [true, "foo"]);
-
-ng("Wrong short declaration:");
-sdns := [[2, 1], [true, true, true]];
-
-ng("Wrong short declaration:");
-sdns := {"aap": 5, "noot": false};
-
-ng("Wrong short declaration:");
-func f() {}
-sdns := [4, f()];
 
 
 ft("Create array", "[0 0]");
@@ -239,27 +180,6 @@ a[1][1] = 101;
 b = a[1];
 print(a, b);
 
-ft("Named", "[0 0][42 0][42 0] [42 0] true");
-type t [2]int;
-var v t;
-print(v);
-v[0] = 42;
-print(v);
-var v2 [2]int;
-v2 = v;
-v = v2;
-print(v, v2, v == v2);
-
-ft("Xtra--named", "[[0 42] [0 0]][[0 42] [0 0]] [[0 42] [0 0]] true");
-type t [2]int;
-var v [2]t;
-v[0][1] = 42;
-print(v);
-
-var v2 [2][2]int;
-v2 = v;
-v = v2;
-print(v, v2, v == v2);
 
 ft("Array copies on set", "[23] [42][[42 23] [202 0]] [[42 23] [202 101]]");
 var a[1]int;
@@ -278,13 +198,7 @@ d = c;
 d[1][1] = 101;
 print(c, d);
 
-ft("Stress--named array", "");
-type tA [3][2][3][2]decimal;
-type tB [2][5]tA;
-type tC [2]tA;
-var vA tA;
-var vB tB;
-var vC tC;
+
 
 ft("Create slice", "[]");
 var s []int;
@@ -316,13 +230,6 @@ s[1][0] = 101;
 s[1][1] = 202;
 print(s);
 
-ft("Named slice", "[[42]]");
-type ts []int;
-type tsa []ts;
-
-var v tsa;
-v[0][0] = 42;
-print(v);
 
 ft("Slice shares", "[42] [42][101] [101]");
 var s []int;
@@ -398,14 +305,6 @@ t2 = t;
 t2[1] = 101;
 print(t, t2);
 
-ft("Named tuple", "(105 0)((0 0) 0)");
-type t (int, int);
-var v t;
-v[0] = 105;
-print(v);
-type t2 (t, int);
-var v2 t2;
-print(v2);
 
 ft("Stress-mixed", "");
 var v [2]((int, bool, [7](int, bool), [3][]int));
@@ -429,6 +328,16 @@ var v2 *(string);
 v2 = *("str");
 print(v2);
 
+ft("Nil pointers", "N*(N true)*(P false) *(42)");
+var v *(*(int), bool);
+print(v);
+v = *(nil, true);
+print(v);
+v = *(*(42), false);
+print(v, v[0]);
+
+
+
 ft("Create 2 pointers", "*(false 101) *(false 101) true");
 var v *(bool, int);
 var v2 *(bool, int);
@@ -445,6 +354,33 @@ print(v, v[2]);
 v = *(303, false, nil);
 print(v);
 
+ft("Pointers of single", "45");
+var v *(int);
+var v2 *(int);
+v = *(42);
+v2 = *(3);
+print(v[0] + v2[0]);
+
+ft("Pointer shares", "*(42) *(42)*(101) *(101)");
+var p1 *(int);
+p1 = *(42);
+var p2 *(int);
+p2 = p1;
+print(p1, p2);
+p2[0] = 101;
+print(p1, p2);
+
+
+
+ft("Self", "");
+var v *(self, int);
+
+
+
+
+
+
+
 ft("Pointers and slices", "[][N][N P] N *(42 true)");
 var ps []*(int, bool);
 print(ps);
@@ -456,12 +392,29 @@ print(ps, ps[0], ps[1]);
 ft("Slices and pointers", "N*([] true)[]*([101] true)");
 var sp *([]int, bool);
 print(sp);
-sp = *([], true);
+sp = *(...[], true);
 print(sp);
 print(sp[0]);
 sp[0][0] = 101;
 print(sp);
 
+ft("Create map", "{}");
+var m[map]int;
+print(m);
+
+ft("Create 2 maps", "{} {} true");
+var m[map]int;
+var m2[map]int;
+m = m2;
+m2 = m;
+print(m, m2, m == m2);
+
+
+
+
+ft("Create decimal", "0");
+var d decimal;
+print(d);
 
 
 
@@ -470,9 +423,13 @@ print(sp);
 
 
 
-
-
-
+ft("Stress--named array", "");
+type tA [3][2][3][2]decimal;
+type tB [2][5]tA;
+type tC [2]tA;
+var vA tA;
+var vB tB;
+var vC tC;
 
 
 ft("Named type test", "0");
@@ -533,6 +490,60 @@ vC = vB;
 print(vA, vB, vC);
 
 
+ft("Short declaration and named", "101 101 true");
+s := 101;
+type t int;
+var x t;
+x = s;
+s = x;
+print(s, x, s == x);
+
+
+
+
+
+ft("Named slice", "[[42]]");
+type ts []int;
+type tsa []ts;
+
+var v tsa;
+v[0][0] = 42;
+print(v);
+
+
+ft("Named tuple", "(105 0)((0 0) 0)");
+type t (int, int);
+var v t;
+v[0] = 105;
+print(v);
+type t2 (t, int);
+var v2 t2;
+print(v2);
+
+
+
+
+ft("Named", "[0 0][42 0][42 0] [42 0] true");
+type t [2]int;
+var v t;
+print(v);
+v[0] = 42;
+print(v);
+var v2 [2]int;
+v2 = v;
+v = v2;
+print(v, v2, v == v2);
+
+ft("Xtra--named", "[[0 42] [0 0]][[0 42] [0 0]] [[0 42] [0 0]] true");
+type t [2]int;
+var v [2]t;
+v[0][1] = 42;
+print(v);
+
+var v2 [2][2]int;
+v2 = v;
+v = v2;
+print(v, v2, v == v2);
 
 
 
@@ -544,7 +555,51 @@ print(vA, vB, vC);
 
 
 
+//Printing
+ft("Print one item", "101");
+print(101);
 
+ft("Print multiple items", "23 42 101");
+print(23, 42, 101);
+
+ft("Print multiple times", "125");
+print(1);
+print(2);
+print(5);
+
+ft("Print nothing", "");
+print();
+
+ft("Print literals IBSD", "42 true str 1.5");
+print(42, true, "str", 1.5);
+
+ft("Print", "a \\ slash");
+print("a \\ slash");
+
+ft("Print arrays", "[23] [true true] [aa bb cc] [0.5 1.5]");
+print([23], [true, true], ["aa", "bb", "cc"], [0.5, 1.5]);
+
+ft("Print slices", "[10] [23 45] [ab bc]");
+print(...[10], ...[23, 45], ...["ab", "bc"]);
+
+ft("Print tuple", "(1 true 10.5)");
+print((1, true, 10.5));
+
+ft("Print pointer", "*(5 N true)");
+print(*(5, nil, true));
+
+ft("Print single element object", "{foo:42}");
+print({"foo": 42});
+
+
+ft("Recursive named", "N*(N true) N*(P true) *(N false)");
+type node *(node, bool);
+var n node;
+print(n);
+n = *(nil, true);
+print(n, n[0]);
+n[0] = *(nil, false);
+print(n, n[0]);
 
 
 
@@ -923,6 +978,9 @@ func fguard() {
     print("bad");
 }
 fguard();
+
+
+
 
 ft("Guard pass", "afterguard");
 func fguard2() {
@@ -2058,5 +2116,33 @@ s[1] = *(true, nil);
 ng("Deeply nested bad assignment:");
 var dnt [2](bool, int, [map](int, string));
 dnt[1][2]["aap"] = (42, true);
-ng("");
+
+   ng("Wrong short declaration");
+sdns := [[2, 1], 24];
+
+//ng("Wrong short declaration");
+//sd := nil;
+
+
+ng("Wrong multi short");
+a, b, c := 1, 5;
+
+ng("Wrong short declaration:");
+func f() {}
+sd := f();
+
+ng("Wrong short declaration:");
+sdns := (5, (true, "foo"), [true, "foo"]);
+
+ng("Wrong short declaration:");
+sdns := [[2, 1], [true, true, true]];
+
+ng("Wrong short declaration:");
+sdns := {"aap": 5, "noot": false};
+
+ng("Wrong short declaration:");
+func f() {}
+sdns := [4, f()];
+   
+   ng("");
 //ng("");

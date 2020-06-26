@@ -6,18 +6,20 @@ class Kind {
         try Kinds.ks.addKind(s, k)
     }
 
-    static func getKind(_ s: String) throws -> Kind {
-        return try Kinds.ks.getKind(s)
-    }
+//    static func getKind(_ s: String) throws -> Kind {
+//        return try Kinds.ks.getKind(s)
+//    }
     static func getPKind(_ s: String)  -> Kind {
         return Kinds.ks.getPkind(s)
     }
 //    static func getDkind(_ s: String) throws -> Kind {
 //        
 //    }
-    
+    static func nilKind() -> Kind {
+        return Kind(Gtype.gScalar(Nil.self))
+    }
     static func nilSlice() -> Kind {
-        return Kind(Gtype.gSlice(Kind(Gtype.gScalar(Nil.self))))
+        return Kind(Gtype.gSlice(nilKind()))
     }
     static func produceKind(_ g: Gtype) throws -> Kind {
 //        if !g.isValid() {
@@ -46,6 +48,9 @@ class Kind {
 //        }
 //        return try gtype.gAssignable(k.gtype, k)
 
+    }
+    func sk() -> Kind {
+        return Kind(gtype.toPGtype())
     }
     func equivalent(_ k: Kind) -> Bool {
 //        if self === k {
