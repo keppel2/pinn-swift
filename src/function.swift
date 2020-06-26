@@ -34,7 +34,7 @@ func execute() throws  {
     let s = args[1]
     test = s == "-t"
     
-    let myinput = fnToString(test ? "/tmp/types.pinn" : s)
+    let myinput = fnToString(test ? "/tmp/types.pinn" : "/tmp/baduk.pinn" )//s)
     try exe(myinput)
     if (test) {
         print()

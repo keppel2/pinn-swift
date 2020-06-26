@@ -114,6 +114,9 @@ class Pval {
             return e === p.e
             //            pv.w.append(v)
         }
+        if case .gMap = gg() {
+            return e === p.e
+        }
         
         
         return try e.con.equal(p.e.con)
@@ -266,6 +269,8 @@ break
                 try $0.gFix()
             }
         case .gMap(let k):
+            
+            
             break
                     
                     
@@ -490,16 +495,17 @@ break
                 }
                 return try ar.w.elementsEqual(co.getAr(), by: {try $0.equal($1)})
             case .map(let map):
-                let omap = co.getMap()
-                for (key, value) in map.w {
-                    if omap[key] == nil {
-                        return false
-                    }
-                    if try !value.equal(omap[key]!) {
-                        return false
-                    }
-                }
-                return true
+//                let omap = co.getMap()
+//                for (key, value) in map.w {
+//                    if omap[key] == nil {
+//                        return false
+//                    }
+//                    if try !value.equal(omap[key]!) {
+//                        return false
+//                    }
+//                }
+//                return true
+                aden()
             }
         }
         func getSlice(_ a: Int, _ b: Int) throws -> [Pval] {

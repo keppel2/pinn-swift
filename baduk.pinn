@@ -22,7 +22,7 @@ func printBoard (board bt) {
 		for y = range 0:SIZEC {
         print (board[x][y]);
 		}
-        println();
+        println("");
 	}
 	println ("---", score(board));
 }

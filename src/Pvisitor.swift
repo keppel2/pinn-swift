@@ -71,6 +71,9 @@ class Pvisitor {
                     return Pval(sctx, try s[0].string()) },
             "print":
                 {sctx, pv, s in
+                    if s.count == 0 {
+                        throw Perr(EPARAM_LENGTH, sctx)
+                    }
                     let rt = Pvisitor.printSpace(try s.map {try $0.string()})
                     pv.textout(rt)
                     return nil
@@ -81,6 +84,10 @@ class Pvisitor {
             },
             "println":
                 {sctx, pv, s in
+                    if s.count == 0 {
+                        throw Perr(EPARAM_LENGTH, sctx)
+                    }
+
                     var rt = Pvisitor.printSpace(try s.map {try $0.string()})
                     pv.textout(rt + "\n")
                     return nil
@@ -767,6 +774,9 @@ class Pvisitor {
             let list = sctx.objectPair()
             var kind: Kind?
             var ckind: Kind?
+            if list.count == 0 {
+                rt = try Pval(sctx, Kind.nilMap())
+            }
             for op in list {
                 
                 let (str, pv) = try visitObjectPair(op)

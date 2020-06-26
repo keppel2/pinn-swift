@@ -21,6 +21,9 @@ class Kind {
     static func nilSlice() -> Kind {
         return Kind(Gtype.gSlice(nilKind()))
     }
+    static func nilMap() -> Kind {
+        return Kind(Gtype.gMap(nilKind()))
+    }
     static func produceKind(_ g: Gtype) throws -> Kind {
 //        if !g.isValid() {
 //            throw Perr(ETYPE)

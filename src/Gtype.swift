@@ -36,6 +36,16 @@ enum Gtype {
             }
         return false
     }
+    func isNilMap() -> Bool {
+                 if case .gMap(let k) = self {
+                     
+                     if case .gScalar(let pt) = k.gtype {
+                         return pt == Nil.self
+                     }
+                     
+             }
+         return false
+     }
     func isNil() -> Bool {
         if case .gScalar(let pt) = self {
             
@@ -199,6 +209,7 @@ enum Gtype {
             }
             return false
         case .gArray(let k, let i):
+            
             if case .gArray(let k2, let i2) = g2 {
                 return i == i2 && k.gtype.gEquivalent(k2.gtype)
             }
@@ -212,6 +223,9 @@ enum Gtype {
             }
             return false
         case .gMap(let k):
+            if g2.isNilMap() {
+                return true
+            }
             if case .gMap(let k2) = g2 {
                 return k.gtype.gEquivalent(k2.gtype)
             }

@@ -4,8 +4,8 @@ ft("Literal zero", "");
 0;
 
 ft("Literals", "");
-0;
-5;
+42;
+101;
 
 ft("Create int", "");
 var x int;
@@ -17,7 +17,7 @@ x = x;
 ft("Create and set 2 ints", "");
 var x int;
 var y int;
-x = y;
+y = x;
 
 ft("Create and set 3 ints", "");
 var x int;
@@ -26,10 +26,45 @@ var z int;
 y = x;
 z = y;
 
-ft("Create and set ints", "");
+ft("Create and set ints to each other", "");
 var x int;
-x = 2;
+var y int;
+x = y;
+y = x;
 
+ft("Create 3 ints", "");
+var x int;
+var y int;
+var z int;
+x = y;
+y = x;
+x = z;
+z = x;
+y = z;
+z = y;
+
+ft("Boolean and String literals", "");
+true;
+false;
+"str";
+"";
+
+ft("Print", "");
+print("");
+
+ft("Print zero", "0");
+print(0);
+
+ft("Print two", "42 101");
+print(42, 101);
+
+ft("Print str", "str");
+print("str");
+
+ft("Print var", "23");
+var x int;
+x = 23;
+print(x);
 
 ft("Create and set BSD", "true value 42.5");
 var b bool;
@@ -398,6 +433,10 @@ print(sp[0]);
 sp[0][0] = 101;
 print(sp);
 
+
+
+
+
 ft("Create map", "{}");
 var m[map]int;
 print(m);
@@ -408,6 +447,37 @@ var m2[map]int;
 m = m2;
 m2 = m;
 print(m, m2, m == m2);
+
+ft("Create and set map", "{key:42}");
+var m[map]int;
+m["key"] = 42;
+print(m);
+
+ft("Create and set 2 maps", "{k:23} {k:23} false");
+var m[map]int;
+var n[map]int;
+m["k"] = 23;
+n["k"] = 23;
+print(m, n, m == n);
+
+ft("Create and null map", "{}{k:101}{}{a:42}");
+var m[map]int;
+print(m);
+m["k"] = 101;
+print(m);
+m = {};
+print(m);
+m["a"] = 42;
+print(m);
+
+ft("Maps and pointers", "");
+var t *([map]int, bool);
+t = *({}, true);
+t[0]["b"] = 101;
+
+ft("map", "");
+var t [map]*(int);
+t["a"] = nil;
 
 
 
@@ -567,8 +637,6 @@ print(1);
 print(2);
 print(5);
 
-ft("Print nothing", "");
-print();
 
 ft("Print literals IBSD", "42 true str 1.5");
 print(42, true, "str", 1.5);
@@ -603,10 +671,26 @@ print(n, n[0]);
 
 
 
+
+
+
+
+
+
+
 ft("Create map", "{answer:true} true false");
 var newMap [map]bool;
 newMap["answer"] = true;
 print(newMap, key(newMap, "answer"), key(newMap, "not"));
+
+
+
+
+
+
+
+
+
 
 
 ft("Short slice equals", "falsetrue[10] [5] false false");
@@ -690,6 +774,12 @@ print(11@13);
 ft("Create array of ints", "[10 14 23 42 101 201]");
 aInt := [10, 14, 23, 42, 101, 201];
 print(aInt);
+
+
+
+
+/*
+
 ft("Create literal of pointer and nil", "[P N]");
 ar := [*(42), nil];
 print(ar);
@@ -1334,7 +1424,6 @@ ssAr2 := ssAr1[1@2];
 ssAr2[0] = 777;
 print(ssAr1, ssAr2);
 
-/*
 ft("Slice of arrays does not share (bug)", "[[23]] [42]");
 var j [][1]int;
 j[0] = [23];
@@ -1342,7 +1431,7 @@ var k [1]int;
 k = j[0];
 k[0] = 42;
 println(j, k);
-*/
+
 
 ft("Slice to slice shares", "[101 23 42] [101 23 42]");
 sss := ...[7, 23, 42];
@@ -1404,14 +1493,14 @@ print(x, "");
 x = *(42);
 print(x);
 
-/*ft("Tuple of pointer", "(N) (N)(P)");
+ft("Tuple of pointer", "(N) (N)(P)");
 var tup (*(int));
 print(tup, "");
 tup = ^(nil);
 print(tup);
 tup = ^(*(42));
 print(tup);
-*/
+
 
 ft("Declared pointer","N true *(24 N) N N true");
 var two *(int, self);
