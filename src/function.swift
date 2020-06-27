@@ -33,8 +33,8 @@ func execute() throws  {
     let args = ProcessInfo.processInfo.arguments
     let s = args[1]
     test = s == "-t"
-    
-    let myinput = fnToString(test ? "/tmp/types.pinn" : s)
+    let fname = test ? "/tmp/types.pinn" : s
+    let myinput = fnToString(fname)
     try exe(myinput)
     if (test) {
         print()

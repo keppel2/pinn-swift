@@ -1,69 +1,73 @@
-//var rec *(self, int);
-//rec = *(*(), 5);
-//println(rec);
-////xam("rec");
-//rec[0] = *(*(), 12);
-//println(rec, rec[0]);
-ft("Assignability of recursive pointers", "*(42 N) *(42 N)*(101 P) *(42 N) *(42 N)");
-var point1 *(int, self);
-var point2 *(int, self);
-point1 = *(42, *());
-point2 = point1;
-print(point1, point2);
-
-exit();
-var rec2 *(self, bool);
-rec2 = *(*(*(), true), false);
-println(rec2, rec2[0], rec2[0][0]);
-rec2[1] = true;
-rec2[0][1] = false;
-println(rec2, rec2[0], rec2[0][0]);
-
-exit();
-
-var v *(*(int), bool);
-print(v);
-v = *(*(), true);
-print(v, v[0]);
-
-exit();
-
-var s[][]int;
-s = ...[...[]];
-print(s);
-
-exit();
-
-type node *(node, bool);
-var n node;
-print(n);
-n = *(nil, true);
-print(n, n[0]);
-n[0] = *(nil, false);
-print(n, n[0]);
-exit();
-
-print(1@4);
-var x int;
-for x = range 1@4 {
-  print(x);
-}
+////var rec *(self, int);
+////rec = *(*(), 5);
+////println(rec);
+//////xam("rec");
+////rec[0] = *(*(), 12);
+////println(rec, rec[0]);
+//ft("Assignability of recursive pointers", "*(42 N) *(42 N)*(101 P) *(42 N) *(42 N)");
+//var point1 *(int, self);
+//var point2 *(int, self);
+//point1 = *(42, *());
+//point2 = point1;
+//print(point1, point2);
+//
+//exit();
+//var rec2 *(self, bool);
+//rec2 = *(*(*(), true), false);
+//println(rec2, rec2[0], rec2[0][0]);
+//rec2[1] = true;
+//rec2[0][1] = false;
+//println(rec2, rec2[0], rec2[0][0]);
+//
+//exit();
+//
+//var v *(*(int), bool);
+//print(v);
+//v = *(*(), true);
+//print(v, v[0]);
+//
+//exit();
+//
+//var s[][]int;
+//s = ...[...[]];
+//print(s);
+//
+//exit();
+//
+//type node *(node, bool);
+//var n node;
+//print(n);
+//n = *(nil, true);
+//print(n, n[0]);
+//n[0] = *(nil, false);
+//print(n, n[0]);
+//exit();
+//
+//print(1@4);
+//var x int;
+//for x = range 1@4 {
+//  print(x);
+//}
 SIZE := 10;
 var gar [SIZE][SIZE]int;
 var ag [](int, int);
-NUMAG := 3;
-//var x int;
-var i int;
-var j int;
-var k int;
+NUMAG := 8;
+var i, j, x int;
 for x = range 1@NUMAG {
   repeat {
   i, j = rand(SIZE), rand(SIZE);
   } while gar[i][j] != 0;
     ag[len(ag)] = (i, j);
+  gar[i][j] = len(ag);
 }
 func printg() {
-  var x int;
-  var y int;
+  var x, y int;
+  for x = range 0:SIZE {
+    for y = range 0:SIZE {
+      print(gar[x][y]);
+    }
+    println("");
+  }
   
 }
+printg();

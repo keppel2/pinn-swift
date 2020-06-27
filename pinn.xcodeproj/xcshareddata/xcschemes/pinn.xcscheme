@@ -52,7 +52,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "/tmp/a.pinn"
+            argument = "/tmp/baduk.pinn"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

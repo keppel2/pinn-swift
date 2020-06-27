@@ -1,11 +1,43 @@
-//Create all with defaults
-
 ft("Literal zero", "");
 0;
 
 ft("Literals", "");
 42;
 101;
+
+ft("Boolean", "");
+false;
+true;
+
+ft("String", "");
+"";
+"str";
+"a";
+
+//Control flow
+
+ft("Bare if", "");
+if true ;
+if false ;
+
+ft("If other", "");
+if true 5;
+if false 10;
+
+//ft("While", "");
+//while false ;
+//
+//ft("While other", "");
+//while false ;
+//while false 101;
+
+
+
+//Create all with defaults
+
+
+
+
 
 ft("Create int", "");
 var x int;
@@ -481,10 +513,11 @@ m = m2;
 m2 = m;
 print(m, m2, m == m2);
 
-ft("Create and set map", "{key:42}");
+ft("Create and set map", "{key:42}42 0");
 var m[map]int;
 m["key"] = 42;
 print(m);
+print(m["key"], m["keyx"]);
 
 ft("Create and set 2 maps", "{k:23} {k:23} false");
 var m[map]int;
@@ -501,6 +534,25 @@ print(m);
 m = {};
 print(m);
 m["a"] = 42;
+print(m);
+
+ft("Maps share", "{a:42 z:101} {a:42 z:101}");
+var m[map]int;
+var m2[map]int;
+
+m["a"] = 42;
+m2 = m;
+m2["z"] = 101;
+print(m, m2);
+
+ft("Composite maps", "{}{a:{}}{a:{z:42}}{a:{z:42} k:{k2:101}}");
+var m[map][map]int;
+print(m);
+m["a"] = {};
+print(m);
+m["a"]["z"] = 42;
+print(m);
+m["k"]["k2"] = 101;
 print(m);
 
 ft("Maps and pointers", "");
@@ -866,6 +918,53 @@ ft("Get second element", "14");
 aInt := [10, 14, 23, 42, 101, 201];
 sInt := aInt[:];
 print(sInt[1]);
+
+
+
+
+
+
+
+
+//Block
+ft("Block", "");
+{}
+
+ft("Block 2", "");
+{
+    0;
+}
+{
+    true;
+}
+{
+    5;
+    10;
+    false;
+}
+
+   ft("Block nest", "");
+{
+    {}
+}
+
+   {
+    {
+        {
+        }
+    }
+}
+
+   ft("Blocks share scope", "");
+{
+    var x int;
+}
+x;
+
+
+
+
+
 
 ft("Block", "in");
 {
@@ -1792,11 +1891,11 @@ var n (int, self);
 
 
 
-//ng("Wrong array declaration:");
-//var ar [true]int;
-//ng("Wrong array declaration:");
-//func f() {}
-//var ar [f()]int;
+ng("Wrong array declaration:");
+var ar [true]int;
+ng("Wrong array declaration:");
+func f() {}
+var ar [f()]int;
 //
 ng("Wrong type assignment defined types:");
 var x [1]int;
