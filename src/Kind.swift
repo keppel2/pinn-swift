@@ -43,8 +43,8 @@ class Kind {
         gtype = g
     }
     
-    func assignable(_ k: Kind)  -> Bool {
-        return equivalent(k)
+//    func assignable(_ k: Kind)  -> Bool {
+//        return equivalent(k)
 //        if self === k {
 //            return true
 //        }
@@ -53,8 +53,8 @@ class Kind {
 //            return true
 //        }
 //        return try gtype.gAssignable(k.gtype, k)
-
-    }
+//
+//    }
     func sk() -> Kind {
         return Kind(gtype.toPGtype())
     }
@@ -63,10 +63,10 @@ class Kind {
 //            return true
 //        }
         
-        
-        if gtype.isPointer() && k === gOne.nkind || self === gOne.nkind && k.gtype.isPointer() {
-            return true
-        }
+//
+//        if gtype.isPointer() && k === gOne.nkind || self === gOne.nkind && k.gtype.isPointer() {
+//            return true
+//        }
         
         return try gtype.gEquivalent(k.gtype)
     }

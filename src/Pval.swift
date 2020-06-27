@@ -72,8 +72,9 @@ class Pval {
         case .gPointer:
             e = Pvalp(ke, Contents.multi(Wrap([Pval]())), c)
         case .gDefined(let s):
-            let pv = try Pval(c, Kind.getPKind(s))
-            e = Pvalp(ke, pv.e.con, c)
+            aden()
+//            let pv = try Pval(c, Kind.getPKind(s))
+//            e = Pvalp(ke, pv.e.con, c)
         }
         
     }
@@ -110,7 +111,9 @@ class Pval {
         }
         if case .gPointer = getKind().gtype {
 //            return try e.con.pEqual(p.e.con)
-
+            if p.gg().isNilPointer() {
+                return e.con.getAr().count == 0
+            }
             return e === p.e
             //            pv.w.append(v)
         }
@@ -281,8 +284,14 @@ break
             return
            }
             for (k, v) in ka.enumerated() {
+                if v.gtype.toPGtype().isRef() {
+                    pva[k].e.k = Kind(gg())
+
+                } else {
                 pva[k].e.k = v
+                }
                 try pva[k].gFix()
+                
             }
         case .gTuple(let ka):
             let pva = e.con.getAr()

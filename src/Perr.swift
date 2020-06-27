@@ -15,6 +15,12 @@ class Perr : Error {
         self.tok = token
         let _str = string
         _ = _str
+        if let pv = pvisitor {
+            if !pv.trip {
+                // breakpoint here
+            }
+        }
+        
         
     }
     convenience init(_ s: String, _ p: Pval?) {

@@ -1,3 +1,26 @@
+//var rec *(self, int);
+//rec = *(*(), 5);
+//println(rec);
+////xam("rec");
+//rec[0] = *(*(), 12);
+//println(rec, rec[0]);
+ft("Assignability of recursive pointers", "*(42 N) *(42 N)*(101 P) *(42 N) *(42 N)");
+var point1 *(int, self);
+var point2 *(int, self);
+point1 = *(42, *());
+point2 = point1;
+print(point1, point2);
+
+exit();
+var rec2 *(self, bool);
+rec2 = *(*(*(), true), false);
+println(rec2, rec2[0], rec2[0][0]);
+rec2[1] = true;
+rec2[0][1] = false;
+println(rec2, rec2[0], rec2[0][0]);
+
+exit();
+
 var v *(*(int), bool);
 print(v);
 v = *(*(), true);

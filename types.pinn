@@ -424,8 +424,21 @@ print(p1, p2);
 
 
 
-ft("Self", "");
-var v *(self, int);
+ft("Self", "*(P false) *(*() true) *()*(P true) *(*() false) *()");
+var rec2 *(self, bool);
+rec2 = *(*(*(), true), false);
+print(rec2, rec2[0], rec2[0][0]);
+rec2[1] = true;
+rec2[0][1] = false;
+print(rec2, rec2[0], rec2[0][0]);
+
+
+
+
+
+
+
+
 
 
 ft("Pointers and slices", "[][*()][*() P] *() *(42 true)");
@@ -801,24 +814,23 @@ print(aInt);
 
 
 
-/*
 
-ft("Create literal of pointer and nil", "[P N]");
-ar := [*(42), nil];
-print(ar);
+//ft("Create literal of pointer and nil", "[P N]");
+//ar := [*(42), *()];
+//print(ar);
 
-ft("Pointer as nullable it:", "N true *(42) false");
+ft("Pointer as nullable it:", "*() true *(42) false");
 var pi *(int);
-print(pi, pi == nil, "");
+print(pi, pi == *(), "");
 pi = *(42);
-print(pi, pi == nil);
+print(pi, pi == *());
 
 
 
 
-ft("Create map to pointer and nil", "{a:P b:N}");
-m := {"a": *(101), "b": nil};
-print(m);
+//ft("Create map to pointer and nil", "{a:P b:N}");
+//m := {"a": *(101), "b": *()};
+//print(m);
 ft("Array slicing", "[] [] [12 23 42 101] [12] [101]");
 ar := [12, 23, 42, 101];
 print(ar[0:0], ar[3:3], ar[:], ar[0:1], ar[3:4]);
@@ -1406,12 +1418,6 @@ ceAr2 := [1, 5, 23];
 ceAr3 := [1, 7, 23];
 print(ceAr1 == ceAr2, ceAr2 == ceAr3);
 
-ft("Map equals", "true false false");
-meMap1 := {"aap": 5};
-meMap2 := {"aap": 5};
-meMap3 := {"noot": 5};
-meMap4 := {"aap": 32};
-print(meMap1 == meMap2, meMap1 == meMap3, meMap1 == meMap4);
 
 
 ft("Map returns zero value with no key", "0, false");
@@ -1453,7 +1459,7 @@ j[0] = [23];
 var k [1]int;
 k = j[0];
 k[0] = 42;
-println(j, k);
+print(j, k);
 
 
 ft("Slice to slice shares", "[101 23 42] [101 23 42]");
@@ -1509,30 +1515,22 @@ print(dnt);
 dnt[1][2]["aap"] = (42, "noot");
 print(dnt);
 
-ft("Pointer", "N *(42)");
+ft("Pointer", "*() *(42)");
 var x *(int);
-x = nil;
+x = *();
 print(x, "");
 x = *(42);
 print(x);
 
-ft("Tuple of pointer", "(N) (N)(P)");
+ft("Tuple of pointer", "(*()) (*())(P)");
 var tup (*(int));
 print(tup, "");
-tup = ^(nil);
+tup = ^(*());
 print(tup);
 tup = ^(*(42));
 print(tup);
 
 
-ft("Declared pointer","N true *(24 N) N N true");
-var two *(int, self);
-print(two, two == nil, "");
-two = *(24, nil);
-print(two, "");
-print(two[1], "");
-two = nil;
-print(two, two == nil);
 
 
 ft("Pointer compare", "false true*(4) *(4) *(4)false true*(4) *(12) *(12)");
@@ -1550,14 +1548,15 @@ print(x, y, z);
 
 
 
-ft("Assignability of recursive pointers", "*(42 N) *(42 N)*(101 P) *(42 N) *(42 N)");
+ft("Assignability of recursive pointers", "*(42 *()) *(42 *())");
 var point1 *(int, self);
 var point2 *(int, self);
-point2 = *(42, nil);
-point1 = point2;
+point1 = *(42, *());
+point2 = point1;
 print(point1, point2);
-point1 = *(101, point2);
-print(point1, point1[1], point2);
+
+//point2 = *(101, point2);
+//print(point1, point1[1], point2);
 
 ft("Pointer shares", "*(101 42) *(101 42)");
 var p *(int, int);
@@ -1584,15 +1583,15 @@ print(z);
 
 
 
-ft("Pointer in tuple", "(0 N) (0 P) *(true N) ");
+ft("Pointer in tuple", "(0 *()) (0 P) *(true *()) ");
 var tup (int, *(bool, self));
 print(tup, "");
-tup[1] = *(true, nil);
+tup[1] = *(true, *());
 print(tup, "");
 print(tup[1], "");
 
-ft("Nested tuple short", "(4 (10 P))(10 P)*(12 N)");
-x := (4, (10, *(12, nil)));
+ft("Nested tuple short", "(4 (10 P))(10 P)*(12 *())");
+x := (4, (10, *(12, *())));
 print(x);
 print(x[1]);
 print(x[1][1]);
@@ -1621,23 +1620,23 @@ ft("Binary search tree", "1 2 3 5 5 5 10 ");
 var i int;
 var mbst *(self, int, self);
 func tree_insert(x int) {
-    if mbst == nil {
-            mbst = *(nil, x, nil);
+    if mbst == *() {
+            mbst = *(*(), x, *());
             return;
     }
         cur := mbst;
         loop {
             if i < cur[1] {
-                if cur[0] == nil {
-                    cur[0] = *(nil, i, nil);
+                if cur[0] == *() {
+                    cur[0] = *(*(), i, *());
                     break;
                 } else {
                     cur = cur[0];
                     continue;
                 }
             } else if i >= cur[1] {
-                if cur[2] == nil {
-                    cur[2] = *(nil, i, nil);
+                if cur[2] == *() {
+                    cur[2] = *(*(), i, *());
                     break;
                 } else {
                     cur = cur[2];
@@ -1651,7 +1650,7 @@ for i = range [1, 5, 5, 5, 10, 2, 3] {
     tree_insert(i);
 }
 func dfs(node  *(self, int, self)) {
-    if node == nil {
+    if node == *() {
         return;
     }
     dfs(node[0]);
@@ -1664,15 +1663,15 @@ dfs(mbst);
 
 ft("Linked list", "5 8 23 ");
 var LL *(int, self);
-LL = *(5, nil);
+LL = *(5, *());
 base := LL;
 
-LL[1] = *(8, nil);
+LL[1] = *(8, *());
 
 LL = LL[1];
-LL[1] = *(23, nil);
+LL[1] = *(23, *());
 func pll(node *(int, self)) {
-    if node == nil {
+    if node == *() {
         return;
     }
     print(node[0], "");
@@ -1681,25 +1680,25 @@ func pll(node *(int, self)) {
 pll(base);
 
 
-ft("Nested pointer types, depth and flat", "*(aap N P)*(noot N N)");
-npt := *("aap", nil, *("noot", nil, nil));
+ft("Nested pointer types, depth and flat", "*(aap *() P)*(noot *() *())");
+npt := *("aap", *(), *("noot", *(), *()));
 print(npt);
 print(npt[2]);
 
 
-ft("Doubly linked list", "*(N 5 P)*(P 7 N)*(N 5 P)");
-var dll *(self, int, self);
-dll = *(nil, 5, nil);
-dll[2] = *(dll, 7, nil);
-print(dll);
-print(dll[2]);
-print(dll[2][0]);
+//ft("Doubly linked list", "*(*() 5 P)*(P 7 *())*(*() 5 P)");
+//var dll *(self, int, self);
+//dll = *(*(), 5, *());
+//dll[2] = *(dll, 7, *());
+//print(dll);
+//print(dll[2]);
+//print(dll[2][0]);
 
 ft("", "
 Positives ok.
 ");
 
-println();
+println("");
 println("Positives ok.");
 
 
@@ -1775,17 +1774,17 @@ y = x;
 
 
 
-ng("Wrong self declaration");
-var n self;
-
-ng("Wrong self declaration:");
-var n [3]self;
-
-ng("Wrong self declaration:");
-var n []self;
-
-ng("Wrong self declaration:");
-var n [map]self;
+//ng("Wrong self declaration");
+//var n self;
+//
+//ng("Wrong self declaration:");
+//var n [3]self;
+//
+//ng("Wrong self declaration:");
+//var n []self;
+//
+//ng("Wrong self declaration:");
+//var n [map]self;
 
 /*ng("Wrong self declaration:");
 var n (int, self);
@@ -1793,12 +1792,12 @@ var n (int, self);
 
 
 
-ng("Wrong array declaration:");
-var ar [true]int;
-ng("Wrong array declaration:");
-func f() {}
-var ar [f()]int;
-
+//ng("Wrong array declaration:");
+//var ar [true]int;
+//ng("Wrong array declaration:");
+//func f() {}
+//var ar [f()]int;
+//
 ng("Wrong type assignment defined types:");
 var x [1]int;
 var y [2]int;

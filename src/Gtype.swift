@@ -61,6 +61,15 @@ enum Gtype {
             }
         return false
     }
+    func isRef() -> Bool {
+        if case .gScalar(let pt) = self {
+            
+            
+            
+                return pt == Ref.self
+            }
+        return false
+    }
     func isPointer() -> Bool {
         if case .gPointer = self {
             return true
@@ -119,97 +128,17 @@ enum Gtype {
         }
         return self
     }
-    func toPGR() -> Gtype {
-//        switch self {
-//        case .gScalar:
-//            return self
-//
-//        case .gArray(let k, let i):
-//            return Gtype.gArray(Kind(k.gtype.toPGR()), i)
-//        case .gSlice(let k):
-//            return Gtype.gSlice(Kind(k.gtype.toPGR()))
-//        case .gMap(let k):
-//            return Gtype.gMap(Kind(k.gtype.toPGR()))
-//
-//
-//        case .gPointer(let ka):
-//            return Gtype.gPointer(ka.map { Kind($0.gtype.toPGR())})
-//
-//        case .gTuple(let ka):
-//            return Gtype.gTuple(ka.map { Kind($0.gtype.toPGR())})
-//
-//        case .gDefined(let s):
-//            return Kind.getPKind(s).gtype.toPGR()
-//        }
-//
-//
-//
-        
-        return self
-        
-        
-        
-        
-    }
-//    func gAssignable(_ gB: Gtype, _ ik: Kind)  -> Bool {
-//        let gA = self//.toPGtype()
-//        let g2 = gB//.toPGtype()
-//        switch gA {
-//        case .gScalar(let pt):
-//            if case .gScalar(let pt2) = g2 {
-//                return pt == pt2
-//            }
-//            return false
-//        case .gArray(let k, let i):
-//            if case .gArray(let k2, let i2) = g2 {
-//                return i == i2 && k.assignable(k2)
-//            }
-//            return false
-//        case .gSlice(let k):
-//            if case .gSlice(let k2) = g2 {
-//                return k.assignable(k2)
-//            }
-//            return false
-//        case .gMap(let k):
-//            if case .gMap(let k2) = g2 {
-//                return k.assignable(k2)
-//            }
-//            return false
-//
-//        case .gPointer(let ka):
-//            if case .gPointer(let ka2) = g2 {
-//
-//                return ka.elementsEqual(ka2) {
-//                    if $0.gtype.isPointer() {
-//                        if $1 === ik {
-//                            return true
-//                        }
-//                    }
-//                    return $0.assignable($1)
-//                }
-//            }
-//            return false
-//
-//
-//        case .gTuple(let ka):
-//            if case .gTuple(let ka2) = g2 {
-//
-//                return ka.elementsEqual(ka2) {
-//                    $0.assignable($1)
-//                }
-//            }
-//            return false
-//        case .gDefined:
-//            aden()
-//        }
-//
-//    }
   
     
     func gEquivalent(_ g2x: Gtype) -> Bool {
         let g2 = g2x.toPGtype()
-        switch self {
+        switch self.toPGtype() {
         case .gScalar(let pt):
+            if pt == Ref.self {
+                if g2.isNilPointer() {
+                    return true
+                }
+            }
             if case .gScalar(let pt2) = g2 {
                 return pt == pt2
             }
@@ -242,8 +171,14 @@ enum Gtype {
             }
             if case .gPointer(let ka2) = g2 {
                 return ka.elementsEqual(ka2) {
-
+                    if $0.gtype.toPGtype().isRef() {
+                        if $1.gtype.toPGtype().isRef() {
+                            return true
+                        }
+                        return g2.gEquivalent($1.gtype)
+                    } else {
                     return $0.gtype.gEquivalent($1.gtype)
+                    }
                 }
             }
             return false
@@ -256,7 +191,8 @@ enum Gtype {
             }
             return false
             case .gDefined(let s):
-                return Kind.getPKind(s).gtype.gEquivalent(g2)
+                aden()
+//                return Kind.getPKind(s).gtype.gEquivalent(g2)
         }
     }
 }

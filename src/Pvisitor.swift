@@ -244,7 +244,7 @@ class Pvisitor {
     private var tester: Tester?
     private var neg = ""
     private var li: String.Index
-    private var trip = false
+    var trip = false
     
     private var fc = Fc()
     private var lfc: Fc?
@@ -336,10 +336,10 @@ class Pvisitor {
         
         
         if let fx = fh.kind {
-            fh.kind = Kind(fx.gtype.toPGR())
+            fh.kind = Kind(fx.gtype)
         }
                 for (index, v) in fh.fkinds.enumerated() {
-                    fh.fkinds[index].k = Kind(v.k.gtype.toPGR())
+                    fh.fkinds[index].k = Kind(v.k.gtype)
         }
         
         
@@ -362,7 +362,7 @@ class Pvisitor {
                 let par = try Pval(ctx, Kind.produceKind(Gtype.gArray(v.k, s.count - index)))
                 
                 for (key, varadds) in s[index...].enumerated() {
-                    if !v.k.assignable(varadds.getKind())  {
+                    if !v.k.equivalent(varadds.getKind())  {
                                     throw Perr(ETYPE, sctx)
                     }
                     try par.set(key, varadds)
@@ -373,7 +373,7 @@ class Pvisitor {
                 lfc!.m[fh.fkinds[index].s] = par//Pval(par)
                 continue
             }
-            if !s[index].getKind().assignable(v.k) {
+            if !s[index].getKind().equivalent(v.k) {
                 throw Perr(ETYPE, sctx)
             }
             if let pv = lfc!.m[fh.fkinds[index].s]  {
@@ -393,7 +393,7 @@ class Pvisitor {
             guard let rp = lfc!.rt else {
                 throw Perr(ETYPE, sctx)
             }
-            if !k.assignable(rp.getKind())  {
+            if !k.equivalent(rp.getKind())  {
                 throw Perr(ETYPE, sctx)
             }
         } else {
