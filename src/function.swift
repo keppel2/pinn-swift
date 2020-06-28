@@ -33,17 +33,21 @@ func execute() throws  {
     let args = ProcessInfo.processInfo.arguments
     let s = args[1]
     test = s == "-t"
-    let fname = test ? "/tmp/types.pinn" : "/tmp/bstp.pinn" //s
+    
+    if test {
+        let fnames = ["types.pinn", "tcontrol.pinn"]
+        for n in fnames {
+            print()
+            print("Now ", n)
+            try exe(fnToString("/tmp/" + n))
+        }
+        return
+    }
+    let fname = test ? "/tmp/types.pinn" : "/tmp/tic.pinn" //s
     let myinput = fnToString(fname)
     try exe(myinput)
-    if (test) {
-        print()
-        print("Passed positive tests")
-//        _ = Perr("Negative start")
-//        for ts in negTest {
-//            try exe(ts.1, ts.0)
-//        }
-    }
+
+    
 }
 
 func writeString(_ s: String, _ f: String) {

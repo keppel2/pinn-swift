@@ -134,20 +134,20 @@ println(ar);
 
 
 //quicksort
-ar := [-1, 2, 8, 7, 1, 3, 5, 6, 4];
+arq := [-1, 2, 8, 7, 1, 3, 5, 6, 4];
 
 func partition(p int, r int) int {
     var j int;
-    x := ar[r];
+    x := arq[r];
     i := p - 1;
     for j = range p@r - 1 {
-        if ar[j] <= x {
+        if arq[j] <= x {
             i++;
-            ar[i], ar[j] = ar[j], ar[i];
+            arq[i], arq[j] = arq[j], arq[i];
         }
     }
-    ar[i+1], ar[r] = ar[r], ar[i + 1];
-    println(ar);
+    arq[i+1], arq[r] = arq[r], arq[i + 1];
+    println(arq);
     return i + 1;
 }
 
@@ -159,8 +159,8 @@ func quicksort(p int, r int) {
     }
 }
 
-quicksort(1, len(ar) - 1);
-println(ar);
+quicksort(1, len(arq) - 1);
+println(arq);
 
 
 

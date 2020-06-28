@@ -1,0 +1,458 @@
+ft("a 5", "5");
+print(5);
+ft("", "");
+
+
+ft("Block", "in");
+{
+    print("in");
+}
+ft("Two block layer", "in2");
+{
+    {
+        print("in2");
+    }
+}
+ft("No block scoping (fix)?", "5");
+{
+    {
+        x := 5;
+    }
+}
+print(x);
+ft("Empty", "");
+;
+
+
+ft("For range string", "a l p h a 0 b 1 r 2 a 3 v 4 o ");
+var char string;
+for char = range "alpha" {
+    print(char, "");
+}
+var k int;
+for k, char = range "bravo" {
+    print(k, char, "");
+}
+//ft("For range", "");
+ft("For range closed interval 11 to 14", "11,12,13,14,");
+var xRange int;
+for xRange = range 11@14 {
+    print(xRange);
+    print(",");
+}
+
+ft("Continue on evens--print odds", "23,25,27,");
+var xRange86 int;
+for xRange86 = range 22@27 {
+    if xRange86 % 2 == 0 continue;
+    print(xRange86);
+    print(",");
+}
+ft("Break", "101,102,");
+var xBreak int;
+for xBreak = range 101@104 {
+if xBreak == 103 {
+break;
+}
+print(xBreak);
+print(",");
+}
+ft("Deep return", "203");
+func deepReturn() int {
+    var i int;
+    for i = range 202@205 {
+        if i == 203 return i;
+    }
+}
+print(deepReturn());
+
+ft("3 part for statement", "10,12,14,");
+for forX := 10; forX < 15; forX += 2 {
+    print(forX);
+    print(",");
+}
+
+ft("For range key value", "0 abcd.1 xyz.2 hello.");
+var key int;
+var value string;
+arS := ["abcd", "xyz", "hello"];
+for key, value = range arS {
+    print(key, value);print(".");
+}
+
+
+ft("For loop without init", "In for");
+var bFor bool;
+for ; bFor != true; bFor = !bFor {
+    print("In for");
+}
+
+ft("If true print true", "true");
+if true print("true");
+
+ft("If false do not print bad", "");
+if false print("bad");
+
+ft("If false print else", "else");
+if false ; else print("else");
+
+ft("If true do not print else", "");
+if true ; else print("bad else");
+
+ft("Ternary true", "42");
+print (true ? 42 : 5);
+
+ft("Ternary false", "good");
+print (false ? "bad" : "good");
+
+
+ft("While countdown", "50.40.30.20.");
+wh := 50;
+while wh > 10 {
+    print(wh);
+    wh -= 10;
+    print(".");
+}
+
+ft("Repeat \"ab\" and doubling while len < 8", "ab.abab.");
+wstr := "ab";
+repeat {
+    print(wstr);
+    print(".");
+    wstr += wstr;
+} while len(wstr) < 8;
+
+ft("Slice string", "apn foo oot every");
+print("aapnoot"[1:4], "foobar"[@2], "noot"[1:], "every"[0:5]);
+
+ft("Slice middle of slice", "[4 5]");
+ar := [1, 4, 5, 14, 23, 32];
+s := ar[1:3];
+print(s);
+
+ft("Slice first 2 closed interval", "[1 4]");
+ar := [1, 4, 5, 14, 23, 32];
+s := ar[1:3];
+print(ar[@1]);
+
+ft("Slice last 3", "[14 23 32]");
+ar := [1, 4, 5, 14, 23, 32];
+s := ar[1:3];
+print(ar[3:]);
+
+ft("Double slice", "[4 5]");
+ar := [1, 4, 5, 14, 23, 32];
+s := ar[1:3];
+print(ar[@4][1@2]);
+
+
+ft("Call function", "in f");
+func f() { print("in f"); }
+
+f();
+
+ft("Call function with 42, print", "42");
+func g(iLocal int) { print(iLocal); }
+g(42);
+
+ft("Call variadic", "7,13,101,");
+func variadic(i ...int) {
+    var x int;
+    for x = range i {
+        print(x);
+        print(",");
+    }
+}
+variadic(7, 13, 101);
+
+ft("Forward call", "forward");
+
+func forward() {
+    forwardCalled();
+}
+
+func forwardCalled() {
+    print("forward");
+}
+forward();
+
+
+
+ft("Call returns", "42");
+func returns42() int {
+    return 42;
+}
+print(returns42());
+
+ft("Return exits", "good");
+func exits() {
+    print("good");
+    return;
+    print("bad");
+}
+exits();
+
+ft("Call recursive", "1 ,2 ,3 ,4 ,");
+func countToFour(i int) {
+    if i > 1 {
+        countToFour(i - 1);
+    }
+    print(i, ",");
+}
+countToFour(4);
+
+ft("Function with map, slice, variadic", "foo 4210,11,12,13,14,false,false,true,");
+func fLots(m [map]int, a []int, vary ...bool) {
+var s string;
+var i int;
+for s, i = range m {
+print(s, i);
+}
+for i = range a {
+print(i);
+print(",");
+}
+var b bool;
+for b = range vary {
+print(b);
+print(",");
+}
+}
+var outerm [map]int;
+outerm["foo"] = 42;
+fLots(outerm, 10@14, false, false, true);
+
+ft("Deep function return", "");
+func deep() {
+    repeat {
+        return;
+        print("bad");
+    } while false;
+}
+
+ft("Guard fail", "fail");
+func fguard() {
+    guard false else {
+        print("fail");
+        return;
+    }
+    print("bad");
+}
+fguard();
+
+
+
+
+ft("Guard pass", "afterguard");
+func fguard2() {
+    guard true else {
+    print("bad");
+    return;
+    }
+print("afterguard");
+}
+fguard2();
+
+ft("Chain call", "true");
+func call2nd() int {
+    return 42;
+}
+func call1st() bool {
+    return call2nd() < 45;
+}
+print(call1st());
+
+ft("Mutually recurse", "m1,1m2,2m1,4m2,5m1,10m2,11m1,22m2,23m1,46m2,47m1,94m2,95");
+MLIMIT := 100;
+func mrecurse1(x int) {
+    print("m1,");
+    print(x);
+    x += 1;
+    if x < MLIMIT {
+        mrecurse2(x);
+    }
+}
+func mrecurse2(i int) {
+    print("m2,");
+    print(i);
+    i *= 2;
+    if i < MLIMIT {
+        mrecurse1(i);
+    }
+}
+mrecurse1(1);
+ft("Return slice of strings","[aap noot mies]");
+func returnSliceString() []string {
+ar := ...["aap", "noot", "mies"];
+return ar;
+}
+print(returnSliceString());
+
+ft("Match true", "matched");
+match true {
+when false:
+    print("bad");
+when true:
+    print("matched");
+}
+ft("Match default", "default");
+match 5 {
+when 2: print("2, bad");
+when 1:
+default: print("default");
+}
+ft("Fallthrough", "start,fell through");
+match true {
+when true: print("start,");
+fallthrough;
+when false: print("fell through");
+}
+ft("Fallthrough default", "match foo,fell through default");
+match "foo" {
+when "foo":
+    print("match foo,");
+    fallthrough;
+default:
+    print("fell through default");
+}
+ft("Break out of default", "default only,");
+match true {
+default:
+print("default only,");
+break;
+print("after break");
+}
+ft("Continue with outer for", "in match,10in match,11in match,12in match,13in match,14");
+var deepX int;
+for deepX = range 10@14 {
+match true {
+when true:
+print("in match,");
+print(deepX);
+continue;
+}
+print("bad");
+}
+
+ft("Break with outer for", "in break match,10in break match,11in break match,12in break match,13in break match,14");
+var deepX324 int;
+for deepX324 = range 10@14 {
+match true {
+when true:
+print("in break match,");
+print(deepX324);
+break;
+print("bad");
+}
+}
+
+ft("Return from deep match in function", "201,203");
+func deepR() int {
+var x int;
+for x = range 201@204 {
+match x {
+when 203:
+return 203;
+when 201:
+print("201,");
+}
+}
+}
+
+print(deepR());
+ft("7, 3. + - * / %", "10 4 21 2 1");
+A := 7;
+B := 3;
+print(A + B, A - B, A * B, A / B, A % B );
+
+ft("Eq, not eq, lt, gt", "false true false true");
+A := 7;
+B := 3;
+print (A == B, A != B, A < B, A > B);
+
+ft("Order", "false");
+print(true && 10 < 2 + 1 );
+
+ft("<= and >=", "true false true false");
+print (5 <= 5, 6 <= 5, 5 >= 5, 4 >= 5);
+
+ft("bar foo < > ==", "barfoo true false false");
+SA := "bar";
+SB := "foo";
+print (SA + SB, SA < SB, SA > SB, SA == SB);
+
+ft("&& ||", "true false true false");
+print (true && true, true && false, true || false, false || false);
+func bad() bool {print("bad"); return false;}
+ft("bad test", "false true");
+print (false && bad(), true || bad());
+ft("Negate", "-42");
+var x int;
+x = 42;
+x *= -1;
+print(x);
+ft("Compound + - * % /", "7 4 8 2 1");
+var comp int;
+comp = 5;
+comp += 2;
+print(comp, "");
+comp -= 3;
+print(comp, "");
+comp *= 2;
+print(comp, "");
+comp %= 3;
+print(comp, "");
+comp /= 2;
+print(comp);
+ft("Order of ops", "9 7");
+print(1+2*3, "");
+print(1+(2*3));
+ft("++ --", "6 4");
+dub := 5;
+dub++;
+print(dub, "");
+dub--;
+dub--;
+print(dub);
+ft("Unary negative int and decimal", "-5 -10.2");
+negint := -5;
+var negdec decimal;
+negdec = -10.2;
+print(negint, negdec);
+ft("Unary plus", "202");
+print(+202);
+ft("Unary boolean negate", "false");
+print(!true);
+ft("print", "Hello, world.");
+print("Hello, world.");
+ft("println", "End with lf.
+");
+println("End with lf.");
+
+ft("delete", "{aap:101 foo:42}true false{aap:101}");
+var intMap [map]int;
+intMap["foo"] = 42;
+intMap["aap"] = 101;
+print(intMap);
+print(delete(intMap, "foo"), "");
+print(delete(intMap, "bar"));
+print(intMap);
+
+ft("len array", "3 7");
+lenAr := [1, 22, 42];
+print(len(lenAr), len(101@107));
+
+ft("map length", "0 1 2");
+var boolMap [map]bool;
+print(len(boolMap), "");
+boolMap["aap"] = true;
+print(len(boolMap), "");
+boolMap["noot"] = true;
+print(len(boolMap));
+
+ft("string length", "4");
+print(len("abcd"));
+ft("string Value", "42");
+var strv string;
+strv = stringValue(42);
+print(strv);

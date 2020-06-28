@@ -2,7 +2,7 @@ EMPTY := 0;
 TIE := 3;
 PLAYER_A := 1;
 PLAYER_B := 2;
-SIZE := 2;
+SIZE := 3;
 var rHashMap [map]int;
 
 func rHash(board [SIZE][SIZE]int, player int) int {
@@ -30,7 +30,7 @@ func printBoard (board [SIZE][SIZE]int) {
         print (" ");
         print (board[x][y]);
 		}
-        println();
+        println("");
 	}
 	println ("---");
 }
@@ -142,4 +142,12 @@ func main() {
     }
     println ("Winner:", resultString);
 }
+time := 0;
+loop {
+println("loop", time);
+rHashMap = {};
 main();
+time += 1;
+
+}
+//main();
