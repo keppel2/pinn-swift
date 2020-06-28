@@ -23,7 +23,7 @@ kind
   :
   ID
   | (LSQUARE ( MAP | expr)? RSQUARE) kind
-  |  AST? LPAREN kindList RPAREN ;
+  |  AST? LPAREN kindList? RPAREN ;
 
 
 simpleStatement

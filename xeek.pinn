@@ -1,0 +1,25 @@
+
+
+SIZE := 10;
+var gar [SIZE][SIZE]int;
+var ag [](int, int);
+NUMAG := 8;
+var i, j, x int;
+for x = range 1@NUMAG {
+  repeat {
+  i, j = rand(SIZE), rand(SIZE);
+  } while gar[i][j] != 0;
+    ag[len(ag)] = (i, j);
+  gar[i][j] = len(ag);
+}
+func printg() {
+  var x, y int;
+  for x = range 0:SIZE {
+    for y = range 0:SIZE {
+      print(gar[x][y]);
+    }
+    println("");
+  }
+  
+}
+printg();

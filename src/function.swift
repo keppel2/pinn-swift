@@ -43,7 +43,7 @@ func execute() throws  {
         }
         return
     }
-    let fname = test ? "/tmp/types.pinn" : "/tmp/tic.pinn" //s
+    let fname = test ? "/tmp/types.pinn" : s//"/tmp/tic.pinn" //s
     let myinput = fnToString(fname)
     try exe(myinput)
 

@@ -504,6 +504,9 @@ class Pvisitor {
                 rt = try Kind.produceKind(Gtype.gTuple(kL))
             }
         } else
+            if sctx.LPAREN() != nil {
+                rt = try Kind.emptyTuple()
+        } else
             if let type = sctx.ID() {
                 let strType = type.getText()
 //                if Kind.isNil(strType) {
@@ -755,7 +758,11 @@ class Pvisitor {
             
         case let sctx as PinnParser.TupleExprContext:
             if sctx.exprList() == nil {
-                rt = try Pval(sctx, Kind.nilPointer())
+                if sctx.AST() == nil {
+                rt = try Pval(sctx, Kind.emptyTuple())
+                } else {
+                    rt = try Pval(sctx, Kind.nilPointer())
+                }
             } else {
             let el = sctx.exprList()!
             let s = try visitList(el)

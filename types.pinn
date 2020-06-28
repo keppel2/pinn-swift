@@ -732,6 +732,79 @@ print(42, true, "str", 1.5);
 ft("Print", "a \\ slash");
 print("a \\ slash");
 
+
+
+
+
+
+// Array literal
+ft("Array literal", "");
+[0];
+
+ft("Array literal 2", "");
+[true];
+["str"];
+[1, 2];
+[1, 5, 10];
+
+ft("Array literal comp", "");
+[[0]];
+
+
+
+
+
+
+// Slice literal
+ft("Slice literal", "");
+...[];
+
+ft("Slice literal 2", "");
+...[true];
+...["str"];
+...[1, 2];
+...[1, 5, 10];
+
+ft("Slice literal comp", "");
+...[...[0]];
+
+
+// Map literal
+ft("Map literal", "");
+{}
+
+ft("Map literal 2", "");
+{"a": "b", "c": "d", "e": "val"};
+{"key": 42};
+
+ft("Map compos", "");
+{"out": {"in": 5}};
+
+// Tuple literal
+
+ft("Tuple", "");
+();
+
+ft("Tuple 2", "");
+(1, 5);
+
+ft("Tuple composite", "");
+((1, true, false), 5);
+
+// Pointer literal
+
+ft("Pointer", "");
+*();
+
+ft("Pointer 2", "");
+*(3);
+*(false, true);
+*(10, 11, 102);
+
+ft("Pointer composite", "");
+*(*(true, false), 1, 5, "abc");
+
+
 ft("Print arrays", "[23] [true true] [aa bb cc] [0.5 1.5]");
 print([23], [true, true], ["aa", "bb", "cc"], [0.5, 1.5]);
 
