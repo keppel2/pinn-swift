@@ -24,12 +24,21 @@ ft("If other", "");
 if true 5;
 if false 10;
 
-//ft("While", "");
-//while false ;
-//
-//ft("While other", "");
-//while false ;
-//while false 101;
+ft("Else", "");
+if false ; else ;
+
+ft("Block", "");
+{}
+
+ft("While", "");
+while false {}
+
+ft("If and while", "");
+if false ;
+  else
+while false {}
+
+
 
 
 
@@ -80,6 +89,34 @@ true;
 false;
 "str";
 "";
+
+ft("Create bool", "");
+var b bool;
+
+
+ft("Create string", "");
+var str string;
+
+ft("plus", "");
+0 + 0;
+
+ft("Plus 2", "");
+1 + 2 + 3;
+"con" + "cat";
+
+ft("Equal", "");
+0 == 0;
+
+ft("Equal 2", "");
+0 == 1;
+true == false;
+true == true;
+"abc" == "abc";
+
+
+
+
+
 
 ft("Print", "");
 print("");
@@ -140,12 +177,6 @@ print(x);
 
 
 
-ft("Create bool", "");
-var b bool;
-
-
-ft("Create string", "");
-var str string;
 
 
 ft("Create and tuple destructure", "42 true");
@@ -817,6 +848,7 @@ ft("Slice of null-types", "");
 ft("Map of null-types", "");
 {a: *(), b: *(), c: *(5)};
 {a: *(), b: *()};
+{a: ...[10, 2], b: ...[5], c: ...[]};
 
 
 ft("Composite all", "");
@@ -1440,6 +1472,23 @@ println("Positives ok.");
 
 
 ft("", "");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,3 +1,19 @@
+ng("Neg int plus bool");
+0 + true;
+ng("Neg 2");
+true + "";
+
+ng("Neg mix");
+1 + 2 + false;
+
+ng("Neg if");
+if 0 ;
+
+ng("");
+
+
+
+
 ft("a 5", "5");
 print(5);
 ft("", "");
