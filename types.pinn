@@ -4,39 +4,7 @@ ft("Literal zero", "");
 ft("Literals", "");
 42;
 101;
-
-ft("Boolean", "");
-false;
-true;
-
-ft("String", "");
-"";
-"str";
-"a";
-
-//Control flow
-
-ft("Bare if", "");
-if true ;
-if false ;
-
-ft("If other", "");
-if true 5;
-if false 10;
-
-ft("Else", "");
-if false ; else ;
-
-ft("Block", "");
-{}
-
-ft("While", "");
-while false {}
-
-ft("If and while", "");
-if false ;
-  else
-while false {}
+1010;
 
 
 
@@ -50,6 +18,10 @@ while false {}
 
 ft("Create int", "");
 var x int;
+
+ft("Set x to 0", "");
+var x int;
+x = 0;
 
 ft("Set x to itself", "");
 var x int;
@@ -84,6 +56,20 @@ z = x;
 y = z;
 z = y;
 
+
+
+
+
+ft("Boolean", "");
+false;
+true;
+
+ft("String", "");
+"";
+"str";
+"a";
+
+
 ft("Boolean and String literals", "");
 true;
 false;
@@ -96,6 +82,12 @@ var b bool;
 
 ft("Create string", "");
 var str string;
+
+
+
+
+
+// Expressions
 
 ft("plus", "");
 0 + 0;
@@ -111,7 +103,10 @@ ft("Equal 2", "");
 0 == 1;
 true == false;
 true == true;
-"abc" == "abc";
+"abc" == "abcdef";
+
+
+
 
 
 
@@ -126,6 +121,17 @@ print(0);
 
 ft("Print two", "42 101");
 print(42, 101);
+
+ft("Print three", "23 23 23");
+print(23, 23, 23);
+
+ft("Print twice", "77");
+print(7);
+print(7);
+
+ft("Mixed", "1 23");
+print(1, 2);
+print(3);
 
 ft("Print str", "str");
 print("str");
@@ -729,6 +735,31 @@ print(v, v2, v == v2);
 
 
 
+
+
+//Control flow
+
+ft("Bare if", "");
+if true ;
+if false ;
+
+ft("If other", "");
+if true 5;
+if false 10;
+
+ft("Else", "");
+if false ; else ;
+
+ft("Block", "");
+{}
+
+ft("While", "");
+while false {}
+
+ft("If and while", "");
+if false ;
+  else
+while false {}
 
 
 

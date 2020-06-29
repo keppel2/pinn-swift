@@ -1,5 +1,56 @@
-ng("Neg mix");
+ng("Undeclared");
+x;
+
+ng("Undeclared 2");
+abc;
+
+ng("Undeclared 3");
+b1;
+
+ng("Create int order");
+x;
+var x int;
+
+ng("Create 2 ints order");
+var x int;
+x;
+y;
+var y int;
+
+
+
+ng("Neg create int");
+x = 0;
+var x int;
+
+ng("Neg create int 2");
+var x int;
+x = false;
+
+ng("Create bool");
+x;
+var x bool;
+
+
+
+//neg expressions
+
+ng("Plus");
+1 + false;
+
+ng("Plus 2");
+false + 1;
+
+ng("Plus with 3");
 1 + 2 + false;
+
+ng("Equal");
+0 == true;
+
+ng("Equal undeclared");
+x == 0;
+
+
 
 ng("Neg if");
 if 0 ;
@@ -13,13 +64,6 @@ while 0 {};
 ng("Neg while");
 while "" {};
 
-ng("Neg create int");
-var x int;
-x = true;
-
-ng("Neg craete int 2");
-var x int;
-x = *(5);
 
 
 ng("Neg create bool");
@@ -45,8 +89,18 @@ ng("Equals");
 ng("Equals 2");
 ...[0, 5] == ...[true, true];
 
+
+
+
 ng("Print no arg");
 print();
+ng("Print undeclared");
+print(x);
+ng("Print multiple undeclared");
+print(x, y, z);
+ng("Print order");
+print(x);
+var x int;
 
 
 
