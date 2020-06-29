@@ -474,7 +474,7 @@ var v *(int);
 var v2 *(int);
 v = *(42);
 v2 = *(3);
-print(v[0] + v2[0]);
+print(v.0 + v2[0]);
 
 ft("Pointer shares", "*(42) *(42)*(101) *(101)");
 var p1 *(int);

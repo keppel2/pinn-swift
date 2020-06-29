@@ -912,6 +912,16 @@ class Pvisitor {
             let lhs = try _visitPval(sctx.expr(0)!)
             let rhs = try _visitPval(sctx.expr(1)!)
             rt = try Self.doOp(lhs, rhs, op, sctx)
+        case let sctx as PinnParser.DotIndexExprContext:
+            let v = try _visitPval(sctx.expr()!)
+            
+            let str = sctx.INT()!.getText()
+            let x = Int(str)!
+            if !(v.gg().isTuple() || v.gg().isPointer()) {
+                throw Perr(ETYPE, sctx)
+            }
+            rt = try v.get(x)
+            
         case let sctx as PinnParser.IndexExprContext:
             
             

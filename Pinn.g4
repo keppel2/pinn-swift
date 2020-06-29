@@ -41,6 +41,7 @@ objectPair
 expr
   :
    expr LSQUARE ( first=expr? (AT | COLON) second=expr? | expr) RSQUARE #indexExpr
+  | expr '.' INT #dotIndexExpr
   |   THREEDOT? LSQUARE exprList? RSQUARE #arrayLiteral
   | '{' (objectPair ( ',' objectPair )*)? '}' #objectLiteral
   | ('+' | '-' | '!' ) expr #unaryExpr
@@ -126,8 +127,8 @@ INT : '0'
   | [1-9] ('_'? DECIMAL_DIGITS)? ;
 
 FLOAT : DECIMAL_DIGITS '.' DECIMAL_DIGITS? DECIMAL_EXPONENT?
-  | DECIMAL_DIGITS DECIMAL_EXPONENT
-  | '.' DECIMAL_DIGITS DECIMAL_EXPONENT? ;
+  | DECIMAL_DIGITS DECIMAL_EXPONENT ;   
+ // | '.' DECIMAL_DIGITS DECIMAL_EXPONENT? ;
 
 WS : ([ \t\n]+ | '//' ~('\n')* '\n' | '/*' .*? '*/' )-> skip ;
 STRING : '"' ( '\\"' | '\\\\' | ~('"' | '\\') )*      '"' ;
