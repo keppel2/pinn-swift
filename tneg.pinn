@@ -1,0 +1,51 @@
+
+ng("Neg int plus bool");
+0 + true;
+ng("Neg 2");
+true + "";
+
+ng("Neg mix");
+1 + 2 + false;
+
+ng("Neg if");
+if 0 ;
+
+ng("Neg 2");
+if 1 ;
+
+ng("Neg while");
+while 0 {};
+
+ng("Neg while");
+while "" {};
+
+ng("Neg create int");
+var x int;
+x = true;
+
+ng("Neg create bool");
+var x bool;
+x = 0;
+
+ng("Neg create string");
+var x string;
+x = true;
+
+ng("Plus");
+0 + true;
+
+ng("Plus");
+"0" + 0;
+
+ng("Equals basic");
+0 == true;
+
+ng("Equals");
+[1, 5] == [1, 5, 10];
+
+ng("Equals 2");
+...[0, 5] == ...[true, true];
+
+
+
+ng("");

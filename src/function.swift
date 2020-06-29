@@ -35,7 +35,7 @@ func execute() throws  {
     test = s == "-t"
     
     if test {
-        let fnames = ["types.pinn", "tcontrol.pinn"]
+        let fnames = ["types.pinn", "tcontrol.pinn", "tneg.pinn"]
         for n in fnames {
             print()
             print("Now ", n)
