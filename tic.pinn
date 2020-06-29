@@ -86,6 +86,10 @@ func opposite (x int) int { return x == PLAYER_A ? PLAYER_B : PLAYER_A; }
 			
 func minimax (player int, board [SIZE][SIZE]int) int
 {
+    marker++;
+    if marker == 100 {
+    printBoard(board);
+    }
 	var result int;
 	best := opposite(player);
 
@@ -142,12 +146,13 @@ func main() {
     }
     println ("Winner:", resultString);
 }
+marker := 0;
 time := 0;
 loop {
 println("loop", time);
 rHashMap = {};
 main();
 time += 1;
-
+marker = 0;     
 }
 //main();

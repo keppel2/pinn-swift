@@ -128,6 +128,9 @@ enum Gtype {
         }
         return self
     }
+    func gEquivalentSym(_ g: Gtype) -> Bool {
+        return gEquivalent(g) || g.gEquivalent(self)
+    }
   
     
     func gEquivalent(_ g2x: Gtype) -> Bool {

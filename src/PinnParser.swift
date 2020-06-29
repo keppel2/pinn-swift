@@ -1026,16 +1026,20 @@ open class PinnParser: Parser {
 
 	public class ObjectPairContext: ParserRuleContext {
 			open
-			func STRING() -> TerminalNode? {
-				return getToken(PinnParser.Tokens.STRING.rawValue, 0)
-			}
-			open
 			func COLON() -> TerminalNode? {
 				return getToken(PinnParser.Tokens.COLON.rawValue, 0)
 			}
 			open
 			func expr() -> ExprContext? {
 				return getRuleContext(ExprContext.self, 0)
+			}
+			open
+			func STRING() -> TerminalNode? {
+				return getToken(PinnParser.Tokens.STRING.rawValue, 0)
+			}
+			open
+			func ID() -> TerminalNode? {
+				return getToken(PinnParser.Tokens.ID.rawValue, 0)
 			}
 		override open
 		func getRuleIndex() -> Int {
@@ -1046,13 +1050,25 @@ open class PinnParser: Parser {
 	 open func objectPair() throws -> ObjectPairContext {
 		var _localctx: ObjectPairContext = ObjectPairContext(_ctx, getState())
 		try enterRule(_localctx, 18, PinnParser.RULE_objectPair)
+		var _la: Int = 0
 		defer {
 	    		try! exitRule()
 	    }
 		do {
 		 	try enterOuterAlt(_localctx, 1)
 		 	setState(173)
-		 	try match(PinnParser.Tokens.STRING.rawValue)
+		 	_la = try _input.LA(1)
+		 	if (!(//closure
+		 	 { () -> Bool in
+		 	      let testSet: Bool = _la == PinnParser.Tokens.ID.rawValue || _la == PinnParser.Tokens.STRING.rawValue
+		 	      return testSet
+		 	 }())) {
+		 	try _errHandler.recoverInline(self)
+		 	}
+		 	else {
+		 		_errHandler.reportMatch(self)
+		 		try consume()
+		 	}
 		 	setState(174)
 		 	try match(PinnParser.Tokens.COLON.rawValue)
 		 	setState(175)
@@ -1439,7 +1455,7 @@ open class PinnParser: Parser {
 				_la = try _input.LA(1)
 				if (//closure
 				 { () -> Bool in
-				      let testSet: Bool = _la == PinnParser.Tokens.STRING.rawValue
+				      let testSet: Bool = _la == PinnParser.Tokens.ID.rawValue || _la == PinnParser.Tokens.STRING.rawValue
 				      return testSet
 				 }()) {
 					setState(187)

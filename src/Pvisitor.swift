@@ -453,7 +453,11 @@ class Pvisitor {
         defer {popDebug()}
         let rt1: String
         //let rt2: Pval
-        rt1 = stringDequote(sctx.STRING()!.getText())
+        if let s = sctx.ID() {
+            rt1 = s.getText()
+        } else {
+            rt1 = stringDequote(sctx.STRING()!.getText())
+        }
         guard let rt2 = try visitPval(sctx.expr()!) else {
             throw Perr(ETYPE, sctx)
         }
@@ -786,16 +790,38 @@ class Pvisitor {
             var ckind: Kind?
             if list.count == 0 {
                 rt = try Pval(sctx, Kind.nilMap())
+                return rt
             }
+            
+            var olist = [String: Pval]()
             for op in list {
-                
                 let (str, pv) = try visitObjectPair(op)
-                if kind == nil {
-                    ckind = pv.getKind()
-                    kind = try Kind.produceKind(Gtype.gMap(ckind!))
-                    rt = try Pval(sctx, kind!)
+                if olist[str] != nil {
+                    throw Perr(EREDECLARE, sctx)
                 }
-                if !pv.getKind().equivalent(ckind!) {
+                olist[str] = pv
+            }
+            let vt: Kind
+            let val = olist.values
+            if let aef = (val.first {
+                !($0.gg().isNilSlice() || $0.gg().isNilMap() || $0.gg().isNilPointer())
+            }) {
+                vt = aef.getKind()
+            } else {
+                vt = val.first!.getKind()
+            }
+            rt = try  Pval(sctx, Kind(Gtype.gMap(vt)))
+            
+            
+            
+            for (str, pv) in olist {
+                
+//                if kind == nil {
+//                    ckind = pv.getKind()
+//                    kind = try Kind.produceKind(Gtype.gMap(ckind!))
+//                    rt = try Pval(sctx, kind!)
+//                }
+                if !pv.gg().gEquivalentSym(vt.gtype) {
                     throw Perr(ETYPE, sctx)
                 }
                 try rt!.set(str, pv)
@@ -805,7 +831,7 @@ class Pvisitor {
             
                      if sctx.exprList() == nil {
                         if sctx.THREEDOT() == nil {
-                            throw Perr(ENIL, sctx)
+                            throw Perr(EPARSE_FAIL, sctx)
                         }
                 rt = try Pval(sctx, Kind.nilSlice())
             } else {
@@ -813,10 +839,17 @@ class Pvisitor {
             
             let el = sctx.exprList()!
             let ae = try visitList(el)
-            let aeFirstk = ae.first!.getKind()
-            
-            rt = try Pval(sctx, ae, sctx.THREEDOT() != nil, aeFirstk)
+//            let aeFirstk = ae.first!.getKind()
+             if let aek = (ae.first {
+                !($0.gg().isNilSlice() || $0.gg().isNilMap() || $0.gg().isNilPointer())
+                }) {
+                rt = try Pval(sctx, ae, sctx.THREEDOT() != nil, aek.getKind())
                      }
+             else {
+                rt = try Pval(sctx, ae, sctx.THREEDOT() != nil, ae.first!.getKind())
+                        }
+            
+            }
             return rt
             
         case let sctx as PinnParser.LiteralExprContext:

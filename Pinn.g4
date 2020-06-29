@@ -36,7 +36,7 @@ lExpr
   : ID (LSQUARE expr RSQUARE)* ;
 
 objectPair
-  : STRING ':' expr ;
+  : (STRING | ID) ':' expr ;
 
 expr
   :

@@ -13,7 +13,7 @@ class Pval {
         if let ki = k
         {
             if (ar.contains {
-                !$0.getKind().equivalent(ki)
+                !$0.gg().gEquivalentSym(ki.gtype)
                 }) {
             throw Perr(ETYPE, c)
             }

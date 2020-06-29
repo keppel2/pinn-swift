@@ -315,13 +315,13 @@ print(s);
 s[0] = 42;
 print(s);
 
-ft("Nested nil slice", "[[42]][[]][[101]]");
+ft("Nested nil slice", "[[42]][[101]]");
 var s[][]int;
 s[0] = ...[42];
 print(s);
 
-s = ...[...[]];
-print(s);
+//s = ...[...[]];
+//print(s);
 
 s[0] = ...[101];
 print(s);
@@ -750,11 +750,6 @@ ft("Array literal 2", "");
 ft("Array literal comp", "");
 [[0]];
 
-
-
-
-
-
 // Slice literal
 ft("Slice literal", "");
 ...[];
@@ -804,6 +799,28 @@ ft("Pointer 2", "");
 ft("Pointer composite", "");
 *(*(true, false), 1, 5, "abc");
 
+// Mixes
+
+ft("Arrays null", "");
+[*(), *(), *()];
+[...[], ...[]];
+[{}, {}];
+
+ft("Array mix", "");
+[*(42), *(101), *()];
+[...[], ...[(1, 4)]];
+[{"bcd": false}, {}, {"a": true}];
+
+ft("Slice of null-types", "");
+...[*(101), *(), *(202)];
+
+ft("Map of null-types", "");
+{a: *(), b: *(), c: *(5)};
+{a: *(), b: *()};
+
+
+ft("Composite all", "");
+(1, 5, 101, [1, 5], ...[10, 12], {"key": 42}, *(12, 20));
 
 ft("Print arrays", "[23] [true true] [aa bb cc] [0.5 1.5]");
 print([23], [true, true], ["aa", "bb", "cc"], [0.5, 1.5]);
