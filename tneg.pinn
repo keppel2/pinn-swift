@@ -7,6 +7,15 @@ abc;
 ng("Undeclared 3");
 b1;
 
+ng("Redeclare");
+var x int;
+var x int;
+
+ng("Redeclare 2");
+var x int;
+x;
+var x int;
+
 ng("Create int order");
 x;
 var x int;
@@ -17,17 +26,25 @@ x;
 y;
 var y int;
 
+//ng("0");
+//0 = 0;
 
 
 ng("Neg create int");
 x = 0;
 var x int;
 
+
+
+
+
+
+
 ng("Neg create int 2");
 var x int;
 x = false;
 
-ng("Create bool");
+ng("Create bool order");
 x;
 var x bool;
 
@@ -44,8 +61,14 @@ false + 1;
 ng("Plus with 3");
 1 + 2 + false;
 
-ng("Equal");
+ng("Equals basic");
 0 == true;
+
+ng("Equals");
+[1, 5] == [1, 5, 10];
+
+ng("Equals 2");
+...[0, 5] == ...[true, true];
 
 ng("Equal undeclared");
 x == 0;
@@ -74,22 +97,6 @@ ng("Neg create string");
 var x string;
 x = true;
 
-ng("Plus");
-0 + true;
-
-ng("Plus");
-"0" + 0;
-
-ng("Equals basic");
-0 == true;
-
-ng("Equals");
-[1, 5] == [1, 5, 10];
-
-ng("Equals 2");
-...[0, 5] == ...[true, true];
-
-
 
 
 ng("Print no arg");
@@ -112,41 +119,29 @@ ng("Array");
 var x[2]int;
 x[2] = 0;
 
+// Collection literals
+
+ng("Array literal");
+[10, true];
+
 ng("Slice literal");
 ...[4, true];
 
+ng("Object literal with different types:");
+{"a": 5, "b": true};
+
+ng("Object literal repeat key");
+{b: 12, b: 42};
+
+ng("Tuple literal bad member");
+(5, 0 == true);
+
+ng("Pointer literal bad member");
+*(0 == true);
 
 
 
 
-
-
-ng("Wrong types, declared:");
-var cdn [2][]int;
-var cdns []int;
-cdns[0] = 42;
-cdns[1] = 101;
-cdn[2] = cdns;
-
-ng("Wrong types, declared:");
-var cdn [][2]int;
-var cdns [3]int;
-cdns[0] = 42;
-cdns[1] = 101;
-cdn[0] = cnds;
-
-ng("Wrong types, declared:");
-var cdn [3][]int;
-var cdns [2]int;
-cdns[0] = 42;
-cdns[1] = 101;
-cdn[0] = cnds;
-
-ng("Wrong types, declared:");
-var cdn [3][]int;
-var cdns []bool;
-cdns[0] = true;
-cdn[0] = cnds;
 
 
 ng("Wrong type assignment from declaration");
@@ -158,53 +153,26 @@ x = *();
 
 ng("Send parameter to function without any:");
 func f() {}
-x := f(5);
+f(5);
 
-ng("Send no parameter to function with one:");
-func f(i int) {}
-x := f();
 
 ng("Send bad parameter to function with one:");
 func f(i int) {}
-x := f("abc");
+f("abc");
 
 ng("Use void return:");
 func f() {}
-x := f();
-
+[f()];
 
 ng("Return int when no return parameter specified:");
 func f() { return 5; }
 f();
 
 
-
 ng("Mix up parameters to function:");
 func f(i int, s string) {}
-x := f("abc", 10);
+f("abc", 10);
 
-
-
-
-ng("Wrong type assignment from short declaration:");
-x := 0;
-x = true;
-
-ng("Wrong type assignment from short declaration:");
-x := [1, 5];
-y := ["aap", "noot"];
-y = x;
-
-ng("Wrong type assignment from short declaration:");
-x := ...[1, 5];
-var y [2]int;
-y = x;
-
-
-
-
-ng("Wrong array declaration:");
-var ar [true]int;
 
 ng("Wrong type assignment defined types:");
 var x [1]int;
@@ -260,39 +228,10 @@ var point1 *(int, self);
 var point2 *(bool, self);
 point1 = point2;
 
-ng("Wrong types, declared:");
-var cdn [][]int;
-var cdns []string;
-cdns[0] = "aap";
-cdns[1] = "noot";
-cdn[0] = cdns;
-
-ng("Wrong types, declared:");
-var cdn [][]int;
-var cdns []int;
-cdns[0] = 42;
-cdns[1] = "noot";
-
-ng("Wrong types, declared:");
-var cdn [][2]int;
-var cdns []int;
-cdns[0] = 42;
-cdns[1] = 101;
-cdn[0] = cdns;
-
 ng("Wrong type get from short declaration:");
 x := 0;
 y := true;
 y = x;
-
-
-ng("Redeclare both short:");
-x := 5;
-x := 10;
-
-ng("Redeclare both short, different type:");
-x := 5;
-x := true;
 
 ng("Assign in global context a local variable:");
 func f() {
@@ -322,8 +261,9 @@ ng("Delete a non-map:");
 var x int;
 delete(x, "k");
 
-ng("Object literal with different types:");
-obj := {"a": 5, "b": true};
+
+
+
 
 ng("Array set element with wrong type:");
 var arStr [3]string;

@@ -33,17 +33,19 @@ func execute() throws  {
     let args = ProcessInfo.processInfo.arguments
     let s = args[1]
     test = s == "-t"
-    
+    let prefix = "/tmp/"
     if test {
         let fnames = ["types.pinn", "tcontrol.pinn", "tneg.pinn"]
         for n in fnames {
             print()
             print("Now ", n)
-            try exe(fnToString("/tmp/" + n))
+            try exe(fnToString(prefix + n))
         }
         return
     }
-    let fname = test ? "/tmp/types.pinn" : s//"/tmp/tic.pinn" //s
+    var fname = test ? prefix + "types.pinn" : s
+    fname = prefix + "tic.pinn"
+    
     let myinput = fnToString(fname)
     try exe(myinput)
 

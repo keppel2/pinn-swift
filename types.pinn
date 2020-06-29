@@ -19,6 +19,10 @@ ft("Literals", "");
 ft("Create int", "");
 var x int;
 
+ft("Create and state", "");
+var x int;
+x;
+
 ft("Set x to 0", "");
 var x int;
 x = 0;
