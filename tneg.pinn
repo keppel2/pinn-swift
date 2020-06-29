@@ -1,9 +1,3 @@
-
-ng("Neg int plus bool");
-0 + true;
-ng("Neg 2");
-true + "";
-
 ng("Neg mix");
 1 + 2 + false;
 
@@ -22,6 +16,11 @@ while "" {};
 ng("Neg create int");
 var x int;
 x = true;
+
+ng("Neg craete int 2");
+var x int;
+x = *(5);
+
 
 ng("Neg create bool");
 var x bool;
@@ -46,6 +45,396 @@ ng("Equals");
 ng("Equals 2");
 ...[0, 5] == ...[true, true];
 
+ng("Print no arg");
+print();
+
+
+
+ng("Create array");
+var x [2]int;
+x[7] = 0;
+
+ng("Array");
+var x[2]int;
+x[2] = 0;
+
+ng("Slice literal");
+...[4, true];
+
+
+
+
+
+
+
+ng("Wrong types, declared:");
+var cdn [2][]int;
+var cdns []int;
+cdns[0] = 42;
+cdns[1] = 101;
+cdn[2] = cdns;
+
+ng("Wrong types, declared:");
+var cdn [][2]int;
+var cdns [3]int;
+cdns[0] = 42;
+cdns[1] = 101;
+cdn[0] = cnds;
+
+ng("Wrong types, declared:");
+var cdn [3][]int;
+var cdns [2]int;
+cdns[0] = 42;
+cdns[1] = 101;
+cdn[0] = cnds;
+
+ng("Wrong types, declared:");
+var cdn [3][]int;
+var cdns []bool;
+cdns[0] = true;
+cdn[0] = cnds;
+
+
+ng("Wrong type assignment from declaration");
+var x int;
+x = *();
+
+
+
+
+ng("Send parameter to function without any:");
+func f() {}
+x := f(5);
+
+ng("Send no parameter to function with one:");
+func f(i int) {}
+x := f();
+
+ng("Send bad parameter to function with one:");
+func f(i int) {}
+x := f("abc");
+
+ng("Use void return:");
+func f() {}
+x := f();
+
+
+ng("Return int when no return parameter specified:");
+func f() { return 5; }
+f();
+
+
+
+ng("Mix up parameters to function:");
+func f(i int, s string) {}
+x := f("abc", 10);
+
+
+
+
+ng("Wrong type assignment from short declaration:");
+x := 0;
+x = true;
+
+ng("Wrong type assignment from short declaration:");
+x := [1, 5];
+y := ["aap", "noot"];
+y = x;
+
+ng("Wrong type assignment from short declaration:");
+x := ...[1, 5];
+var y [2]int;
+y = x;
+
+
+
+
+ng("Wrong array declaration:");
+var ar [true]int;
+
+ng("Wrong type assignment defined types:");
+var x [1]int;
+var y [2]int;
+y = x;
+
+ng("Wrong type assignment defined types:");
+var x [2]int;
+var y [2]string;
+y = x;
+
+
+ng("Wrong type assignment defined types (scalar = array):");
+var x []bool;
+var y [2]bool;
+x = y;
+
+ng("Wrong type assignment (array = slice, both size 2):");
+var x [2]int;
+y := ...[42, 101];
+x = y;
+
+ng("Wrong type assignment defined types (array = slice, both size 2):");
+var x [2]int;
+var y []int;
+y[0] = 10;
+y[1] = 20;
+x = y;
+
+
+ng("Wrong type assignment defined types (tuple = array):");
+var x (int, int);
+var y [2]int;
+y = x;
+
+ng("Wrong type assignment defined types (map = tuple):");
+var x [map]int;
+var y (int, int);
+x = y;
+
+ng("Wrong type assignment defined types (scalar = array):");
+var x int;
+var y [2]int;
+x = y;
+
+ng("Wrong type assignment defined types (array = scalar):");
+var x int;
+var y [2]int;
+y = x;
+
+ng("Wrong type assignment defined types pointers:");
+var point1 *(int, self);
+var point2 *(bool, self);
+point1 = point2;
+
+ng("Wrong types, declared:");
+var cdn [][]int;
+var cdns []string;
+cdns[0] = "aap";
+cdns[1] = "noot";
+cdn[0] = cdns;
+
+ng("Wrong types, declared:");
+var cdn [][]int;
+var cdns []int;
+cdns[0] = 42;
+cdns[1] = "noot";
+
+ng("Wrong types, declared:");
+var cdn [][2]int;
+var cdns []int;
+cdns[0] = 42;
+cdns[1] = 101;
+cdn[0] = cdns;
+
+ng("Wrong type get from short declaration:");
+x := 0;
+y := true;
+y = x;
+
+
+ng("Redeclare both short:");
+x := 5;
+x := 10;
+
+ng("Redeclare both short, different type:");
+x := 5;
+x := true;
+
+ng("Assign in global context a local variable:");
+func f() {
+  x := 5;
+}
+f();
+x = 10;
+
+ng("Attempt to append to array:");
+var ar [3]int;
+ar[3] = 42;
+
+ng("Attempt to append to one more than length of slice:");
+s := [1, 4];
+s[3] = 42;
+
+ng("Index map by integer:");
+var m[map]int;
+m[23] = 42;
+
+ng("Index slice by string:");
+s := [1, 4];
+s["a"];
+
+
+ng("Delete a non-map:");
+var x int;
+delete(x, "k");
+
+ng("Object literal with different types:");
+obj := {"a": 5, "b": true};
+
+ng("Array set element with wrong type:");
+var arStr [3]string;
+arStr[0] = "alpha";
+arStr[1] = "bravo";
+arStr[2] = 42;
+ng("Slice literal with different types:");
+s := [4, 1, true];
+
+ng("Slice literal with an int and a tuple of 2 ints:");
+s := [5, (1, 3)];
+
+ng("Test statement in function:");
+func f() {
+  ft("Test", "");
+}
+f();
+
+
+ng("Nil for if:");
+func f() {}
+if (10) {}
+
+ng("Zero for if:");
+if (0) {}
+
+ng("Zero for if:");
+if (0) ; else ;
+
+ng("Zero for while:");
+while 0 {}
+
+ng("Bad return in loop:");
+func f() int {
+loop {
+  return false;
+}
+}
+f();
+
+ng("No exit from guard:");
+guard false else {
+}
+
+ng("Range:");
+for x = range 1@10 {}
+
+ng("Range:");
+var x int;
+for x = range true {}
+
+ng("Range:");
+var x int;
+for x = range ["aap", "noot"] {}
+
+ng("Range:");
+var x [2]int;
+for x = range [5, 10] {}
+
+ng("Range:");
+var x int;
+for x = range (5, 10) {}
+
+ng("Range:");
+var x string;
+var y int;
+for x, y = range [5, 10] {}
+
+ng("Range:");
+var x int;
+var y int;
+for x, y = range {"aap": 5, "noot": 23} {}
+
+ng("Range:");
+var x int;
+var y int;
+for x, y = range 23 {}
+
+ng("Range:");
+var x string;
+var y int;
+for x, y = range ["aap", "noot"] {}
+
+ng("For triple:");
+for var x int; i < 5; i += "aap" {}
+
+ng("For triple:");
+for var x int; 2; i += 10 {}
+
+ng("For triple:");
+for var x string; i < 2; i += "aap" {}
+
+ng("For triple:");
+for var i [2]int; i[1] < 2; i++ {}
+
+
+ng("Slice operator fail:");
+[5, 42, 101][0@3];
+
+ng("Slice operator fail:");
+(2, true, false)[0@1];
+
+ng("Slice operator fail:");
+[[1, 2], [10, 11], [101, 102]][1@2][0][0@2];
+
+ng("Index operator fail:");
+[4, 5][-1];
+
+ng("Index operator fail:");
+(4, false)[-1];
+
+ng("Index operator fail:");
+5[0];
+
+ng("Exit with a value:");
+exit(5);
+
+ng("Exit with two values:");
+exit(true, true);
+
+ng("len:");
+len(4);
+
+ng("len:");
+len(true);
+
+
+ng("len:");
+len("abc", "def");
+
+ng("stringValue:");
+stringValue();
+
+ng("stringValue:");
+stringValue(5, ",");
+
+ng("Print empty:");
+func f() {}
+print(f());
+
+ng("Delete:");
+m := {"key": 42};
+delete(m);
+
+ng("Delete:");
+m := {"key": 42};
+delete(m, 2);
+
+ng("Delete:");
+m := 42;
+delete(m, "k");
+
+ng("Delete:");
+m := [2, 24];
+delete(m, "k");
+
+ng("Delete:");
+m := {"key": 42};
+x := delete(m, "k");
+x = 101;
+
+
+ng("key:");
+m := {"key": 42};
+key(m);
 
 
 ng("");
