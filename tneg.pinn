@@ -185,20 +185,52 @@ ng("fc 3");
 func f() {}
 g();
 
+ng("fc");
+func f() {}
+func g() {}
+h();
+
+ng("function with no params");
+func f() {}
+f(0);
+
+ng("fc return");
+func f() int {}
+f();
+
+ng("fc return wrong");
+func f() int {return false;}
+f();
 
 
-ng("Send parameter to function without any:");
+ng("fc param");
+func f(a int) {}
+f();
+
+ng("fc param redeclare");
+func f(a int) {
+    var a int;
+}
+f();
+
+ng("Error in function");
+func f() {
+    x;
+}
+f();
+
+ng("fc param w/ none");
 func f() {}
 f(0);
 
 
-ng("Send bad parameter to function with one:");
+ng("fc bad param");
 func f(i int) {}
 f(true);
 
 ng("Use void return:");
 func f() {}
-[f()];
+f() + 0;
 
 ng("Return int when no return parameter specified:");
 func f() { return 0; }
@@ -208,6 +240,7 @@ f();
 ng("Mix up parameters to function:");
 func f(i int, s string) {}
 f("abc", 10);
+
 
 
 

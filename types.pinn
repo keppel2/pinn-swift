@@ -835,9 +835,6 @@ print(v, v2, v == v2);
 
 
 
-
-
-
 //Control flow
 
 ft("Bare if", "");
@@ -1233,7 +1230,7 @@ func f(a int) {}
 ft("2 parameters");
 func f(a int, b int) {}
 
-ft("Parameter and return");
+ft("Parameter and return (reject?)");
 func f(a int) int {}
 
 ft("Function call");
@@ -1250,8 +1247,26 @@ ft("Function call 3");
 func f() int {return 0;}
 f();
 
+ft("Call and return");
+func f(a int) int {
+    return 0;
+}
+f(0) + 0;
 
+ft("Call and return bools");
+func f(a bool) bool {
+    return true;
+}
+f(true) == true;
 
+ft("Basics in function");
+func f() {
+    0;
+    42;
+    var x int;
+    x = 0;
+}
+f();
 
 
 

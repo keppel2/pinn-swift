@@ -9,7 +9,7 @@ block
   : '{' statement* '}' ;
 
 fvarDecl
-  : ID THREEDOT? kind ;
+  : idList THREEDOT? kind ;
 
 typeDecl
   : 'type' ID kind ;

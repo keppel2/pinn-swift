@@ -374,8 +374,8 @@ open class PinnParser: Parser {
 
 	public class FvarDeclContext: ParserRuleContext {
 			open
-			func ID() -> TerminalNode? {
-				return getToken(PinnParser.Tokens.ID.rawValue, 0)
+			func idList() -> IdListContext? {
+				return getRuleContext(IdListContext.self, 0)
 			}
 			open
 			func kind() -> KindContext? {
@@ -401,7 +401,7 @@ open class PinnParser: Parser {
 		do {
 		 	try enterOuterAlt(_localctx, 1)
 		 	setState(86)
-		 	try match(PinnParser.Tokens.ID.rawValue)
+		 	try idList()
 		 	setState(88)
 		 	try _errHandler.sync(self)
 		 	_la = try _input.LA(1)
