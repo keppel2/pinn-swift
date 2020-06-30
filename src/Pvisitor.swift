@@ -420,7 +420,20 @@ class Pvisitor {
         
         for child in sctx.children! {
             if let spec = child as? PinnParser.FunctionContext {
-                try visitHeader(spec)
+                if trip {
+                    do {
+                         try visitHeader(spec)
+                     } catch let err where err is Perr {
+                         let perr = err as! Perr
+                         if perr.str == ENEGTEST_FAIL {
+                             perr.str += ", " + neg
+                             throw perr
+                         }
+                         trip = false
+                     }
+                } else {
+                    try visitHeader(spec)
+                }
             } else {
                 if let spec = child as? PinnParser.StatementContext {
                     if trip {
@@ -485,18 +498,22 @@ class Pvisitor {
         }
         var fkinds = [FKind]()
         for (index, child) in sctx.fvarDecl().enumerated() {
-            let vfk = try visitFKind(child)
-            if (fkinds.contains { fk in vfk.s == fk.s }) {
-                throw Perr(EREDECLARE, vfk.prc)
+            let vfks = try visitFKind(child)
+            for vfk in vfks {
+                if (fkinds.contains { fk in vfk.s == fk.s }) {
+                    throw Perr(EREDECLARE, vfk.prc)
+                }
+                fkinds.append(vfk)
             }
-            if vfk.variadic && index < sctx.fvarDecl().count - 1 {
-                throw Perr(ETYPE, vfk.prc)
-            }
-            
-            fkinds.append(try visitFKind(child))
-            
             
         }
+        for (k, fk) in fkinds.enumerated() {
+            if fk.variadic && k != fkinds.indices.last {
+               throw Perr(ETYPE, sctx)
+            }
+        }
+        
+        
         fkmap[sctx.ID()!.getText()] = Fheader(funcContext: sctx, kind: k, fkinds: fkinds)
     }
     
@@ -541,16 +558,20 @@ class Pvisitor {
         }
         return rt
     }
-    private func visitFKind(_ sctx: PinnParser.FvarDeclContext) throws -> FKind {
+    private func visitFKind(_ sctx: PinnParser.FvarDeclContext) throws -> [FKind] {
         loadDebug(sctx)
         defer {popDebug()}
         
-        let str = sctx.ID()!.getText()
-        let k = try visitKind(sctx.kind()!)
-//        if k === gOne.rkind {
-//            throw Perr(ETYPE, sctx)
-//        }
-        return FKind(k: k, s: str, variadic: sctx.THREEDOT() != nil, prc: sctx)
+        
+        let ai = try visitIdList(sctx.idList()!)
+            let k = try visitKind(sctx.kind()!)
+        
+        
+        var rt = [FKind]()
+        for str in ai  {
+            rt.append(FKind(k: k, s: str, variadic: sctx.THREEDOT() != nil, prc: sctx))
+        }
+        return rt
     }
     private func visitKindList(_ sctx: PinnParser.KindListContext) throws -> [Kind]
     {
@@ -1357,6 +1378,8 @@ class Pvisitor {
         var s: String
         var variadic = false
         var prc: ParserRuleContext
+        
+        
     }
     private class Tester {
         private let desc: String

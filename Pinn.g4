@@ -3,7 +3,7 @@ grammar Pinn;
 file : ( function | statement )+ EOF ;
 
 function
-  : 'func' ID LPAREN (fvarDecl (',' fvarDecl)*)?  RPAREN kind? block ;
+  : 'func' ID LPAREN (fvarDecl (',' fvarDecl)*)? RPAREN kind? block ;
 
 block
   : '{' statement* '}' ;

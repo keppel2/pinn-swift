@@ -848,8 +848,17 @@ if false 10;
 ft("Else", "");
 if false ; else ;
 
+
+
+
+
 ft("Block", "");
 {}
+
+
+
+
+
 
 ft("While", "");
 while false {}
@@ -1235,13 +1244,17 @@ func f(a int) int {}
 
 ft("Function call");
 func f() {}
+
+
 f();
 
 ft("Function call 2");
 func fA(a int) {}
 func fB(a int, b int) {}
+func fC(a, b int) {}
 fA(0);
 fB(0, 0);
+fC(0, 0);
 
 ft("Function call 3");
 func f() int {return 0;}
@@ -1251,13 +1264,15 @@ ft("Call and return");
 func f(a int) int {
     return 0;
 }
-f(0) + 0;
+var x int;
+x = f(0);
 
 ft("Call and return bools");
 func f(a bool) bool {
     return true;
 }
-f(true) == true;
+var x bool;
+x = f(true);
 
 ft("Basics in function");
 func f() {
@@ -1268,6 +1283,9 @@ func f() {
 }
 f();
 
+ft("Variadic");
+func f(v ...int) {}
+f(0, 5, 10);
 
 
 

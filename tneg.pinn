@@ -86,6 +86,25 @@ if 0 ;
 ng("Neg 2");
 if 1 ;
 
+
+//basic block
+
+ng("block");
+{x;}
+
+ng("block");
+
+{
+    x;
+}
+var x int;
+
+
+
+
+
+
+
 ng("Neg while");
 while 0 {};
 
@@ -213,6 +232,7 @@ func f(a int) {
 }
 f();
 
+
 ng("Error in function");
 func f() {
     x;
@@ -240,6 +260,22 @@ f();
 ng("Mix up parameters to function:");
 func f(i int, s string) {}
 f("abc", 10);
+
+ng("Repeat");
+func f(a int, a int){}
+
+
+ng("Repeat");
+func f(a, a int){}
+
+ng("Repeat");
+func f(a, b int, a int) {}
+
+ng("Variadic");
+func f(a ...int, b int) {}
+
+
+
 
 
 
