@@ -41,7 +41,7 @@ class Pvisitor {
                 let xa2 = pv.getPv(str2)
                 fatalError()
             },
-            "ft": { sctx, pv, s in try assertPvals(s, 2)
+            "ft": { sctx, pv, s in try assertPvalIn(s, [1, 2])
                 if pv.lfc != nil {
                     throw Perr(ESTATEMENT, sctx)
                 }
@@ -52,7 +52,7 @@ class Pvisitor {
                 print("--", sctx.getStart()!.getLine())
                 pv.li = pv.printed.endIndex
                 let s1: String = try tryCast(s[0])
-                let s2: String = try tryCast(s[1])
+                let s2: String = s.count == 2 ? try tryCast(s[1]) : ""
                 pv.tester = Tester(s1, s2)
                 return nil
             },
@@ -237,6 +237,11 @@ class Pvisitor {
      }
     private static func assertPvals( _ s: [Pval], _ i: Int) throws {
         if s.count != i {
+            throw Perr(EPARAM_LENGTH)
+        }
+    }
+    private static func assertPvalIn( _ s: [Pval], _ ok: [Int]) throws {
+        if !ok.contains(s.count) {
             throw Perr(EPARAM_LENGTH)
         }
     }

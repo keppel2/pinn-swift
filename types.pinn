@@ -19,6 +19,14 @@ ft("Literals", "");
 ft("Create int", "");
 var x int;
 
+ft("Create 2 int");
+var x int;
+var y int;
+
+ft("Xtra--create 2 int short");
+var x, y int;
+
+
 ft("Create and state", "");
 var x int;
 x;
@@ -35,6 +43,8 @@ ft("Create and set 2 ints", "");
 var x int;
 var y int;
 y = x;
+
+
 
 ft("Create and set 3 ints", "");
 var x int;
@@ -116,34 +126,6 @@ true == true;
 
 
 
-
-ft("Print", "");
-print("");
-
-ft("Print zero", "0");
-print(0);
-
-ft("Print two", "42 101");
-print(42, 101);
-
-ft("Print three", "23 23 23");
-print(23, 23, 23);
-
-ft("Print twice", "77");
-print(7);
-print(7);
-
-ft("Mixed", "1 23");
-print(1, 2);
-print(3);
-
-ft("Print str", "str");
-print("str");
-
-ft("Print var", "23");
-var x int;
-x = 23;
-print(x);
 
 ft("Create and set BSD", "true value 42.5");
 var b bool;
@@ -228,9 +210,128 @@ print(x, y);
 
 
 
-ft("Create array", "[0 0]");
-var newArray [2]int;
-print(newArray);
+//Create collections
+
+ft("Create array", "");
+var x [1]int;
+
+ft("Create array 2", "");
+var x [2]int;
+var y [7]int;
+
+ft("Create comp array", "");
+var x[1][1]int;
+var y[7][1]int;
+var z[1][7]int;
+
+//slice
+
+ft("Create slice", "");
+var x []int;
+
+ft("Slice 2", "");
+var x []int;
+var y []bool;
+
+ft("Slice assign", "");
+var x, y []int;
+x = y;
+y = x;
+
+//map
+
+ft("Create map", "");
+var x [map]int;
+
+ft("Map 2", "");
+var x [map]bool;
+
+ft("Comp map", "");
+var x [map][map]int;
+var y [map][map][map]bool;
+
+ft("Map assign", "");
+var x, y [map]int;
+x = y;
+y = x;
+var i[map][map]bool;
+var j[map][map]bool;
+i = j;
+j= i;
+
+//tuple
+
+ft("Tuple", "");
+var t (int, int);
+
+ft("Tuple 2", "");
+var x (int, int, int);
+var y (int, bool);
+
+ft("Tuple composite", "");
+var x (int, (int, bool));
+
+ft("Tuple assign", "");
+var x, y (int, int);
+x = y;
+y = x;
+
+//Pointer
+
+ft("Pointer", "");
+var p *(int);
+
+ft("Pointer 2", "");
+var x *(int, int);
+
+ft("Comp pointer", "");
+var p *(*(int), bool);
+var p2 *(*(int));
+
+
+
+
+
+
+
+
+
+
+
+
+ft("Print", "");
+print("");
+
+ft("Print zero", "0");
+print(0);
+
+ft("Print two", "42 101");
+print(42, 101);
+
+ft("Print three", "23 23 23");
+print(23, 23, 23);
+
+ft("Print twice", "77");
+print(7);
+print(7);
+
+ft("Mixed", "1 23");
+print(1, 2);
+print(3);
+
+ft("Print str", "str");
+print("str");
+
+ft("Print var", "23");
+var x int;
+x = 23;
+print(x);
+
+
+
+
+
+
 
 ft("Create 2 array", "[0 0] [0 0] true");
 var a [2]int;
@@ -294,10 +395,6 @@ d[1][1] = 101;
 print(c, d);
 
 
-
-ft("Create slice", "[]");
-var s []int;
-print(s);
 
 
 ft("Create 2 slice", "false[] [] true");
@@ -1115,6 +1212,55 @@ x;
 
 
 
+
+
+
+// function isolated
+
+ft("Function");
+func f() {}
+
+ft("Function 2");
+func f() {}
+func g() {}
+
+ft("Function return");
+func f() int {}
+
+ft("Function parameter");
+func f(a int) {}
+
+ft("2 parameters");
+func f(a int, b int) {}
+
+ft("Parameter and return");
+func f(a int) int {}
+
+ft("Function call");
+func f() {}
+f();
+
+ft("Function call 2");
+func fA(a int) {}
+func fB(a int, b int) {}
+fA(0);
+fB(0, 0);
+
+ft("Function call 3");
+func f() int {return 0;}
+f();
+
+
+
+
+
+
+
+
+
+
+
+
 ft("decimal + - * /", "6.6 -4.4 6.05 0.2");
 DA := 1.1;
 DB := 5.5;
@@ -1570,47 +1716,4 @@ var b tArray;
 print(a == b, "");
 a[0] = 23;
 print(a == b, "");
-ng("Bad named type");
-type tInt int;
-var x tInt;
-var y tInt;
-x = 12;
-y = true;
-
-ng("Bad named type");
-type tInt int;
-var x tInt;
-x = true;
-
-
-ng("Deeply nested bad assignment:");
-var dnt [2](bool, int, [map](int, string));
-dnt[1][2]["aap"] = (42, true);
-
-   ng("Wrong short declaration");
-sdns := [[2, 1], 24];
-
-
-
-ng("Wrong multi short");
-a, b, c := 1, 5;
-
-ng("Wrong short declaration:");
-func f() {}
-sd := f();
-
-ng("Wrong short declaration:");
-sdns := (5, (true, "foo"), [true, "foo"]);
-
-ng("Wrong short declaration:");
-sdns := [[2, 1], [true, true, true]];
-
-ng("Wrong short declaration:");
-sdns := {"aap": 5, "noot": false};
-
-ng("Wrong short declaration:");
-func f() {}
-sdns := [4, f()];
-   
-   ng("");
 //ng("");

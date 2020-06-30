@@ -1,3 +1,8 @@
+//ng("tmp");
+//func f(int a) {}
+//f(0);
+
+
 ng("Undeclared");
 x;
 
@@ -99,6 +104,13 @@ x = true;
 
 
 
+ng("Create array");
+var x [true]int;
+
+//ng("Array 2");
+//var x [0 - 1]int;
+
+
 ng("Print no arg");
 print();
 ng("Print undeclared");
@@ -111,13 +123,20 @@ var x int;
 
 
 
-ng("Create array");
+ng("Create array and set");
 var x [2]int;
 x[7] = 0;
 
-ng("Array");
+ng("Array 2");
 var x[2]int;
 x[2] = 0;
+
+
+ng("Wrong type assignment defined types:");
+var x [1]int;
+var y [2]int;
+y = x;
+
 
 // Collection literals
 
@@ -150,22 +169,39 @@ x = *();
 
 
 
+//functions
+ng("Function call");
+f();
+
+
+ng("Function call 2");
+f(0);
+
+ng("fc");
+f();
+func f() {}
+
+ng("fc 3");
+func f() {}
+g();
+
+
 
 ng("Send parameter to function without any:");
 func f() {}
-f(5);
+f(0);
 
 
 ng("Send bad parameter to function with one:");
 func f(i int) {}
-f("abc");
+f(true);
 
 ng("Use void return:");
 func f() {}
 [f()];
 
 ng("Return int when no return parameter specified:");
-func f() { return 5; }
+func f() { return 0; }
 f();
 
 
@@ -174,10 +210,6 @@ func f(i int, s string) {}
 f("abc", 10);
 
 
-ng("Wrong type assignment defined types:");
-var x [1]int;
-var y [2]int;
-y = x;
 
 ng("Wrong type assignment defined types:");
 var x [2]int;
@@ -394,41 +426,53 @@ len(true);
 ng("len:");
 len("abc", "def");
 
+
 ng("stringValue:");
 stringValue();
 
 ng("stringValue:");
 stringValue(5, ",");
+ng("Bad named type");
+type tInt int;
+var x tInt;
+var y tInt;
+x = 12;
+y = true;
 
-ng("Print empty:");
+ng("Bad named type");
+type tInt int;
+var x tInt;
+x = true;
+
+
+ng("Deeply nested bad assignment:");
+var dnt [2](bool, int, [map](int, string));
+dnt[1][2]["aap"] = (42, true);
+
+   ng("Wrong short declaration");
+sdns := [[2, 1], 24];
+
+
+
+ng("Wrong multi short");
+a, b, c := 1, 5;
+
+ng("Wrong short declaration:");
 func f() {}
-print(f());
+sd := f();
 
-ng("Delete:");
-m := {"key": 42};
-delete(m);
+ng("Wrong short declaration:");
+sdns := (5, (true, "foo"), [true, "foo"]);
 
-ng("Delete:");
-m := {"key": 42};
-delete(m, 2);
+ng("Wrong short declaration:");
+sdns := [[2, 1], [true, true, true]];
 
-ng("Delete:");
-m := 42;
-delete(m, "k");
+ng("Wrong short declaration:");
+sdns := {"aap": 5, "noot": false};
 
-ng("Delete:");
-m := [2, 24];
-delete(m, "k");
-
-ng("Delete:");
-m := {"key": 42};
-x := delete(m, "k");
-x = 101;
-
-
-ng("key:");
-m := {"key": 42};
-key(m);
-
+ng("Wrong short declaration:");
+func f() {}
+sdns := [4, f()];
+   
 
 ng("");
