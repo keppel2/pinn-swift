@@ -71,6 +71,13 @@ class Pval {
             e = Pvalp(ke, Contents.multi(Wrap(ar)), c)
         case .gPointer:
             e = Pvalp(ke, Contents.multi(Wrap([Pval]())), c)
+        case .gStructure(let osk):
+            var m = [String: Pval]()
+            for (str, ki) in osk {
+                m[str] = try Pval(c, ki)
+            }
+            e = Pvalp(ke, Contents.map(Wrap(m)), c)
+            
         case .gDefined(let s):
             aden()
 //            let pv = try Pval(c, Kind.getPKind(s))
@@ -190,6 +197,8 @@ class Pval {
                     }
                 }
                 return e.con.getMap()[v1v]!
+            } else  if case .gStructure(let osk) = g {
+                return e.con.getMap()[v1v]!
             } else {
                 throw Perr(ETYPE, self)
             }
@@ -276,7 +285,11 @@ break
                 
              }
                                 
-                    
+        case .gStructure(let osk):
+                    for (k, v) in e.con.getMap() {
+                        v.e.k = osk[k]!
+                        try v.gFix()
+                    }
         case .gPointer(let ka):
 
            let pva = e.con.getAr()

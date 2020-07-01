@@ -476,11 +476,20 @@ class Pvisitor {
         } else {
             rt1 = stringDequote(sctx.STRING()!.getText())
         }
-        guard let rt2 = try visitPval(sctx.expr()!) else {
-            throw Perr(ETYPE, sctx)
-        }
+        let rt = try _visitPval(sctx.expr()!)
+        return (rt1, rt)
+    }
+    
+    private func visitStructurePair(_ sctx: PinnParser.StructurePairContext) throws -> (String, Kind) {
+        loadDebug(sctx)
+        defer {popDebug()}
+        let rt1 = sctx.ID()!.getText()
+        let rt2 = try visitKind(sctx.kind()!)
         return (rt1, rt2)
     }
+    
+    
+    
     
     private func visitHeader(_ sctx:PinnParser.FunctionContext ) throws  {
         loadDebug(sctx)
@@ -533,7 +542,18 @@ class Pvisitor {
             if sctx.LPAREN() != nil {
                 rt = try Kind.emptyTuple()
         } else
-            if let type = sctx.ID() {
+                if sctx.structurePair().count > 0 {
+                    var stki = [String: Kind]()
+                    for sp in sctx.structurePair() {
+                        let (s, k) = try visitStructurePair(sp)
+                        if stki.keys.contains(s) {
+                            throw Perr(EREDECLARE, sctx)
+                        }
+                        stki[s] = k
+                    }
+                    rt = try Kind(Gtype.gStructure(stki))
+                }
+            else if let type = sctx.ID() {
                 let strType = type.getText()
 //                if Kind.isNil(strType) {
 //                    rt = gOne.nkind

@@ -6,26 +6,8 @@ enum Gtype {
     case gTuple([Kind])
     case gPointer([Kind])
     case gDefined(String)
+    case gStructure([String: Kind])
 
-//    func isValid() -> Bool {
-//        switch self {
-//        case .gScalar:
-//            return true
-//        case .gArray(let k, let x):
-//            _ = x
-//            return !k.isNr()
-//        case .gSlice(let k), .gMap(let k):
-//            return !k.isNr()
-//        case .gTuple://(let ka):
-//            return true
-////            !ka.contains {
-////                $0 === gOne.rkind
-////            }
-//        case .gPointer, .gDefined:
-//            return true
-//        
-//        }
-//    }
     func isNilSlice() -> Bool {
                 if case .gSlice(let k) = self {
                     
@@ -89,16 +71,11 @@ enum Gtype {
         return false
     }
 
-//    func refMatch(_ k: Kind) -> Bool {
-//        if case .gPointer(let ka) = self {
-//            
-//        }
-//    }
     func openString() -> String {
         switch self {
         case .gArray, .gSlice:
             return "["
-        case .gMap:
+        case .gMap, .gStructure:
             return "{"
         case .gPointer:
             return "*("
@@ -113,7 +90,7 @@ enum Gtype {
         switch self {
         case .gArray, .gSlice:
             return "]"
-        case .gMap:
+        case .gMap, .gStructure:
             return "}"
         case .gPointer, .gTuple:
             return ")"
@@ -183,6 +160,24 @@ enum Gtype {
                     return $0.gtype.gEquivalent($1.gtype)
                     }
                 }
+            }
+            return false
+        case .gStructure(let osk):
+            if case .gStructure(let osk2) = g2 {
+                if osk.count != osk2.count {
+                    return false
+                }
+                for (s, k) in osk {
+                    if let sgt = osk2[s]?.gtype {
+                        if !k.gtype.gEquivalent(sgt) {
+                            return false
+                        }
+                    } else {
+                        return false
+                    }
+                }
+                return true
+
             }
             return false
         case .gTuple(let ka):

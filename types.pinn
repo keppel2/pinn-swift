@@ -101,6 +101,158 @@ var str string;
 
 
 
+
+//Create collections
+
+ft("Create array", "");
+var x [1]int;
+
+ft("Create array 2", "");
+var x [2]int;
+var y [7]int;
+
+ft("Create comp array", "");
+var x[1][1]int;
+var y[7][1]int;
+var z[1][7]int;
+
+ft("Array assign", "");
+var x[7]int;
+var y[7]int;
+x = y;
+y = x;
+
+ft("Array index", "");
+var x[3]int;
+x[2];
+x[0];
+
+ft("Array index assign");
+var x[3]int;
+x[0] = 0;
+
+//slice
+
+ft("Create slice", "");
+var x []int;
+
+ft("Slice 2", "");
+var x []int;
+var y []bool;
+
+ft("Slice composite", "");
+var x [][]int;
+var y [][][]bool;
+
+ft("Slice assign", "");
+var x, y []int;
+x = y;
+y = x;
+
+ft("Slice extend");
+var x []int;
+x[0] = 10;
+x[1] = 42;
+
+ft("Slice index");
+var x []int;
+x[0] = 20;
+x[0];
+
+//map
+
+ft("Create map", "");
+var x [map]int;
+
+ft("Map 2", "");
+var x [map]bool;
+
+ft("Comp map", "");
+var x [map][map]int;
+var y [map][map][map]bool;
+
+ft("Map assign", "");
+var x, y [map]int;
+x = y;
+y = x;
+var i[map][map]bool;
+var j[map][map]bool;
+i = j;
+j= i;
+
+
+ft("Map index", "");
+var x [map]int;
+x["key"];
+x["k"] = 0;
+
+
+//tuple
+
+ft("Tuple", "");
+var t (int, int);
+
+ft("Tuple 2", "");
+var x (int, int, int);
+var y (int, bool);
+
+ft("Tuple composite", "");
+var x (int, (int, bool));
+
+ft("Tuple assign", "");
+var x, y (int, int);
+x = y;
+y = x;
+
+ft("Tuple index (both syntax)", "");
+var x (int, int);
+x[0];
+x[0] = 0;
+x.1;
+var y ((int, int), int);
+y[0][1] = 0;
+y[1] = 0;
+
+//Pointer
+
+ft("Pointer", "");
+var p *(int);
+
+ft("Pointer 2", "");
+var x *(int, int);
+var y *(int, bool);
+var z *(bool);
+
+ft("Comp pointer", "");
+var p *(*(int), bool);
+var p2 *(*(int));
+
+ft("Pointer assign");
+var x *(int);
+var y *(int);
+x = y;
+y = x;
+
+ft("Pointer index (literal needed)");
+var p *(int, int);
+p = *(1, 4);
+p[0];
+p[0] = 10;
+p[1];
+
+
+// Struct
+
+ft("Struct");
+var s {a: int, b: bool};
+
+ft("Struct index get", "0 false");
+var s {a: int, b: bool};
+print(s["a"], s["b"]);
+
+
+
+
 // Expressions
 
 ft("plus", "");
@@ -127,28 +279,43 @@ true == true;
 
 
 
-ft("Create and set BSD", "true value 42.5");
-var b bool;
-b = true;
-var str string;
-str = "value";
-var d decimal;
-d = 42.5;
-print(b, str, d);
-
-ft("Create and chain set int from default", "0 0");
-var i1 int;
-var i2 int;
-i2 = i1;
-print(i1, i2);
 
 
-ft("Create and chain set ints", "10 10");
-var i1 int;
-var i2 int;
-i1 = 10;
-i2 = i1;
-print(i1, i2);
+
+//PRINT
+
+ft("Print", "");
+print("");
+
+ft("Print zero", "0");
+print(0);
+
+ft("Print two", "42 101");
+print(42, 101);
+
+ft("Print three", "23 23 23");
+print(23, 23, 23);
+
+ft("Print twice", "77");
+print(7);
+print(7);
+
+ft("Mixed", "1 23");
+print(1, 2);
+print(3);
+
+ft("Print str", "str");
+print("str");
+
+ft("Print var", "23");
+var x int;
+x = 23;
+print(x);
+
+
+
+
+
 
 
 ft("Int copies by value", "23 42");
@@ -158,17 +325,6 @@ x = 23;
 y = x;
 y = 42;
 print(x, y);
-
-ft("Set to self", "42");
-var x int;
-x = 42;
-x = x;
-print(x);
-
-
-
-
-
 
 
 ft("Create and tuple destructure", "42 true");
@@ -210,122 +366,8 @@ print(x, y);
 
 
 
-//Create collections
-
-ft("Create array", "");
-var x [1]int;
-
-ft("Create array 2", "");
-var x [2]int;
-var y [7]int;
-
-ft("Create comp array", "");
-var x[1][1]int;
-var y[7][1]int;
-var z[1][7]int;
-
-//slice
-
-ft("Create slice", "");
-var x []int;
-
-ft("Slice 2", "");
-var x []int;
-var y []bool;
-
-ft("Slice assign", "");
-var x, y []int;
-x = y;
-y = x;
-
-//map
-
-ft("Create map", "");
-var x [map]int;
-
-ft("Map 2", "");
-var x [map]bool;
-
-ft("Comp map", "");
-var x [map][map]int;
-var y [map][map][map]bool;
-
-ft("Map assign", "");
-var x, y [map]int;
-x = y;
-y = x;
-var i[map][map]bool;
-var j[map][map]bool;
-i = j;
-j= i;
-
-//tuple
-
-ft("Tuple", "");
-var t (int, int);
-
-ft("Tuple 2", "");
-var x (int, int, int);
-var y (int, bool);
-
-ft("Tuple composite", "");
-var x (int, (int, bool));
-
-ft("Tuple assign", "");
-var x, y (int, int);
-x = y;
-y = x;
-
-//Pointer
-
-ft("Pointer", "");
-var p *(int);
-
-ft("Pointer 2", "");
-var x *(int, int);
-
-ft("Comp pointer", "");
-var p *(*(int), bool);
-var p2 *(*(int));
 
 
-
-
-
-
-
-
-
-
-
-
-ft("Print", "");
-print("");
-
-ft("Print zero", "0");
-print(0);
-
-ft("Print two", "42 101");
-print(42, 101);
-
-ft("Print three", "23 23 23");
-print(23, 23, 23);
-
-ft("Print twice", "77");
-print(7);
-print(7);
-
-ft("Mixed", "1 23");
-print(1, 2);
-print(3);
-
-ft("Print str", "str");
-print("str");
-
-ft("Print var", "23");
-var x int;
-x = 23;
-print(x);
 
 
 
@@ -631,40 +673,6 @@ print(t);
 
 
 
-
-ft("Create map", "{}");
-var m[map]int;
-print(m);
-
-ft("Create 2 maps", "{} {} true");
-var m[map]int;
-var m2[map]int;
-m = m2;
-m2 = m;
-print(m, m2, m == m2);
-
-ft("Create and set map", "{key:42}42 0");
-var m[map]int;
-m["key"] = 42;
-print(m);
-print(m["key"], m["keyx"]);
-
-ft("Create and set 2 maps", "{k:23} {k:23} false");
-var m[map]int;
-var n[map]int;
-m["k"] = 23;
-n["k"] = 23;
-print(m, n, m == n);
-
-ft("Create and null map", "{}{k:101}{}{a:42}");
-var m[map]int;
-print(m);
-m["k"] = 101;
-print(m);
-m = {};
-print(m);
-m["a"] = 42;
-print(m);
 
 ft("Maps share", "{a:42 z:101} {a:42 z:101}");
 var m[map]int;

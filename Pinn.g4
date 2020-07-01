@@ -23,7 +23,8 @@ kind
   :
   ID
   | (LSQUARE ( MAP | expr)? RSQUARE) kind
-  |  AST? LPAREN kindList? RPAREN ;
+  |  AST? LPAREN kindList? RPAREN
+  | '{' structurePair (',' structurePair)* '}' ;
 
 
 simpleStatement
@@ -34,6 +35,9 @@ simpleStatement
 
 lExpr
   : ID (LSQUARE expr RSQUARE)* ;
+
+structurePair
+  : ID ':' kind ;
 
 objectPair
   : (STRING | ID) ':' expr ;

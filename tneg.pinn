@@ -80,6 +80,120 @@ x == 0;
 
 
 
+
+// basic collections
+
+ng("Array");
+var x [true]int;
+
+ng("Array composite");
+var x [4][true] int;
+
+ng("Array assign");
+var x [3]int;
+var y [4]int;
+x = y;
+
+ng("Array index");
+var x [3]int;
+x[7];
+
+ng("Array index assign");
+var x [3]int;
+x[1] = true;
+
+ng("Array index assign");
+var x [2]int;
+x[7] = 0;
+
+ng("AIA multi-error");
+var x [3]int;
+x[8] = true;
+
+ng("Slice");
+x;
+var x []int;
+
+ng("Slice composite");
+x;
+var x [][]int;
+
+ng("Slice assign");
+var x []int;
+var y []bool;
+x = y;
+
+ng("Slice index");
+var x []int;
+x[7];
+
+ng("Slice index assign");
+var x[]int;
+x[0] = true;
+
+ng("Slice index assign");
+var x[]int;
+x[1] = 0;
+
+
+ng("Map");
+x;
+var x [map]int;
+
+ng("Map assign");
+var x [map]int;
+var y [map]bool;
+x = y;
+
+ng("Map index");
+var x [map]int;
+x[4];
+
+ng("Map index assign");
+var x [map]int;
+x["key"] = true;
+
+ng("Tuple");
+x;
+var x (int, int);
+
+ng("Tuple assign");
+var x (int, int);
+var y (int, bool);
+x = y;
+
+ng("Tuple index");
+var x (int, int);
+x[12];
+
+ng("Tuple index assign");
+var x (int, int);
+x[0] = true;
+
+ng("Pointer assign");
+var x *(int);
+var y *(bool);
+x = y;
+
+ng("Pointer assign");
+var x *(int, int);
+var y *(int);
+x = y;
+
+ng("Pointer index");
+var x *(int);
+x[0];
+
+ng("Pointer index assign");
+var x *(int);
+x[0] = 7;
+
+
+
+
+
+
+
 ng("Neg if");
 if 0 ;
 
@@ -303,31 +417,6 @@ y[0] = 10;
 y[1] = 20;
 x = y;
 
-
-ng("Wrong type assignment defined types (tuple = array):");
-var x (int, int);
-var y [2]int;
-y = x;
-
-ng("Wrong type assignment defined types (map = tuple):");
-var x [map]int;
-var y (int, int);
-x = y;
-
-ng("Wrong type assignment defined types (scalar = array):");
-var x int;
-var y [2]int;
-x = y;
-
-ng("Wrong type assignment defined types (array = scalar):");
-var x int;
-var y [2]int;
-y = x;
-
-ng("Wrong type assignment defined types pointers:");
-var point1 *(int, self);
-var point2 *(bool, self);
-point1 = point2;
 
 ng("Wrong type get from short declaration:");
 x := 0;
