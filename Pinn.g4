@@ -47,7 +47,7 @@ expr
    expr LSQUARE ( first=expr? (AT | COLON) second=expr? | expr) RSQUARE #indexExpr
   | expr '.' INT #dotIndexExpr
   |   THREEDOT? LSQUARE exprList? RSQUARE #arrayLiteral
-  | '{' (objectPair ( ',' objectPair )*)? '}' #objectLiteral
+  | AST? '{' (objectPair ( ',' objectPair )*)? '}' #objectLiteral
   | ('+' | '-' | '!' ) expr #unaryExpr
   | expr ('+' | '-' | AST | '/' | '%') expr #intExpr
   | expr ('==' | '!=' | '>' | '<' | '>=' | '<=' ) expr #compExpr

@@ -832,6 +832,7 @@ class Pvisitor {
             rt = try _visitPval(sctx.expr()!)
         case let sctx as PinnParser.ObjectLiteralContext:
             let list = sctx.objectPair()
+            let ast = sctx.AST() != nil
             var kind: Kind?
             var ckind: Kind?
             if list.count == 0 {
@@ -846,6 +847,30 @@ class Pvisitor {
                     throw Perr(EREDECLARE, sctx)
                 }
                 olist[str] = pv
+            }
+            if ast {
+                var klist = [String: Kind]()
+                for (k, v) in olist {
+                    klist[k] = v.getKind()
+                }
+                rt = try Pval(sctx, Kind(Gtype.gStructure(klist)))
+                
+                
+                
+                
+                            
+                            for (str, pv) in olist {
+
+                                try rt!.set(str, pv)
+                            }
+
+                return rt
+                
+                
+                
+                
+                
+                
             }
             let vt: Kind
             let val = olist.values

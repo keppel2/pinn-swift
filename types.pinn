@@ -1,3 +1,11 @@
+
+
+
+
+
+
+
+
 ft("Literal zero", "");
 0;
 
@@ -270,6 +278,188 @@ ft("Struct index assign", "");
 var s {a: int, b: bool};
 s["a"] = 42;
 //println(s);
+
+
+
+
+
+// Compound literals
+
+
+// Array literal
+ft("Array literal", "");
+[0];
+
+ft("Array literal 2", "");
+[true];
+["str"];
+[1, 2];
+[1, 5, 10];
+
+ft("Array literal comp", "");
+[[0, 10], [2, 5]];
+
+
+// Slice literal
+ft("Slice literal", "");
+...[];
+
+ft("Slice literal 2", "");
+...[true];
+...["str"];
+...[1, 2];
+...[1, 5, 10];
+
+ft("Slice literal comp", "");
+...[...[0]];
+
+
+// Map literal
+ft("Map literal", "");
+{}
+
+ft("Map literal 2", "");
+{"a": "b", "c": "d", "e": "val"};
+{"key": 42};
+
+ft("Map compos", "");
+{"out": {"in": 5}};
+
+// Tuple literal
+
+ft("Tuple", "");
+();
+
+ft("Tuple 2", "");
+(1, 5);
+
+ft("Tuple composite", "");
+((1, true, false), 5);
+
+// Pointer literal
+
+ft("Pointer", "");
+*();
+
+ft("Pointer 2", "");
+*(3);
+*(false, true);
+*(10, 11, 102);
+
+ft("Pointer composite", "");
+*(*(true, false), 1, 5, "abc");
+
+// Struct literal
+
+ft("Struct");
+*{a: 42, b: true};
+ft("Struct 2");
+*{a: true, b: 42, c: "str"};
+ft("Struct composite");
+*{key: *{a: true, b: 101}, key2: *{z: "zee"}};
+
+//print(x);
+
+// Mixes
+
+ft("Arrays null", "");
+[*(), *(), *()];
+[...[], ...[]];
+[{}, {}];
+
+ft("Array mix null/non", "");
+[*(42), *(101), *()];
+[...[], ...[101, 4]];
+[{"bcd": false}, {}, {"a": true}];
+
+
+ft("Slice null", "");
+...[*(), *()];
+...[...[], ...[]];
+...[{}, {}];
+
+
+ft("Slice mix null/non", "");
+...[*(101), *(), *(202)];
+...[...[] , ...[true, false]];
+...[{}, {"a": 42}];
+
+ft("Map null");
+{a: *(), b: *()};
+{a: ...[], b: ...[]};
+{a: {}, b: {}};
+
+ft("Map mix");
+{a: *(42), b: *()};
+
+ft("Composite all", "");
+(1, 5, 101, [1, 5], ...[10, 12], {"key": 42}, *(12, 20));
+
+ft("Tuple null/mix");
+(*(), *());
+(...[], ...[5]);
+
+ft("Pointer null/mix");
+*(*(), *());
+*({}, {a: 42});
+
+
+
+// Collection literal assignment
+
+ft("Array");
+var x [1]int;
+x = [0];
+var y [2]int;
+y = [0, 0];
+var z [3]bool;
+z = [false, true, false];
+var comp [2][3]int;
+comp = [[1, 2, 5], [10, 12, 13]];
+
+ft("Slice");
+var x[]int;
+x = ...[0];
+x = ...[12, 42];
+var y[]bool;
+y = ...[false, true, false];
+var z[]string;
+z = ...["abc", "def"];
+var z2[][]int;
+z2 = ...[...[1, 2], ...[10, 11]];
+
+ft("Map");
+var x[map]int;
+x = {a: 42};
+var y[map][map]bool;
+y = {a: {b: true}, b: {z: false, zz: true}};
+
+ft("Tuple");
+var x (int, bool, string);
+x = (42, true, "str");
+var y ((int, bool), string);
+y = ((23, false), "ing");
+
+ft("Pointer");
+var x *(int);
+x = *(101);
+var y *(*(int, bool), string);
+y = *(*(42, true), "str");
+
+ft("Structure");
+var x {x: int, y: int, c: string};
+x = *{x: 10, y: 20, c: "green"};
+
+// Stress
+
+ft("Nulls");
+var x (*(int), *(int), *(int));
+x = (*(), *(42), *());
+
+
+
+
+
 
 
 
@@ -926,91 +1116,7 @@ print("a \\ slash");
 
 
 
-// Array literal
-ft("Array literal", "");
-[0];
 
-ft("Array literal 2", "");
-[true];
-["str"];
-[1, 2];
-[1, 5, 10];
-
-ft("Array literal comp", "");
-[[0]];
-
-// Slice literal
-ft("Slice literal", "");
-...[];
-
-ft("Slice literal 2", "");
-...[true];
-...["str"];
-...[1, 2];
-...[1, 5, 10];
-
-ft("Slice literal comp", "");
-...[...[0]];
-
-
-// Map literal
-ft("Map literal", "");
-{}
-
-ft("Map literal 2", "");
-{"a": "b", "c": "d", "e": "val"};
-{"key": 42};
-
-ft("Map compos", "");
-{"out": {"in": 5}};
-
-// Tuple literal
-
-ft("Tuple", "");
-();
-
-ft("Tuple 2", "");
-(1, 5);
-
-ft("Tuple composite", "");
-((1, true, false), 5);
-
-// Pointer literal
-
-ft("Pointer", "");
-*();
-
-ft("Pointer 2", "");
-*(3);
-*(false, true);
-*(10, 11, 102);
-
-ft("Pointer composite", "");
-*(*(true, false), 1, 5, "abc");
-
-// Mixes
-
-ft("Arrays null", "");
-[*(), *(), *()];
-[...[], ...[]];
-[{}, {}];
-
-ft("Array mix", "");
-[*(42), *(101), *()];
-[...[], ...[(1, 4)]];
-[{"bcd": false}, {}, {"a": true}];
-
-ft("Slice of null-types", "");
-...[*(101), *(), *(202)];
-
-ft("Map of null-types", "");
-{a: *(), b: *(), c: *(5)};
-{a: *(), b: *()};
-{a: ...[10, 2], b: ...[5], c: ...[]};
-
-
-ft("Composite all", "");
-(1, 5, 101, [1, 5], ...[10, 12], {"key": 42}, *(12, 20));
 
 ft("Print arrays", "[23] [true true] [aa bb cc] [0.5 1.5]");
 print([23], [true, true], ["aa", "bb", "cc"], [0.5, 1.5]);

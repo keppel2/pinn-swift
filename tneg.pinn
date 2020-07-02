@@ -221,6 +221,50 @@ s1["a"] = true;
 
 
 
+// Collection literals
+ng("Array");
+[[0, 10], [2]];
+
+ng("Array literal");
+[10, true];
+
+ng("Slice literal");
+...[4, true];
+
+ng("Slice");
+...[2, true];
+
+ng("Object literal:");
+{"a": 5, "b": true};
+
+ng("Object literal repeat key");
+{b: 12, b: 42};
+
+ng("Tuple literal bad member");
+(5, 0 == true);
+
+ng("Pointer literal bad member");
+*(0 == true);
+
+ng("array null/non");
+[*(), *(42), *(1, 4)];
+
+ng("array/tuple mix");
+[(1, 4), (1, 10, 12)];
+
+ng("map null/non");
+{a: *(), b: *(42), c: *(101, 202)};
+
+
+
+
+
+
+
+
+
+
+
 ng("Neg if");
 if 0 ;
 
@@ -297,26 +341,6 @@ var x [1]int;
 var y [2]int;
 y = x;
 
-
-// Collection literals
-
-ng("Array literal");
-[10, true];
-
-ng("Slice literal");
-...[4, true];
-
-ng("Object literal with different types:");
-{"a": 5, "b": true};
-
-ng("Object literal repeat key");
-{b: 12, b: 42};
-
-ng("Tuple literal bad member");
-(5, 0 == true);
-
-ng("Pointer literal bad member");
-*(0 == true);
 
 
 
