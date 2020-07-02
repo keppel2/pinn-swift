@@ -246,10 +246,30 @@ p[1];
 ft("Struct");
 var s {a: int, b: bool};
 
-ft("Struct index get", "0 false");
-var s {a: int, b: bool};
-print(s["a"], s["b"]);
+ft("Struct composite");
+var s {a: {z: int}};
 
+ft("Struct assign");
+var s1 {a: int, b: bool};
+var s2 {a: int, b: bool};
+s1 = s2;
+s2 = s1;
+
+ft("Xtra--Struct assign");
+var s1 {a: int, b: bool};
+var s2 {b: bool, a: int};
+s1 = s2;
+s2 = s1;
+
+ft("Struct index get", "");
+var s {a: int, b: bool};
+s["a"];
+//print(s["a"], s["b"]);
+
+ft("Struct index assign", "");
+var s {a: int, b: bool};
+s["a"] = 42;
+//println(s);
 
 
 

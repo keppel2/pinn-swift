@@ -188,6 +188,33 @@ ng("Pointer index assign");
 var x *(int);
 x[0] = 7;
 
+//Struct
+ng("Struct");
+var s {a: int, a: int};
+
+ng("Struct composite");
+var s {s2: {a: int, a: int}};
+
+ng("Struct assign");
+var s1 {a: int, b: int};
+var s2 {a: int, b: bool};
+s1 = s2;
+
+ng("Struct assign 2");
+var s1 {a: int};
+var s2 {z: int};
+s1 = s2;
+
+//ng("Struct index get");
+//var s1 {a: int};
+//s1["b"];
+
+ng("Struct index assign");
+var s1 {a: int, b: int};
+s1["a"] = true;
+
+
+
 
 
 
