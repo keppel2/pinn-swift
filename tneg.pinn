@@ -53,30 +53,10 @@ ng("Create bool order");
 x;
 var x bool;
 
+ng("Multiset");
+var x, y int;
+x, y = 10, 15, 201;
 
-
-//neg expressions
-
-ng("Plus");
-1 + false;
-
-ng("Plus 2");
-false + 1;
-
-ng("Plus with 3");
-1 + 2 + false;
-
-ng("Equals basic");
-0 == true;
-
-ng("Equals");
-[1, 5] == [1, 5, 10];
-
-ng("Equals 2");
-...[0, 5] == ...[true, true];
-
-ng("Equal undeclared");
-x == 0;
 
 
 
@@ -188,6 +168,10 @@ ng("Pointer index assign");
 var x *(int);
 x[0] = 7;
 
+
+
+
+
 //Struct
 ng("Struct");
 var s {a: int, a: int};
@@ -298,6 +282,42 @@ ng("Slice type");
 ng("Slice type");
 (3, 1, 23)[0:1];
 
+// Set destructure
+
+ng("destruct");
+var x, y int;
+(x, y) = (2, true);
+
+ng("desturct 2");
+var x, y int;
+(x, y) = (1, 4, 10);
+
+
+
+
+
+// Short
+
+ng("Short");
+x := 1;
+x = true;
+
+ng("Short 2");
+var x int;
+y := true;
+x = y;
+
+
+
+
+
+
+//neg expressions
+
+
+
+
+
 //Expression
 
 ng("Plus");
@@ -305,6 +325,25 @@ ng("Plus");
 
 ng("Plus");
 "abc" + 0;
+
+ng("Plus with 3");
+1 + 2 + false;
+
+
+
+ng("Equals basic");
+0 == true;
+
+ng("Equals");
+[1, 5] == [1, 5, 10];
+
+ng("Equals 2");
+...[0, 5] == ...[true, true];
+
+ng("Equal undeclared");
+x == 0;
+
+
 
 ng("LT");
 0 < true;
@@ -326,7 +365,13 @@ ng("-");
 ng("!");
 !0;
 
+//Range
 
+ng("Range");
+2:1;
+
+ng("Range");
+2@0;
 
 
 
@@ -382,43 +427,6 @@ var x [true]int;
 
 //ng("Array 2");
 //var x [0 - 1]int;
-
-
-ng("Print no arg");
-print();
-ng("Print undeclared");
-print(x);
-ng("Print multiple undeclared");
-print(x, y, z);
-ng("Print order");
-print(x);
-var x int;
-
-
-
-ng("Create array and set");
-var x [2]int;
-x[7] = 0;
-
-ng("Array 2");
-var x[2]int;
-x[2] = 0;
-
-
-ng("Wrong type assignment defined types:");
-var x [1]int;
-var y [2]int;
-y = x;
-
-
-
-
-
-
-
-ng("Wrong type assignment from declaration");
-var x int;
-x = *();
 
 
 
@@ -507,6 +515,53 @@ func f(a, b int, a int) {}
 
 ng("Variadic");
 func f(a ...int, b int) {}
+
+
+
+
+
+
+
+
+
+
+
+ng("Print no arg");
+print();
+ng("Print undeclared");
+print(x);
+ng("Print multiple undeclared");
+print(x, y, z);
+ng("Print order");
+print(x);
+var x int;
+
+
+
+ng("Create array and set");
+var x [2]int;
+x[7] = 0;
+
+ng("Array 2");
+var x[2]int;
+x[2] = 0;
+
+
+ng("Wrong type assignment defined types:");
+var x [1]int;
+var y [2]int;
+y = x;
+
+
+
+
+
+
+
+ng("Wrong type assignment from declaration");
+var x int;
+x = *();
+
 
 
 

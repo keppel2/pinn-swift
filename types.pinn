@@ -70,7 +70,10 @@ z = x;
 y = z;
 z = y;
 
-
+ft("Multi set", "");
+var x int;
+var y int;
+x, y = 11, 42;
 
 
 
@@ -97,7 +100,14 @@ var b bool;
 ft("Create string", "");
 var str string;
 
+ft("Tuple destructure");
+var x, y int;
+(x, y) = (23, 42);
 
+ft("Tuple destructure 2");
+var x int;
+var y bool;
+(x, y) = (101, true);
 
 
 
@@ -442,6 +452,37 @@ ft("Structure");
 var x {x: int, y: int, c: string};
 x = *{x: 10, y: 20, c: "green"};
 
+// Short declaration
+
+ft("Short");
+x := 0;
+x = 0;
+
+ft("Short declaration");
+var x int;
+y := 4;
+x = y;
+
+ft("Short 3");
+var x int;
+y := x;
+y = 2;
+
+ft("Short destructure");
+(x, y) := (10, true);
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Stress
 
 ft("Nulls");
@@ -564,7 +605,31 @@ true == true;
 2 >= 3;
 2 <= 3;
 
+ft("Range expr");
+0:1;
+0:0;
 
+ft("Range 2");
+0:10;
+4:14;
+1@2;
+
+ft("Range equals");
+var x []int;
+x = 2:10;
+x = 10@20;
+
+ft("Paren");
+(0);
+
+ft("Paren comp");
+((0));
+
+ft("Conditional");
+true ? 2 : 1;
+
+ft("Conditional 2");
+false ? 1 + 2 : true;
 
 //Control flow
 
@@ -586,7 +651,15 @@ if false ; else ;
 ft("Block", "");
 {}
 
-
+ft("Block 2", "");
+1;
+{
+    2;
+    {
+        3;
+    
+    }
+}
 
 
 
@@ -598,6 +671,95 @@ ft("If and while", "");
 if false ;
   else
 while false {}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// function isolated
+
+ft("Function");
+func f() {}
+
+ft("Function 2");
+func f() {}
+func g() {}
+
+ft("Function return");
+func f() int {}
+
+ft("Function parameter");
+func f(a int) {}
+
+ft("2 parameters");
+func f(a int, b int) {}
+
+ft("Parameter and return (reject?)");
+func f(a int) int {}
+
+ft("Function call");
+func f() {}
+
+
+f();
+
+ft("Function call 2");
+func fA(a int) {}
+func fB(a int, b int) {}
+func fC(a, b int) {}
+fA(0);
+fB(0, 0);
+fC(0, 0);
+
+ft("Function call 3");
+func f() int {return 0;}
+f();
+
+ft("Call and return");
+func f(a int) int {
+    return 0;
+}
+var x int;
+x = f(0);
+
+ft("Call and return bools");
+func f(a bool) bool {
+    return true;
+}
+var x bool;
+x = f(true);
+
+ft("Basics in function");
+func f() {
+    0;
+    42;
+    var x int;
+    x = 0;
+}
+f();
+
+ft("Variadic");
+func f(v ...int) {}
+f(0, 5, 10);
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1438,72 +1600,6 @@ x;
 
 
 
-
-// function isolated
-
-ft("Function");
-func f() {}
-
-ft("Function 2");
-func f() {}
-func g() {}
-
-ft("Function return");
-func f() int {}
-
-ft("Function parameter");
-func f(a int) {}
-
-ft("2 parameters");
-func f(a int, b int) {}
-
-ft("Parameter and return (reject?)");
-func f(a int) int {}
-
-ft("Function call");
-func f() {}
-
-
-f();
-
-ft("Function call 2");
-func fA(a int) {}
-func fB(a int, b int) {}
-func fC(a, b int) {}
-fA(0);
-fB(0, 0);
-fC(0, 0);
-
-ft("Function call 3");
-func f() int {return 0;}
-f();
-
-ft("Call and return");
-func f(a int) int {
-    return 0;
-}
-var x int;
-x = f(0);
-
-ft("Call and return bools");
-func f(a bool) bool {
-    return true;
-}
-var x bool;
-x = f(true);
-
-ft("Basics in function");
-func f() {
-    0;
-    42;
-    var x int;
-    x = 0;
-}
-f();
-
-ft("Variadic");
-func f(v ...int) {}
-f(0, 5, 10);
 
 
 
