@@ -1,6 +1,4 @@
-var s {a: int, b: bool};
-
-s = {a: 10, b: false};
+x := *(4, *());
 
 exit();
 

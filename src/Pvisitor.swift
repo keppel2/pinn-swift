@@ -1011,6 +1011,8 @@ class Pvisitor {
                         var rhsv = str.count
                         if let rh = sctx.second {
                             rhsv = try tryCast(_visitPval(rh))
+                        } else if (sctx.AT() != nil) {
+                            throw Perr(ENIL, sctx)
                         }
                         if (sctx.AT() != nil) {
                             rhsv += 1

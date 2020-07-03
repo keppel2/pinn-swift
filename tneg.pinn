@@ -255,11 +255,76 @@ ng("array/tuple mix");
 ng("map null/non");
 {a: *(), b: *(42), c: *(101, 202)};
 
+ng("self");
+var z *(int, self);
+
+z = *(23, *(42, *(101, 202)));
+
+ng("self 2");
+var z *(int, self);
+
+z = *(23, *(101, *(202, *())));
+z[1][1][1] = *(302, true);
+
+ng("Slice");
+var x[3]int;
+x[0:4];
+
+ng("Slice 2");
+var x[3]int;
+x[4:];
+
+ng("At");
+var x[3]int;
+x[1@];
+
+ng("Slice a slice");
+var x[]int;
+x[0] = 2;
+x[1] = 23;
+x[2] = 101;
+x[0@3];
 
 
+ng("String");
+"abc"[2@3];
 
+ng("Repeat slice");
+"abcd"[2:4][0:3];
 
+ng("Slice type");
+3[1:2];
 
+ng("Slice type");
+(3, 1, 23)[0:1];
+
+//Expression
+
+ng("Plus");
+0 + true;
+
+ng("Plus");
+"abc" + 0;
+
+ng("LT");
+0 < true;
+
+ng("&&");
+true && 0;
+
+ng("||");
+false || 0;
+
+//Unary
+
+ng("+");
++true;
+
+ng("-");
+-"str";
+
+ng("!");
+!0;
 
 
 

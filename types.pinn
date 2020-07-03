@@ -456,6 +456,59 @@ ft("Nulls");
 var x (*(int), *(int), *(int));
 x = (*(), *(42), *());
 
+ft("Null deep structure");
+var x, y *(*(int), *(*(bool)));
+x = *(*(42), *());
+y = *(*(), *(*()));
+
+
+ft("Self");
+var x, y, z *(int, self);
+x = *(42, *());
+y = *(11, *(12, *()));
+z = *(23, *(42, *(101, *())));
+z[1][1][1] = *(202, *());
+//print(z, z[1], z[1][1]);
+
+//Slicing
+
+ft("Slicing");
+var x[3]int;
+x[0:2];
+
+ft("Slicing 2");
+var x[3]int;
+x[0:0];
+x[:3];
+x[1:];
+x[:];
+
+ft("At slicing");
+var x[3]int;
+x[0@2];
+x[@2];
+
+ft("Slice a slice");
+var x[]int;
+x[0] = 2;
+x[1] = 23;
+x[2] = 101;
+x[0@2];
+x[:];
+
+ft("String slice");
+"abc"[0:2];
+"a"[0:0];
+
+ft("Repeat slicing");
+"abcd"[1:4][0:1];
+
+
+
+
+
+
+
 
 
 
@@ -471,6 +524,7 @@ ft("plus", "");
 ft("Plus 2", "");
 1 + 2 + 3;
 "con" + "cat";
+"ab" + "cdef";
 
 ft("Equal", "");
 0 == 0;
@@ -481,12 +535,77 @@ true == false;
 true == true;
 "abc" == "abcdef";
 
+ft("LT", "");
+0 < 10;
+10 < 0;
+"ab" < "def";
+
+ft("&&");
+true && true;
+true && false;
+false && 0 + true;
+
+ft("||");
+true || false;
+
+//Unary
+
+ft("Unary");
++4;
+-10;
+!true;
+!false;
+
+
+ft("Binary int->int");
+2 + 3;
+2 - 3;
+2 * 3;
+2 / 3;
+2 % 3;
+
+ft("Binary comp");
+true == true;
+2 != 3;
+2 > 3;
+2 < 3;
+2 >= 3;
+2 <= 3;
+
+
+
+//Control flow
+
+ft("Bare if", "");
+if true ;
+if false ;
+
+ft("If other", "");
+if true 5;
+if false 10;
+
+ft("Else", "");
+if false ; else ;
+
+
+
+
+
+ft("Block", "");
+{}
 
 
 
 
 
 
+ft("While", "");
+while false {}
+
+ft("If and while", "");
+if false ;
+  else
+while false {}
 
 
 
@@ -683,6 +802,12 @@ t = s;
 print(s, t);
 t[0] = 101;
 print(s, t);
+
+
+
+
+
+
 
 
 
@@ -1052,39 +1177,6 @@ v = v2;
 print(v, v2, v == v2);
 
 
-
-//Control flow
-
-ft("Bare if", "");
-if true ;
-if false ;
-
-ft("If other", "");
-if true 5;
-if false 10;
-
-ft("Else", "");
-if false ; else ;
-
-
-
-
-
-ft("Block", "");
-{}
-
-
-
-
-
-
-ft("While", "");
-while false {}
-
-ft("If and while", "");
-if false ;
-  else
-while false {}
 
 
 
