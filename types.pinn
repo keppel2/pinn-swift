@@ -135,7 +135,7 @@ assert(b, false);
 
 ft("Create string", "");
 var str string;
-
+assert(str, "");
 
 
 
@@ -196,7 +196,7 @@ x[1] = 42;
 ft("Slice index");
 var x []int;
 x[0] = 20;
-x[0];
+assert(x[0], 20);
 
 //map
 
@@ -222,8 +222,7 @@ j= i;
 
 ft("Map index", "");
 var x [map]int;
-x["key"];
-x["k"] = 0;
+assert(x["k"], 0);
 
 
 //tuple
@@ -246,21 +245,28 @@ y = x;
 ft("Tuple index (both syntax)", "");
 var x (int, int);
 x[0];
+assert(x[0], 0);
 x[0] = 0;
-x.1;
-var y ((int, int), int);
-y[0][1] = 0;
-y[1] = 0;
+assert(x[0], 0);
+assert(x.1, 0);
 
+var y ((int, int), int);
+y[0][1] = 12;
+y[1] = 23;
+assert(y[0][1], 12);
+assert(y[1], 23);
 ft("Tuple destructure");
 var x, y int;
 (x, y) = (23, 42);
+assert(x, 23);
+assert(y, 42);
 
 ft("Tuple destructure 2");
 var x int;
 var y bool;
 (x, y) = (101, true);
-
+assert(x, 101);
+assert(y, true);
 
 
 
@@ -288,8 +294,8 @@ ft("Pointer index (literal needed)");
 var p *(int, int);
 p = *(1, 4);
 p[0];
-p[0] = 10;
-p[1];
+assert(p[0], 1);
+assert(p[1], 4);
 
 
 // Struct
@@ -314,12 +320,12 @@ s2 = s1;
 
 ft("Struct index get", "");
 var s {a: int, b: bool};
-s["a"];
-//print(s["a"], s["b"]);
+assert(s["a"], 0);
 
 ft("Struct index assign", "");
 var s {a: int, b: bool};
 s["a"] = 42;
+assert(s["a"], 42);
 //println(s);
 
 
@@ -332,17 +338,16 @@ s["a"] = 42;
 // Array literal
 ft("Array literal", "");
 [0];
-assert([0], [0]);
 
 ft("Array literal 2", "");
 [true];
 ["str"];
 [1, 2];
 [1, 5, 10];
-assert([1, 5, 10], [1, 5, 10]);
+assert([1, 42][1], 42);
 
 ft("Array literal comp", "");
-[[0, 10], [2, 5]];
+assert([[0, 10], [2, 5]][0][1], 10);
 
 
 // Slice literal
@@ -459,6 +464,8 @@ var y [2]int;
 y = [0, 0];
 var z [3]bool;
 z = [false, true, false];
+assert(z[1], true);
+//assert(len(z), 3);
 var comp [2][3]int;
 comp = [[1, 2, 5], [10, 12, 13]];
 
@@ -655,6 +662,7 @@ ft("Range expr");
 0:1;
 0:0;
 
+
 ft("Range 2");
 0:10;
 4:14;
@@ -672,23 +680,23 @@ ft("Paren comp");
 ((0));
 
 ft("Conditional");
-true ? 2 : 1;
+assert(true ? 2 : 1, 2);
 
 ft("Conditional 2");
-false ? 1 + 2 : true;
+assert(false ? 1 + 2 : true, true);
 
 //Control flow
 
 ft("Bare if", "");
 if true ;
-if false ;
+if false bad();
 
 ft("If other", "");
 if true 5;
 if false bad();
 
 ft("Else", "");
-if false ; else ;
+if false bad(); else ;
 
 
 
@@ -767,16 +775,16 @@ fB(0, 0);
 fC(0, 0);
 
 ft("Function call 3");
-func f() int {return 0;}
-f();
+func f() int {return 12;}
+assert(f(), 12);
 
 ft("Call and return");
 func f(a int) int {
-    return 0;
+    return 23;
 }
 var x int;
 x = f(0);
-
+assert(x, 23);
 ft("Call and return bools");
 func f(a bool) bool {
     return true;

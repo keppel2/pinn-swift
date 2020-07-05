@@ -1,4 +1,14 @@
-println("ok");
-readLine();
+//func f(i *(int)) {
+//  i = *(42);
+//}
+//var x, y *(int);
+//x = *(12);
+//y = x;
+//f(x);
+//println(x, y);
 
-exit();
+var s1 {a: int, b: bool};
+var s2 {a: int, b: bool};
+//s2["a"] = 42;
+s1;
+//println(s1, s2);

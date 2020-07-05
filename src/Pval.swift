@@ -387,7 +387,7 @@ break
         switch e.con {
         case .single(let pw):
             if getKind().gtype.isPointer() {
-                return self
+                aden()
             }
             return Pval(e.prc, pw.clone().unwrap())
         case .multi(let ar):
@@ -401,6 +401,20 @@ break
             default: aden()
             }
         case .map:
+            switch getKind().gtype {
+            case .gMap:
+                return Pval(self)
+            case .gStructure(let osk):
+                var sv = [String: Pval]()
+                for (k, v) in e.con.getMap() {
+                    sv[k] = try v.cloneIf()
+                }
+                let con = try Contents.map(Wrap(sv))
+                let pvp = Pvalp(Kind(Gtype.gStructure(osk)), con, e.prc)
+                return Pval(pvp)
+            default:
+                aden()
+            }
             return Pval(self)
         }
     }
@@ -514,17 +528,14 @@ break
                 return try ar.w.elementsEqual(co.getAr(), by: {try $0.equal($1)})
             case .map(let map):
 
-                //                let omap = co.getMap()
-//                for (key, value) in map.w {
-//                    if omap[key] == nil {
-//                        return false
-//                    }
-//                    if try !value.equal(omap[key]!) {
-//                        return false
-//                    }
-//                }
-//                return true
-                aden()
+                let omap = co.getMap()
+                for (key, value) in map.w {
+                    if try !value.equal(omap[key]!) {
+                        return false
+                    }
+                }
+                return true
+//                aden()
             }
         }
         func getSlice(_ a: Int, _ b: Int) throws -> [Pval] {
