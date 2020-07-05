@@ -18,6 +18,7 @@ class Perr : Error {
         if let pv = pvisitor {
             if !pv.trip {
                 // breakpoint here
+                
             }
         }
         
