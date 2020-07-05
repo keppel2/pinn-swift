@@ -384,9 +384,9 @@ print (SA + SB, SA < SB, SA > SB, SA == SB);
 
 ft("&& ||", "true false true false");
 print (true && true, true && false, true || false, false || false);
-func bad() bool {print("bad"); return false;}
+func badd() bool {print("bad"); return false;}
 ft("bad test", "false true");
-print (false && bad(), true || bad());
+print (false && bad(), true || badd());
 ft("Negate", "-42");
 var x int;
 x = 42;

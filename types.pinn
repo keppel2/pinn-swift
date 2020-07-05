@@ -1,5 +1,6 @@
 ft("Literal zero", "");
 0;
+assert(0, 0);
 
 ft("Literals", "");
 42;
@@ -18,32 +19,51 @@ ft("Literals", "");
 
 ft("Create int", "");
 var x int;
-
+assert(x, 0);
 ft("Create 2 int");
 var x int;
 var y int;
+assert(x, 0);
+assert(y, 0);
+assert(x, y);
+
+
 
 ft("Xtra--create 2 int short");
 var x, y int;
+assert(x, 0);
+assert(y, 0);
 
 
 ft("Create and state", "");
 var x int;
+assert(x, 0);
+
 x;
+assert(x, 0);
 
 ft("Set x to 0", "");
 var x int;
 x = 0;
+assert(x, 0);
+
+ft("Set to x to 42");
+var x int;
+x = 42;
+assert(x, 42);
 
 ft("Set x to itself", "");
 var x int;
 x = x;
+assert(x, 0);
 
 ft("Create and set 2 ints", "");
 var x int;
 var y int;
 y = x;
 
+assert(x, 0);
+assert(y, 0);
 
 
 ft("Create and set 3 ints", "");
@@ -52,12 +72,20 @@ var y int;
 var z int;
 y = x;
 z = y;
+assert(x, 0);
+assert(y, 0);
+assert(z, 0);
+
 
 ft("Create and set ints to each other", "");
 var x int;
 var y int;
 x = y;
 y = x;
+assert(x, 0);
+assert(y, 0);
+
+
 
 ft("Create 3 ints", "");
 var x int;
@@ -69,21 +97,28 @@ x = z;
 z = x;
 y = z;
 z = y;
+assert(x, 0);
+assert(y, 0);
+assert(z, 0);
+
 
 ft("Multi set", "");
 var x int;
 var y int;
 x, y = 11, 42;
-
+assert(x, 11);
+assert(42, y);
 
 
 ft("Boolean", "");
 false;
 true;
+assert(false, false);
 
 ft("String", "");
 "";
 "str";
+assert("str", "str");
 "a";
 
 
@@ -95,19 +130,11 @@ false;
 
 ft("Create bool", "");
 var b bool;
+assert(b, false);
 
 
 ft("Create string", "");
 var str string;
-
-ft("Tuple destructure");
-var x, y int;
-(x, y) = (23, 42);
-
-ft("Tuple destructure 2");
-var x int;
-var y bool;
-(x, y) = (101, true);
 
 
 
@@ -135,7 +162,9 @@ y = x;
 ft("Array index", "");
 var x[3]int;
 x[2];
+assert(x[2], 0);
 x[0];
+assert(x[0], 0);
 
 ft("Array index assign");
 var x[3]int;
@@ -223,6 +252,18 @@ var y ((int, int), int);
 y[0][1] = 0;
 y[1] = 0;
 
+ft("Tuple destructure");
+var x, y int;
+(x, y) = (23, 42);
+
+ft("Tuple destructure 2");
+var x int;
+var y bool;
+(x, y) = (101, true);
+
+
+
+
 //Pointer
 
 ft("Pointer", "");
@@ -291,12 +332,14 @@ s["a"] = 42;
 // Array literal
 ft("Array literal", "");
 [0];
+assert([0], [0]);
 
 ft("Array literal 2", "");
 [true];
 ["str"];
 [1, 2];
 [1, 5, 10];
+assert([1, 5, 10], [1, 5, 10]);
 
 ft("Array literal comp", "");
 [[0, 10], [2, 5]];
@@ -468,6 +511,9 @@ var x int;
 y := x;
 y = 2;
 
+ft("Short list");
+x, y := 10, 105;
+
 ft("Short destructure");
 (x, y) := (10, true);
 
@@ -552,21 +598,21 @@ ft("Repeat slicing");
 // Expressions
 
 ft("plus", "");
-0 + 0;
+assert(0 + 0, 0);
 
 ft("Plus 2", "");
-1 + 2 + 3;
-"con" + "cat";
-"ab" + "cdef";
+assert(1 + 2 + 3, 6);
+assert("con" + "cat", "concat");
+assert("ab" + "cdef", "abcdef");
 
 ft("Equal", "");
-0 == 0;
+at(0 == 0);
 
 ft("Equal 2", "");
-0 == 1;
-true == false;
-true == true;
-"abc" == "abcdef";
+assert(0 == 1, false);
+assert(true == false, false);
+at(true == true);
+assert("abc" == "abcdef", false);
 
 ft("LT", "");
 0 < 10;
@@ -591,16 +637,16 @@ ft("Unary");
 
 
 ft("Binary int->int");
-2 + 3; //5
-2 - 3; //-1
-2 * 3; //6
-2 / 3; //0
-2 % 3; //2
+assert(2 + 3, 5); //5
+assert(2 - 3, 0 - 1); //-1
+assert(2 * 3, 6); //6
+assert(2 / 3, 0); //0
+assert(2 % 3, 2); //2
 
 ft("Binary comp");
 true == true;
-2 != 3;
-2 > 3;
+assert(2 != 3, true);
+assert(2 > 3, false);
 2 < 3;
 2 >= 3;
 2 <= 3;
@@ -639,7 +685,7 @@ if false ;
 
 ft("If other", "");
 if true 5;
-if false 10;
+if false bad();
 
 ft("Else", "");
 if false ; else ;
@@ -842,15 +888,11 @@ print(x, y, x == y, y == x);
 
 
 
-ft("Multi swap:", "101 42");
+ft("Multi swap");
 x, y := 42, 101;
 x, y = y, x;
-print(x, y);
-
-
-
-
-
+assert(x, 101);
+assert(y, 42);
 
 
 
@@ -2062,5 +2104,14 @@ var a tArray;
 var b tArray;
 print(a == b, "");
 a[0] = 23;
-print(a == b, "");
+print(a == b);
 //ng("");
+
+
+ft("Classify");
+var t *(*(*(bool), int), int);
+t = *(*(*(), 42), 101);
+//print(t, t[0], t[0][0]);
+var t2 *(self, int);
+t2 = *(*(*(), 42), 101);
+//print(t2, t2[0], t2[0][0]);

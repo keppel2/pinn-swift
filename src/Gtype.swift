@@ -105,6 +105,53 @@ enum Gtype {
         }
         return self
     }
+    
+    func toSelf() -> Gtype {
+        let g2 = toPGtype()
+        switch g2 {
+        case .gScalar(let pt):
+            return self
+        case .gArray(let k, let i):
+            return Gtype.gArray(Kind(k.gtype.toSelf()), i)
+        case .gSlice(let k):
+            return Gtype.gSlice(Kind(k.gtype.toSelf()))
+        case .gMap(let k):
+            return Gtype.gMap(Kind(k.gtype.toSelf()))
+        case .gPointer(let ka):
+            var ka2 = [Kind]()
+            for k in ka {
+                if k.gtype.isNilPointer() {
+                    ka2.append(Kind(Gtype.gScalar(Ref.self)))
+                    
+                } else {
+                    ka2.append(Kind(k.gtype.toSelf()))
+                }
+            }
+            return Gtype.gPointer(ka2)
+        case .gStructure(let osk):
+            var osk2 = [String: Kind]()
+                for (s, k) in osk {
+                    osk2[s] = Kind(k.gtype.toSelf())
+            }
+            return Gtype.gStructure(osk2)
+        case .gTuple(let ka):
+        return Gtype.gTuple(ka.map{
+            Kind($0.gtype.toSelf())
+            
+        })
+            case .gDefined(let s):
+        
+        aden()
+        
+        
+        
+        
+        
+        
+        }
+    }
+    
+    
     func gEquivalentSym(_ g: Gtype) -> Bool {
         return gEquivalent(g) || g.gEquivalent(self)
     }

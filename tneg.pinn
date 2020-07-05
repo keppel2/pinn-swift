@@ -59,8 +59,6 @@ x, y = 10, 15, 201;
 
 
 
-
-
 // basic collections
 
 ng("Array");

@@ -11,6 +11,29 @@ class Pvisitor {
                 try assertPvals(s, 0)
                 exit(0)
             },
+            "bad": { sctx, pv, s in
+                try assertPvals(s, 0);
+                throw Perr(EASSERTF, sctx);
+                return nil
+            },
+            "at": { sctx, pv, s in
+                try assertPvals(s, 1);
+                let b: Bool = try tryCast(s[0]);
+                if !b {
+                    throw Perr(EASSERTF, sctx);
+                }
+                return nil
+            },
+            "assert": { sctx, pv, s in
+                try assertPvals(s, 2)
+                if !s[0].gg().gEquivalent(s[1].gg()) {
+                    throw Perr(ETYPE, sctx)
+                }
+                if try !s[0].equal(s[1]) {
+                    throw Perr(ETEST_FAIL)
+                }
+                return nil
+            },
             "gn": { sctx, pv, s in
                 try assertPvals(s, 0)
 
@@ -384,7 +407,7 @@ class Pvisitor {
             if let pv = lfc!.m[fh.fkinds[index].s]  {
                 throw Perr(EREDECLARE, sctx, pv)
             }
-            lfc!.m[fh.fkinds[index].s] = try Pval(s[index]).cloneType()
+            lfc!.m[fh.fkinds[index].s] = try Pval(s[index])//.cloneType()
         }
         try visit(ctx.block()!)
         switch lfc!.path {
@@ -1378,7 +1401,7 @@ class Pvisitor {
                 }
                     for (k, v) in sctx.ID().enumerated() {
                             let str = v.getText()
-                        let pv = try ae[k].cloneType()
+                        let pv = try ae[k]//.cloneType()
                             if let prev = map[str] {
                                 throw Perr(EREDECLARE, sctx, prev)
                             }
