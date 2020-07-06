@@ -1402,6 +1402,9 @@ class Pvisitor {
 
             if sctx.CONST() != nil {
                 let id = sctx.ID(0)!.getText()
+                if id == "_" {
+                    throw Perr(ENIL)
+                }
                 let pv = try _visitPval(sctx.expr()!)
                 let rt = Pval(pv, true)
                 if lfc != nil {
@@ -1431,6 +1434,9 @@ class Pvisitor {
                 }
                     for (k, v) in sctx.ID().enumerated() {
                             let str = v.getText()
+                        if str == "_" {
+                            continue
+                        }
                         let pv = try ae[k]//.cloneType()
                             if let prev = map[str] {
                                 throw Perr(EREDECLARE, sctx, prev)
@@ -1454,7 +1460,9 @@ class Pvisitor {
 
             for v in ai {
                 
-            
+                if v == "_" {
+                    continue
+                }
                             var newV: Pval
                             if let prev = map[v] {
                                 throw Perr(EREDECLARE, sctx, prev)

@@ -836,6 +836,14 @@ ft("Constant");
 const X = 12;
 
 assert(X, 12);
+
+//Blank
+
+ft("Blank");
+var _ int;
+
+
+
 //Decimal
 
 ft("Literal");

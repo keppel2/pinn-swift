@@ -823,6 +823,10 @@ AR[0] = 42;
 ng("Constant");
 const ST = *{a: 4, b: true};
 ST["a"] = 42;
+ng("Blank");
+
+var _ int;
+_;
 
 ng("Decimal");
 0.0 + true;
