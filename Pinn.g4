@@ -16,6 +16,7 @@ typeDecl
 
 varDecl
   : 'var' idList kind
+  | CONST ID '=' expr
   | ID ( ',' ID )* CE exprList
   | LPAREN ID ( ',' ID )* RPAREN CE expr;
 
@@ -125,6 +126,7 @@ AST: '*' ;
 THREEDOT : '...' ;
 AT : '@' ;
 CARET : '^' ;
+CONST : 'const' ;
 
 ID : [a-zA-Z_]([a-zA-Z_0-9])* ;
 INT : '0'

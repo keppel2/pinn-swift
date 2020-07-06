@@ -1390,6 +1390,7 @@ class Pvisitor {
             }
             
         case let sctx as PinnParser.TypeDeclContext:
+            
             let str = sctx.ID()!.getText()
             
             let k = try visitKind(sctx.kind()!)
@@ -1399,7 +1400,18 @@ class Pvisitor {
         case let sctx as PinnParser.VarDeclContext:
             let map = lfc?.m ?? fc.m
 
-            
+            if sctx.CONST() != nil {
+                let id = sctx.ID(0)!.getText()
+                let pv = try _visitPval(sctx.expr()!)
+                let rt = Pval(pv, true)
+                if lfc != nil {
+                    lfc!.m[id] = rt
+                } else {
+                    fc.m[id] = rt
+                }
+                return
+                
+            }
             if sctx.CE() != nil {
                 var ae = [Pval]()
                 if sctx.LPAREN() != nil {

@@ -2,11 +2,15 @@ import Antlr4
 
 class Pval {
     private var e: Pvalp
+    private var const = false
     private init(_ x: Pvalp) {
         e = x
     }
-    init(_ p: Pval) {
+    init(_ p: Pval, _ c: Bool? = false) {
         e = p.e
+        if let cc = c {
+            const = cc
+        }
     }
 
     init(_ c: ParserRuleContext, _ ar: [Pval], _ sp: Bool, _ k: Kind? = nil) throws {
@@ -163,6 +167,9 @@ class Pval {
             switch g {
             case .gSlice(let k):
                 if lh && v1v == e.con.count() {
+                    if const {
+                        throw Perr(ECONST)
+                    }
                     try e.con.appendCon(Pval(e.prc, k))
                 }
                 fallthrough
@@ -176,13 +183,15 @@ class Pval {
 //                if g.isArray() {
 //                    return try e.con.getAr()[v1v].cloneIf()
 //                } else {
-                if !lh {
-                    let pv = try e.con.getAr()[v1v].cloneIf()
-                    return pv
-                } else {
+//                if !lh {
+//                    let pv = try e.con.getAr()[v1v]//.cloneIf()
+//                    return pv
+//                } else {
                     let pv = e.con.getAr()[v1v]
-                    return pv
+                if const {
+                    pv.const = true
                 }
+                    return pv
 //            }
             default:
                 throw Perr(ETYPE, self)
@@ -191,14 +200,25 @@ class Pval {
             if case .gMap(let k) = g {
                 if e.con.getMap()[v1v] == nil {
                     if lh {
+                        if const {
+                            throw Perr(ECONST)
+                        }
                         try e.con.setCon(v1v, Pval(e.prc, k))
                     } else {
                         return try Pval(e.prc, k)
                     }
                 }
-                return e.con.getMap()[v1v]!
+                let pv = e.con.getMap()[v1v]!
+                if const {
+                pv.const = true;
+                }
+                return pv
             } else  if case .gStructure(let osk) = g {
-                return e.con.getMap()[v1v]!
+                let pv = e.con.getMap()[v1v]!
+                if const {
+                pv.const = true;
+                }
+                return pv
             } else {
                 throw Perr(ETYPE, self)
             }
@@ -209,6 +229,9 @@ class Pval {
     
     
     func setPV(_ v : Pval) throws {
+        if const {
+            throw Perr(ECONST)
+        }
         let b = getKind().gtype.gEquivalent(v.gg())
 
 
@@ -232,6 +255,9 @@ class Pval {
     }
     
     func delKey(_ s: String) throws {
+        if const {
+            throw Perr(ECONST)
+        }
         if case .gMap = getKind().gtype {
             e.con.setCon(s, nil)
             return
@@ -240,6 +266,9 @@ class Pval {
     }
     
     func set(_ k: Ktype, _ v: Pval) throws {
+        if const {
+            throw Perr(ECONST)
+        }
      
         switch k {
         case let v1v as Int:

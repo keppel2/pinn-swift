@@ -830,8 +830,12 @@ x, y = y, x;
 assert(x, 101);
 assert(y, 42);
 
+//Constant
 
+ft("Constant");
+const X = 12;
 
+assert(X, 12);
 //Decimal
 
 ft("Literal");

@@ -44,7 +44,7 @@ func execute() throws  {
         return
     }
     var fname = test ? prefix + "types.pinn" : s
-    fname = prefix + "xeek.pinn"
+    fname = prefix + "a.pinn"
     
     let myinput = fnToString(fname)
     try exe(myinput)

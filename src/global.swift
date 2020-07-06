@@ -2,6 +2,7 @@
 var test = false
 var gparser: PinnParser? = nil
 var pvisitor: Pvisitor? = nil
+let ECONST = "Constant"
 let ENIL = "Unexpected nil"
 let EPARAM_LENGTH = "Parameter length mismatch"
 let ESTATEMENT = "Wrong statement"

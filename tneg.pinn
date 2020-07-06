@@ -805,6 +805,25 @@ ng("Wrong short declaration:");
 func f() {}
 sdns := [4, f()];
 
+
+
+
+ng("Constant");
+const X = 10;
+x = 42;
+
+ng("Constant");
+const X = true;
+x = true;
+
+ng("Constant");
+const AR = [1, 10];
+AR[0] = 42;
+
+ng("Constant");
+const ST = *{a: 4, b: true};
+ST["a"] = 42;
+
 ng("Decimal");
 0.0 + true;
 
