@@ -1,9 +1,4 @@
 
-ft("a 5", "5");
-print(5);
-ft("", "");
-
-
 ft("Block", "in");
 {
     print("in");
@@ -14,58 +9,134 @@ ft("Two block layer", "in2");
         print("in2");
     }
 }
-ft("No block scoping (fix)?", "5");
+ft("No block scoping (fix)?");
 {
     {
         x := 5;
     }
 }
-print(x);
+assert(x, 5);
+
 ft("Empty", "");
 ;
 
+//Control flow
 
-ft("For range string", "a l p h a 0 b 1 r 2 a 3 v 4 o ");
+ft("Bare if");
+if true ;
+if false bad();
+
+ft("If other");
+if true 5;
+if false bad();
+
+ft("Else");
+if false bad(); else ;
+
+
+
+
+
+ft("Block");
+{}
+
+ft("Block 2");
+1;
+{
+    2;
+    {
+        3;
+    
+    }
+}
+
+
+
+
+ft("While");
+while false {}
+
+ft("If and while");
+if false ;
+  else
+while false {}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// function isolated
+
+ft("Function");
+func f() {}
+
+ft("Function 2");
+func f() {}
+func g() {}
+
+ft("Function return");
+func f() int {}
+
+ft("Function parameter");
+func f(a int) {}
+
+ft("2 parameters");
+func f(a int, b int) {}
+
+ft("Parameter and return (reject?)");
+func f(a int) int {}
+
+ft("Function call");
+func f() {}
+
+
+ft("For range string");
 var char string;
 for char = range "alpha" {
-    print(char, "");
 }
 var k int;
 for k, char = range "bravo" {
-    print(k, char, "");
 }
-//ft("For range", "");
-ft("For range closed interval 11 to 14", "11,12,13,14,");
+ft("For range closed interval 11 to 14");
 var xRange int;
 for xRange = range 11@14 {
-    print(xRange);
-    print(",");
 }
 
-ft("Continue on evens--print odds", "23,25,27,");
+ft("Continue on evens--print odds");
 var xRange86 int;
 for xRange86 = range 22@27 {
     if xRange86 % 2 == 0 continue;
-    print(xRange86);
-    print(",");
 }
-ft("Break", "101,102,");
+ft("Break");
+s := "";
 var xBreak int;
 for xBreak = range 101@104 {
-if xBreak == 103 {
-break;
+    if xBreak == 103 {
+    break;
+    }
+    s += sprint(xBreak, ",");
 }
-print(xBreak);
-print(",");
-}
-ft("Deep return", "203");
+assert(s, "101 ,102 ,");
+
+
+
+ft("Deep return");
 func deepReturn() int {
     var i int;
     for i = range 202@205 {
         if i == 203 return i;
     }
 }
-print(deepReturn());
+assert(deepReturn(), 203);
 
 ft("3 part for statement", "10,12,14,");
 for forX := 10; forX < 15; forX += 2 {
@@ -87,18 +158,6 @@ var bFor bool;
 for ; bFor != true; bFor = !bFor {
     print("In for");
 }
-
-ft("If true print true", "true");
-if true print("true");
-
-ft("If false do not print bad", "");
-if false print("bad");
-
-ft("If false print else", "else");
-if false ; else print("else");
-
-ft("If true do not print else", "");
-if true ; else print("bad else");
 
 ft("Ternary true", "42");
 print (true ? 42 : 5);

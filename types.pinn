@@ -743,87 +743,6 @@ assert(true ? 2 : 1, 2);
 ft("Conditional 2");
 assert(false ? 1 + 2 : true, true);
 
-//Control flow
-
-ft("Bare if");
-if true ;
-if false bad();
-
-ft("If other");
-if true 5;
-if false bad();
-
-ft("Else");
-if false bad(); else ;
-
-
-
-
-
-ft("Block");
-{}
-
-ft("Block 2");
-1;
-{
-    2;
-    {
-        3;
-    
-    }
-}
-
-
-
-
-ft("While");
-while false {}
-
-ft("If and while");
-if false ;
-  else
-while false {}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// function isolated
-
-ft("Function");
-func f() {}
-
-ft("Function 2");
-func f() {}
-func g() {}
-
-ft("Function return");
-func f() int {}
-
-ft("Function parameter");
-func f(a int) {}
-
-ft("2 parameters");
-func f(a int, b int) {}
-
-ft("Parameter and return (reject?)");
-func f(a int) int {}
-
-ft("Function call");
-func f() {}
-
-
-f();
-
 ft("Function call 2");
 func fA(a int) {}
 func fB(a int, b int) {}
@@ -1072,14 +991,14 @@ assert(sprint([23], [true, true], ["aa", "bb", "cc"]), "[23] [true true] [aa bb 
 ft("Print slices");
 assert(sprint(...[10], ...[23, 45], ...["ab", "bc"]), "[10] [23 45] [ab bc]");
 
-ft("Print tuple", "(1 true 10.5)");
-print((1, true, 10.5));
+ft("Print tuple");
+assert(sprint((1, true, 10.5)), "(1 true 10.5)");
 
-ft("Print pointer", "*(5 *() true)");
-print(*(5, *(), true));
+ft("Print pointer");
+assert(sprint(*(5, *(), true)), "*(5 *() true)");
 
-ft("Print single element object", "{foo:42}");
-print({"foo": 42});
+ft("Print single element object");
+assert(sprint({"foo": 42}), "{foo:42}");
 
 
 
@@ -1118,9 +1037,6 @@ assert(len(n), 2);
 assert(n[0], *());
 assert(n[1], true);
 
-//print(n, n[0]);
-//n[0] = *(*(), false);
-//print(n, n[0]);
 
 
 
@@ -1180,9 +1096,7 @@ alsts = ...[202, 302, 502];
 
 
 
-//ft("Create literal of pointer and nil", "[P N]");
-//ar := [*(42), *()];
-//print(ar);
+
 
 ft("Pointer as nullable it:");
 var pi *(int);
@@ -1232,21 +1146,10 @@ x;
 
 
 
-
-
-
-
-
-
-ft("decimal + - * /", "6.6 -4.4 6.05 0.2");
-DA := 1.1;
-DB := 5.5;
-print(DA + DB, DA - DB, DA * DB, DA / DB);
-
-ft("Global int in header", "3");
+ft("Global int in header");
 GLOB := 3;
 func giih(ar [GLOB]bool) {
-    print(len(ar));
+    assert(len(ar), 3);
 }
 var glob [GLOB] bool;
 giih(glob);
@@ -1303,14 +1206,13 @@ tup := (42, true, "str", 1.5);
 tup[0] = 23;
 tup[1] = false;
 
-ft("Postfix minus array tuple, map", "49 100 22");
+ft("Postfix minus array tuple, map");
 pfA := [50];
 pfT := (101, "boo");
 pfM := {"aaa": 23};
 pfA[0]--;
 pfT[0]--;
 pfM["aaa"]--;
-print(pfA[0], pfT[0], pfM["aaa"]);
 
 ft("Compound equals");
 ceAr1 := [1, 5, 23];
@@ -1586,36 +1488,26 @@ ft("");
 
 
 
-ft("Named type test", "5");
+ft("Named type test");
 type tInt int;
 var x tInt;
 x = 5;
-print(x);
+assert(x, 5);
 
 
 
-ft("Named type tuple string", "(foo bar)");
+ft("Named type tuple string");
 type tTuple (string, string);
 var x tTuple;
-x[0] = "foo";
-x[1] = "bar";
-print(x);
-ft("Named type equality", "12 12");
+x[0] = "a";
+x[1] = "b";
+
+ft("Named type equality");
 type tInt int;
 var x tInt;
 var y tInt;
 x = 12;
 y = x;
-print(x, y);
-//ft("Named type array equality", "true false");
-//type tArray [2]int;
-//var a tArray;
-//var b tArray;
-//print(a == b);
-//a[0] = 23;
-//print(a == b);
-////ng("");
-
 
 ft("Classify");
 var t *(*(*(bool), int), int);
