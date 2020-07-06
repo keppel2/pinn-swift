@@ -804,6 +804,8 @@ sdns := {"aap": 5, "noot": false};
 ng("Wrong short declaration:");
 func f() {}
 sdns := [4, f()];
-   
+
+ng("Decimal");
+0.0 + true;
 
 ng("");
