@@ -13,14 +13,16 @@ func main() {
     repeat {
         x = rand(300) + 1;
         y = rand(300) + 1;
-        coin = rand(3) + 1;
+        coin = rand(4) + 1;
         if coin == 1 {
           z = 1;
         } else if coin == 2 {
           z = rand(200) + 1;
-        } else {
+        } else if coin == 3 {
           z = rand(1250) + 1;
-        }
+        } else if coin == 4 {
+          z= rand(500) + 1;
+        }   
         } while hm[genHS(x, y, z)] == true;
         hm[genHS(x, y, z)] = true;
         println(genHS(x, y, z));
