@@ -1,62 +1,29 @@
 
-
-SIZE := 20;
-TURN := 5;
-TURNS := 20;
-var gar [SIZE][SIZE]bool;
-var ag [](int, int);
-func birth() {
-    var i, j, x int;
-    if len(ag) >= SIZE * SIZE {
-    println("Full");
-    exit();
+AGENTS := 2000 * 100;
+func genHS(x, y, z int) string {
+    return stringValue(x) + "," + stringValue(y) + "," + stringValue(z);
 }
 
-    repeat {
-    i, j = rand(SIZE), rand(SIZE);
-    } while gar[i][j] == true;
-      ag[len(ag)] = (i, j);
-    gar[i][j] = true;
-
-}
-func process(i int) {
-    var dx, dy int;
-    repeat {
-    dx = rand(3) - 1;
-    dy = rand(3) - 1;
-    if ag[i].0 + dx < 0 || ag[i].0 + dx >= SIZE {
-        dx = 0;
-    }
-    if ag[i].1 + dy < 0 || ag[i].1 + dy >= SIZE {
-        dy = 0;
-    }
-    } while gar[ag[i].0 + dx][ag[i].1 + dy] == true;
-    ag[i][0] += dx;
-    ag[i][1] += dy;
-}
 func main() {
-    var i, j, k int;
-    for i = range 1@TURNS {
-        for j = range 1@TURN {
-            birth();
-            for k = range 0:len(ag) {
-                process(k);
-            }
+    println("x,y,z");
+    var hm [map]bool;
+    var i, x, y, z int;
+    var coin int;
+    for i = range 1@AGENTS {
+    repeat {
+        x = rand(300) + 1;
+        y = rand(300) + 1;
+        coin = rand(3) + 1;
+        if coin == 1 {
+          z = 1;
+        } else if coin == 2 {
+          z = rand(200) + 1;
+        } else {
+          z = rand(1250) + 1;
         }
-        println("Turn ", i);
-        printg();
+        } while hm[genHS(x, y, z)] == true;
+        hm[genHS(x, y, z)] = true;
+        println(genHS(x, y, z));
     }
 }
-
-func printg() {
-  var x, y int;
-  for x = range 0:SIZE {
-    for y = range 0:SIZE {
-      print(gar[x][y] ? "X" : "O");
-    }
-    println("");
-  }
-  
-}
-println("min");
 main();

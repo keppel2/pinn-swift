@@ -75,3 +75,68 @@ for sol = range 1:len(p) {
     pn = pn - s[pn];
   }
 }
+
+
+
+
+
+SIZE := 20;
+TURN := 5;
+TURNS := 20;
+var gar [SIZE][SIZE]bool;
+var ag [](int, int);
+func birth() {
+    var i, j, x int;
+    if len(ag) >= SIZE * SIZE {
+    println("Full");
+    exit();
+}
+
+    repeat {
+    i, j = rand(SIZE), rand(SIZE);
+    } while gar[i][j] == true;
+      ag[len(ag)] = (i, j);
+    gar[i][j] = true;
+
+}
+func process(i int) {
+    var dx, dy int;
+    repeat {
+    dx = rand(3) - 1;
+    dy = rand(3) - 1;
+    if ag[i].0 + dx < 0 || ag[i].0 + dx >= SIZE {
+        dx = 0;
+    }
+    if ag[i].1 + dy < 0 || ag[i].1 + dy >= SIZE {
+        dy = 0;
+    }
+    } while gar[ag[i].0 + dx][ag[i].1 + dy] == true;
+    ag[i][0] += dx;
+    ag[i][1] += dy;
+}
+func main() {
+    var i, j, k int;
+    for i = range 1@TURNS {
+        for j = range 1@TURN {
+            birth();
+            for k = range 0:len(ag) {
+                process(k);
+            }
+        }
+        println("Turn ", i);
+        printg();
+    }
+}
+
+func printg() {
+  var x, y int;
+  for x = range 0:SIZE {
+    for y = range 0:SIZE {
+      print(gar[x][y] ? "X" : "O");
+    }
+    println("");
+  }
+  
+}
+println("min");
+main();

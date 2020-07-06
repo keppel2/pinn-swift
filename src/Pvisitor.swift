@@ -92,6 +92,24 @@ class Pvisitor {
                             "stringValue":
                 { sctx, pv, s in try assertPvals(s, 1)
                     return Pval(sctx, try s[0].string()) },
+                            "sprint":
+                                {
+                                    sctx, pv, s in
+                                        if s.count == 0 {
+                                            throw Perr(EPARAM_LENGTH, sctx)
+                                        }
+                                        let rt = Pvisitor.printSpace(try s.map {try $0.string()})
+                                        return Pval(sctx, rt)
+            },
+                            "sprintln":
+                                                    {
+                                                        sctx, pv, s in
+                                                            if s.count == 0 {
+                                                                throw Perr(EPARAM_LENGTH, sctx)
+                                                            }
+                                                            let rt = Pvisitor.printSpace(try s.map {try $0.string()})
+                                                            return Pval(sctx, rt + "\n")
+                                },
             "print":
                 {sctx, pv, s in
                     if s.count == 0 {

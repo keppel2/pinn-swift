@@ -4,6 +4,7 @@ assert(0, 0);
 
 ft("Literals", "");
 42;
+assert(42, 42);
 101;
 1010;
 
@@ -19,6 +20,7 @@ ft("Literals", "");
 
 ft("Create int", "");
 var x int;
+assert(x, x);
 assert(x, 0);
 ft("Create 2 int");
 var x int;
@@ -51,11 +53,13 @@ ft("Set to x to 42");
 var x int;
 x = 42;
 assert(x, 42);
+assert(x, x);
 
 ft("Set x to itself", "");
 var x int;
 x = x;
 assert(x, 0);
+assert(x, x);
 
 ft("Create and set 2 ints", "");
 var x int;
@@ -114,6 +118,7 @@ ft("Boolean", "");
 false;
 true;
 assert(false, false);
+assert(true, true);
 
 ft("String", "");
 "";
@@ -137,20 +142,36 @@ ft("Create string", "");
 var str string;
 assert(str, "");
 
-
-
 //Create collections
 
 ft("Create array", "");
 var x [1]int;
 
+ft("Add len");
+var x[5]int;
+assert(len(x), 5);
+
 ft("Create array 2", "");
 var x [2]int;
 var y [7]int;
 
+ft("Variable array bounds");
+var bound int;
+bound = 2;
+var y [bound]int;
+assert(bound, len(y));
+bound = 3;
+var z [bound]int;
+assert(bound, len(z));
+
+
+
+
+
 ft("Create comp array", "");
 var x[1][1]int;
 var y[7][1]int;
+assert(len(y), 7);
 var z[1][7]int;
 
 ft("Array assign", "");
@@ -158,6 +179,8 @@ var x[7]int;
 var y[7]int;
 x = y;
 y = x;
+assert(len(x), 7);
+assert(len(y), 7);
 
 ft("Array index", "");
 var x[3]int;
@@ -170,14 +193,23 @@ ft("Array index assign");
 var x[3]int;
 x[0] = 0;
 
+ft("Create array and set");
+var na [2]int;
+na[0] = 42;
+na[1] = 101;
+assert(na[0], 42);
+assert(na[1], 101);
 //slice
 
 ft("Create slice", "");
 var x []int;
+assert(len(x), 0);
 
 ft("Slice 2", "");
 var x []int;
 var y []bool;
+assert(len(x), 0);
+assert(len(y), 0);
 
 ft("Slice composite", "");
 var x [][]int;
@@ -187,16 +219,22 @@ ft("Slice assign", "");
 var x, y []int;
 x = y;
 y = x;
+assert(x, y);
 
 ft("Slice extend");
 var x []int;
+assert(len(x), 0);
 x[0] = 10;
+assert(len(x), 1);
+
 x[1] = 42;
+assert(len(x), 2);
 
 ft("Slice index");
 var x []int;
 x[0] = 20;
 assert(x[0], 20);
+assert(len(x), 1);
 
 //map
 
@@ -214,10 +252,12 @@ ft("Map assign", "");
 var x, y [map]int;
 x = y;
 y = x;
+assert(x, y);
 var i[map][map]bool;
 var j[map][map]bool;
 i = j;
 j= i;
+assert(i, j);
 
 
 ft("Map index", "");
@@ -229,6 +269,7 @@ assert(x["k"], 0);
 
 ft("Tuple", "");
 var t (int, int);
+assert(len(t), 2);
 
 ft("Tuple 2", "");
 var x (int, int, int);
@@ -326,7 +367,6 @@ ft("Struct index assign", "");
 var s {a: int, b: bool};
 s["a"] = 42;
 assert(s["a"], 42);
-//println(s);
 
 
 
@@ -473,6 +513,10 @@ ft("Slice");
 var x[]int;
 x = ...[0];
 x = ...[12, 42];
+assert(len(x), 2);
+assert(x[0], 12);
+assert(x[1], 42);
+
 var y[]bool;
 y = ...[false, true, false];
 var z[]string;
@@ -507,23 +551,32 @@ x = *{x: 10, y: 20, c: "green"};
 ft("Short");
 x := 0;
 x = 0;
+assert(x, 0);
 
 ft("Short declaration");
 var x int;
 y := 4;
 x = y;
+assert(x, 4);
+assert(y, 4);
 
 ft("Short 3");
 var x int;
 y := x;
+assert(y, 0);
 y = 2;
+assert(y, 2);
+assert(x, 0);
 
 ft("Short list");
 x, y := 10, 105;
+assert(x, 10);
+assert(y, 105);
 
 ft("Short destructure");
 (x, y) := (10, true);
-
+assert(x, 10);
+assert(y, true);
 
 
 
@@ -541,6 +594,11 @@ ft("Short destructure");
 ft("Nulls");
 var x (*(int), *(int), *(int));
 x = (*(), *(42), *());
+assert(len(x), 3);
+assert(x[0], *());
+assert(x[1][0], 42);
+assert(x[2], *());
+
 
 ft("Null deep structure");
 var x, y *(*(int), *(*(bool)));
@@ -819,35 +877,6 @@ f(0, 5, 10);
 
 
 
-//PRINT
-
-ft("Print", "");
-print("");
-
-ft("Print zero", "0");
-print(0);
-
-ft("Print two", "42 101");
-print(42, 101);
-
-ft("Print three", "23 23 23");
-print(23, 23, 23);
-
-ft("Print twice", "77");
-print(7);
-print(7);
-
-ft("Mixed", "1 23");
-print(1, 2);
-print(3);
-
-ft("Print str", "str");
-print("str");
-
-ft("Print var", "23");
-var x int;
-x = 23;
-print(x);
 
 
 
@@ -855,20 +884,26 @@ print(x);
 
 
 
-ft("Int copies by value", "23 42");
+
+
+
+
+ft("Int copies by value");
 var x int;
 var y int;
 x = 23;
 y = x;
 y = 42;
-print(x, y);
+assert(x, 23);
+assert(y, 42);
 
-
-ft("Create and tuple destructure", "42 true");
+ft("Create and tuple destructure");
 var x int;
 var y bool;
 (x, y) = (42, true);
-print(x, y);
+assert(x, 42);
+assert(y, true);
+
 
 ft("Short declaration", "42 true str 98.5");
 i := 42;
@@ -908,32 +943,12 @@ assert(y, 42);
 
 
 
-ft("Create 2 array", "[0 0] [0 0] true");
-var a [2]int;
-var b [2]int;
-a = b;
-b = a;
-print(a, b, a == b);
 
-ft("Xtra--1 and zero size array", "[0] []");
-var a1 [1]int;
-var a2 [0]int;
-print(a1, a2);
 
-ft("Xtra--variable array bounds", "[0 0][0 0 0]");
-var x int;
-x = 2;
-var y [x]int;
-print(y);
-x = 3;
-var y2 [x]int;
-print(y2);
 
-ft("Create array and set", "[42 101]");
-var na [2]int;
-na[0] = 42;
-na[1] = 101;
-print(na);
+
+
+
 
 ft("Create/set 2-dimensional array", "[[0 0 0] [0 0 0]][[0 0 20] [0 0 0]]");
 var a [2][3]int;
@@ -1245,7 +1260,7 @@ t["a"] = {"b": 5};
 
 
 
-
+//Decimal
 
 ft("Create decimal", "0");
 var d decimal;
@@ -1253,76 +1268,64 @@ print(d);
 
 
 
+//Named
+ft("Named type");
+type tInt int;
 
-
-
-
-
-ft("Stress--named array", "");
-type tA [3][2][3][2]decimal;
-type tB [2][5]tA;
-type tC [2]tA;
-var vA tA;
-var vB tB;
-var vC tC;
-
-
-ft("Named type test", "0");
+ft("Named type test");
 type tInt int;
 var x tInt;
-print(x);
+assert(x, 0);
 
-ft("Chained named type", "false");
+
+ft("Chained named type");
 type tA bool;
 type tB tA;
 var x tB;
-print(x);
+assert(x, false);
 
-ft("Create and set named type", "101.5");
-type t decimal;
+ft("Create and set named type");
+type t string;
 var d t;
-d = 101.5;
-print(d);
+assert(d, "");
+d = "str";
+assert(d, "str");
 
-
-ft("Create and set differently named types", "101 101 42 42");
+ft("Create and set differently named types");
 type t int;
 var x1 t;
 x1 = 101;
 var x2 int;
 x2 = x1;
-print(x1, x2, "");
+assert(x1, 101);
+assert(x2, 101);
 var xA int;
 xA = 42;
 var xB t;
 xB = xA;
-print(xA, xB);
+assert(xA, 42);
+assert(xB, 42);
 
-ft("Create and set two named types derived from int", "202 202");
+ft("Create and set two named types derived from int");
 type tA int;
 type tB int;
 var vA tA;
-vA = 202;
 var vB tB;
-vB = vA;
-print(vA, vB);
+vA = vB;
 
-ft("Xtra--named", "true true true0 0 0");
-
+ft("Xtra--named");
 type tA int;
 type tB tA;
 type tC tB;
 var vA tA;
 var vB tB;
 var vC tC;
-print(vA == vB, vA == vC, vB == vC);
 vA = vB;
 vB = vA;
 vA = vC;
 vC = vA;
 vB = vC;
 vC = vB;
-print(vA, vB, vC);
 
 
 ft("Short declaration and named", "101 101 true");
@@ -1381,44 +1384,39 @@ v = v2;
 print(v, v2, v == v2);
 
 
+ft("Stress--named array", "");
+type tA [3][2][3][2]decimal;
+type tB [2][5]tA;
+type tC [2]tA;
+var vA tA;
+var vB tB;
+var vC tC;
 
 
 
 
-
+ft("Sprint");
+sprint("");
 
 
 //Printing
-ft("Print one item", "101");
-print(101);
-
-ft("Print multiple items", "23 42 101");
-print(23, 42, 101);
-
-ft("Print multiple times", "125");
-print(1);
-print(2);
-print(5);
 
 
-ft("Print literals IBSD", "42 true str 1.5");
-print(42, true, "str", 1.5);
+ft("Print one item");
+assert(stringValue(101), "101");
 
-ft("Print", "a \\ slash");
-print("a \\ slash");
-
-
+ft("Print multiple items");
+assert(sprint(23, 42, 101), "23 42 101");
 
 
+ft("Print literals IBS");
+assert(sprint(42, true, "str"), "42 true str");
 
+ft("Print arrays");
+assert(sprint([23], [true, true], ["aa", "bb", "cc"]), "[23] [true true] [aa bb cc]");
 
-
-
-ft("Print arrays", "[23] [true true] [aa bb cc] [0.5 1.5]");
-print([23], [true, true], ["aa", "bb", "cc"], [0.5, 1.5]);
-
-ft("Print slices", "[10] [23 45] [ab bc]");
-print(...[10], ...[23, 45], ...["ab", "bc"]);
+ft("Print slices");
+assert(sprint(...[10], ...[23, 45], ...["ab", "bc"]), "[10] [23 45] [ab bc]");
 
 ft("Print tuple", "(1 true 10.5)");
 print((1, true, 10.5));
@@ -1430,14 +1428,45 @@ ft("Print single element object", "{foo:42}");
 print({"foo": 42});
 
 
-ft("Recursive named", "*()*(*() true) *()*(P true) *(*() false)");
+
+
+
+
+ft("Print");
+assert(sprint(""), "");
+
+ft("Print zero", "0");
+assert(sprint(0), "0");
+
+ft("Mixed", "1 23");
+assert(sprint(1, 2) + sprint(3), "1 23");
+
+ft("Print str");
+assert(sprint("str"), "str");
+
+ft("Print var");
+var x int;
+x = 23;
+assert(sprint(x), "23");
+
+
+
+
+
+
+ft("Recursive named");
 type node *(node, bool);
 var n node;
-print(n);
+assert(n, *());
+
 n = *(*(), true);
-print(n, n[0]);
-n[0] = *(*(), false);
-print(n, n[0]);
+assert(len(n), 2);
+assert(n[0], *());
+assert(n[1], true);
+
+//print(n, n[0]);
+//n[0] = *(*(), false);
+//print(n, n[0]);
 
 
 
@@ -2123,3 +2152,6 @@ t = *(*(*(), 42), 101);
 var t2 *(self, int);
 t2 = *(*(*(), 42), 101);
 //print(t2, t2[0], t2[0][0]);
+
+ft("len");
+assert(len("abc"), 3);
