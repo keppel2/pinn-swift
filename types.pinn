@@ -1,8 +1,8 @@
-ft("Literal zero", "");
+ft("Literal zero");
 0;
 assert(0, 0);
 
-ft("Literals", "");
+ft("Literals");
 42;
 assert(42, 42);
 101;
@@ -18,7 +18,7 @@ assert(42, 42);
 
 
 
-ft("Create int", "");
+ft("Create int");
 var x int;
 assert(x, x);
 assert(x, 0);
@@ -37,14 +37,14 @@ assert(x, 0);
 assert(y, 0);
 
 
-ft("Create and state", "");
+ft("Create and state");
 var x int;
 assert(x, 0);
 
 x;
 assert(x, 0);
 
-ft("Set x to 0", "");
+ft("Set x to 0");
 var x int;
 x = 0;
 assert(x, 0);
@@ -55,13 +55,13 @@ x = 42;
 assert(x, 42);
 assert(x, x);
 
-ft("Set x to itself", "");
+ft("Set x to itself");
 var x int;
 x = x;
 assert(x, 0);
 assert(x, x);
 
-ft("Create and set 2 ints", "");
+ft("Create and set 2 ints");
 var x int;
 var y int;
 y = x;
@@ -70,7 +70,7 @@ assert(x, 0);
 assert(y, 0);
 
 
-ft("Create and set 3 ints", "");
+ft("Create and set 3 ints");
 var x int;
 var y int;
 var z int;
@@ -81,7 +81,7 @@ assert(y, 0);
 assert(z, 0);
 
 
-ft("Create and set ints to each other", "");
+ft("Create and set ints to each other");
 var x int;
 var y int;
 x = y;
@@ -91,7 +91,7 @@ assert(y, 0);
 
 
 
-ft("Create 3 ints", "");
+ft("Create 3 ints");
 var x int;
 var y int;
 var z int;
@@ -106,7 +106,7 @@ assert(y, 0);
 assert(z, 0);
 
 
-ft("Multi set", "");
+ft("Multi set");
 var x int;
 var y int;
 x, y = 11, 42;
@@ -114,44 +114,44 @@ assert(x, 11);
 assert(42, y);
 
 
-ft("Boolean", "");
+ft("Boolean");
 false;
 true;
 assert(false, false);
 assert(true, true);
 
-ft("String", "");
+ft("String");
 "";
 "str";
 assert("str", "str");
 "a";
 
 
-ft("Boolean and String literals", "");
+ft("Boolean and String literals");
 true;
 false;
 "str";
 "";
 
-ft("Create bool", "");
+ft("Create bool");
 var b bool;
 assert(b, false);
 
 
-ft("Create string", "");
+ft("Create string");
 var str string;
 assert(str, "");
 
 //Create collections
 
-ft("Create array", "");
+ft("Create array");
 var x [1]int;
 
 ft("Add len");
 var x[5]int;
 assert(len(x), 5);
 
-ft("Create array 2", "");
+ft("Create array 2");
 var x [2]int;
 var y [7]int;
 
@@ -168,13 +168,13 @@ assert(bound, len(z));
 
 
 
-ft("Create comp array", "");
+ft("Create comp array");
 var x[1][1]int;
 var y[7][1]int;
 assert(len(y), 7);
 var z[1][7]int;
 
-ft("Array assign", "");
+ft("Array assign");
 var x[7]int;
 var y[7]int;
 x = y;
@@ -182,7 +182,7 @@ y = x;
 assert(len(x), 7);
 assert(len(y), 7);
 
-ft("Array index", "");
+ft("Array index");
 var x[3]int;
 x[2];
 assert(x[2], 0);
@@ -201,21 +201,21 @@ assert(na[0], 42);
 assert(na[1], 101);
 //slice
 
-ft("Create slice", "");
+ft("Create slice");
 var x []int;
 assert(len(x), 0);
 
-ft("Slice 2", "");
+ft("Slice 2");
 var x []int;
 var y []bool;
 assert(len(x), 0);
 assert(len(y), 0);
 
-ft("Slice composite", "");
+ft("Slice composite");
 var x [][]int;
 var y [][][]bool;
 
-ft("Slice assign", "");
+ft("Slice assign");
 var x, y []int;
 x = y;
 y = x;
@@ -238,17 +238,17 @@ assert(len(x), 1);
 
 //map
 
-ft("Create map", "");
+ft("Create map");
 var x [map]int;
 
-ft("Map 2", "");
+ft("Map 2");
 var x [map]bool;
 
-ft("Comp map", "");
+ft("Comp map");
 var x [map][map]int;
 var y [map][map][map]bool;
 
-ft("Map assign", "");
+ft("Map assign");
 var x, y [map]int;
 x = y;
 y = x;
@@ -260,30 +260,30 @@ j= i;
 assert(i, j);
 
 
-ft("Map index", "");
+ft("Map index");
 var x [map]int;
 assert(x["k"], 0);
 
 
 //tuple
 
-ft("Tuple", "");
+ft("Tuple");
 var t (int, int);
 assert(len(t), 2);
 
-ft("Tuple 2", "");
+ft("Tuple 2");
 var x (int, int, int);
 var y (int, bool);
 
-ft("Tuple composite", "");
+ft("Tuple composite");
 var x (int, (int, bool));
 
-ft("Tuple assign", "");
+ft("Tuple assign");
 var x, y (int, int);
 x = y;
 y = x;
 
-ft("Tuple index (both syntax)", "");
+ft("Tuple index (both syntax)");
 var x (int, int);
 x[0];
 assert(x[0], 0);
@@ -313,15 +313,15 @@ assert(y, true);
 
 //Pointer
 
-ft("Pointer", "");
+ft("Pointer");
 var p *(int);
 
-ft("Pointer 2", "");
+ft("Pointer 2");
 var x *(int, int);
 var y *(int, bool);
 var z *(bool);
 
-ft("Comp pointer", "");
+ft("Comp pointer");
 var p *(*(int), bool);
 var p2 *(*(int));
 
@@ -359,11 +359,11 @@ var s2 {b: bool, a: int};
 s1 = s2;
 s2 = s1;
 
-ft("Struct index get", "");
+ft("Struct index get");
 var s {a: int, b: bool};
 assert(s["a"], 0);
 
-ft("Struct index assign", "");
+ft("Struct index assign");
 var s {a: int, b: bool};
 s["a"] = 42;
 assert(s["a"], 42);
@@ -376,67 +376,67 @@ assert(s["a"], 42);
 
 
 // Array literal
-ft("Array literal", "");
+ft("Array literal");
 [0];
 
-ft("Array literal 2", "");
+ft("Array literal 2");
 [true];
 ["str"];
 [1, 2];
 [1, 5, 10];
 assert([1, 42][1], 42);
 
-ft("Array literal comp", "");
+ft("Array literal comp");
 assert([[0, 10], [2, 5]][0][1], 10);
 
 
 // Slice literal
-ft("Slice literal", "");
+ft("Slice literal");
 ...[];
 
-ft("Slice literal 2", "");
+ft("Slice literal 2");
 ...[true];
 ...["str"];
 ...[1, 2];
 ...[1, 5, 10];
 
-ft("Slice literal comp", "");
+ft("Slice literal comp");
 ...[...[0]];
 
 
 // Map literal
-ft("Map literal", "");
+ft("Map literal");
 {}
 
-ft("Map literal 2", "");
+ft("Map literal 2");
 {"a": "b", "c": "d", "e": "val"};
 {"key": 42};
 
-ft("Map compos", "");
+ft("Map compos");
 {"out": {"in": 5}};
 
 // Tuple literal
 
-ft("Tuple", "");
+ft("Tuple");
 ();
 
-ft("Tuple 2", "");
+ft("Tuple 2");
 (1, 5);
 
-ft("Tuple composite", "");
+ft("Tuple composite");
 ((1, true, false), 5);
 
 // Pointer literal
 
-ft("Pointer", "");
+ft("Pointer");
 *();
 
-ft("Pointer 2", "");
+ft("Pointer 2");
 *(3);
 *(false, true);
 *(10, 11, 102);
 
-ft("Pointer composite", "");
+ft("Pointer composite");
 *(*(true, false), 1, 5, "abc");
 
 // Struct literal
@@ -452,24 +452,24 @@ ft("Struct composite");
 
 // Mixes
 
-ft("Arrays null", "");
+ft("Arrays null");
 [*(), *(), *()];
 [...[], ...[]];
 [{}, {}];
 
-ft("Array mix null/non", "");
+ft("Array mix null/non");
 [*(42), *(101), *()];
 [...[], ...[101, 4]];
 [{"bcd": false}, {}, {"a": true}];
 
 
-ft("Slice null", "");
+ft("Slice null");
 ...[*(), *()];
 ...[...[], ...[]];
 ...[{}, {}];
 
 
-ft("Slice mix null/non", "");
+ft("Slice mix null/non");
 ...[*(101), *(), *(202)];
 ...[...[] , ...[true, false]];
 ...[{}, {"a": 42}];
@@ -482,7 +482,7 @@ ft("Map null");
 ft("Map mix");
 {a: *(42), b: *()};
 
-ft("Composite all", "");
+ft("Composite all");
 (1, 5, 101, [1, 5], ...[10, 12], {"key": 42}, *(12, 20));
 
 ft("Tuple null/mix");
@@ -662,24 +662,24 @@ ft("Repeat slicing");
 
 // Expressions
 
-ft("plus", "");
+ft("plus");
 assert(0 + 0, 0);
 
-ft("Plus 2", "");
+ft("Plus 2");
 assert(1 + 2 + 3, 6);
 assert("con" + "cat", "concat");
 assert("ab" + "cdef", "abcdef");
 
-ft("Equal", "");
+ft("Equal");
 at(0 == 0);
 
-ft("Equal 2", "");
+ft("Equal 2");
 assert(0 == 1, false);
 assert(true == false, false);
 at(true == true);
 assert("abc" == "abcdef", false);
 
-ft("LT", "");
+ft("LT");
 0 < 10;
 10 < 0;
 "ab" < "def";
@@ -745,25 +745,25 @@ assert(false ? 1 + 2 : true, true);
 
 //Control flow
 
-ft("Bare if", "");
+ft("Bare if");
 if true ;
 if false bad();
 
-ft("If other", "");
+ft("If other");
 if true 5;
 if false bad();
 
-ft("Else", "");
+ft("Else");
 if false bad(); else ;
 
 
 
 
 
-ft("Block", "");
+ft("Block");
 {}
 
-ft("Block 2", "");
+ft("Block 2");
 1;
 {
     2;
@@ -776,10 +776,10 @@ ft("Block 2", "");
 
 
 
-ft("While", "");
+ft("While");
 while false {}
 
-ft("If and while", "");
+ft("If and while");
 if false ;
   else
 while false {}
@@ -1116,7 +1116,7 @@ t2[1] = 101;
 print(t, t2);
 
 
-ft("Stress-mixed", "");
+ft("Stress-mixed");
 var v [2]((int, bool, [7](int, bool), [3][]int));
 
 ft("Create pointer", "*()*()");
@@ -1247,12 +1247,12 @@ print(m);
 m["k"]["k2"] = 101;
 print(m);
 
-ft("Maps and pointers", "");
+ft("Maps and pointers");
 var t *([map]int, bool);
 t = *({}, true);
 t[0]["b"] = 101;
 
-ft("map", "");
+ft("map");
 var t [map][map]int;
 t = {"a": {}};
 t["a"] = {"b": 5};
@@ -1384,7 +1384,7 @@ v = v2;
 print(v, v2, v == v2);
 
 
-ft("Stress--named array", "");
+ft("Stress--named array");
 type tA [3][2][3][2]decimal;
 type tB [2][5]tA;
 type tC [2]tA;
@@ -1532,12 +1532,14 @@ var ntdda [2][3][4]int;
 ntdda[0][1][2] = 42;
 print(ntdda);
 
-ft("Short declaration slice", "[10 23 42 101] [10 23 42 101]");
+ft("Short declaration slice");
 sda := ...[10, 23, 42, 101];
-print(sda, "");
+
+assert(stringValue(sda), "[10 23 42 101]");
 var sds []int;
+
 sds = sda;
-print(sds);
+assert(stringValue(sds), "[10 23 42 101]");
 
 ft("Short declaration nested slice", "[[2 1] [21 23 101]][[2 1] [21 23 101]]");
 sdns := ...[...[2, 1], ...[21, 23, 101]];
@@ -1638,10 +1640,10 @@ print(sInt[1]);
 
 
 //Block
-ft("Block", "");
+ft("Block");
 {}
 
-ft("Block 2", "");
+ft("Block 2");
 {
     0;
 }
@@ -1654,7 +1656,7 @@ ft("Block 2", "");
     false;
 }
 
-   ft("Block nest", "");
+   ft("Block nest");
 {
     {}
 }
@@ -1666,7 +1668,7 @@ ft("Block 2", "");
     }
 }
 
-   ft("Blocks share scope", "");
+   ft("Blocks share scope");
 {
     var x int;
 }
@@ -1840,16 +1842,13 @@ s := ar[:];
 s[0] = 101;
 print(ar, s);
 
-ft("Slice of arrays", "[[0 42] [101 0]] [[0 42] [0 42]] [[202 42] [0 42]]");
+ft("Slice of arrays");
 var soa [][2]int;
 
 soa[0][1] = 42;
 soa[1][0] = 101;
-print(soa, "");
 soa[1] = soa[0];
-print(soa, "");
 soa[0][0] = 202;
-print(soa);
 
 ft("Multi-dimensional array of int", "[[0 0 0] [0 0 42]]");
 var mda [2][3]int;
@@ -1881,20 +1880,20 @@ print(dnt);
 dnt[1][2]["aap"] = (42, "noot");
 print(dnt);
 
-ft("Pointer", "*() *(42)");
-var x *(int);
-x = *();
-print(x, "");
-x = *(42);
-print(x);
+//ft("Pointer");
+//var x *(int);
+//x = *();
+//print(x);
+//x = *(42);
+//print(x);
 
-ft("Tuple of pointer", "(*()) (*())(P)");
-var tup (*(int));
-print(tup, "");
-tup = ^(*());
-print(tup);
-tup = ^(*(42));
-print(tup);
+//ft("Tuple of pointer", "(*()) (*())(P)");
+//var tup (*(int));
+//print(tup);
+//tup = ^(*());
+//print(tup);
+//tup = ^(*(42));
+//print(tup);
 
 
 
@@ -1949,12 +1948,12 @@ print(z);
 
 
 
-ft("Pointer in tuple", "(0 *()) (0 P) *(true *()) ");
-var tup (int, *(bool, self));
-print(tup, "");
-tup[1] = *(true, *());
-print(tup, "");
-print(tup[1], "");
+//ft("Pointer in tuple", "(0 *()) (0 P) *(true *()) ");
+//var tup (int, *(bool, self));
+//print(tup);
+//tup[1] = *(true, *());
+//print(tup);
+//print(tup[1]);
 
 ft("Nested tuple short", "(4 (10 P))(10 P)*(12 *())");
 x := (4, (10, *(12, *())));
@@ -1982,69 +1981,69 @@ print(bub);
 
 
 
-ft("Binary search tree", "1 2 3 5 5 5 10 ");
-var i int;
-var mbst *(self, int, self);
-func tree_insert(x int) {
-    if mbst == *() {
-            mbst = *(*(), x, *());
-            return;
-    }
-        cur := mbst;
-        loop {
-            if i < cur[1] {
-                if cur[0] == *() {
-                    cur[0] = *(*(), i, *());
-                    break;
-                } else {
-                    cur = cur[0];
-                    continue;
-                }
-            } else if i >= cur[1] {
-                if cur[2] == *() {
-                    cur[2] = *(*(), i, *());
-                    break;
-                } else {
-                    cur = cur[2];
-                    continue;
-                }
-            }
-            debug();
-    }
-}
-for i = range [1, 5, 5, 5, 10, 2, 3] {
-    tree_insert(i);
-}
-func dfs(node  *(self, int, self)) {
-    if node == *() {
-        return;
-    }
-    dfs(node[0]);
-    print(node[1], "");
-    dfs(node[2]);
-}
-dfs(mbst);
+//ft("Binary search tree", "1 2 3 5 5 5 10 ");
+//var i int;
+//var mbst *(self, int, self);
+//func tree_insert(x int) {
+//    if mbst == *() {
+//            mbst = *(*(), x, *());
+//            return;
+//    }
+//        cur := mbst;
+//        loop {
+//            if i < cur[1] {
+//                if cur[0] == *() {
+//                    cur[0] = *(*(), i, *());
+//                    break;
+//                } else {
+//                    cur = cur[0];
+//                    continue;
+//                }
+//            } else if i >= cur[1] {
+//                if cur[2] == *() {
+//                    cur[2] = *(*(), i, *());
+//                    break;
+//                } else {
+//                    cur = cur[2];
+//                    continue;
+//                }
+//            }
+//            debug();
+//    }
+//}
+//for i = range [1, 5, 5, 5, 10, 2, 3] {
+//    tree_insert(i);
+//}
+//func dfs(node  *(self, int, self)) {
+//    if node == *() {
+//        return;
+//    }
+//    dfs(node[0]);
+//    print(node[1]);
+//    dfs(node[2]);
+//}
+//dfs(mbst);
+//
 
 
-
-ft("Linked list", "5 8 23 ");
-var LL *(int, self);
-LL = *(5, *());
-base := LL;
-
-LL[1] = *(8, *());
-
-LL = LL[1];
-LL[1] = *(23, *());
-func pll(node *(int, self)) {
-    if node == *() {
-        return;
-    }
-    print(node[0], "");
-    pll(node[1]);
-}
-pll(base);
-
+//ft("Linked list", "5 8 23 ");
+//var LL *(int, self);
+//LL = *(5, *());
+//base := LL;
+//
+//LL[1] = *(8, *());
+//
+//LL = LL[1];
+//LL[1] = *(23, *());
+//func pll(node *(int, self)) {
+//    if node == *() {
+//        return;
+//    }
+//    print(node[0]);
+//    pll(node[1]);
+//}
+//pll(base);
+//
 
 ft("Nested pointer types, depth and flat", "*(aap *() P)*(noot *() *())");
 npt := *("aap", *(), *("noot", *(), *()));
@@ -2070,7 +2069,7 @@ println("Positives ok.");
 
 
 
-ft("", "");
+ft("");
 
 
 
@@ -2135,14 +2134,14 @@ var y tInt;
 x = 12;
 y = x;
 print(x, y);
-ft("Named type array equality", "true false");
-type tArray [2]int;
-var a tArray;
-var b tArray;
-print(a == b, "");
-a[0] = 23;
-print(a == b);
-//ng("");
+//ft("Named type array equality", "true false");
+//type tArray [2]int;
+//var a tArray;
+//var b tArray;
+//print(a == b);
+//a[0] = 23;
+//print(a == b);
+////ng("");
 
 
 ft("Classify");
