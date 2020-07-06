@@ -837,6 +837,12 @@ const X = 12;
 
 assert(X, 12);
 
+ft("Constant collection");
+const AR = [[1, 5], [10, 21]];
+var a[2]int;
+a = AR[0];
+a[0] = 42;
+
 //Blank
 
 ft("Blank");
@@ -1343,17 +1349,10 @@ f(z);
 g(z);
 
 
-
-//ft("Pointer in tuple", "(0 *()) (0 P) *(true *()) ");
-//var tup (int, *(bool, self));
-//print(tup);
-//tup[1] = *(true, *());
-//print(tup);
-//print(tup[1]);
-
 ft("Nested tuple short");
 x := (4, (10, *(12, *())));
-
+assert(x[0], 4);
+//assert(x[0][0], 10); BUG
 
 
 ft("Bubble sort");
@@ -1438,20 +1437,10 @@ assert(bub, [1, 20, 101, 202, 1081]);
 //
 
 
-//ft("Doubly linked list", "*(*() 5 P)*(P 7 *())*(*() 5 P)");
+//ft("Doubly linked list");
 //var dll *(self, int, self);
 //dll = *(*(), 5, *());
 //dll[2] = *(dll, 7, *());
-//print(dll);
-//print(dll[2]);
-//print(dll[2][0]);
-
-ft("", "
-Positives ok.
-");
-
-println("");
-println("Positives ok.");
 
 
 

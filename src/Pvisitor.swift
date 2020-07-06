@@ -745,11 +745,12 @@ class Pvisitor {
             guard let v = getPv(str) else {
                 throw Perr(EUNDECLARED, sctx)
             }
+            if v.const {
+                throw Perr(ECONST)
+            }
             var cv = v
             for e in sctx.expr() {
-                guard let pv = try visitPval(e) else {
-                    throw Perr(ENIL, sctx)
-                }
+                let pv = try _visitPval(e) 
                 let kt: Ktype = try tryCast(pv)
                 cv = try cv.get(kt, true)
             }
@@ -1154,7 +1155,6 @@ class Pvisitor {
             guard let lh = try visitPval(sctx.lExpr()!) else {
                 throw Perr(ENIL, sctx)
             }
-//            lh.resolve();
             let rh = try _visitPval(sctx.expr()!)
             
             let op = sctx.children![sctx.children!.count - 3].getText()
@@ -1190,6 +1190,7 @@ class Pvisitor {
         case let sctx as PinnParser.DoubleSetContext:
             
             let lh = try _visitPval(sctx.lExpr()!)
+            
             let rhsv: Int
             let str = Self.childToText(sctx.getChild(1)!)
             switch str {

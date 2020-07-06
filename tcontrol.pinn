@@ -138,11 +138,12 @@ func deepReturn() int {
 }
 assert(deepReturn(), 203);
 
-ft("3 part for statement", "10,12,14,");
+ft("3 part for statement");
+s := "";
 for forX := 10; forX < 15; forX += 2 {
-    print(forX);
-    print(",");
+    s += sprint(forX, ",");
 }
+assert(s, "10 ,12 ,14 ,");
 
 ft("For range key value", "0 abcd.1 xyz.2 hello.");
 var key int;

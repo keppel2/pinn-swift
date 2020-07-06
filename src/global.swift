@@ -1,4 +1,5 @@
 //import Foundation
+let FNAME = "a"
 var test = false
 var gparser: PinnParser? = nil
 var pvisitor: Pvisitor? = nil

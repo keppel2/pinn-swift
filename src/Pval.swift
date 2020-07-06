@@ -2,7 +2,7 @@ import Antlr4
 
 class Pval {
     private var e: Pvalp
-    private var const = false
+    var const = false
     private init(_ x: Pvalp) {
         e = x
     }
@@ -167,9 +167,9 @@ class Pval {
             switch g {
             case .gSlice(let k):
                 if lh && v1v == e.con.count() {
-                    if const {
-                        throw Perr(ECONST)
-                    }
+//                    if const {
+//                        throw Perr(ECONST)
+//                    }
                     try e.con.appendCon(Pval(e.prc, k))
                 }
                 fallthrough
@@ -188,9 +188,9 @@ class Pval {
 //                    return pv
 //                } else {
                     let pv = e.con.getAr()[v1v]
-                if const {
-                    pv.const = true
-                }
+//                if const {
+//                    pv.const = true
+//                }
                     return pv
 //            }
             default:
@@ -200,9 +200,9 @@ class Pval {
             if case .gMap(let k) = g {
                 if e.con.getMap()[v1v] == nil {
                     if lh {
-                        if const {
-                            throw Perr(ECONST)
-                        }
+//                        if const {
+//                            throw Perr(ECONST)
+//                        }
                         try e.con.setCon(v1v, Pval(e.prc, k))
                     } else {
                         return try Pval(e.prc, k)
