@@ -1435,10 +1435,10 @@ print({"foo": 42});
 ft("Print");
 assert(sprint(""), "");
 
-ft("Print zero", "0");
+ft("Print zero");
 assert(sprint(0), "0");
 
-ft("Mixed", "1 23");
+ft("Mixed");
 assert(sprint(1, 2) + sprint(3), "1 23");
 
 ft("Print str");
