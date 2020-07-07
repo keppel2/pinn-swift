@@ -126,6 +126,9 @@ ft("String");
 assert("str", "str");
 "a";
 
+ft("String index");
+assert("str"[1], "t");
+
 
 ft("Boolean and String literals");
 true;
@@ -283,19 +286,45 @@ var x, y (int, int);
 x = y;
 y = x;
 
-ft("Tuple index (both syntax)");
+
+
+
+
+
+
+
+
+ft("Tuple index get");
 var x (int, int);
 x[0];
 assert(x[0], 0);
-x[0] = 0;
-assert(x[0], 0);
-assert(x.1, 0);
 
+
+//tuple index assign
+ft("Tuple assignments");
+var tup2 ([]int, []string);
+tup2[0] = ...[3, 5];
+tup2[1] = ["aap", "noot"][:];
+
+
+
+ft("Tuple index assign");
 var y ((int, int), int);
 y[0][1] = 12;
 y[1] = 23;
 assert(y[0][1], 12);
 assert(y[1], 23);
+
+
+
+ft("Tuple copies");
+var tup (int, bool);
+var tup2 (int, bool);
+tup[0] = 42;
+tup2 = tup;
+tup2[1] = true;
+
+
 ft("Tuple destructure");
 var x, y int;
 (x, y) = (23, 42);
@@ -331,6 +360,12 @@ var y *(int);
 x = y;
 y = x;
 
+ft("Pointer as nullable it:");
+var pi *(int);
+pi = *(42);
+assert(pi[0], 42);
+
+
 ft("Pointer index (literal needed)");
 var p *(int, int);
 p = *(1, 4);
@@ -362,12 +397,14 @@ s2 = s1;
 ft("Struct index get");
 var s {a: int, b: bool};
 assert(s["a"], 0);
+assert(s["b"], false);
 
 ft("Struct index assign");
 var s {a: int, b: bool};
 s["a"] = 42;
 assert(s["a"], 42);
-
+s["b"] = true;
+assert(s["b"], true);
 
 
 
@@ -433,7 +470,6 @@ ft("Pointer");
 
 ft("Pointer 2");
 *(3);
-*(false, true);
 *(10, 11, 102);
 
 ft("Pointer composite");
@@ -528,14 +564,40 @@ z2 = ...[...[1, 2], ...[10, 11]];
 ft("Map");
 var x[map]int;
 x = {a: 42};
+assert(x["a"], 42);
+
 var y[map][map]bool;
 y = {a: {b: true}, b: {z: false, zz: true}};
+assert(y["a"]["b"], true);
 
 ft("Tuple");
+
+
+
+
 var x (int, bool, string);
 x = (42, true, "str");
+assert (x.0, 42);
+
 var y ((int, bool), string);
 y = ((23, false), "ing");
+assert(y[0][0], 23);
+
+
+
+
+
+ft("Tuple short declaration");
+tup := (42, true, "str", 1.5);
+
+
+ft("Set tuple");
+tup := (42, true, "str", 1.5);
+tup[0] = 23;
+tup[1] = false;
+
+
+
 
 ft("Pointer");
 var x *(int);
@@ -546,6 +608,7 @@ y = *(*(42, true), "str");
 ft("Structure");
 var x {x: int, y: int, c: string};
 x = *{x: 10, y: 20, c: "green"};
+assert(x["c"], "green");
 
 // Short declaration
 
@@ -568,6 +631,14 @@ assert(y, 0);
 y = 2;
 assert(y, 2);
 assert(x, 0);
+
+ft("Short declaration copies integer");
+sdci1 := 5;
+sdci2 := sdci1;
+sdci1 = 10;
+assert(sdci1, 10);
+assert(sdci2, 5);
+
 
 ft("Short list");
 x, y := 10, 105;
@@ -622,7 +693,10 @@ at(sequal(...[1, 5], ...[1, 5]));
 at(!sequal(...[5], ...[1]));
 at(!sequal(...[5], ...[5, 5]));
 
-
+ft("API: max");
+assert(max(1, 4), 4);
+assert(max(42, 42), 42);
+assert(max(8, 7), 8);
 
 //Slicing
 
@@ -632,7 +706,8 @@ x[0:2];
 
 ft("Slicing 2");
 var x[3]int;
-x[0:0];
+x[2];
+x[1:1];
 x[:3];
 x[1:];
 x[:];
@@ -641,18 +716,20 @@ ft("At slicing");
 var x[3]int;
 x[0@2];
 x[@2];
+//x[1@];
 
 ft("Slice a slice");
 var x[]int;
 x[0] = 2;
 x[1] = 23;
 x[2] = 101;
-x[0@2];
+at(sequal(x[0@1], ...[2, 23]));
 x[:];
 
 ft("String slice");
-"abc"[0:2];
-"a"[0:0];
+assert("abc"[0@2], "abc");
+
+assert("a"[0:0], "");
 
 ft("Repeat slicing");
 "abcd"[1:4][0:1];
@@ -1019,34 +1096,30 @@ assert(n[1], true);
 
 
 
-
-
-
-
-
-
-
-ft("Short slice equals");
-s := ...[5];
-a := ...[5];
-a = s;
-a = ...[10];
-
-
 ft("Nested types, declared");
 var cdn42 [3][]bool;
 var cdns42 []bool;
 cdns42[0] = true;
 cdn42[0] = cdns42;
 
+
+ft("Short slice equals");
+s := ...[15];
+a := ...[35];
+a = s;
+assert(a, s);
+at(sequal(a, s));
+assert(a[0], 15);
+assert(len(a), 1);
+
 ft("Short declaration slice");
 sda := ...[10, 23, 42, 101];
 
-assert(stringValue(sda), "[10 23 42 101]");
+assert(sprint(sda), "[10 23 42 101]");
 var sds []int;
 
 sds = sda;
-assert(stringValue(sds), "[10 23 42 101]");
+assert(sprint(sds), "[10 23 42 101]");
 
 ft("Short declaration nested slice");
 sdns := ...[...[2, 1], ...[21, 23, 101]];
@@ -1071,14 +1144,12 @@ assert(len(assts), 2);
 ft("Assign larger slice to slice plus length");
 alsts := ...[24, 30];
 alsts = ...[202, 302, 502];
+at(sequal(alsts, ...[202, 302, 502]));
 
 
 
 
 
-ft("Pointer as nullable it:");
-var pi *(int);
-pi = *(42);
 
 //Block
 ft("Block");
@@ -1133,6 +1204,8 @@ var glob [GLOB] bool;
 giih(glob);
 
 
+
+
 ft("Array copies in call");
 func arFunc(ar [1]int) {
     ar[0] = 42;
@@ -1159,30 +1232,6 @@ mapShare := { "aap": 42};
 mFunc(mapShare);
 
 
-ft("Tuple");
-var tup23 (int, bool, string);
-
-ft("Tuple copies");
-var tup (int, bool);
-var tup2 (int, bool);
-tup[0] = 42;
-tup2 = tup;
-tup2[1] = true;
-
-ft("Tuple assignments");
-var tup2 ([]int, []string);
-tup2[0] = ...[3, 5];
-tup2[1] = ["aap", "noot"][:];
-
-
-ft("Tuple short declaration");
-tup := (42, true, "str", 1.5);
-
-
-ft("Set tuple");
-tup := (42, true, "str", 1.5);
-tup[0] = 23;
-tup[1] = false;
 
 ft("Postfix minus array tuple, map");
 pfA := [50];
@@ -1202,10 +1251,6 @@ func garf() {
     gar = [10, 12];
 }
 
-ft("Short declaration copies integer");
-sdci1 := 5;
-sdci2 := sdci1;
-sdci1 = 10;
 
 
 ft("Slicing shares");
@@ -1247,32 +1292,10 @@ mda[1][2] = 42;
 ft("Multi-dimensional tuple");
 var mdt ([5]int, (bool, int));
 mdt[0][2] = 42;
+assert(mdt[0], [0, 0, 42, 0, 0]);
 mdt[1][1] = 101;
 mdt[1][0] = true;
-
-
-
-ft("Multi-dimensional tuple set compound type");
-var mdt ([5]int, (bool, int));
-mdt[0][2] = 42;
-mdt[1][1] = 101;
-mdt[1][0] = true;
-var mdt2 ([5]int, (bool, int));
-mdt[1] = (true, 202);
-
-
-
-
-
-
-ft("Pointer compare");
-x := *(4);
-y := *(4);
-z := y;
-y[0] = 12;
-
-
-
+assert(mdt[1], (true, 101));
 
 
 ft("Assignability of recursive pointers");
@@ -1291,6 +1314,7 @@ var p2 *(int, int);
 p = *(23, 42);
 p2 = p;
 p2[0] = 101;
+assert(p[0], 101);
 
 ft("Function copies pointer");
 func f(p *(int)) {
@@ -1302,7 +1326,9 @@ func g(p *(int)) {
 var z *(int);
 z = *(23);
 f(z);
+assert(z[0], 23);
 g(z);
+assert(z[0], 202);
 
 
 ft("Nested tuple short");
@@ -1494,3 +1520,6 @@ assert(comp, 1);
 ft("Order of ops", "9 7");
 assert(1 + 2 * 3, 9);
 assert(1 + (2 * 3), 7);
+
+//Short slicing
+

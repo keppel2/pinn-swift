@@ -27,10 +27,11 @@ class Pvisitor {
             "assert": { sctx, pv, s in
                 try assertPvals(s, 2)
                 if !s[0].gg().gEquivalent(s[1].gg()) {
-                    throw Perr(ETYPE, sctx)
+                    throw try Perr(ETYPE + " " + s[0].string() + " " + s[1].string(), sctx)
                 }
                 if try !s[0].equal(s[1]) {
-                    throw Perr(ETEST_FAIL)
+                    throw try Perr(ETEST_FAIL + " " + s[0].string() + " " + s[1].string(), sctx)
+
                 }
                 return nil
             },

@@ -197,21 +197,22 @@ for forX := 10; forX < 15; forX += 2 {
 }
 assert(s, "10 ,12 ,14 ,");
 
-ft("For range key value", "0 abcd.1 xyz.2 hello.");
+
+ft("For range key value");
 var key int;
 var value string;
 arS := ["abcd", "xyz", "hello"];
+var s string;
 for key, value = range arS {
-    print(key, value);print(".");
+    s += sprint(key, value, ",");
 }
-
+assert(s, "0 abcd ,1 xyz ,2 hello ,");
 
 ft("For loop without init", "In for");
 var bFor bool;
 for ; bFor != true; bFor = !bFor {
     print("In for");
 }
-
 
 
 ft("While countdown", "50.40.30.20.");
