@@ -959,6 +959,10 @@ assert(true ? 2 : 1, 2);
 ft("Conditional 2");
 assert(false ? 1 + 2 : true, true);
 
+ft("in");
+at(5 in (4@6));
+nat(7 in (1@6));
+at(5 in [1, 5, 10]);
 
 //Constant
 

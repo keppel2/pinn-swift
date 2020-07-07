@@ -24,6 +24,14 @@ class Pvisitor {
                 }
                 return nil
             },
+            "nat": { sctx, pv, s in
+                try assertPvals(s, 1);
+                let b: Bool = try tryCast(s[0]);
+                if b {
+                    throw Perr(EASSERTF, sctx);
+                }
+                return nil
+            },
             "assert": { sctx, pv, s in
                 try assertPvals(s, 2)
                 if !s[0].gg().gEquivalent(s[1].gg()) {
@@ -221,6 +229,26 @@ class Pvisitor {
              return Pval(sctx, result)
          default: break
          }
+        
+        if str == "in" {
+            switch rhs.gg() {
+            case .gSlice(let t), .gArray(let t, let _):
+                if !lhs.gg().gEquivalent(t.gtype) {
+                    throw Perr(ETYPE, sctx)
+                }
+                                var result = false
+                for x in try 0..<rhs.getCount() {
+                    if try lhs.equal(rhs.get(x)) {
+                        result = true
+                        break
+                    }
+                }
+                return Pval(sctx, result)
+
+                
+            default: aden()
+            }
+        }
          
          let lhsv: Int = try tryCast(lhs)
          var rhsv: Int = try tryCast(rhs)

@@ -50,7 +50,7 @@ expr
   |   THREEDOT? LSQUARE exprList? RSQUARE #arrayLiteral
   | AST? '{' (objectPair ( ',' objectPair )*)? '}' #objectLiteral
   | ('+' | '-' | '!' ) expr #unaryExpr
-  | expr ('+' | '-' | AST | '/' | '%' | '<<' | '>>' | '&' | '|' | '^' ) expr #intExpr
+  | expr ('+' | '-' | AST | '/' | '%' | '<<' | '>>' | '&' | '|' | '^' | 'in' ) expr #intExpr
   | expr ('==' | '!=' | '>' | '<' | '>=' | '<=' ) expr #compExpr
   | expr ('&&' | '||') expr #boolExpr
   |   ID LPAREN exprList? RPAREN #callExpr
