@@ -48,6 +48,15 @@ ft("Set x to 0");
 var x int;
 x = 0;
 assert(x, 0);
+ft("Int copies by value");
+var x int;
+var y int;
+x = 23;
+y = x;
+y = 42;
+assert(x, 23);
+assert(y, 42);
+
 
 ft("Set to x to 42");
 var x int;
@@ -113,7 +122,7 @@ x, y = 11, 42;
 assert(x, 11);
 assert(42, y);
 
-
+//BOOL AND STRING
 ft("Boolean");
 false;
 true;
@@ -268,7 +277,7 @@ var x [map]int;
 assert(x["k"], 0);
 
 
-//tuple
+//tuple and vars
 
 ft("Tuple");
 var t (int, int);
@@ -286,26 +295,22 @@ var x, y (int, int);
 x = y;
 y = x;
 
-
-
-
-
-
-
-
-
 ft("Tuple index get");
 var x (int, int);
 x[0];
 assert(x[0], 0);
-
+ft("Tuple index assign");
+var x (int, bool);
+x[0] = 42;
+assert(x[0], 42);
 
 //tuple index assign
 ft("Tuple assignments");
 var tup2 ([]int, []string);
 tup2[0] = ...[3, 5];
-tup2[1] = ["aap", "noot"][:];
-
+tup2[1] = ...["aap", "noot"];
+assert(tup2[0][1], 5);
+assert(tup2[1][0], "aap");
 
 
 ft("Tuple index assign");
@@ -419,12 +424,28 @@ ft("Array literal");
 ft("Array literal 2");
 [true];
 ["str"];
-[1, 2];
-[1, 5, 10];
 assert([1, 42][1], 42);
 
 ft("Array literal comp");
 assert([[0, 10], [2, 5]][0][1], 10);
+
+
+ft("Array");
+var x [1]int;
+x = [0];
+assert(x, [0]);
+var y [2]int;
+y = [0, 0];
+var z [3]bool;
+z = [false, true, false];
+assert(z[1], true);
+assert(len(z), 3);
+var comp [2][3]int;
+comp = [[1, 2, 5], [10, 12, 13]];
+assert(len(comp), 2);
+assert(comp[1][1], 12);
+
+
 
 
 // Slice literal
@@ -433,12 +454,45 @@ ft("Slice literal");
 
 ft("Slice literal 2");
 ...[true];
-...["str"];
 ...[1, 2];
 ...[1, 5, 10];
 
 ft("Slice literal comp");
 ...[...[0]];
+
+
+ft("Slicing shares");
+var ssAr1, ssAr2 []int;
+ssAr1 = ...[1, 10, 101, 202];
+ssAr2 = ssAr1[1@2];
+ssAr2[0] = 777;
+
+ft("Slice of arrays does not share (bug)");
+var j [][1]int;
+j[0] = [23];
+var k [1]int;
+k = j[0];
+k[0] = 42;
+
+ft("Slice");
+var x[]int;
+x = ...[0];
+x = ...[12, 42];
+assert(len(x), 2);
+assert(x[0], 12);
+assert(x[1], 42);
+
+at(sequal(x, ...[12, 42]));
+
+var y[]bool;
+y = ...[false, true, false];
+var z[]string;
+z = ...["abc", "def"];
+var z2[][]int;
+z2 = ...[...[1, 2], ...[10, 11]];
+
+
+
 
 
 // Map literal
@@ -501,121 +555,29 @@ ft("Array mix null/non");
 
 ft("Slice null");
 ...[*(), *()];
-...[...[], ...[]];
-...[{}, {}];
-
 
 ft("Slice mix null/non");
 ...[*(101), *(), *(202)];
-...[...[] , ...[true, false]];
 ...[{}, {"a": 42}];
 
 ft("Map null");
 {a: *(), b: *()};
 {a: ...[], b: ...[]};
-{a: {}, b: {}};
 
 ft("Map mix");
 {a: *(42), b: *()};
 
-ft("Composite all");
-(1, 5, 101, [1, 5], ...[10, 12], {"key": 42}, *(12, 20));
 
-ft("Tuple null/mix");
-(*(), *());
-(...[], ...[5]);
-
-ft("Pointer null/mix");
-*(*(), *());
-*({}, {a: 42});
-
-
-
-// Collection literal assignment
-
-ft("Array");
-var x [1]int;
-x = [0];
-var y [2]int;
-y = [0, 0];
-var z [3]bool;
-z = [false, true, false];
-assert(z[1], true);
-//assert(len(z), 3);
-var comp [2][3]int;
-comp = [[1, 2, 5], [10, 12, 13]];
-ft("Slice");
-var x[]int;
-x = ...[0];
-x = ...[12, 42];
-assert(len(x), 2);
-assert(x[0], 12);
-assert(x[1], 42);
-
-at(sequal(x, ...[12, 42]));
-
-var y[]bool;
-y = ...[false, true, false];
-var z[]string;
-z = ...["abc", "def"];
-var z2[][]int;
-z2 = ...[...[1, 2], ...[10, 11]];
-
-ft("Map");
-var x[map]int;
-x = {a: 42};
-assert(x["a"], 42);
-
-var y[map][map]bool;
-y = {a: {b: true}, b: {z: false, zz: true}};
-assert(y["a"]["b"], true);
-
-ft("Tuple");
-
-
-
-
-var x (int, bool, string);
-x = (42, true, "str");
-assert (x.0, 42);
-
-var y ((int, bool), string);
-y = ((23, false), "ing");
-assert(y[0][0], 23);
-
-
-
-
-
-ft("Tuple short declaration");
-tup := (42, true, "str", 1.5);
-
-
-ft("Set tuple");
-tup := (42, true, "str", 1.5);
-tup[0] = 23;
-tup[1] = false;
-
-
-
-
-ft("Pointer");
-var x *(int);
-x = *(101);
-var y *(*(int, bool), string);
-y = *(*(42, true), "str");
-
-ft("Structure");
-var x {x: int, y: int, c: string};
-x = *{x: 10, y: 20, c: "green"};
-assert(x["c"], "green");
 
 // Short declaration
 
 ft("Short");
 x := 0;
-x = 0;
 assert(x, 0);
+
+ft("ShortB");
+x := 42;
+assert(x, 42);
 
 ft("Short declaration");
 var x int;
@@ -623,6 +585,13 @@ y := 4;
 x = y;
 assert(x, 4);
 assert(y, 4);
+
+ft("Short 2");
+a := true;
+assert(a, true);
+b := "spam";
+assert(b, "spam");
+
 
 ft("Short 3");
 var x int;
@@ -640,19 +609,161 @@ assert(sdci1, 10);
 assert(sdci2, 5);
 
 
+
+
+
+
+
+
+
 ft("Short list");
 x, y := 10, 105;
 assert(x, 10);
 assert(y, 105);
 
+
+//Short slice
+
+ft("Short slice equals");
+s := ...[15];
+a := ...[35];
+assert(a[0], 35);
+s = a;
+assert(s, a);
+at(sequal(s, a));
+assert(s[0], 35);
+assert(len(a), 1);
+
+ft("Slice to slice shares");
+sss := ...[7, 23, 42];
+sss2 := sss[:];
+sss2[0] = 101;
+
+
+
+
+// Collection literal assignment
+
+
+
+ft("Array short literal assign");
+
+ar := [1, 10];
+comp := [[1, 120], [2, 121], [3, 123]];
+assert(len(comp), 3);
+
+
+
+
+
+ft("Short declaration slice");
+sda := ...[10, 23, 42, 101];
+
+assert(sprint(sda), "[10 23 42 101]");
+var sds []int;
+
+sds = sda;
+assert(sprint(sds), "[10 23 42 101]");
+
+
+
+
+
+
+
+
+ft("Short declaration nested slice");
+sdns := ...[...[2, 1], ...[21, 23, 101]];
+var sdns2 [][]int;
+sdns2 = sdns;
+
+
+
+ft("Slicing can be repeated and still shares both ways");
+s := ...[101, 42];
+s2 := s[:][:][:];
+s2[0] = 201;
+assert(s[0], 201);
+s[1] = 301;
+assert(s2[1], 301);
+
+ft("Assign smaller slice to slice plus length");
+assts := ...[24, 30, 101];
+assts = [202, 302][:];
+assert(len(assts), 2);
+
+ft("Assign larger slice to slice plus length");
+alsts := ...[24, 30];
+alsts = ...[202, 302, 502];
+at(sequal(alsts, ...[202, 302, 502]));
+
+
+
+
+
+
+
+
+
+
+
+
+
+ft("Map");
+var x[map]int;
+x = {a: 42};
+assert(x["a"], 42);
+
+var y[map][map]bool;
+y = {a: {b: true}, b: {z: false, zz: true}};
+assert(y["a"]["b"], true);
+
+ft("Tuple assign literal");
+
+var x (int, bool, string);
+x = (42, true, "str");
+assert (x.0, 42);
+
+var y ((int, bool), string);
+y = ((23, false), "ing");
+assert(y[0][0], 23);
+
+ft("Tuple short declaration");
+tup := (42, true, "str");
+assert(tup[1], true);
 ft("Short destructure");
 (x, y) := (10, true);
 assert(x, 10);
 assert(y, true);
 
+ft("Short declaration and set tuple");
+tup := (42, true, "str");
+assert(tup[1], true);
+tup[0] = 23;
+tup[1] = false;
+assert(tup[0], 23);
 
 
 
+
+ft("Pointer assign literal");
+var x *(int);
+x = *(101);
+var y *(*(int, bool), string);
+y = *(*(42, true), "str");
+
+ft("Structure");
+var x {x: int, y: int, c: string};
+x = *{x: 10, y: 20, c: "green"};
+assert(x["c"], "green");
+
+
+
+
+
+
+ft("Composite all");
+(1, 5, 101, [1, 5], ...[10, 12], {"key": 42}, *(12, 20));
 
 
 
@@ -749,6 +860,10 @@ ft("Repeat slicing");
 
 // Expressions
 
+
+
+
+
 ft("plus");
 assert(0 + 0, 0);
 
@@ -765,6 +880,11 @@ assert(0 == 1, false);
 assert(true == false, false);
 at(true == true);
 assert("abc" == "abcdef", false);
+
+ft("Equal 3");
+at([[1, 5], [23, 42]] == [[1, 5], [23, 42]]);
+
+
 
 ft("LT");
 0 < 10;
@@ -807,7 +927,7 @@ assert(2 <= 3, true);
 
 ft("Range expr");
 at(sequal(0:1, ...[0]));
-//0:0;
+
 
 
 ft("Range 2");
@@ -816,14 +936,18 @@ at(sequal(1@3, ...[1, 2, 3]));
 
 ft("Range equals");
 var x []int;
-x = 2:10;
-x = 10@20;
+x = 1:3;
+assert(x[0], 1);
+x = 3:5;
+assert(len(x), 2);
 
 ft("Paren");
 (0);
+assert((42), 42);
 
 ft("Paren comp");
 ((0));
+assert(((101)), 101);
 
 ft("Conditional");
 assert(true ? 2 : 1, 2);
@@ -831,36 +955,6 @@ assert(true ? 2 : 1, 2);
 ft("Conditional 2");
 assert(false ? 1 + 2 : true, true);
 
-
-
-
-
-
-
-
-
-ft("Int copies by value");
-var x int;
-var y int;
-x = 23;
-y = x;
-y = 42;
-assert(x, 23);
-assert(y, 42);
-
-ft("Create and tuple destructure");
-var x int;
-var y bool;
-(x, y) = (42, true);
-assert(x, 42);
-assert(y, true);
-
-
-ft("Multi swap");
-x, y := 42, 101;
-x, y = y, x;
-assert(x, 101);
-assert(y, 42);
 
 //Constant
 
@@ -912,7 +1006,7 @@ assert(1.75 - 0.25, 1.5);
 
 
 
-//Named
+//Named START
 ft("Named type");
 type tInt int;
 
@@ -1096,58 +1190,6 @@ assert(n[1], true);
 
 
 
-ft("Nested types, declared");
-var cdn42 [3][]bool;
-var cdns42 []bool;
-cdns42[0] = true;
-cdn42[0] = cdns42;
-
-
-ft("Short slice equals");
-s := ...[15];
-a := ...[35];
-a = s;
-assert(a, s);
-at(sequal(a, s));
-assert(a[0], 15);
-assert(len(a), 1);
-
-ft("Short declaration slice");
-sda := ...[10, 23, 42, 101];
-
-assert(sprint(sda), "[10 23 42 101]");
-var sds []int;
-
-sds = sda;
-assert(sprint(sds), "[10 23 42 101]");
-
-ft("Short declaration nested slice");
-sdns := ...[...[2, 1], ...[21, 23, 101]];
-var sdns2 [][]int;
-sdns2 = sdns;
-
-
-
-ft("Slicing can be repeated and still shares both ways");
-s := ...[101, 42];
-s2 := s[:][:][:];
-s2[0] = 201;
-assert(s[0], 201);
-s[1] = 301;
-assert(s2[1], 301);
-
-ft("Assign smaller slice to slice plus length");
-assts := ...[24, 30, 101];
-assts = [202, 302][:];
-assert(len(assts), 2);
-
-ft("Assign larger slice to slice plus length");
-alsts := ...[24, 30];
-alsts = ...[202, 302, 502];
-at(sequal(alsts, ...[202, 302, 502]));
-
-
-
 
 
 
@@ -1253,23 +1295,6 @@ func garf() {
 
 
 
-ft("Slicing shares");
-ssAr1 := ...[1, 10, 101, 202];
-ssAr2 := ssAr1[1@2];
-ssAr2[0] = 777;
-
-ft("Slice of arrays does not share (bug)");
-var j [][1]int;
-j[0] = [23];
-var k [1]int;
-k = j[0];
-k[0] = 42;
-
-
-ft("Slice to slice shares");
-sss := ...[7, 23, 42];
-sss2 := sss[:];
-sss2[0] = 101;
 
 ft("Array to slice copies (fix)");
 ar := [7, 42];

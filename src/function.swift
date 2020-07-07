@@ -48,8 +48,7 @@ func execute() throws  {
         }
         return
     }
-    var fname = test ? prefix + "types.pinn" : s
-    fname = prefix + FNAME + ".pinn"
+    var fname = s == "-c" ? FNAME : s
     
     let myinput = fnToString(fname)
     try exe(myinput, plib)
