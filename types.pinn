@@ -508,7 +508,6 @@ assert(z[1], true);
 //assert(len(z), 3);
 var comp [2][3]int;
 comp = [[1, 2, 5], [10, 12, 13]];
-
 ft("Slice");
 var x[]int;
 x = ...[0];
@@ -516,6 +515,8 @@ x = ...[12, 42];
 assert(len(x), 2);
 assert(x[0], 12);
 assert(x[1], 42);
+
+at(sequal(x, ...[12, 42]));
 
 var y[]bool;
 y = ...[false, true, false];

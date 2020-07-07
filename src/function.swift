@@ -1,26 +1,28 @@
 import Foundation
 import Antlr4
 
-func exe(_ s: String, _ failReason: String? = nil) throws {
+func exe(_ s: String, _ api: Pvisitor? = nil) throws -> Pvisitor {
     let (tree, parser) = parse(s)
-    gparser = parser
+//    gparser = parser
+    let pv = try Pvisitor(parser)
+    if let apip = api {
+        pv.apifkmap = apip.fkmap
+//        pv.fkmap = apip.fkmap
+    }
+//    pv.reset()
+    
     if tree != nil {
         //        gtree = tree
-        let pv = try Pvisitor()
         pvisitor = pv
         
-        if let fr = failReason {
-            if (try? pv.visitFile(tree!)) != nil {
-                throw Perr(ETEST_FAIL + ", expected to fail: " + fr + "\n" + s)
-            }
-        } else {
-            try pv.visitFile(tree!)
-        }
+        
+            try pv.visitFile(tree!, api)
     } else {
         let parser = stringToParser(s)
         try parser.file()
         throw Perr(EPARSE_FAIL)
     }
+    return pv
 }
 func parse(_ s: String) -> (PinnParser.FileContext?, PinnParser) {
     let parser = stringToParser(s)
@@ -34,12 +36,15 @@ func execute() throws  {
     let s = args[1]
     test = s == "-t"
     let prefix = "/tmp/"
+    let postfix = ".pinn"
+    let plib = try exe(fnToString(prefix + "libp" + postfix))
+    plib.removeReserved()
     if test {
         let fnames = ["types.pinn", "tcontrol.pinn", "tneg.pinn"]
         for n in fnames {
             print()
             print("Now ", n)
-            try exe(fnToString(prefix + n))
+            try exe(fnToString(prefix + n), plib)
         }
         return
     }
@@ -47,7 +52,7 @@ func execute() throws  {
     fname = prefix + FNAME + ".pinn"
     
     let myinput = fnToString(fname)
-    try exe(myinput)
+    try exe(myinput, plib)
 
     
 }

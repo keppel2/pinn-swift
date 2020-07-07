@@ -2,6 +2,7 @@
 let FNAME = "a"
 var test = false
 var gparser: PinnParser? = nil
+var papi: Pvisitor? = nil
 var pvisitor: Pvisitor? = nil
 let ECONST = "Constant"
 let ENIL = "Unexpected nil"

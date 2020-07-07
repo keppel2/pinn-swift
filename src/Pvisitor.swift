@@ -286,6 +286,7 @@ class Pvisitor {
             throw Perr(EPARAM_LENGTH)
         }
     }
+    private var aparser: PinnParser
     private var printed = ""
     private var tester: Tester?
     private var neg = ""
@@ -294,13 +295,15 @@ class Pvisitor {
     
     private var fc = Fc()
     private var lfc: Fc?
-    private var fkmap = [String:Fheader]()
+    var fkmap = [String:Fheader]()
+    var apifkmap = [String:Fheader]()
     private var line = -1
     private var prc: ParserRuleContext?
     private var oldPrc: ParserRuleContext?
     private var cfc: Fc {return lfc ?? fc}
 
-    init() throws {
+    init(_ ap: PinnParser) throws {
+        aparser = ap
         li = printed.startIndex
         try reset()
     }
@@ -317,7 +320,8 @@ class Pvisitor {
     private func reset() throws {
         fc = Fc()
         lfc = nil
-        fkmap = [String:Fheader]()
+        fkmap = apifkmap //[String:Fheader]()
+        
         Kind.clear()
         for str in Self.builtIns.keys {
             reserveFunction(str)
@@ -326,6 +330,11 @@ class Pvisitor {
             try Kind.storeKind(str, Kind.produceKind(Gtype.gScalar(x)))
         }
         
+    }
+    func removeReserved() {
+        for str in Self.builtIns.keys {
+            fkmap.removeValue(forKey: str)
+        }
     }
     
 
@@ -457,7 +466,8 @@ class Pvisitor {
     }
     
     
-    public func visitFile(_ sctx: PinnParser.FileContext) throws {
+    public func visitFile(_ sctx: PinnParser.FileContext, _ api: Pvisitor? = nil) throws {
+
         
         for child in sctx.children! {
             if let spec = child as? PinnParser.FunctionContext {
@@ -1482,7 +1492,7 @@ class Pvisitor {
         default: break
         }
     }
-    private struct FKind {
+    struct FKind {
         var k: Kind
         var s: String
         var variadic = false
@@ -1525,7 +1535,7 @@ class Pvisitor {
         }
         
     }
-    private struct Fheader {
+    struct Fheader {
         var funcContext: PinnParser.FunctionContext?
         var kind: Kind?
         var fkinds = [FKind]()

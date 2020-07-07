@@ -65,6 +65,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E215A42C24B3EF2E007F6168 /* libp.pinn */ = {isa = PBXFileReference; explicitFileType = sourcecode.c; path = libp.pinn; sourceTree = "<group>"; };
 		E218086924A82A8A0041ECE1 /* tcontrol.pinn */ = {isa = PBXFileReference; explicitFileType = sourcecode.c; path = tcontrol.pinn; sourceTree = "<group>"; };
 		E218086A24A83BBF0041ECE1 /* xeek.pinn */ = {isa = PBXFileReference; lastKnownFileType = text; path = xeek.pinn; sourceTree = "<group>"; };
 		E22C2FA62399FD9E007AD1D5 /* Antlr4-swift */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Antlr4-swift"; sourceTree = "<group>"; };
@@ -136,6 +137,7 @@
 				E2D5848F2405ECE2002ED255 /* Single.swift */,
 				E2EB00862403246D00593370 /* snip.pinn */,
 				E218086924A82A8A0041ECE1 /* tcontrol.pinn */,
+				E215A42C24B3EF2E007F6168 /* libp.pinn */,
 				E2B287D8248A1351000A968F /* tic.pinn */,
 				E26E76A024A9B11900D7743F /* tneg.pinn */,
 				E2B287D4248A1351000A968F /* types.pinn */,
