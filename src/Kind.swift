@@ -116,6 +116,11 @@ class Kind {
             }
             var k = km[s]!
             while case .gDefined(let s2) = k.gtype {
+                
+                if km[s2] == nil {
+                    throw Perr(EUNDECLARED)
+                }
+                
                 k = km[s2]!
             }
             return k

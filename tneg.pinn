@@ -14,6 +14,7 @@ b1;
 
 ng("Redeclare");
 var x int;
+assert(x, 0);
 var x int;
 
 ng("Redeclare 2");
@@ -878,15 +879,12 @@ ng("Named");
 var x bad;
 //x = 12;
 
+ng("Named 2");
+type t tBad;
+var x t;
 
 ng("Bad named type");
 type tInt int;
 var x tInt;
-var y tInt;
 x = 12;
-y = true;
 
-ng("Bad named type");
-type tInt int;
-var x tInt;
-x = true;

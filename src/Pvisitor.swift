@@ -28,18 +28,21 @@ class Pvisitor {
                 try assertPvals(s, 1);
                 let b: Bool = try tryCast(s[0]);
                 if b {
-                    throw Perr(EASSERTF, sctx);
+                    throw try Perr(EASSERTF + s[0].string(), sctx);
                 }
                 return nil
             },
             "assert": { sctx, pv, s in
                 try assertPvals(s, 2)
                 if try !s[0].gg().gEquivalent(s[1].gg()) {
-                    throw try Perr(ETYPE + " " + s[0].string() + " " + s[1].string(), sctx)
+                    var perr = Perr(EASSERTF, sctx)
+                    perr.substr = try "Type. " + s[0].string() + " " + s[1].string()
+                    throw perr
                 }
                 if try !s[0].equal(s[1]) {
-                    throw try Perr(ETEST_FAIL + " " + s[0].string() + " " + s[1].string(), sctx)
-
+                    var perr = Perr(EASSERTF, sctx)
+                    perr.substr = try "Val. " + s[0].string() + " " + s[1].string()
+                    throw perr
                 }
                 return nil
             },
@@ -505,10 +508,11 @@ class Pvisitor {
                          try visitHeader(spec)
                      } catch let err where err is Perr {
                          let perr = err as! Perr
-                         if perr.str == ENEGTEST_FAIL {
-                             perr.str += ", " + neg
-                             throw perr
-                         }
+//                         if perr.str == ENEGTEST_FAIL {
+//                             perr.str += ", " + neg
+//                             throw perr
+//                         }
+
                          trip = false
                      }
                 } else {
@@ -523,6 +527,9 @@ class Pvisitor {
                             let perr = err as! Perr
                             if perr.str == ENEGTEST_FAIL {
                                 perr.str += ", " + neg
+                                throw perr
+                            }
+                            if perr.str == EASSERTF {
                                 throw perr
                             }
                             trip = false

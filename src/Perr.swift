@@ -2,6 +2,7 @@ import Antlr4
 
 class Perr : Error {
     var str: String
+    var substr = ""
     private var pval: Pval?
     private var prc: ParserRuleContext?
     private var tok: Token?
@@ -32,7 +33,7 @@ class Perr : Error {
     }
     var string: String {
         var rt = ""
-        rt += "Error: \(str)."
+        rt += "Error: \(str), \(substr)."
         if let pv = pval {
             rt += "Pval. Line " + pv.prc.getStart()!.getLine() + " Col " + pv.prc.getStart()!.getCharPositionInLine() + "."
         }
