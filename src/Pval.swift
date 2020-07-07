@@ -173,6 +173,9 @@ class Pval {
                     throw Perr(ETYPE)
                 }
                 let str = e.con.getPw().unwrap() as! String
+                if v1v < 0 || v1v >= str.count {
+                    throw Perr(ERANGE)
+                }
                 let start = str.index(str.startIndex, offsetBy: v1v)
                 let end = str.index(str.startIndex, offsetBy: v1v + 1)
 let newstr = str[start..<end]

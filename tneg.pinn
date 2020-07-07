@@ -43,15 +43,23 @@ var x int;
 
 
 
-
-
 ng("Neg create int 2");
 var x int;
 x = false;
 
+ng("Neg create bool");
+var x bool;
+x = 42;
+
 ng("Create bool order");
 x;
 var x bool;
+
+ng("String bad index");
+"str"[3];
+
+ng("SBI");
+"str"[1:12];
 
 ng("Multiset");
 var x, y int;

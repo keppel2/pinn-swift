@@ -136,8 +136,7 @@ assert("str", "str");
 "a";
 
 ft("String index");
-assert("str"[1], "t");
-
+assert("str"[2], "r");
 
 ft("Boolean and String literals");
 true;
