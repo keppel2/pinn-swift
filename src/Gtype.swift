@@ -98,68 +98,68 @@ enum Gtype {
             aden()
         }
     }
-    func toPGtype() -> Gtype {
+    func toPGtype() throws -> Gtype {
         if case .gDefined(let s) = self {
             
-            return Kind.getPKind(s).gtype
+            return try Kind.getPKind(s).gtype
         }
         return self
     }
     
-    func toSelf() -> Gtype {
-        let g2 = toPGtype()
-        switch g2 {
-        case .gScalar(let pt):
-            return self
-        case .gArray(let k, let i):
-            return Gtype.gArray(Kind(k.gtype.toSelf()), i)
-        case .gSlice(let k):
-            return Gtype.gSlice(Kind(k.gtype.toSelf()))
-        case .gMap(let k):
-            return Gtype.gMap(Kind(k.gtype.toSelf()))
-        case .gPointer(let ka):
-            var ka2 = [Kind]()
-            for k in ka {
-                if k.gtype.isNilPointer() {
-                    ka2.append(Kind(Gtype.gScalar(Ref.self)))
-                    
-                } else {
-                    ka2.append(Kind(k.gtype.toSelf()))
-                }
-            }
-            return Gtype.gPointer(ka2)
-        case .gStructure(let osk):
-            var osk2 = [String: Kind]()
-                for (s, k) in osk {
-                    osk2[s] = Kind(k.gtype.toSelf())
-            }
-            return Gtype.gStructure(osk2)
-        case .gTuple(let ka):
-        return Gtype.gTuple(ka.map{
-            Kind($0.gtype.toSelf())
-            
-        })
-            case .gDefined(let s):
-        
-        aden()
-        
-        
-        
-        
-        
-        
-        }
-    }
+//    func toSelf() throws -> Gtype {
+//        let g2 = try toPGtype()
+//        switch g2 {
+//        case .gScalar(let pt):
+//            return self
+//        case .gArray(let k, let i):
+//            return Gtype.gArray(Kind(k.gtype.toSelf()), i)
+//        case .gSlice(let k):
+//            return Gtype.gSlice(Kind(k.gtype.toSelf()))
+//        case .gMap(let k):
+//            return Gtype.gMap(Kind(k.gtype.toSelf()))
+//        case .gPointer(let ka):
+//            var ka2 = [Kind]()
+//            for k in ka {
+//                if k.gtype.isNilPointer() {
+//                    ka2.append(Kind(Gtype.gScalar(Ref.self)))
+//                    
+//                } else {
+//                    ka2.append(Kind(k.gtype.toSelf()))
+//                }
+//            }
+//            return Gtype.gPointer(ka2)
+//        case .gStructure(let osk):
+//            var osk2 = [String: Kind]()
+//                for (s, k) in osk {
+//                    osk2[s] = Kind(k.gtype.toSelf())
+//            }
+//            return Gtype.gStructure(osk2)
+//        case .gTuple(let ka):
+//        return Gtype.gTuple(ka.map{
+//            Kind($0.gtype.toSelf())
+//            
+//        })
+//            case .gDefined(let s):
+//        
+//        aden()
+//        
+//        
+//        
+//        
+//        
+//        
+//        }
+//    }
+//    
     
-    
-    func gEquivalentSym(_ g: Gtype) -> Bool {
-        return gEquivalent(g) || g.gEquivalent(self)
+    func gEquivalentSym(_ g: Gtype) throws -> Bool {
+        return try gEquivalent(g) || g.gEquivalent(self)
     }
   
     
-    func gEquivalent(_ g2x: Gtype) -> Bool {
-        let g2 = g2x.toPGtype()
-        switch self.toPGtype() {
+    func gEquivalent(_ g2x: Gtype) throws -> Bool {
+        let g2 = try g2x.toPGtype()
+        switch try self.toPGtype() {
         case .gScalar(let pt):
             if pt == Ref.self {
                 if g2.isNilPointer() {
@@ -173,7 +173,7 @@ enum Gtype {
         case .gArray(let k, let i):
             
             if case .gArray(let k2, let i2) = g2 {
-                return i == i2 && k.gtype.gEquivalent(k2.gtype)
+                return try i == i2 && k.gtype.gEquivalent(k2.gtype)
             }
             return false
         case .gSlice(let k):
@@ -181,7 +181,7 @@ enum Gtype {
                 return true
             }
             if case .gSlice(let k2) = g2 {
-                return k.gtype.gEquivalent(k2.gtype)
+                return try k.gtype.gEquivalent(k2.gtype)
             }
             return false
         case .gMap(let k):
@@ -189,7 +189,7 @@ enum Gtype {
                 return true
             }
             if case .gMap(let k2) = g2 {
-                return k.gtype.gEquivalent(k2.gtype)
+                return try k.gtype.gEquivalent(k2.gtype)
             }
             return false
         case .gPointer(let ka):
@@ -197,14 +197,14 @@ enum Gtype {
                 return true
             }
             if case .gPointer(let ka2) = g2 {
-                return ka.elementsEqual(ka2) {
-                    if $0.gtype.toPGtype().isRef() {
-                        if $1.gtype.toPGtype().isRef() {
+                return try ka.elementsEqual(ka2) {
+                    if try $0.gtype.toPGtype().isRef() {
+                        if try $1.gtype.toPGtype().isRef() {
                             return true
                         }
-                        return g2.gEquivalent($1.gtype)
+                        return try g2.gEquivalent($1.gtype)
                     } else {
-                    return $0.gtype.gEquivalent($1.gtype)
+                    return try $0.gtype.gEquivalent($1.gtype)
                     }
                 }
             }
@@ -216,7 +216,7 @@ enum Gtype {
                 }
                 for (s, k) in osk {
                     if let sgt = osk2[s]?.gtype {
-                        if !k.gtype.gEquivalent(sgt) {
+                        if try !k.gtype.gEquivalent(sgt) {
                             return false
                         }
                     } else {
@@ -230,8 +230,8 @@ enum Gtype {
         case .gTuple(let ka):
             if case .gTuple(let ka2) = g2 {
                 
-                return ka.elementsEqual(ka2) {
-                    return $0.gtype.gEquivalent($1.gtype)
+                return try ka.elementsEqual(ka2) {
+                    return try $0.gtype.gEquivalent($1.gtype)
                 }
             }
             return false

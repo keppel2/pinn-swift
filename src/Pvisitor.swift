@@ -34,7 +34,7 @@ class Pvisitor {
             },
             "assert": { sctx, pv, s in
                 try assertPvals(s, 2)
-                if !s[0].gg().gEquivalent(s[1].gg()) {
+                if try !s[0].gg().gEquivalent(s[1].gg()) {
                     throw try Perr(ETYPE + " " + s[0].string() + " " + s[1].string(), sctx)
                 }
                 if try !s[0].equal(s[1]) {
@@ -233,7 +233,7 @@ class Pvisitor {
         if str == "in" {
             switch rhs.gg() {
             case .gSlice(let t), .gArray(let t, let _):
-                if !lhs.gg().gEquivalent(t.gtype) {
+                if try !lhs.gg().gEquivalent(t.gtype) {
                     throw Perr(ETYPE, sctx)
                 }
                                 var result = false
@@ -446,7 +446,7 @@ class Pvisitor {
                 let par = try Pval(ctx, Kind.produceKind(Gtype.gArray(v.k, s.count - index)))
                 
                 for (key, varadds) in s[index...].enumerated() {
-                    if !v.k.equivalent(varadds.getKind())  {
+                    if try !v.k.equivalent(varadds.getKind())  {
                                     throw Perr(ETYPE, sctx)
                     }
                     try par.set(key, varadds)
@@ -457,7 +457,7 @@ class Pvisitor {
                 lfc!.m[fh.fkinds[index].s] = par//Pval(par)
                 continue
             }
-            if !s[index].getKind().equivalent(v.k) {
+            if try !s[index].getKind().equivalent(v.k) {
                 throw Perr(ETYPE, sctx)
             }
             if let pv = lfc!.m[fh.fkinds[index].s]  {
@@ -477,7 +477,7 @@ class Pvisitor {
             guard let rp = lfc!.rt else {
                 throw Perr(ETYPE, sctx)
             }
-            if !k.equivalent(rp.getKind())  {
+            if try !k.equivalent(rp.getKind())  {
                 throw Perr(ETYPE, sctx)
             }
         } else {
@@ -973,7 +973,7 @@ class Pvisitor {
 //                    kind = try Kind.produceKind(Gtype.gMap(ckind!))
 //                    rt = try Pval(sctx, kind!)
 //                }
-                if !pv.gg().gEquivalentSym(vt.gtype) {
+                if try !pv.gg().gEquivalentSym(vt.gtype) {
                     throw Perr(ETYPE, sctx)
                 }
                 try rt!.set(str, pv)

@@ -9,8 +9,8 @@ class Kind {
 //    static func getKind(_ s: String) throws -> Kind {
 //        return try Kinds.ks.getKind(s)
 //    }
-    static func getPKind(_ s: String)  -> Kind {
-        return Kinds.ks.getPkind(s)
+    static func getPKind(_ s: String) throws -> Kind {
+        return try Kinds.ks.getPkind(s)
     }
 //    static func getDkind(_ s: String) throws -> Kind {
 //        
@@ -58,10 +58,10 @@ class Kind {
 //        return try gtype.gAssignable(k.gtype, k)
 //
 //    }
-    func sk() -> Kind {
-        return Kind(gtype.toPGtype())
+    func sk() throws -> Kind {
+        return try Kind(gtype.toPGtype())
     }
-    func equivalent(_ k: Kind) -> Bool {
+    func equivalent(_ k: Kind) throws -> Bool {
 //        if self === k {
 //            return true
 //        }
@@ -110,7 +110,10 @@ class Kind {
         func getKind(_ s: String) throws -> Kind {
             return km[s]!
         }
-        func getPkind(_ s: String) -> Kind {
+        func getPkind(_ s: String) throws -> Kind {
+            if km[s] == nil {
+                throw Perr(EUNDECLARED)
+            }
             var k = km[s]!
             while case .gDefined(let s2) = k.gtype {
                 k = km[s2]!

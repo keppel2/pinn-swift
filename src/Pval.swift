@@ -16,8 +16,8 @@ class Pval {
     init(_ c: ParserRuleContext, _ ar: [Pval], _ sp: Bool, _ k: Kind? = nil) throws {
         if let ki = k
         {
-            if (ar.contains {
-                !$0.gg().gEquivalentSym(ki.gtype)
+            if (try ar.contains {
+                try !$0.gg().gEquivalentSym(ki.gtype)
                 }) {
             throw Perr(ETYPE, c)
             }
@@ -51,7 +51,7 @@ class Pval {
         e = Pvalp(k, .single(w), c)
     }
     init( _ c: ParserRuleContext, _ kx: Kind) throws {
-        let ke = kx.sk()
+        let ke = try kx.sk()
         switch ke.gtype {
         case .gSlice:
             e = Pvalp(ke, Contents.multi(Wrap([Pval]())), c)
@@ -113,7 +113,7 @@ class Pval {
         return rt
     }
     func equal(_ p: Pval) throws -> Bool {
-        if !getKind().equivalent(p.getKind()) {
+        if try !getKind().equivalent(p.getKind()) {
             throw Perr(ETYPE, self)
         }
         
@@ -161,7 +161,7 @@ class Pval {
     }
     
     func get(_ k: Ktype, _ lh: Bool = false) throws -> Pval {
-        let g = getKind().gtype.toPGtype()
+        let g = try getKind().gtype.toPGtype()
         switch k {
         case let v1v as Int:
             switch g {
@@ -252,7 +252,7 @@ let newstr = str[start..<end]
         if const {
             throw Perr(ECONST)
         }
-        let b = getKind().gtype.gEquivalent(v.gg())
+        let b = try getKind().gtype.gEquivalent(v.gg())
 
 
         if !b {
@@ -346,7 +346,7 @@ break
             return
            }
             for (k, v) in ka.enumerated() {
-                if v.gtype.toPGtype().isRef() {
+                if try v.gtype.toPGtype().isRef() {
                     pva[k].e.k = Kind(gg())
 
                 } else {
@@ -364,7 +364,7 @@ break
             
 
                         case .gDefined(let s):
-                            e.k = Kind.getPKind(s)
+                            e.k = try Kind.getPKind(s)
                             try gFix()
             
         }

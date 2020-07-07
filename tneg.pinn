@@ -121,6 +121,10 @@ ng("Slice index assign");
 var x[]int;
 x[1] = 0;
 
+ng("Slice add bad");
+var x []int;
+x[0] = 42;
+x[2] = 101;
 
 ng("Map");
 x;
@@ -221,8 +225,9 @@ ng("Array literal");
 ng("Slice literal");
 ...[4, true];
 
-ng("Slice");
-...[2, true];
+ng("Slice 2");
+...[...[5], ...[true]];
+
 
 ng("Object literal:");
 {"a": 5, "b": true};
@@ -313,8 +318,13 @@ var x int;
 y := true;
 x = y;
 
+ng("All short");
+a := 5;
+b := true;
+a = b;
 
-
+ng("Short list");
+a, b, c := 10, 45;
 
 
 
@@ -335,6 +345,23 @@ ng("Plus");
 ng("Plus with 3");
 1 + 2 + false;
 
+ng("-");
+3 - true;
+
+ng("*");
+3 * "a";
+
+ng("/");
+4 / false;
+
+ng("%");
+5 % "3"; //ain't javascript
+
+ng("<<");
+4 << true;
+
+ng(">>");
+true >> 12;
 
 
 ng("Equals basic");
@@ -353,6 +380,11 @@ x == 0;
 
 ng("LT");
 0 < true;
+
+ng(">");
+10 > "abc";
+
+
 
 ng("&&");
 true && 0;
@@ -380,10 +412,31 @@ ng("Range");
 2@0;
 
 
+ng("Slice operator fail:");
+[5, 42, 101][0@3];
+
+ng("Slice operator fail:");
+(2, true, false)[0@1];
+
+ng("Slice operator fail:");
+[[1, 2], [10, 11], [101, 102]][1@2][0][0@2];
+
+ng("Index operator fail:");
+[4, 5][-1];
+
+ng("Index operator fail:");
+(4, false)[-1];
+
+ng("Index operator fail:");
+5[0];
 
 
 
 
+
+
+
+// TCONTROL NEGS
 
 ng("Neg if");
 if 0 ;
@@ -731,23 +784,6 @@ ng("For triple:");
 for var i [2]int; i[1] < 2; i++ {}
 
 
-ng("Slice operator fail:");
-[5, 42, 101][0@3];
-
-ng("Slice operator fail:");
-(2, true, false)[0@1];
-
-ng("Slice operator fail:");
-[[1, 2], [10, 11], [101, 102]][1@2][0][0@2];
-
-ng("Index operator fail:");
-[4, 5][-1];
-
-ng("Index operator fail:");
-(4, false)[-1];
-
-ng("Index operator fail:");
-5[0];
 
 ng("Exit with a value:");
 exit(5);
@@ -771,17 +807,7 @@ stringValue();
 
 ng("stringValue:");
 stringValue(5, ",");
-ng("Bad named type");
-type tInt int;
-var x tInt;
-var y tInt;
-x = 12;
-y = true;
 
-ng("Bad named type");
-type tInt int;
-var x tInt;
-x = true;
 
 
 ng("Deeply nested bad assignment:");
@@ -842,4 +868,25 @@ ng("Decimal (feature?)");
 0.5 + 2;
 ng("API");
 sequal();
-ng("");
+
+// negative NAMED
+
+ng("Named");
+//var x tbadx;
+//a := x;
+//x = 1;
+var x bad;
+//x = 12;
+
+
+ng("Bad named type");
+type tInt int;
+var x tInt;
+var y tInt;
+x = 12;
+y = true;
+
+ng("Bad named type");
+type tInt int;
+var x tInt;
+x = true;
