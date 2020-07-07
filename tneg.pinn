@@ -830,5 +830,8 @@ _;
 
 ng("Decimal");
 0.0 + true;
-
+ng("Decimal (feature?)");
+0.5 + 2;
+ng("API");
+sequal();
 ng("");
