@@ -804,10 +804,7 @@ at(sequal(...[1, 5], ...[1, 5]));
 at(!sequal(...[5], ...[1]));
 at(!sequal(...[5], ...[5, 5]));
 
-ft("API: max");
-assert(max(1, 4), 4);
-assert(max(42, 42), 42);
-assert(max(8, 7), 8);
+
 
 //Slicing
 
@@ -859,9 +856,6 @@ ft("Repeat slicing");
 
 
 // Expressions
-
-
-
 
 
 ft("plus");
@@ -917,6 +911,16 @@ assert(2 - 3, 0 - 1); //-1
 assert(2 * 3, 6); //6
 assert(2 / 3, 0); //0
 assert(2 % 3, 2); //2
+
+ft("Shift");
+assert(1 << 1, 2);
+assert(2 >> 1, 1);
+
+ft("Bitwise");
+assert(3 & 1, 1); //11 & 01
+assert(3 | 4, 7); //11 | 100
+assert(3 ^ 2, 1); //11 ^ 10
+
 
 ft("Binary comp");
 true == true;
@@ -984,6 +988,9 @@ assert(j, 101);
 
 ft("Literal");
 0.0;
+assert(24., 24.0);
+1e2;
+assert(1e3, 1000.0);
 
 ft("Create decimal");
 var d decimal;
@@ -1237,42 +1244,6 @@ x;
 
 
 
-ft("Global int in header");
-GLOB := 3;
-func giih(ar [GLOB]bool) {
-    assert(len(ar), 3);
-}
-var glob [GLOB] bool;
-giih(glob);
-
-
-
-
-ft("Array copies in call");
-func arFunc(ar [1]int) {
-    ar[0] = 42;
-}
-var arF[1]int;
-arF[0] = 23;
-arFunc(arF);
-
-
-ft("Slice shares in call");
-func slFunc(s []int) {
-    s[0] = 201;
-}
-var slf []int;
-slf = ...[23, 101];
-slFunc(slf);
-
-
-ft("Map shares in call");
-func mFunc(m [map]int) {
-    m["aap"] = 101;
-}
-mapShare := { "aap": 42};
-mFunc(mapShare);
-
 
 
 ft("Postfix minus array tuple, map");
@@ -1287,11 +1258,6 @@ pfM["aaa"]--;
 assert(pfM["aaa"], 22);
 
 
-ft("Global ar");
-gar := [1, 5];
-func garf() {
-    gar = [10, 12];
-}
 
 
 
@@ -1341,19 +1307,7 @@ p2 = p;
 p2[0] = 101;
 assert(p[0], 101);
 
-ft("Function copies pointer");
-func f(p *(int)) {
-  p = *(10);
-}
-func g(p *(int)) {
-  p[0] = 202;
-}
-var z *(int);
-z = *(23);
-f(z);
-assert(z[0], 23);
-g(z);
-assert(z[0], 202);
+
 
 
 ft("Nested tuple short");
@@ -1378,70 +1332,6 @@ assert(bub, [1, 20, 101, 202, 1081]);
 
 
 
-
-//ft("Binary search tree", "1 2 3 5 5 5 10 ");
-//var i int;
-//var mbst *(self, int, self);
-//func tree_insert(x int) {
-//    if mbst == *() {
-//            mbst = *(*(), x, *());
-//            return;
-//    }
-//        cur := mbst;
-//        loop {
-//            if i < cur[1] {
-//                if cur[0] == *() {
-//                    cur[0] = *(*(), i, *());
-//                    break;
-//                } else {
-//                    cur = cur[0];
-//                    continue;
-//                }
-//            } else if i >= cur[1] {
-//                if cur[2] == *() {
-//                    cur[2] = *(*(), i, *());
-//                    break;
-//                } else {
-//                    cur = cur[2];
-//                    continue;
-//                }
-//            }
-//            debug();
-//    }
-//}
-//for i = range [1, 5, 5, 5, 10, 2, 3] {
-//    tree_insert(i);
-//}
-//func dfs(node  *(self, int, self)) {
-//    if node == *() {
-//        return;
-//    }
-//    dfs(node[0]);
-//    print(node[1]);
-//    dfs(node[2]);
-//}
-//dfs(mbst);
-//
-
-
-//ft("Linked list", "5 8 23 ");
-//var LL *(int, self);
-//LL = *(5, *());
-//base := LL;
-//
-//LL[1] = *(8, *());
-//
-//LL = LL[1];
-//LL[1] = *(23, *());
-//func pll(node *(int, self)) {
-//    if node == *() {
-//        return;
-//    }
-//    print(node[0]);
-//    pll(node[1]);
-//}
-//pll(base);
-//
 
 
 //ft("Doubly linked list");
@@ -1542,9 +1432,24 @@ assert(comp, 2);
 comp /= 2;
 assert(comp, 1);
 
-ft("Order of ops", "9 7");
+ft("Order of ops");
 assert(1 + 2 * 3, 9);
 assert(1 + (2 * 3), 7);
 
 //Short slicing
 
+
+
+//Predefined API
+
+ft("API: max/min");
+assert(max(1, 4), 4);
+assert(max(42, 42), 42);
+assert(max(8, 7), 8);
+assert(min(8, 7), 7);
+
+
+ft("API: abs");
+assert(abs(0 - 4), 4);
+assert(abs(0), 0);
+assert(abs(10), 10);

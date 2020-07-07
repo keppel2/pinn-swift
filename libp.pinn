@@ -14,3 +14,12 @@ func sequal(a []int, b []int) bool {
 func max(a, b int) int {
     return a > b ? a : b;
 }
+
+func abs(a int) int {
+    return a < 0 ? -a : a;
+}
+
+func min(a, b int) int {
+    return a < b ? a : b;
+}
+

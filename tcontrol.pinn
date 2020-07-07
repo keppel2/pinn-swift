@@ -451,3 +451,123 @@ print("201,");
 print(deepR());
 
 
+ft("Global int in header");
+GLOB := 3;
+func giih(ar [GLOB]bool) {
+    assert(len(ar), 3);
+}
+var glob [GLOB] bool;
+giih(glob);
+
+
+
+
+ft("Array copies in call");
+func arFunc(ar [1]int) {
+    ar[0] = 42;
+}
+var arF[1]int;
+arF[0] = 23;
+arFunc(arF);
+
+
+ft("Slice shares in call");
+func slFunc(s []int) {
+    s[0] = 201;
+}
+var slf []int;
+slf = ...[23, 101];
+slFunc(slf);
+
+
+ft("Map shares in call");
+func mFunc(m [map]int) {
+    m["aap"] = 101;
+}
+mapShare := { "aap": 42};
+mFunc(mapShare);
+
+ft("Global ar");
+gar := [1, 5];
+func garf() {
+    gar = [10, 12];
+}
+ft("Function copies pointer");
+func f(p *(int)) {
+  p = *(10);
+}
+func g(p *(int)) {
+  p[0] = 202;
+}
+var z *(int);
+z = *(23);
+f(z);
+assert(z[0], 23);
+g(z);
+assert(z[0], 202);
+
+
+
+//ft("Binary search tree", "1 2 3 5 5 5 10 ");
+//var i int;
+//var mbst *(self, int, self);
+//func tree_insert(x int) {
+//    if mbst == *() {
+//            mbst = *(*(), x, *());
+//            return;
+//    }
+//        cur := mbst;
+//        loop {
+//            if i < cur[1] {
+//                if cur[0] == *() {
+//                    cur[0] = *(*(), i, *());
+//                    break;
+//                } else {
+//                    cur = cur[0];
+//                    continue;
+//                }
+//            } else if i >= cur[1] {
+//                if cur[2] == *() {
+//                    cur[2] = *(*(), i, *());
+//                    break;
+//                } else {
+//                    cur = cur[2];
+//                    continue;
+//                }
+//            }
+//            debug();
+//    }
+//}
+//for i = range [1, 5, 5, 5, 10, 2, 3] {
+//    tree_insert(i);
+//}
+//func dfs(node  *(self, int, self)) {
+//    if node == *() {
+//        return;
+//    }
+//    dfs(node[0]);
+//    print(node[1]);
+//    dfs(node[2]);
+//}
+//dfs(mbst);
+//
+
+
+//ft("Linked list", "5 8 23 ");
+//var LL *(int, self);
+//LL = *(5, *());
+//base := LL;
+//
+//LL[1] = *(8, *());
+//
+//LL = LL[1];
+//LL[1] = *(23, *());
+//func pll(node *(int, self)) {
+//    if node == *() {
+//        return;
+//    }
+//    print(node[0]);
+//    pll(node[1]);
+//}
+//pll(base);
+//
