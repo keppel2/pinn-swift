@@ -148,11 +148,16 @@ f(0, 5, 10);
 
 ft("For range string");
 var char string;
-for char = range "alpha" {
+for char = range "spam" {
 }
+assert(char, "m");
+
 var k int;
-for k, char = range "bravo" {
+s := "eggs";
+for k, char = range s {
+    assert(char, s[k]);
 }
+
 ft("For range closed interval 11 to 14");
 var xRange int;
 for xRange = range 11@14 {

@@ -165,6 +165,23 @@ class Pval {
         switch k {
         case let v1v as Int:
             switch g {
+            case .gScalar(let pt):
+                if lh {
+                    throw Perr(ECONST)
+                }
+                if pt != String.self {
+                    throw Perr(ETYPE)
+                }
+                let str = e.con.getPw().unwrap() as! String
+                let start = str.index(str.startIndex, offsetBy: v1v)
+                let end = str.index(str.startIndex, offsetBy: v1v + 1)
+let newstr = str[start..<end]
+                
+                return Pval(e.prc, String(newstr))
+            
+                
+                
+                
             case .gSlice(let k):
                 if lh && v1v == e.con.count() {
 //                    if const {
