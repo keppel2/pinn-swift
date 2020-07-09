@@ -50,7 +50,7 @@ func execute() throws  {
     }
     var fname = s == "-c" ? FNAME : s
     
-    let myinput = fnToString(fname)
+    let myinput = fnToString(prefix + fname + postfix)
     try exe(myinput, plib)
 
     

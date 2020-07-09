@@ -1,1 +1,12 @@
-assert(1, 2);
+trip := false;
+  var x int;
+  for x = range 200@204 {
+    match x {
+      when 203:
+      break;
+      when 201:
+        debug();
+        trip = true;
+    }
+  }
+print(trip);

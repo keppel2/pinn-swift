@@ -74,7 +74,7 @@ class Pvisitor {
                 let xa2 = pv.getPv(str2)
                 fatalError()
             },
-            "ft": { sctx, pv, s in try assertPvalIn(s, [1, 2])
+            "ft": { sctx, pv, s in try assertPvalIn(s, [1])
                 if pv.lfc != nil {
                     throw Perr(ESTATEMENT, sctx)
                 }
