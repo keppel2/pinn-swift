@@ -13,7 +13,7 @@ class Pvisitor {
             },
             "bad": { sctx, pv, s in
                 try assertPvals(s, 0);
-                throw Perr(EASSERTF, sctx);
+                throw Perr(ETEST_FAIL, sctx);
                 return nil
             },
             "at": { sctx, pv, s in
@@ -35,13 +35,11 @@ class Pvisitor {
             "assert": { sctx, pv, s in
                 try assertPvals(s, 2)
                 if try !s[0].gg().gEquivalent(s[1].gg()) {
-                    var perr = Perr(EASSERTF, sctx)
-                    perr.substr = try "Type. " + s[0].string() + " " + s[1].string()
+                    var perr = Perr(EASSERTF, sctx, nil, nil, try "Type. " + s[0].string() + " " + s[1].string())
                     throw perr
                 }
                 if try !s[0].equal(s[1]) {
-                    var perr = Perr(EASSERTF, sctx)
-                    perr.substr = try "Val. " + s[0].string() + " " + s[1].string()
+                    var perr = Perr(EASSERTF, sctx, nil, nil, try "Val. " + s[0].string() + " " + s[1].string())
                     throw perr
                 }
                 return nil

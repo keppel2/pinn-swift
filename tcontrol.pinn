@@ -1,14 +1,14 @@
 
-ft("Block", "in");
+ft("Block");
 {
-    print("in");
 }
-ft("Two block layer", "in2");
+ft("Block 2");
+var x int;
 {
-    {
-        print("in2");
-    }
+    x = 42;
 }
+assert(x, 42);
+
 ft("No block scoping (fix)?");
 {
     {
@@ -17,7 +17,7 @@ ft("No block scoping (fix)?");
 }
 assert(x, 5);
 
-ft("Empty", "");
+ft("Empty");
 ;
 
 //Control flow
@@ -34,25 +34,6 @@ ft("Else");
 if false bad(); else ;
 
 
-
-
-
-ft("Block");
-{}
-
-ft("Block 2");
-1;
-{
-    2;
-    {
-        3;
-    
-    }
-}
-
-
-
-
 ft("While");
 while false {}
 
@@ -60,17 +41,6 @@ ft("If and while");
 if false ;
   else
 while false {}
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -82,12 +52,15 @@ func f() {}
 ft("Function 2");
 func f() {}
 func g() {}
+f();
+g();
 
-ft("Function return");
+ft("Function return, (fix?)");
 func f() int {}
 
 ft("Function parameter");
 func f(a int) {}
+f(10);
 
 ft("2 parameters");
 func f(a int, b int) {}
@@ -119,12 +92,14 @@ func f(a int) int {
 var x int;
 x = f(0);
 assert(x, 23);
+
 ft("Call and return bools");
 func f(a bool) bool {
     return true;
 }
 var x bool;
 x = f(true);
+assert(x, true);
 
 ft("Basics in function");
 func f() {
@@ -136,23 +111,23 @@ func f() {
 f();
 
 ft("Variadic");
-func f(v ...int) {}
+func f(v ...int) {
+    assert(v, [0, 5, 10]);
+}
 f(0, 5, 10);
-
-
-
-
-
-
-
 
 ft("For range string");
 var char string;
+var str string;
 for char = range "spam" {
+    assert(len(char), 1);
+    str += char;
 }
-assert(char, "m");
+assert(str, "spam");
 
+ft("For range 2");
 var k int;
+var char string;
 s := "eggs";
 for k, char = range s {
     assert(char, s[k]);
@@ -160,14 +135,24 @@ for k, char = range s {
 
 ft("For range closed interval 11 to 14");
 var xRange int;
+var s string;
 for xRange = range 11@14 {
+    s += sprint(xRange, ",");
 }
+assert(s, "11 ,12 ,13 ,14 ,");
 
 ft("Continue on evens--print odds");
 var xRange86 int;
+var s string;
 for xRange86 = range 22@27 {
     if xRange86 % 2 == 0 continue;
+    s += sprint(xRange86, ",");
+    
 }
+assert(s, "23 ,25 ,27 ,");
+
+
+
 ft("Break");
 s := "";
 var xBreak int;
@@ -230,9 +215,6 @@ repeat {
     print(".");
     wstr += wstr;
 } while len(wstr) < 8;
-
-ft("Slice string", "apn foo oot every");
-print("aapnoot"[1:4], "foobar"[@2], "noot"[1:], "every"[0:5]);
 
 
 ft("Call function", "in f");

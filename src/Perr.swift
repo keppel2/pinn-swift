@@ -6,7 +6,7 @@ class Perr : Error {
     private var pval: Pval?
     private var prc: ParserRuleContext?
     private var tok: Token?
-    init (_ s: String, _ prc: ParserRuleContext? = nil, _ pval: Pval? = nil, _ token: Token? = nil) {
+    init (_ s: String, _ prc: ParserRuleContext? = nil, _ pval: Pval? = nil, _ token: Token? = nil, _ ss: String = "") {
         if s == EX {
             print(s)
         }
@@ -14,6 +14,7 @@ class Perr : Error {
         self.pval = pval
         self.prc = prc
         self.tok = token
+        self.substr = ss
         let _str = string
         _ = _str
         if let pv = pvisitor {
@@ -26,10 +27,10 @@ class Perr : Error {
         
     }
     convenience init(_ s: String, _ p: Pval?) {
-        self.init(s, nil, p, nil)
+        self.init(s, nil, p, nil, "")
     }
     convenience init(_ s: String, _ t: Token) {
-        self.init(s, nil, nil, t)
+        self.init(s, nil, nil, t, "")
     }
     var string: String {
         var rt = ""
