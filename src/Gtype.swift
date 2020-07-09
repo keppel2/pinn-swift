@@ -202,7 +202,7 @@ enum Gtype {
                         if try $1.gtype.toPGtype().isRef() {
                             return true
                         }
-                        return try g2.gEquivalent($1.gtype)
+                        return try self.gEquivalent($1.gtype)
                     } else {
                     return try $0.gtype.gEquivalent($1.gtype)
                     }

@@ -140,3 +140,9 @@ func printg() {
 }
 println("min");
 main();
+
+
+//Recursive assumptions
+//rec := *(*(*(), 12), 23);
+//rec is *(self, int);
+//rec is *(*(*(bool), int), int);

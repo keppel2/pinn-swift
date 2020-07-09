@@ -1,12 +1,33 @@
-trip := false;
-  var x int;
-  for x = range 200@204 {
-    match x {
-      when 203:
-      break;
-      when 201:
-        debug();
-        trip = true;
-    }
-  }
-print(trip);
+
+var node, base *(self, int);
+//base = *(*(*(), 23), 12);
+//node = *(base, 42);
+//node = *(*(), 42);
+//node[0] = base;
+//base[0] = *(node, 23);
+
+
+//var p1 *(*(int), int);
+//var p2 *(int);
+//p2 = *(21);
+//p1 = *(p2, 42);
+//print(p1, p1[0]);
+
+
+exit();
+
+
+ft("Linked list");
+var node, base *(self, int);
+base = *(*(), 12);
+node = base;
+node[0] = *(*(), 23);
+node = node[0];
+node[0] = *(*(), 42);
+node = node[0];
+node[0] = base;
+
+assert(base[1], 12);
+assert(base[0][1], 23);
+assert(base[0][0][1], 42);
+assert(base[0][0][0][1], 12);

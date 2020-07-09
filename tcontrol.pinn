@@ -113,6 +113,104 @@ func f(v ...int) {
 }
 f(0, 5, 10);
 
+ft("Variadic 2");
+func f(a bool, b ...int) {
+    at(a);
+    assert(b, [2, 42, 101]);
+}
+f(true, 2, 42, 101);
+
+
+
+
+ft("Forward call");
+
+func forward() {
+    forwardCalled();
+}
+
+func forwardCalled() {
+}
+forward();
+ft("Return exits");
+func exits() {
+    return;
+    bad();
+}
+exits();
+
+
+ft("Call recursive");
+
+s := "";
+func countToFour(i int) {
+    s += sprint(i) + ",";
+    if i > 1 {
+        countToFour(i - 1);
+    }
+}
+countToFour(4);
+assert(s, "4,3,2,1,");
+
+ft("Function with map, slice, variadic");
+func fLots(m [map]int, a []int, vary ...bool) {
+}
+var outerm [map]int;
+outerm["foo"] = 42;
+fLots(outerm, 10@14, false, false, true);
+
+ft("Deep function return");
+func deep() {
+    loop {
+        return;
+    }
+}
+
+ft("Global int in header");
+GLOB := 3;
+func giih(ar [GLOB]bool) {
+    assert(len(ar), 3);
+}
+var glob [GLOB] bool;
+giih(glob);
+
+ft("Array copies in call");
+func arFunc(ar [1]int) {
+    ar[0] = 42;
+}
+var arF[1]int;
+arF[0] = 23;
+arFunc(arF);
+
+
+ft("Slice shares in call");
+func slFunc(s []int) {
+    s[0] = 201;
+}
+var slf []int;
+slf = ...[23, 101];
+slFunc(slf);
+
+ft("Function copies pointer");
+func f(p *(int)) {
+  p = *(10);
+}
+func g(p *(int)) {
+  p[0] = 202;
+}
+var z *(int);
+z = *(23);
+f(z);
+assert(z[0], 23);
+g(z);
+assert(z[0], 202);
+
+
+
+
+
+
+
 
 
 
@@ -213,48 +311,11 @@ while wh > 10 {
 assert(s, "50,40,30,20,");
 
 
-ft("Forward call");
 
-func forward() {
-    forwardCalled();
-}
 
-func forwardCalled() {
-}
-forward();
 
-ft("Return exits");
-func exits() {
-    return;
-    bad();
-}
-exits();
 
-ft("Call recursive");
 
-s := "";
-func countToFour(i int) {
-    s += sprint(i) + ",";
-    if i > 1 {
-        countToFour(i - 1);
-    }
-}
-countToFour(4);
-assert(s, "4,3,2,1,");
-
-ft("Function with map, slice, variadic");
-func fLots(m [map]int, a []int, vary ...bool) {
-}
-var outerm [map]int;
-outerm["foo"] = 42;
-fLots(outerm, 10@14, false, false, true);
-
-ft("Deep function return");
-func deep() {
-    loop {
-        return;
-    }
-}
 
 ft("Guard fail");
 trip := false;
@@ -300,6 +361,13 @@ func mrecurse2(i int) {
 mrecurse1(1);
 assert(s, "1,2,4,5,10,11,22,23,");
 
+
+
+
+//MATCH
+
+
+
 ft("Match true");
 count := 0;
 match true {
@@ -310,8 +378,8 @@ when true:
 }
 assert(count, 1);
 
-ft("Match default");
 
+ft("Match default");
 count := 0;
 match 5 {
     when 2: bad();
@@ -364,142 +432,97 @@ for deepX = range 10@14 {
 }
 
 
-//ft("Return from deep match in function");
-//trip := false;
-//func deepR() int {
-//  var x int;
-//  for x = range 200@204 {
-//    match x {
-//      when 203:
-//      return 203;
-//      when 201:
-//        debug();
-//        trip = true;
-//    }
-//  }
-//}
-//
-//at(trip);
-//assert(deepR(), 203);
-
-
-ft("Global int in header");
-GLOB := 3;
-func giih(ar [GLOB]bool) {
-    assert(len(ar), 3);
+ft("Return from deep match in function");
+trip := false;
+func deepR() int {
+  var x int;
+  for x = range 200@204 {
+    match x {
+      when 203:
+      return 203;
+      when 201:
+        trip = true;
+    }
+  }
 }
-var glob [GLOB] bool;
-giih(glob);
+
+assert(deepR(), 203);
+
+
+
+//end MATCH
 
 
 
 
-ft("Array copies in call");
-func arFunc(ar [1]int) {
-    ar[0] = 42;
+
+
+
+
+ft("Binary search tree");
+var i int;
+var mbst *(self, int, self);
+func tree_insert(x int) {
+    if mbst == *() {
+            mbst = *(*(), x, *());
+            return;
+    }
+        cur := mbst;
+        loop {
+            if i < cur[1] {
+                if cur[0] == *() {
+                    cur[0] = *(*(), i, *());
+                    break;
+                } else {
+                    cur = cur[0];
+                    continue;
+                }
+            } else if i >= cur[1] {
+                if cur[2] == *() {
+                    cur[2] = *(*(), i, *());
+                    break;
+                } else {
+                    cur = cur[2];
+                    continue;
+                }
+            }
+            debug();
+    }
 }
-var arF[1]int;
-arF[0] = 23;
-arFunc(arF);
-
-
-ft("Slice shares in call");
-func slFunc(s []int) {
-    s[0] = 201;
+for i = range [1, 5, 5, 5, 10, 2, 3] {
+    tree_insert(i);
 }
-var slf []int;
-slf = ...[23, 101];
-slFunc(slf);
-
-
-ft("Map shares in call");
-func mFunc(m [map]int) {
-    m["aap"] = 101;
+var ar []int;
+func dfs(node  *(self, int, self)) {
+    if node == *() {
+        return;
+    }
+    dfs(node[0]);
+    ar[len(ar)] = node[1];
+    dfs(node[2]);
 }
-mapShare := { "aap": 42};
-mFunc(mapShare);
+dfs(mbst);
+at(sequal(ar, ...[1, 2, 3, 5, 5, 5, 10]));
 
-ft("Global ar");
-gar := [1, 5];
-func garf() {
-    gar = [10, 12];
+
+ft("Linked list");
+var ar[]int;
+var LL *(int, self);
+LL = *(5, *());
+base := LL;
+
+LL[1] = *(8, *());
+
+LL = LL[1];
+LL[1] = *(23, *());
+func pll(node *(int, self)) {
+    if node == *() {
+        return;
+    }
+    ar[len(ar)] = node[0];
+
+    pll(node[1]);
 }
-ft("Function copies pointer");
-func f(p *(int)) {
-  p = *(10);
-}
-func g(p *(int)) {
-  p[0] = 202;
-}
-var z *(int);
-z = *(23);
-f(z);
-assert(z[0], 23);
-g(z);
-assert(z[0], 202);
+pll(base);
 
-
-
-//ft("Binary search tree", "1 2 3 5 5 5 10 ");
-//var i int;
-//var mbst *(self, int, self);
-//func tree_insert(x int) {
-//    if mbst == *() {
-//            mbst = *(*(), x, *());
-//            return;
-//    }
-//        cur := mbst;
-//        loop {
-//            if i < cur[1] {
-//                if cur[0] == *() {
-//                    cur[0] = *(*(), i, *());
-//                    break;
-//                } else {
-//                    cur = cur[0];
-//                    continue;
-//                }
-//            } else if i >= cur[1] {
-//                if cur[2] == *() {
-//                    cur[2] = *(*(), i, *());
-//                    break;
-//                } else {
-//                    cur = cur[2];
-//                    continue;
-//                }
-//            }
-//            debug();
-//    }
-//}
-//for i = range [1, 5, 5, 5, 10, 2, 3] {
-//    tree_insert(i);
-//}
-//func dfs(node  *(self, int, self)) {
-//    if node == *() {
-//        return;
-//    }
-//    dfs(node[0]);
-//    print(node[1]);
-//    dfs(node[2]);
-//}
-//dfs(mbst);
-//
-
-
-//ft("Linked list", "5 8 23 ");
-//var LL *(int, self);
-//LL = *(5, *());
-//base := LL;
-//
-//LL[1] = *(8, *());
-//
-//LL = LL[1];
-//LL[1] = *(23, *());
-//func pll(node *(int, self)) {
-//    if node == *() {
-//        return;
-//    }
-//    print(node[0]);
-//    pll(node[1]);
-//}
-//pll(base);
-//
+at(sequal(ar, ...[5, 8, 23]));
