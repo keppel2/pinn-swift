@@ -71,6 +71,7 @@
 		E22C2FA62399FD9E007AD1D5 /* Antlr4-swift */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Antlr4-swift"; sourceTree = "<group>"; };
 		E2673962235BC825000CF830 /* pinn */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = pinn; sourceTree = BUILT_PRODUCTS_DIR; };
 		E26E76A024A9B11900D7743F /* tneg.pinn */ = {isa = PBXFileReference; explicitFileType = sourcecode.c; path = tneg.pinn; sourceTree = "<group>"; };
+		E290C8FD24B7C0E4003288CF /* tnegcontrol.pinn */ = {isa = PBXFileReference; lastKnownFileType = text; path = tnegcontrol.pinn; sourceTree = "<group>"; };
 		E2B287D3248A1351000A968F /* paused.pinn */ = {isa = PBXFileReference; lastKnownFileType = text; path = paused.pinn; sourceTree = "<group>"; };
 		E2B287D4248A1351000A968F /* types.pinn */ = {isa = PBXFileReference; explicitFileType = sourcecode.c; path = types.pinn; sourceTree = "<group>"; };
 		E2B287D5248A1351000A968F /* baduk.pinn */ = {isa = PBXFileReference; explicitFileType = sourcecode.c; path = baduk.pinn; sourceTree = "<group>"; };
@@ -113,6 +114,7 @@
 		E2673959235BC825000CF830 = {
 			isa = PBXGroup;
 			children = (
+				E290C8FD24B7C0E4003288CF /* tnegcontrol.pinn */,
 				E2BE75D624B6E90300D84A51 /* texpr.pinn */,
 				E2BC3DB42387733B002D9413 /* a.pinn */,
 				E22C2FA62399FD9E007AD1D5 /* Antlr4-swift */,

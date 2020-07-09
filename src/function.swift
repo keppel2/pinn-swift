@@ -40,7 +40,7 @@ func execute() throws  {
     let plib = try exe(fnToString(prefix + "libp" + postfix))
     plib.removeReserved()
     if test {
-        let fnames = ["texpr", "types", "tcontrol", "tneg"]
+        let fnames = ["texpr", "types", "tcontrol", "tneg", "tnegcontrol"]
         for n in fnames {
             print()
             print("Now ", n)

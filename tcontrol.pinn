@@ -2,6 +2,7 @@
 ft("Block");
 {
 }
+
 ft("Block 2");
 var x int;
 {
@@ -23,26 +24,111 @@ ft("Empty");
 //Control flow
 
 ft("Bare if");
-if true ;
+trip := false;
+
+if true {
+    trip = true;
+}
+at(trip);
+
+
 if false bad();
 
-ft("If other");
-if true 5;
-if false bad();
 
 ft("Else");
-if false bad(); else ;
-
+trip := false;
+if false bad(); else trip = true;
+at(trip);
 
 ft("While");
-while false {}
+go := true;
+while go {
+    go = false;
+}
+assert(go, false);
 
-ft("If and while");
-if false ;
-  else
-while false {}
+ft("While2");
+while false {
+    bad();
+}
+
+ft("While 3");
+var x int;
+x = 0;
+while x < 23 {
+    x = x + 1;
+}
+assert(x, 23);
+
+ft("Repeat");
+count := 0;
+repeat {
+    count += 1;
+} while false;
+assert(count, 1);
+
+ft("repeat 3");
+x := 0;
+repeat {
+    x = x + 1;
+} while x < 12;
+assert(x, 12);
+
+//break and loop
+ft("Break and loop");
+loop {
+    break;
+}
+
+ft("BL 2");
+loop {
+    {
+        break;
+    }
+}
+
+loop {
+    loop {
+        break;
+    }
+    break;
+}
+loop {
+    loop {
+        {
+            break;
+        }
+    }
+    break;
+}
+
+ft("BL 3");
+loop {
+    break;
+    bad(); //lol
+}
+
+count := 0;
+loop {
+    count++;
+    break;
+}
+assert(count, 1);
+
+//continue
+ft("Continue");
 
 
+
+
+
+
+
+
+
+
+ft("Guard");
+guard true else {}
 
 // function isolated
 
@@ -209,8 +295,26 @@ assert(z[0], 202);
 
 
 
+ft("Guard fail");
+trip := false;
+func fguard() {
+    guard false else {
+        trip = true;
+        return;
+    }
+    bad();
+}
+fguard();
+at(trip);
 
 
+ft("Guard pass");
+func fguard2() {
+    guard true else {
+        bad();
+    }
+}
+fguard2();
 
 
 
@@ -239,6 +343,7 @@ for xRange = range 11@14 {
 }
 assert(s, "11 ,12 ,13 ,14 ,");
 
+
 ft("Continue on evens--print odds");
 var xRange86 int;
 var s string;
@@ -249,9 +354,11 @@ for xRange86 = range 22@27 {
 }
 assert(s, "23 ,25 ,27 ,");
 
+// end range
 
 
-ft("Break");
+
+ft("Break 7");
 s := "";
 var xBreak int;
 for xBreak = range 101@104 {
@@ -317,27 +424,7 @@ assert(s, "50,40,30,20,");
 
 
 
-ft("Guard fail");
-trip := false;
-func fguard() {
-    guard false else {
-        trip = true;
-        return;
-    }
-    bad();
-}
-fguard();
-at(trip);
 
-
-
-ft("Guard pass");
-func fguard2() {
-    guard true else {
-        bad();
-    }
-}
-fguard2();
 
 
 ft("Mutually recurse");
