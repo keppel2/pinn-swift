@@ -1,4 +1,4 @@
-// Generated from Pinn.g4 by ANTLR 4.7.2
+// Generated from Pinn.g4 by ANTLR 4.8
 import Antlr4
 
 open class PinnParser: Parser {
@@ -90,7 +90,7 @@ open class PinnParser: Parser {
 
 	override public
 	init(_ input:TokenStream) throws {
-	    RuntimeMetaData.checkVersion("4.7.2", RuntimeMetaData.VERSION)
+	    RuntimeMetaData.checkVersion("4.8", RuntimeMetaData.VERSION)
 		try super.init(input)
 		_interp = ParserATNSimulator(self,PinnParser._ATN,PinnParser._decisionToDFA, PinnParser._sharedContextCache)
 	}
@@ -824,11 +824,6 @@ open class PinnParser: Parser {
 		func getRuleIndex() -> Int {
 			return PinnParser.RULE_simpleStatement
 		}
-	 
-		open
-		func copyFrom(_ ctx: SimpleStatementContext) {
-			super.copyFrom(ctx)
-		}
 	}
 	public class SimpleSetContext: SimpleStatementContext {
 			open
@@ -1185,11 +1180,6 @@ open class PinnParser: Parser {
 		override open
 		func getRuleIndex() -> Int {
 			return PinnParser.RULE_expr
-		}
-	 
-		open
-		func copyFrom(_ ctx: ExprContext) {
-			super.copyFrom(ctx)
 		}
 	}
 	public class DotIndexExprContext: ExprContext {

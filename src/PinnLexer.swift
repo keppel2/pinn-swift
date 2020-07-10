@@ -1,4 +1,4 @@
-// Generated from Pinn.g4 by ANTLR 4.7.2
+// Generated from Pinn.g4 by ANTLR 4.8
 import Antlr4
 
 open class PinnLexer: Lexer {
@@ -77,7 +77,7 @@ open class PinnLexer: Lexer {
 
 	public
 	required init(_ input: CharStream) {
-	    RuntimeMetaData.checkVersion("4.7.2", RuntimeMetaData.VERSION)
+	    RuntimeMetaData.checkVersion("4.8", RuntimeMetaData.VERSION)
 		super.init(input)
 		_interp = LexerATNSimulator(self, PinnLexer._ATN, PinnLexer._decisionToDFA, PinnLexer._sharedContextCache)
 	}
