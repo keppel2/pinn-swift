@@ -31,9 +31,6 @@ class Kind {
         return Kind(Gtype.gTuple([Kind]()))
     }
     static func produceKind(_ g: Gtype) throws -> Kind {
-//        if !g.isValid() {
-//            throw Perr(ETYPE)
-//        }
         return Kind(g)
     }
     var gtype: Gtype

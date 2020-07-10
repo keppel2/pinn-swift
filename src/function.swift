@@ -3,19 +3,13 @@ import Antlr4
 
 func exe(_ s: String, _ api: Pvisitor? = nil) throws -> Pvisitor {
     let (tree, parser) = parse(s)
-//    gparser = parser
     let pv = try Pvisitor(parser)
     if let apip = api {
         pv.apifkmap = apip.fkmap
-//        pv.fkmap = apip.fkmap
     }
-//    pv.reset()
     
     if tree != nil {
-        //        gtree = tree
         pvisitor = pv
-        
-        
             try pv.visitFile(tree!, api)
     } else {
         let parser = stringToParser(s)
@@ -40,7 +34,7 @@ func execute() throws  {
     let plib = try exe(fnToString(prefix + "libp" + postfix))
     plib.removeReserved()
     if test {
-        let fnames = ["texpr", "types", "tcontrol", "tneg", "tnegcontrol"]
+        let fnames = ["texpr", "ttypes", "tcontrol", "tneg", "tnegcontrol"]
         for n in fnames {
             print()
             print("Now ", n)

@@ -3,6 +3,7 @@ import Antlr4
 class Pval {
     private var e: Pvalp
     var const = false
+    var pv: Pvisitor?
     private init(_ x: Pvalp) {
         e = x
     }
@@ -50,7 +51,8 @@ class Pval {
         let k = try! Kind.produceKind(Gtype.gScalar(type(of: a)))
         e = Pvalp(k, .single(w), c)
     }
-    init( _ c: ParserRuleContext, _ kx: Kind) throws {
+    init( _ c: ParserRuleContext, _ kx: Kind, _ pv: Pvisitor? = nil) throws {
+        self.pv = pv
         let ke = try kx.sk()
         switch ke.gtype {
         case .gSlice:
@@ -167,14 +169,14 @@ class Pval {
             switch g {
             case .gScalar(let pt):
                 if lh {
-                    throw Perr(ECONST)
+                    throw Perr(ECONST, self)
                 }
                 if pt != String.self {
-                    throw Perr(ETYPE)
+                    throw Perr(ETYPE, self)
                 }
                 let str = e.con.getPw().unwrap() as! String
                 if v1v < 0 || v1v >= str.count {
-                    throw Perr(ERANGE)
+                    throw Perr(ERANGE, self)
                 }
                 let start = str.index(str.startIndex, offsetBy: v1v)
                 let end = str.index(str.startIndex, offsetBy: v1v + 1)
@@ -250,7 +252,7 @@ let newstr = str[start..<end]
     
     func setPV(_ v : Pval) throws {
         if const {
-            throw Perr(ECONST)
+            throw Perr(ECONST, self)
         }
         let b = try getKind().gtype.gEquivalent(v.gg())
 
@@ -276,7 +278,7 @@ let newstr = str[start..<end]
     
     func delKey(_ s: String) throws {
         if const {
-            throw Perr(ECONST)
+            throw Perr(ECONST, self)
         }
         if case .gMap = getKind().gtype {
             e.con.setCon(s, nil)
@@ -287,7 +289,7 @@ let newstr = str[start..<end]
     
     func set(_ k: Ktype, _ v: Pval) throws {
         if const {
-            throw Perr(ECONST)
+            throw Perr(ECONST, self)
         }
      
         switch k {

@@ -117,18 +117,46 @@ assert(count, 1);
 
 //continue
 ft("Continue");
+count := 0;
+loop {
+    count += 1;
+    if count < 3 {
+        continue;
+    }
+    break;
+}
+assert(count, 3);
 
-
-
-
-
-
-
-
+ft("Continue with while");
+x := 0;
+s := "";
+while x < 12 {
+    x += 1;
+    if x < 7 {
+        continue;
+    }
+    s += sprint(x, ",");
+}
+assert(s, "7 ,8 ,9 ,10 ,11 ,12 ,");
 
 
 ft("Guard");
-guard true else {}
+loop {
+    guard false else {
+        break;
+    }
+}
+
+b := false;
+loop {
+    guard b else {
+        b = true;
+        continue;
+    }
+    break;
+}
+
+
 
 // function isolated
 

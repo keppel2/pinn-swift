@@ -13,33 +13,39 @@ class Pvisitor {
             },
             "bad": { sctx, pv, s in
                 try assertPvals(s, 0);
-                throw Perr(ETEST_FAIL, sctx);
+                throw Perr(ETEST_FAIL, pv, sctx);
                 return nil
             },
             "at": { sctx, pv, s in
                 try assertPvals(s, 1);
                 let b: Bool = try tryCast(s[0]);
                 if !b {
-                    throw Perr(EASSERTF, sctx);
+                    throw Perr(EASSERTF, pv, sctx);
                 }
                 return nil
+            },
+            "call": { sctx, pv, s in
+                let str: String = try tryCast(s[0]);
+                var s2 = s
+                s2.remove(at: 0)
+                return try pv.callFunction(sctx, str, s2)
             },
             "nat": { sctx, pv, s in
                 try assertPvals(s, 1);
                 let b: Bool = try tryCast(s[0]);
                 if b {
-                    throw try Perr(EASSERTF + s[0].string(), sctx);
+                    throw try Perr(EASSERTF + s[0].string(), pv, sctx);
                 }
                 return nil
             },
             "assert": { sctx, pv, s in
                 try assertPvals(s, 2)
                 if try !s[0].gg().gEquivalent(s[1].gg()) {
-                    var perr = Perr(EASSERTF, sctx, nil, nil, try "Type. " + s[0].string() + " " + s[1].string())
+                    var perr = Perr(EASSERTF, sctx, nil, nil, try "Type. " + s[0].string() + " " + s[1].string(), pv)
                     throw perr
                 }
                 if try !s[0].equal(s[1]) {
-                    var perr = Perr(EASSERTF, sctx, nil, nil, try "Val. " + s[0].string() + " " + s[1].string())
+                    var perr = Perr(EASSERTF, sctx, nil, nil, try "Val. " + s[0].string() + " " + s[1].string(), pv)
                     throw perr
                 }
                 return nil
@@ -48,14 +54,14 @@ class Pvisitor {
                 try assertPvals(s, 0)
 
                 if pv.trip {
-                    throw Perr(ENEGTEST_FAIL, sctx)
+                    throw Perr(ENEGTEST_FAIL, pv, sctx)
                 }
                 return nil
             },
             "ng": { sctx, pv, s in try assertPvals(s, 1)
                     let str: String = try tryCast(s[0])
                 if pv.trip {
-                    throw Perr(ENEGTEST_FAIL, sctx)
+                    throw Perr(ENEGTEST_FAIL, pv, sctx)
                 }
                 try pv.reset()
                 pv.trip = true
@@ -76,7 +82,7 @@ class Pvisitor {
             },
             "ft": { sctx, pv, s in try assertPvalIn(s, [1])
                 if pv.lfc != nil {
-                    throw Perr(ESTATEMENT, sctx)
+                    throw Perr(ESTATEMENT,pv,  sctx)
                 }
                 pv.trip = false
                 try pv.reset()
@@ -92,7 +98,7 @@ class Pvisitor {
             "len": { sctx, pv, s in try assertPvals(s, 1)
                 if case .gScalar(let pt) = s[0].getKind().gtype {
                     if pt != String.self {
-                        throw Perr(ETYPE, sctx)
+                        throw Perr(ETYPE, pv, sctx)
                     }
                     return try Pval(sctx, (s[0].getUnwrap() as! String).count)
                 }
@@ -106,7 +112,7 @@ class Pvisitor {
                                 {
                                     sctx, pv, s in
                                         if s.count == 0 {
-                                            throw Perr(EPARAM_LENGTH, sctx)
+                                            throw Perr(EPARAM_LENGTH, pv, sctx)
                                         }
                                         let rt = Pvisitor.printSpace(try s.map {try $0.string()})
                                         return Pval(sctx, rt)
@@ -115,7 +121,7 @@ class Pvisitor {
                                                     {
                                                         sctx, pv, s in
                                                             if s.count == 0 {
-                                                                throw Perr(EPARAM_LENGTH, sctx)
+                                                                throw Perr(EPARAM_LENGTH, pv, sctx)
                                                             }
                                                             let rt = Pvisitor.printSpace(try s.map {try $0.string()})
                                                             return Pval(sctx, rt + "\n")
@@ -123,7 +129,7 @@ class Pvisitor {
             "print":
                 {sctx, pv, s in
                     if s.count == 0 {
-                        throw Perr(EPARAM_LENGTH, sctx)
+                        throw Perr(EPARAM_LENGTH, pv, sctx)
                     }
                     let rt = Pvisitor.printSpace(try s.map {try $0.string()})
                     pv.textout(rt)
@@ -136,7 +142,7 @@ class Pvisitor {
             "println":
                 {sctx, pv, s in
                     if s.count == 0 {
-                        throw Perr(EPARAM_LENGTH, sctx)
+                        throw Perr(EPARAM_LENGTH, pv, sctx)
                     }
 
                     var rt = Pvisitor.printSpace(try s.map {try $0.string()})
@@ -343,7 +349,7 @@ class Pvisitor {
         if let t = tester{
             let compee = printed[li..<printed.endIndex]
             if let bad = t.compare(String(compee)) {
-                throw Perr(ETEST_FAIL + bad)
+                throw Perr(ETEST_FAIL + bad, self)
             }
         }
     }
@@ -414,7 +420,7 @@ class Pvisitor {
     private func callFunction(_ sctx: ParserRuleContext, _ str: String, _ s: [Pval]) throws -> Pval? {
         var rt: Pval?
         guard var fh = fkmap[str] else {
-            throw Perr(EUNDECLAREDF, sctx)
+            throw Perr(EUNDECLAREDF, self, sctx)
         }
         
         
@@ -436,11 +442,11 @@ class Pvisitor {
         
         if fh.fkinds.last != nil && fh.fkinds.last!.variadic {
             if s.count < fh.fkinds.count - 1 {
-                throw Perr(EPARAM_LENGTH, sctx)
+                throw Perr(EPARAM_LENGTH, self, sctx)
             }
         } else
             if s.count != fh.fkinds.count {
-                throw Perr(EPARAM_LENGTH, sctx)
+                throw Perr(EPARAM_LENGTH, self, sctx)
         }
         for (index, v) in fh.fkinds.enumerated() {
             if v.variadic {
@@ -453,13 +459,13 @@ class Pvisitor {
                     try par.set(key, varadds)
                 }
                 if lfc!.m[fh.fkinds[index].s] != nil {
-                    throw Perr(EREDECLARE, sctx)
+                    throw Perr(EREDECLARE, self, sctx)
                 }
                 lfc!.m[fh.fkinds[index].s] = par//Pval(par)
                 continue
             }
             if try !s[index].getKind().equivalent(v.k) {
-                throw Perr(ETYPE, sctx)
+                throw Perr(ETYPE, self, sctx)
             }
             if let pv = lfc!.m[fh.fkinds[index].s]  {
                 throw Perr(EREDECLARE, sctx, pv)
@@ -469,21 +475,21 @@ class Pvisitor {
         try visit(ctx.block()!)
         switch lfc!.path {
         case .pBreak, .pContinue, .pFallthrough:
-            throw Perr(ESTATEMENT, sctx)
+            throw Perr(ESTATEMENT, self, sctx)
         default: break
         }
         
         if let k = fh.kind {
             
             guard let rp = lfc!.rt else {
-                throw Perr(ETYPE, sctx)
+                throw Perr(ETYPE, self, sctx)
             }
             if try !k.equivalent(rp.getKind())  {
-                throw Perr(ETYPE, sctx)
+                throw Perr(ETYPE, self, sctx)
             }
         } else {
             if lfc!.rt != nil {
-                throw Perr(ETYPE, sctx)
+                throw Perr(ETYPE, self, sctx)
             }
         }
         rt = lfc!.rt
@@ -537,10 +543,19 @@ class Pvisitor {
                     }
                     switch fc.path {
                     case .pBreak, .pContinue, .pFallthrough:
-                        throw Perr(ESTATEMENT, sctx)
+                        if trip {
+                            trip = false
+//                            fc.path = .pNormal
+                        } else {
+                        throw Perr(ESTATEMENT, self, sctx)
+                        }
                     case .pExiting:
                         if fc.rt != nil {
-                            throw Perr(ETYPE, sctx)
+                            if trip {
+                                trip = false
+                            } else {
+                            throw Perr(ETYPE, self, sctx)
+                            }
                         }
                     case .pNormal: break
                         
@@ -595,7 +610,7 @@ class Pvisitor {
             let vfks = try visitFKind(child)
             for vfk in vfks {
                 if (fkinds.contains { fk in vfk.s == fk.s }) {
-                    throw Perr(EREDECLARE, vfk.prc)
+                    throw Perr(EREDECLARE, self, vfk.prc)
                 }
                 fkinds.append(vfk)
             }
@@ -632,7 +647,7 @@ class Pvisitor {
                     for sp in sctx.structurePair() {
                         let (s, k) = try visitStructurePair(sp)
                         if stki.keys.contains(s) {
-                            throw Perr(EREDECLARE, sctx)
+                            throw Perr(EREDECLARE, self, sctx)
                         }
                         stki[s] = k
                     }
@@ -757,7 +772,7 @@ class Pvisitor {
                 switch cfc.path {
                 case .pFallthrough:
                     if key != sctx.statement().count - 1 {
-                        throw Perr(ESTATEMENT, sctx)
+                        throw Perr(ESTATEMENT, self, sctx)
                     }
                     
                 case .pBreak:
@@ -774,7 +789,7 @@ class Pvisitor {
     }
     private func _visitPval(_ sctx: ParserRuleContext) throws -> Pval {
         guard let rt = try visitPval(sctx) else {
-            throw Perr(ENIL, sctx)
+            throw Perr(ENIL, self, sctx)
         }
         return rt
     }
@@ -787,10 +802,10 @@ class Pvisitor {
         case let sctx as PinnParser.LExprContext:
             let str =  sctx.ID()!.getText()
             guard let v = getPv(str) else {
-                throw Perr(EUNDECLARED, sctx)
+                throw Perr(EUNDECLARED, self, sctx)
             }
             if v.const {
-                throw Perr(ECONST)
+                throw Perr(ECONST, self, sctx)
             }
             var cv = v
             for e in sctx.expr() {
@@ -802,10 +817,10 @@ class Pvisitor {
         case let sctx as PinnParser.IntExprContext:
             let op = Self.childToText(sctx.getChild(1)!)
             guard let lhs = try visitPval(sctx.expr(0)!) else {
-                throw Perr(ENIL)
+                throw Perr(ENIL, self, sctx)
             }
             guard let rhs = try visitPval(sctx.expr(1)!) else {
-                throw Perr(ENIL)
+                throw Perr(ENIL, self, sctx)
             }
 
             rt = try Self.doOp(lhs, rhs, op, sctx)
@@ -815,10 +830,10 @@ class Pvisitor {
         case let sctx as PinnParser.CompExprContext:
             let op = Self.childToText(sctx.getChild(1)!)
             guard let lhs = try visitPval(sctx.expr(0)!) else {
-                throw Perr(ENIL)
+                throw Perr(ENIL, self, sctx)
             }
             guard let rhs = try visitPval(sctx.expr(1)!) else {
-                throw Perr(ENIL)
+                throw Perr(ENIL, self, sctx)
             }
             
             
@@ -829,7 +844,7 @@ class Pvisitor {
             
             let op = Self.childToText(sctx.getChild(1)!)
             guard let lhs = try visitPval(sctx.expr(0)!) else {
-                throw Perr(ENIL)
+                throw Perr(ENIL, self, sctx)
             }
             if op == "&&" {
                 let lhsv: Bool = try tryCast(lhs)
@@ -840,7 +855,7 @@ class Pvisitor {
                 else {
                     
                     guard let rhs = try visitPval(sctx.expr(1)!) else {
-                        throw Perr(ENIL)
+                        throw Perr(ENIL, self, sctx)
                     }
                     let rhsv: Bool = try tryCast(rhs)
                     rt = Pval(sctx, rhsv)
@@ -855,7 +870,7 @@ class Pvisitor {
                 }
                 else {
                     guard let rhs = try visitPval(sctx.expr(1)!) else {
-                         throw Perr(ENIL)
+                         throw Perr(ENIL, self, sctx)
                      }
                      let rhsv: Bool = try tryCast(rhs)
                      rt = Pval(sctx, rhsv)
@@ -930,7 +945,7 @@ class Pvisitor {
             for op in list {
                 let (str, pv) = try visitObjectPair(op)
                 if olist[str] != nil {
-                    throw Perr(EREDECLARE, sctx)
+                    throw Perr(EREDECLARE, self, sctx)
                 }
                 olist[str] = pv
             }
@@ -979,7 +994,7 @@ class Pvisitor {
 //                    rt = try Pval(sctx, kind!)
 //                }
                 if try !pv.gg().gEquivalentSym(vt.gtype) {
-                    throw Perr(ETYPE, sctx)
+                    throw Perr(ETYPE, self, sctx)
                 }
                 try rt!.set(str, pv)
             }
@@ -988,7 +1003,7 @@ class Pvisitor {
             
                      if sctx.exprList() == nil {
                         if sctx.THREEDOT() == nil {
-                            throw Perr(EPARSE_FAIL, sctx)
+                            throw Perr(EPARSE_FAIL, self, sctx)
                         }
                 rt = try Pval(sctx, Kind.nilSlice())
             } else {
@@ -1254,7 +1269,7 @@ class Pvisitor {
             for child in sctx.statement() {
                 try visit(child)
                 if cfc.path == .pFallthrough {
-                    throw Perr(ESTATEMENT, sctx)
+                    throw Perr(ESTATEMENT, self, sctx)
                 }
                 if cfc.path != .pNormal {
                     break
@@ -1268,10 +1283,10 @@ class Pvisitor {
                 let lae = try _visitPval(sctx.expr()!)
             
                 if !lae.getKind().gtype.isTuple() {
-                    throw Perr(ETYPE, sctx)
+                    throw Perr(ETYPE, self, sctx)
                 }
                 if try ae.count != lae.getCount() {
-                    throw Perr(ERANGE, sctx)
+                    throw Perr(ERANGE, self, sctx)
                 }
                                 for (k, v) in ae.enumerated() {
                                     try v.setPV(lae.get(k))
@@ -1289,7 +1304,7 @@ class Pvisitor {
                 let lae = try visitLList(lel)
 
                 if ae.count != lae.count {
-                    throw Perr(ERANGE, sctx)
+                    throw Perr(ERANGE, self, sctx)
                 }
                     for (k, v) in ae.enumerated() {
                         try lae[k].setPV(v)
@@ -1368,7 +1383,7 @@ class Pvisitor {
                 switch ranger.getKind().gtype {
                 case .gScalar(let pt):
                     if pt != String.self {
-                        throw Perr(ETYPE, sctx)
+                        throw Perr(ETYPE, self, sctx)
                     }
                     let str: String = try tryCast(ranger)
                     for (k, ch) in str.enumerated() {

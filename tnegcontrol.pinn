@@ -38,6 +38,25 @@ loop {
     break;
 }
 
+ng("break");
+break;
+
+ng("break 2");
+{
+break;
+}
+ng("continue");
+continue;
+ng("continue 2");
+{
+    continue;
+}
+
+ng("guard");
+
+guard false else {
+    5;
+}
 
 //functions
 ng("Function call");
