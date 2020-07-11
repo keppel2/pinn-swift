@@ -1,8 +1,7 @@
-//import Foundation
-let FNAME = "a"
-var test = false
-var pvisitor: Pvisitor? = nil
+let FNAME = "xeek"
 let ECONST = "Constant"
+let prefix = "/tmp/"
+let postfix = ".pinn"
 let ENIL = "Unexpected nil"
 let EPARAM_LENGTH = "Parameter length mismatch"
 let ESTATEMENT = "Wrong statement"

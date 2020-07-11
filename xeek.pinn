@@ -1,5 +1,5 @@
 
-AGENTS := 2000 * 100;
+AGENTS := 2000 * 10;//100;
 func genHS(x, y, z int) string {
     return stringValue(x) + "," + stringValue(y) + "," + stringValue(z);
 }

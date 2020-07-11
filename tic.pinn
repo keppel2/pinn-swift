@@ -2,7 +2,7 @@ EMPTY := 0;
 TIE := 3;
 PLAYER_A := 1;
 PLAYER_B := 2;
-SIZE := 3;
+SIZE := 2;
 var rHashMap [map]int;
 
 func rHash(board [SIZE][SIZE]int, player int) int {
@@ -153,6 +153,9 @@ println("loop", time);
 rHashMap = {};
 main();
 time += 1;
-marker = 0;     
+marker = 0;
+    
+    
+    break;
 }
 //main();

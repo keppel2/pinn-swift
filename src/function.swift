@@ -9,7 +9,7 @@ func exe(_ s: String, _ api: Pvisitor? = nil) throws -> Pvisitor {
     }
     
     if tree != nil {
-        pvisitor = pv
+//        pvisitor = pv
             try pv.visitFile(tree!, api)
     } else {
         let parser = stringToParser(s)
@@ -25,12 +25,46 @@ func parse(_ s: String) -> (PinnParser.FileContext?, PinnParser) {
     return (tree, parser)
 }
 
+var ds = DispatchSemaphore(value: 0)
+
+class MyT: Thread {
+    var str = ""
+    override func main() {
+        let inp1 = fnToString(prefix + str + postfix)
+        while true {
+        try! exe(inp1)
+        }
+        ds.signal()
+    }
+}
 func execute() throws  {
     let args = ProcessInfo.processInfo.arguments
     let s = args[1]
-    test = s == "-t"
-    let prefix = "/tmp/"
-    let postfix = ".pinn"
+    let test = s == "-t"
+    let fnames = ["a"]//, "a"]//, "xeek"]
+//    try! exe(fnToString(prefix + "tic" + postfix))
+//    return
+//    var mar = [MyT]()
+//    for name in fnames {
+//        let mt = MyT()
+//        mt.str = name
+//        mar.append(mt)
+//    }
+//    for t in mar {
+//        t.start()
+//    }
+//    for _ in fnames {
+//        ds.wait()
+//    }
+//    sleep(2)
+//return
+//    let inp1 = fnToString(prefix + "tic" + postfix)
+//    try exe(inp1)
+//    let inp2 = fnToString(prefix + "xeek" + postfix)
+//    try exe(inp2)
+//    return
+//    
+//    
     let plib = try exe(fnToString(prefix + "libp" + postfix))
     plib.removeReserved()
     if test {
