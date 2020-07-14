@@ -563,6 +563,9 @@ class Pvisitor {
                 }
             }
         }
+        if trip {
+            throw Perr(ENEGTEST_FAIL, self, sctx)
+        }
         //try test()
     }
     

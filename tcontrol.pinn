@@ -189,7 +189,7 @@ when false:
     bad();
 when true:
     count++;
-    when true:
+when true:
     count++;
 }
 assert(count, 1);

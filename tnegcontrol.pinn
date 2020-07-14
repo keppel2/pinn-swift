@@ -229,4 +229,3 @@ for var x string; i < 2; i += "aap" {}
 ng("For triple:");
 for var i []int; i < 2; i++ {}
 
-ng("");

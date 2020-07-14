@@ -662,10 +662,29 @@ type tInt int;
 var x tInt;
 x = true;
 
+ng("Increment");
+x++;
+
+ng("Dec");
+x--;
+
+ng("Compound");
+x += 1;
+
+ng("Multiple");
+x += y;
+
+
+
+
+
+
+
 ng("API");
 max(5);
 ng("API");
 abs(2, 5);
 ng("API");
 max(5, true);
-ng("");
+ng("sdf");
+x;
