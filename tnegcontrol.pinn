@@ -58,6 +58,25 @@ guard false else {
     5;
 }
 
+//match
+
+ng("match");
+match 0 {
+    when true:
+}
+
+ng("match 2");
+match 0 {
+    when 0:
+    bad();
+    when 1:
+    ;
+}
+
+
+
+
+
 //functions
 ng("Function call");
 f();
@@ -208,6 +227,6 @@ ng("For triple:");
 for var x string; i < 2; i += "aap" {}
 
 ng("For triple:");
-for var i [2]int; i[1] < 2; i++ {}
+for var i []int; i < 2; i++ {}
 
-
+ng("");
