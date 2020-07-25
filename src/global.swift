@@ -1,4 +1,4 @@
-let FNAME = "xeek"
+let FNAME = "a"
 let ECONST = "Constant"
 let prefix = "/tmp/"
 let postfix = ".pinn"

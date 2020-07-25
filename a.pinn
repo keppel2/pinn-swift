@@ -1,11 +1,2 @@
-s := "";
-//func f(a int) {print(a);}
-func countToFour(i int) {
-    s += sprint(i) + ",";
-//  f(42);
-    if i > 1 {
-        countToFour(i - 1);
-    }
-}
-countToFour(5);
-println(s);
+x := 5;
+print(x);
