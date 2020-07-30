@@ -1,3 +1,4 @@
+var pvik: Pvisitor?
 let FNAME = "a"
 let ECONST = "Constant"
 let prefix = "/tmp/"

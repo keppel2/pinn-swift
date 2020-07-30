@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E26F5D9424CE0F50001C8A9B /* Kinds.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26F5D9324CE0F50001C8A9B /* Kinds.swift */; };
 		E2B531442398E3500041751D /* PinnParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B531382398E3500041751D /* PinnParser.swift */; };
 		E2B531452398E3500041751D /* PinnParserATN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B531392398E3500041751D /* PinnParserATN.swift */; };
 		E2B531462398E3500041751D /* Kind.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B5313A2398E3500041751D /* Kind.swift */; };
@@ -71,6 +72,7 @@
 		E22C2FA62399FD9E007AD1D5 /* Antlr4-swift */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Antlr4-swift"; sourceTree = "<group>"; };
 		E2673962235BC825000CF830 /* pinn */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = pinn; sourceTree = BUILT_PRODUCTS_DIR; };
 		E26E76A024A9B11900D7743F /* tneg.pinn */ = {isa = PBXFileReference; explicitFileType = sourcecode.c; path = tneg.pinn; sourceTree = "<group>"; };
+		E26F5D9324CE0F50001C8A9B /* Kinds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Kinds.swift; sourceTree = "<group>"; };
 		E290C8FD24B7C0E4003288CF /* tnegcontrol.pinn */ = {isa = PBXFileReference; explicitFileType = sourcecode.c; path = tnegcontrol.pinn; sourceTree = "<group>"; };
 		E2B287D3248A1351000A968F /* paused.pinn */ = {isa = PBXFileReference; lastKnownFileType = text; path = paused.pinn; sourceTree = "<group>"; };
 		E2B287D4248A1351000A968F /* ttypes.pinn */ = {isa = PBXFileReference; explicitFileType = sourcecode.c; path = ttypes.pinn; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 				E2D584902405ECE2002ED255 /* Gtype.swift */,
 				E2B287D6248A1351000A968F /* heap.pinn */,
 				E2B5313A2398E3500041751D /* Kind.swift */,
+				E26F5D9324CE0F50001C8A9B /* Kinds.swift */,
 				E2B531422398E3500041751D /* main.swift */,
 				E2B287D3248A1351000A968F /* paused.pinn */,
 				E2B5313D2398E3500041751D /* Perr.swift */,
@@ -247,6 +250,7 @@
 				E2B5314B2398E3500041751D /* Pval.swift in Sources */,
 				E2B531442398E3500041751D /* PinnParser.swift in Sources */,
 				E2D584922405ECE2002ED255 /* function.swift in Sources */,
+				E26F5D9424CE0F50001C8A9B /* Kinds.swift in Sources */,
 				E2B531482398E3500041751D /* Pvisitor.swift in Sources */,
 				E2B531492398E3500041751D /* Perr.swift in Sources */,
 				E2B531452398E3500041751D /* PinnParserATN.swift in Sources */,

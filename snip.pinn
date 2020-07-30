@@ -146,3 +146,50 @@ main();
 //rec := *(*(*(), 12), 23);
 //rec is *(self, int);
 //rec is *(*(*(bool), int), int);
+
+
+
+
+
+
+
+
+
+
+AGENTS := 2000 * 10;//100;
+func genHS(x, y, z int) string {
+    return stringValue(x) + "," + stringValue(y) + "," + stringValue(z);
+}
+
+func main() {
+    println("x,y,z");
+    println("5,5,5");
+    println("5,5,5");
+    var hm [map]bool;
+    var i, x, y, z int;
+    var coin, c2 int;
+    for i = range 1@AGENTS {
+    repeat {
+        x = rand(300);
+        y = rand(300);
+        coin = rand(4) + 1;
+        if coin == 1 {
+          z = 1;
+        } else if coin == 2 {
+          z = rand(16);
+        } else if coin == 3 {
+          c2 = rand(5);
+          if c2 == 0 {
+            z = rand(1250);
+          } else {
+            z= rand(400);
+          }
+        } else if coin == 4 {
+          z= rand(256);
+        }
+        } while hm[genHS(x, y, z)] == true;
+        hm[genHS(x, y, z)] = true;
+        println(genHS(x, y, z));
+    }
+}
+main();

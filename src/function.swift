@@ -4,6 +4,7 @@ import Antlr4
 func exe(_ s: String, _ api: Pvisitor? = nil) throws -> Pvisitor {
     let (tree, parser) = parse(s)
     let pv = try Pvisitor(parser)
+    pvik = pv
     if let apip = api {
         pv.apifkmap = apip.fkmap
     }
@@ -31,9 +32,26 @@ class MyT: Thread {
     var str = ""
     override func main() {
         let inp1 = fnToString(prefix + str + postfix)
-        while true {
-        try! exe(inp1)
+//        while true {
+        
+//  try! exe(inp1)
+//        do {
+//            try exe(inp1)
+//        } catch let err{
+//            print("here", err)
+//        }
+    do {
+    try exe(inp1)
+} catch let err where err is Perr {
+    print((err as! Perr).string)
+    } catch let err2 {
+        print(err2)
         }
+        
+        
+        
+//        }
+        print(str)
         ds.signal()
     }
 }
@@ -41,7 +59,7 @@ func execute() throws  {
     let args = ProcessInfo.processInfo.arguments
     let s = args[1]
     let test = s == "-t"
-    let fnames = ["a"]//, "a"]//, "xeek"]
+    let fnames = ["a", "xeek"]
 //    try! exe(fnToString(prefix + "tic" + postfix))
 //    return
 //    var mar = [MyT]()
@@ -56,6 +74,7 @@ func execute() throws  {
 //    for _ in fnames {
 //        ds.wait()
 //    }
+//    return
 //    sleep(2)
 //return
 //    let inp1 = fnToString(prefix + "tic" + postfix)

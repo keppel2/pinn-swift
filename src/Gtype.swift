@@ -101,7 +101,7 @@ enum Gtype {
     func toPGtype() throws -> Gtype {
         if case .gDefined(let s) = self {
             
-            return try Kind.getPKind(s).gtype
+            return try pvik!.ks.getPkind(s).gtype
         }
         return self
     }

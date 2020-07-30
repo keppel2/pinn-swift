@@ -337,6 +337,10 @@ class Pvisitor {
     private var prc: ParserRuleContext?
     private var oldPrc: ParserRuleContext?
     private var cfc: Fc {return lfc ?? fc}
+    
+    
+    var ks = Kinds()
+
 
     init(_ ap: PinnParser) throws {
         aparser = ap
@@ -358,12 +362,12 @@ class Pvisitor {
         lfc = nil
         fkmap = apifkmap //[String:Fheader]()
         
-        Kind.clear()
+        ks.clear()
         for str in Self.builtIns.keys {
             reserveFunction(str)
         }
         for (str, x) in Self.litToType {
-            try Kind.storeKind(str, Kind.produceKind(Gtype.gScalar(x)))
+            try ks.addKind(str, Kind.produceKind(Gtype.gScalar(x)))
         }
         
     }
@@ -1457,7 +1461,7 @@ class Pvisitor {
             let str = sctx.ID()!.getText()
             
             let k = try visitKind(sctx.kind()!)
-            try Kind.storeKind(str, k)
+            try ks.addKind(str, k)
                 
             
         case let sctx as PinnParser.VarDeclContext:

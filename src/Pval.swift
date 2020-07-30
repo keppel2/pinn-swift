@@ -366,7 +366,7 @@ break
             
 
                         case .gDefined(let s):
-                            e.k = try Kind.getPKind(s)
+                            e.k = try pvik!.ks.getPkind(s)
                             try gFix()
             
         }
