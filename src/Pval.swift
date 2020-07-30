@@ -51,7 +51,7 @@ class Pval {
         let k = try! Kind.produceKind(Gtype.gScalar(type(of: a)))
         e = Pvalp(k, .single(w), c)
     }
-    init( _ c: ParserRuleContext, _ kx: Kind, _ pv: Pvisitor? = nil) throws {
+    init( _ c: ParserRuleContext, _ kx: Kind, _ pv: Pvisitor?) throws {
         self.pv = pv
         let ke = try kx.sk()
         switch ke.gtype {
@@ -60,7 +60,7 @@ class Pval {
         case .gArray(let k2, let i):
             var ar = [Pval]()
             for _ in 0..<i {
-                try ar.append(Pval(c, k2))
+                try ar.append(Pval(c, k2, pv))
             }
             e = Pvalp(ke, Contents.multi(Wrap(ar)), c)
         case .gMap:
@@ -72,7 +72,7 @@ class Pval {
         case .gTuple(let ka):
             var ar = [Pval]()
             for x in ka {
-                try ar.append(Pval(c, x))
+                try ar.append(Pval(c, x, pv))
             }
             e = Pvalp(ke, Contents.multi(Wrap(ar)), c)
         case .gPointer:
@@ -80,7 +80,7 @@ class Pval {
         case .gStructure(let osk):
             var m = [String: Pval]()
             for (str, ki) in osk {
-                m[str] = try Pval(c, ki)
+                m[str] = try Pval(c, ki, pv)
             }
             e = Pvalp(ke, Contents.map(Wrap(m)), c)
             
@@ -92,14 +92,14 @@ class Pval {
         
     }
         
-    convenience init( _ c: ParserRuleContext, _ pv: Pval, _ a: Int, _ b: Int) throws {
+    convenience init( _ c: ParserRuleContext, _ pv: Pval, _ a: Int, _ b: Int, _ pvi: Pvisitor) throws {
         switch pv.getKind().gtype {
         case .gSlice(let k):
-            try self.init(c, Kind.produceKind(Gtype.gSlice(k)))
+            try self.init(c, Kind.produceKind(Gtype.gSlice(k)), pvi)
             e.con = .multi(Wrap(try pv.e.con.getSlice(a, b)))
         case .gArray(let k, let x):
             _ = x
-            try self.init(c, Kind.produceKind(Gtype.gSlice(k)))
+            try self.init(c, Kind.produceKind(Gtype.gSlice(k)), pvi)
             e.con = .multi(Wrap(try pv.e.con.getSlice(a, b)))
         
         default:
@@ -110,7 +110,7 @@ class Pval {
     }
     var prc: ParserRuleContext {e.prc}
     func cloneType() throws -> Pval {
-        let rt = try Pval(self.prc, self.e.k)
+        let rt = try Pval(self.prc, self.e.k, pv)
         try rt.setPV(self)
         return rt
     }
@@ -156,7 +156,7 @@ class Pval {
     
     private func getNewChild() throws  -> Pval {
         if case .gMap(let k) = getKind().gtype {
-            return try Pval(e.prc, k)
+            return try Pval(e.prc, k, pv)
         } else {
             throw Perr(ETYPE, self)
         }
@@ -192,7 +192,7 @@ let newstr = str[start..<end]
 //                    if const {
 //                        throw Perr(ECONST)
 //                    }
-                    try e.con.appendCon(Pval(e.prc, k))
+                    try e.con.appendCon(Pval(e.prc, k, pv))
                 }
                 fallthrough
             case .gArray, .gPointer, .gTuple:
@@ -225,9 +225,9 @@ let newstr = str[start..<end]
 //                        if const {
 //                            throw Perr(ECONST)
 //                        }
-                        try e.con.setCon(v1v, Pval(e.prc, k))
+                        try e.con.setCon(v1v, Pval(e.prc, k, pv))
                     } else {
-                        return try Pval(e.prc, k)
+                        return try Pval(e.prc, k, pv)
                     }
                 }
                 let pv = e.con.getMap()[v1v]!

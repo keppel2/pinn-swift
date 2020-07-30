@@ -188,7 +188,7 @@ class Pvisitor {
         ]
     
 
-    private static func doOp(_ lhs: Pval, _ rhs: Pval, _ str: String, _ sctx: ParserRuleContext) throws -> Pval {
+    private func doOp(_ lhs: Pval, _ rhs: Pval, _ str: String, _ sctx: ParserRuleContext) throws -> Pval {
          let rt: Pval
          switch str {
          case "==":
@@ -294,7 +294,7 @@ class Pvisitor {
                  throw Perr(ERANGE, sctx)
              }
              let ki = try Kind.produceKind(Gtype.gScalar(Int.self))
-             rt = try Pval(sctx, Kind.produceKind(Gtype.gSlice(ki)))
+             rt = try Pval(sctx, Kind.produceKind(Gtype.gSlice(ki)), self)
              for x in lhsv..<rhsv {
                  try rt.set(x - lhsv, Pval(sctx, x))
              }
@@ -454,7 +454,7 @@ class Pvisitor {
         }
         for (index, v) in fh.fkinds.enumerated() {
             if v.variadic {
-                let par = try Pval(ctx, Kind.produceKind(Gtype.gArray(v.k, s.count - index)))
+                let par = try Pval(ctx, Kind.produceKind(Gtype.gArray(v.k, s.count - index)), self)
                 
                 for (key, varadds) in s[index...].enumerated() {
                     if try !v.k.equivalent(varadds.getKind())  {
@@ -830,7 +830,7 @@ class Pvisitor {
                 throw Perr(ENIL, self, sctx)
             }
 
-            rt = try Self.doOp(lhs, rhs, op, sctx)
+            rt = try doOp(lhs, rhs, op, sctx)
             
             
             
@@ -844,7 +844,7 @@ class Pvisitor {
             }
             
             
-            try rt = Self.doOp(lhs, rhs, op, sctx)
+            try rt = doOp(lhs, rhs, op, sctx)
             
             
         case let sctx as PinnParser.BoolExprContext:
@@ -917,9 +917,9 @@ class Pvisitor {
         case let sctx as PinnParser.TupleExprContext:
             if sctx.exprList() == nil {
                 if sctx.AST() == nil {
-                rt = try Pval(sctx, Kind.emptyTuple())
+                rt = try Pval(sctx, Kind.emptyTuple(), self)
                 } else {
-                    rt = try Pval(sctx, Kind.nilPointer())
+                    rt = try Pval(sctx, Kind.nilPointer(), self)
                 }
             } else {
             let el = sctx.exprList()!
@@ -944,7 +944,7 @@ class Pvisitor {
             var kind: Kind?
             var ckind: Kind?
             if list.count == 0 {
-                rt = try Pval(sctx, Kind.nilMap())
+                rt = try Pval(sctx, Kind.nilMap(), self)
                 return rt
             }
             
@@ -961,7 +961,7 @@ class Pvisitor {
                 for (k, v) in olist {
                     klist[k] = v.getKind()
                 }
-                rt = try Pval(sctx, Kind(Gtype.gStructure(klist)))
+                rt = try Pval(sctx, Kind(Gtype.gStructure(klist)), self)
                 
                 
                 
@@ -989,7 +989,7 @@ class Pvisitor {
             } else {
                 vt = val.first!.getKind()
             }
-            rt = try  Pval(sctx, Kind(Gtype.gMap(vt)))
+            rt = try  Pval(sctx, Kind(Gtype.gMap(vt)), self)
             
             
             
@@ -1012,7 +1012,7 @@ class Pvisitor {
                         if sctx.THREEDOT() == nil {
                             throw Perr(EPARSE_FAIL, self, sctx)
                         }
-                rt = try Pval(sctx, Kind.nilSlice())
+                rt = try Pval(sctx, Kind.nilSlice(), self)
             } else {
             
             
@@ -1090,7 +1090,7 @@ class Pvisitor {
             
             let lhs = try _visitPval(sctx.expr(0)!)
             let rhs = try _visitPval(sctx.expr(1)!)
-            rt = try Self.doOp(lhs, rhs, op, sctx)
+            rt = try doOp(lhs, rhs, op, sctx)
         case let sctx as PinnParser.DotIndexExprContext:
             let v = try _visitPval(sctx.expr()!)
             
@@ -1155,7 +1155,7 @@ class Pvisitor {
                     rhsv += 1
                 }
                 
-                rt = try Pval(sctx, v, lhsv, rhsv)
+                rt = try Pval(sctx, v, lhsv, rhsv, self)
                 
                 
                 return rt
@@ -1226,7 +1226,7 @@ class Pvisitor {
             let op = sctx.children![sctx.children!.count - 3].getText()
             
             
-            let result = try Self.doOp(lh, rh, op, sctx)
+            let result = try doOp(lh, rh, op, sctx)
             try lh.setPV(result)
             
         case let sctx as PinnParser.StatementContext:
@@ -1534,7 +1534,7 @@ class Pvisitor {
                             if let prev = map[v] {
                                 throw Perr(EREDECLARE, sctx, prev)
                             }
-                                newV = try Pval(sctx, k)
+                                newV = try Pval(sctx, k, self)
 
                             if lfc != nil {
                                 lfc!.m[v] = newV
