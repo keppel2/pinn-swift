@@ -3,22 +3,25 @@ import Antlr4
 class Pval {
     private var e: Pvalp
     var const = false
-    var pv: Pvisitor?
-    private init(_ x: Pvalp) {
+    var pv: Pvisitor
+    private init(_ x: Pvalp, _ pvik: Pvisitor) {
         e = x
+        pv = pvik
     }
     init(_ p: Pval, _ c: Bool? = false) {
         e = p.e
         if let cc = c {
             const = cc
         }
+        pv = p.pv
     }
 
-    init(_ c: ParserRuleContext, _ ar: [Pval], _ sp: Bool, _ k: Kind? = nil) throws {
+    init(_ c: ParserRuleContext, _ ar: [Pval], _ sp: Bool, _ k: Kind? = nil, _ pvik: Pvisitor) throws {
+        pv = pvik
         if let ki = k
         {
             if (try ar.contains {
-                try !$0.gg().gEquivalentSym(ki.gtype)
+                try !$0.gg().gEquivalentSym(ki.gtype, pvik)
                 }) {
             throw Perr(ETYPE, c)
             }
@@ -46,14 +49,15 @@ class Pval {
     }
 
     
-    init(_ c: ParserRuleContext, _ a: Ptype) {
+    init(_ c: ParserRuleContext, _ a: Ptype, _ pvik: Pvisitor) {
         let w = Pwrap(a)
         let k = try! Kind.produceKind(Gtype.gScalar(type(of: a)))
         e = Pvalp(k, .single(w), c)
+        pv = pvik
     }
-    init( _ c: ParserRuleContext, _ kx: Kind, _ pv: Pvisitor?) throws {
+    init( _ c: ParserRuleContext, _ kx: Kind, _ pv: Pvisitor) throws {
         self.pv = pv
-        let ke = try kx.sk()
+        let ke = try kx.sk(pv)
         switch ke.gtype {
         case .gSlice:
             e = Pvalp(ke, Contents.multi(Wrap([Pval]())), c)
@@ -115,7 +119,7 @@ class Pval {
         return rt
     }
     func equal(_ p: Pval) throws -> Bool {
-        if try !getKind().equivalent(p.getKind()) {
+        if try !getKind().equivalent(p.getKind(), pv) {
             throw Perr(ETYPE, self)
         }
         
@@ -163,7 +167,7 @@ class Pval {
     }
     
     func get(_ k: Ktype, _ lh: Bool = false) throws -> Pval {
-        let g = try getKind().gtype.toPGtype()
+        let g = try getKind().gtype.toPGtype(pv)
         switch k {
         case let v1v as Int:
             switch g {
@@ -182,7 +186,7 @@ class Pval {
                 let end = str.index(str.startIndex, offsetBy: v1v + 1)
 let newstr = str[start..<end]
                 
-                return Pval(e.prc, String(newstr))
+                return Pval(e.prc, String(newstr), pv)
             
                 
                 
@@ -254,7 +258,7 @@ let newstr = str[start..<end]
         if const {
             throw Perr(ECONST, self)
         }
-        let b = try getKind().gtype.gEquivalent(v.gg())
+        let b = try getKind().gtype.gEquivalent(v.gg(), pv)
 
 
         if !b {
@@ -348,7 +352,7 @@ break
             return
            }
             for (k, v) in ka.enumerated() {
-                if try v.gtype.toPGtype().isRef() {
+                if try v.gtype.toPGtype(pv).isRef() {
                     pva[k].e.k = Kind(gg())
 
                 } else {
@@ -366,7 +370,7 @@ break
             
 
                         case .gDefined(let s):
-                            e.k = try pvik!.ks.getPkind(s)
+                            e.k = try pv.ks.getPkind(s)
                             try gFix()
             
         }
@@ -440,7 +444,7 @@ break
             if getKind().gtype.isPointer() {
                 aden()
             }
-            return Pval(e.prc, pw.clone().unwrap())
+            return Pval(e.prc, pw.clone().unwrap(), pv)
         case .multi(let ar):
             switch getKind().gtype {
             case .gSlice, .gPointer:
@@ -448,7 +452,7 @@ break
             case .gArray, .gTuple:
                 let con = try Contents.multi(Wrap(ar.w.map { try $0.cloneIf() }))
                 let pvp = Pvalp(e.k, con, e.prc)
-                return Pval(pvp)
+                return Pval(pvp, pv)
             default: aden()
             }
         case .map:
@@ -462,7 +466,7 @@ break
                 }
                 let con = try Contents.map(Wrap(sv))
                 let pvp = Pvalp(Kind(Gtype.gStructure(osk)), con, e.prc)
-                return Pval(pvp)
+                return Pval(pvp, pv)
             default:
                 aden()
             }

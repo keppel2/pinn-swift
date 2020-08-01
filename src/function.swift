@@ -4,7 +4,7 @@ import Antlr4
 func exe(_ s: String, _ api: Pvisitor? = nil) throws -> Pvisitor {
     let (tree, parser) = parse(s)
     let pv = try Pvisitor(parser)
-    pvik = pv
+   // pvik = pv
     if let apip = api {
         pv.apifkmap = apip.fkmap
     }

@@ -98,10 +98,10 @@ enum Gtype {
             aden()
         }
     }
-    func toPGtype() throws -> Gtype {
+    func toPGtype(_ pvik: Pvisitor) throws -> Gtype {
         if case .gDefined(let s) = self {
             
-            return try pvik!.ks.getPkind(s).gtype
+            return try pvik.ks.getPkind(s).gtype
         }
         return self
     }
@@ -152,14 +152,14 @@ enum Gtype {
 //    }
 //    
     
-    func gEquivalentSym(_ g: Gtype) throws -> Bool {
-        return try gEquivalent(g) || g.gEquivalent(self)
+    func gEquivalentSym(_ g: Gtype, _ pvik: Pvisitor) throws -> Bool {
+        return try gEquivalent(g, pvik) || g.gEquivalent(self, pvik)
     }
   
     
-    func gEquivalent(_ g2x: Gtype) throws -> Bool {
-        let g2 = try g2x.toPGtype()
-        switch try self.toPGtype() {
+    func gEquivalent(_ g2x: Gtype, _ pvik: Pvisitor) throws -> Bool {
+        let g2 = try g2x.toPGtype(pvik)
+        switch try self.toPGtype(pvik) {
         case .gScalar(let pt):
             if pt == Ref.self {
                 if g2.isNilPointer() {
@@ -173,7 +173,7 @@ enum Gtype {
         case .gArray(let k, let i):
             
             if case .gArray(let k2, let i2) = g2 {
-                return try i == i2 && k.gtype.gEquivalent(k2.gtype)
+                return try i == i2 && k.gtype.gEquivalent(k2.gtype, pvik)
             }
             return false
         case .gSlice(let k):
@@ -181,7 +181,7 @@ enum Gtype {
                 return true
             }
             if case .gSlice(let k2) = g2 {
-                return try k.gtype.gEquivalent(k2.gtype)
+                return try k.gtype.gEquivalent(k2.gtype, pvik)
             }
             return false
         case .gMap(let k):
@@ -189,7 +189,7 @@ enum Gtype {
                 return true
             }
             if case .gMap(let k2) = g2 {
-                return try k.gtype.gEquivalent(k2.gtype)
+                return try k.gtype.gEquivalent(k2.gtype, pvik)
             }
             return false
         case .gPointer(let ka):
@@ -198,13 +198,13 @@ enum Gtype {
             }
             if case .gPointer(let ka2) = g2 {
                 return try ka.elementsEqual(ka2) {
-                    if try $0.gtype.toPGtype().isRef() {
-                        if try $1.gtype.toPGtype().isRef() {
+                    if try $0.gtype.toPGtype(pvik).isRef() {
+                        if try $1.gtype.toPGtype(pvik).isRef() {
                             return true
                         }
-                        return try self.gEquivalent($1.gtype)
+                        return try self.gEquivalent($1.gtype, pvik)
                     } else {
-                    return try $0.gtype.gEquivalent($1.gtype)
+                    return try $0.gtype.gEquivalent($1.gtype, pvik)
                     }
                 }
             }
@@ -216,7 +216,7 @@ enum Gtype {
                 }
                 for (s, k) in osk {
                     if let sgt = osk2[s]?.gtype {
-                        if try !k.gtype.gEquivalent(sgt) {
+                        if try !k.gtype.gEquivalent(sgt, pvik) {
                             return false
                         }
                     } else {
@@ -231,7 +231,7 @@ enum Gtype {
             if case .gTuple(let ka2) = g2 {
                 
                 return try ka.elementsEqual(ka2) {
-                    return try $0.gtype.gEquivalent($1.gtype)
+                    return try $0.gtype.gEquivalent($1.gtype, pvik)
                 }
             }
             return false

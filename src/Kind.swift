@@ -47,10 +47,10 @@ class Kind {
 //        return try gtype.gAssignable(k.gtype, k)
 //
 //    }
-    func sk() throws -> Kind {
-        return try Kind(gtype.toPGtype())
+    func sk(_ pvik: Pvisitor) throws -> Kind {
+        return try Kind(gtype.toPGtype(pvik))
     }
-    func equivalent(_ k: Kind) throws -> Bool {
+    func equivalent(_ k: Kind, _ pvik: Pvisitor) throws -> Bool {
 //        if self === k {
 //            return true
 //        }
@@ -60,7 +60,7 @@ class Kind {
 //            return true
 //        }
         
-        return try gtype.gEquivalent(k.gtype)
+        return try gtype.gEquivalent(k.gtype, pvik)
     }
 //    func isNr() -> Bool {
 //        return self === gOne.nkind
