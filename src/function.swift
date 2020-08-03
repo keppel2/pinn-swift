@@ -7,6 +7,7 @@ func exe(_ s: String, _ api: Pvisitor? = nil) throws -> Pvisitor {
     if let apip = api {
         pv.apifkmap = apip.fkmap
     }
+    try! pv.reset()
     
     if tree != nil {
             try pv.visitFile(tree!, api)

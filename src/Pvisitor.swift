@@ -357,7 +357,7 @@ class Pvisitor {
             }
         }
     }
-    private func reset() throws {
+    func reset() throws {
         fc = Fc()
         lfc = nil
         fkmap = apifkmap //[String:Fheader]()
