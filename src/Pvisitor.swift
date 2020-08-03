@@ -476,6 +476,7 @@ class Pvisitor {
             }
             lfc!.m[fh.fkinds[index].s] = try Pval(s[index])//.cloneType()
         }
+        try visit(ctx.block()!)
 
         switch lfc!.path {
         case .pBreak, .pContinue, .pFallthrough:
@@ -486,7 +487,7 @@ class Pvisitor {
         if let k = fh.kind {
             
             guard let rp = lfc!.rt else {
-                throw Perr(ETYPE, self, sctx)
+                    throw Perr(ETYPE, self, sctx)
             }
             if try !k.equivalent(rp.getKind(), self)  {
                 throw Perr(ETYPE, self, sctx)
