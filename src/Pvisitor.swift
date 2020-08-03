@@ -476,7 +476,7 @@ class Pvisitor {
             }
             lfc!.m[fh.fkinds[index].s] = try Pval(s[index])//.cloneType()
         }
-        try visit(ctx.block()!)
+
         switch lfc!.path {
         case .pBreak, .pContinue, .pFallthrough:
             throw Perr(ESTATEMENT, self, sctx)

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E25081B224D695E70094B27F /* Pthread.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25081B124D695E70094B27F /* Pthread.swift */; };
 		E26F5D9424CE0F50001C8A9B /* Kinds.swift in Sources */ = {isa = PBXBuildFile; fileRef = E26F5D9324CE0F50001C8A9B /* Kinds.swift */; };
 		E2B531442398E3500041751D /* PinnParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B531382398E3500041751D /* PinnParser.swift */; };
 		E2B531452398E3500041751D /* PinnParserATN.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B531392398E3500041751D /* PinnParserATN.swift */; };
@@ -70,9 +71,10 @@
 		E218086924A82A8A0041ECE1 /* tcontrol.pinn */ = {isa = PBXFileReference; explicitFileType = sourcecode.c; path = tcontrol.pinn; sourceTree = "<group>"; };
 		E218086A24A83BBF0041ECE1 /* xeek.pinn */ = {isa = PBXFileReference; lastKnownFileType = text; path = xeek.pinn; sourceTree = "<group>"; };
 		E22C2FA62399FD9E007AD1D5 /* Antlr4-swift */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Antlr4-swift"; sourceTree = "<group>"; };
+		E25081B124D695E70094B27F /* Pthread.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pthread.swift; sourceTree = "<group>"; };
 		E2673962235BC825000CF830 /* pinn */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = pinn; sourceTree = BUILT_PRODUCTS_DIR; };
 		E26E76A024A9B11900D7743F /* tneg.pinn */ = {isa = PBXFileReference; explicitFileType = sourcecode.c; path = tneg.pinn; sourceTree = "<group>"; };
-		E26F5D9324CE0F50001C8A9B /* Kinds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Kinds.swift; sourceTree = "<group>"; };
+		E26F5D9324CE0F50001C8A9B /* Kinds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Kinds.swift; path = src/Kinds.swift; sourceTree = "<group>"; };
 		E290C8FD24B7C0E4003288CF /* tnegcontrol.pinn */ = {isa = PBXFileReference; explicitFileType = sourcecode.c; path = tnegcontrol.pinn; sourceTree = "<group>"; };
 		E2B287D3248A1351000A968F /* paused.pinn */ = {isa = PBXFileReference; lastKnownFileType = text; path = paused.pinn; sourceTree = "<group>"; };
 		E2B287D4248A1351000A968F /* ttypes.pinn */ = {isa = PBXFileReference; explicitFileType = sourcecode.c; path = ttypes.pinn; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 				E2B287D5248A1351000A968F /* baduk.pinn */,
 				E2D5848D2405ECE2002ED255 /* extensions.swift */,
 				E2D5848E2405ECE2002ED255 /* function.swift */,
+				E25081B124D695E70094B27F /* Pthread.swift */,
 				E2B531432398E3500041751D /* global.swift */,
 				E2D584902405ECE2002ED255 /* Gtype.swift */,
 				E2B287D6248A1351000A968F /* heap.pinn */,
@@ -259,6 +262,7 @@
 				E2B5314A2398E3500041751D /* aux.swift in Sources */,
 				E2B5314E2398E3500041751D /* main.swift in Sources */,
 				E2B531462398E3500041751D /* Kind.swift in Sources */,
+				E25081B224D695E70094B27F /* Pthread.swift in Sources */,
 				E2B531472398E3500041751D /* protocols.swift in Sources */,
 				E2B5314D2398E3500041751D /* PinnLexer.swift in Sources */,
 				E2D584942405ECE2002ED255 /* Gtype.swift in Sources */,

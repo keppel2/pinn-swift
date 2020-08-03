@@ -4,13 +4,11 @@ import Antlr4
 func exe(_ s: String, _ api: Pvisitor? = nil) throws -> Pvisitor {
     let (tree, parser) = parse(s)
     let pv = try Pvisitor(parser)
-   // pvik = pv
     if let apip = api {
         pv.apifkmap = apip.fkmap
     }
     
     if tree != nil {
-//        pvisitor = pv
             try pv.visitFile(tree!, api)
     } else {
         let parser = stringToParser(s)
@@ -30,8 +28,10 @@ var ds = DispatchSemaphore(value: 0)
 
 class MyT: Thread {
     var str = ""
+    var pfc: PinnParser.FileContext?
+    var pp: PinnParser?
     override func main() {
-        let inp1 = fnToString(prefix + str + postfix)
+//        let inp1 = fnToString(prefix + str + postfix)
 //        while true {
         
 //  try! exe(inp1)
@@ -40,18 +40,19 @@ class MyT: Thread {
 //        } catch let err{
 //            print("here", err)
 //        }
-    do {
-    try exe(inp1)
-} catch let err where err is Perr {
-    print((err as! Perr).string)
-    } catch let err2 {
-        print(err2)
-        }
-        
-        
+    let pv = try! Pvisitor(pp!)
+        try! pv.visitFile(pfc!, nil)
+//        do {
+//    try
+//} catch let err where err is Perr {
+//    print((err as! Perr).string)
+//    } catch let err2 {
+//        print(err2)
+//        }
+//
+//
         
 //        }
-        print(str)
         ds.signal()
     }
 }
@@ -59,13 +60,13 @@ func execute() throws  {
     let args = ProcessInfo.processInfo.arguments
     let s = args[1]
     let test = s == "-t"
-    let fnames = ["a", "xeek"]
-//    try! exe(fnToString(prefix + "tic" + postfix))
-//    return
+//    let fnames = ["a", "xeek"]
 //    var mar = [MyT]()
 //    for name in fnames {
 //        let mt = MyT()
 //        mt.str = name
+//        (mt.pfc, mt.pp) = parse(fnToString(prefix + mt.str + postfix))
+//        
 //        mar.append(mt)
 //    }
 //    for t in mar {
@@ -75,15 +76,8 @@ func execute() throws  {
 //        ds.wait()
 //    }
 //    return
-//    sleep(2)
-//return
-//    let inp1 = fnToString(prefix + "tic" + postfix)
-//    try exe(inp1)
-//    let inp2 = fnToString(prefix + "xeek" + postfix)
-//    try exe(inp2)
-//    return
 //    
-//    
+    
     let plib = try exe(fnToString(prefix + "libp" + postfix))
     plib.removeReserved()
     if test {
