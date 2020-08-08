@@ -4,6 +4,11 @@ import Foundation
 let fm = FileManager.default
 let str: String = fm.currentDirectoryPath
 print(str)
+print(str)
+
+print(str)
+//str.write
+
 print("here")
 //exit(0)
 

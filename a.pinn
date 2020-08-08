@@ -1,4 +1,21 @@
-x := 5;
-print(x);
-x = max(10, 24);
-print(x);
+//var m [map]sm;
+print("sos");
+//exit();
+md := "/2020/2018jan/m2/";
+var s string;
+d := dir(md);
+//print(d);
+count := 0;
+var sha string;
+for s = range d {
+//  print(s);
+  count++;
+  println(count);
+  sha = sha512(md + s);
+//  println(sha);
+//  exit();
+//  print(sha);
+//  if key(m, sha) {
+//
+//  }
+}

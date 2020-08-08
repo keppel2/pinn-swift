@@ -432,7 +432,7 @@
 				E2673968235BC825000CF830 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		E2673969235BC825000CF830 /* Build configuration list for PBXNativeTarget "pinn" */ = {
 			isa = XCConfigurationList;
@@ -441,7 +441,7 @@
 				E267396B235BC825000CF830 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 

@@ -1,5 +1,6 @@
 import Foundation
 import Antlr4
+import CryptoKit
 
 class Pvisitor {
     
@@ -10,6 +11,29 @@ class Pvisitor {
             "exit": { sctx, pv, s in
                 try assertPvals(s, 0)
                 exit(0)
+            },
+            "dir": { sctx, pv, s in
+                                let fn: String = try tryCast(s[0]);
+                
+                let fm = FileManager.default
+              let ast = try fm.contentsOfDirectory(atPath: "/Users/ryankeppel/" + fn)
+                
+                let pva = ast.map { Pval(sctx, $0, pv) }
+                return try Pval (sctx, pva, false, Kind(Gtype.gDefined("string")), pv)
+            },
+            "sha512": { sctx, pv, s in
+                let fn: String = try tryCast(s[0]);
+                
+                let fm = FileManager.default
+
+                let cont = fm.contents(atPath: "/Users/ryankeppel/" + fn)
+
+                let audioFileDigest = SHA512.hash(data: cont!)
+                let s: String = audioFileDigest.description
+
+                
+                return Pval(sctx, s, pv)
+
             },
             "bad": { sctx, pv, s in
                 try assertPvals(s, 0);
@@ -892,19 +916,19 @@ class Pvisitor {
             switch Self.childToText(sctx.getChild(0)!) {
             case "!":
                 guard let pv = try visitPval(sctx.expr()!) else {
-                    throw Perr(ENIL, sctx)
+                    throw Perr(ENIL, self, sctx)
                 }
                 let b: Bool = try tryCast(pv)
                 rt = Pval(sctx, !b, self)
             case "-":
                 guard let pv = try visitPval(sctx.expr()!) else {
-                    throw Perr(ENIL, sctx)
+                    throw Perr(ENIL, self, sctx)
                 }
                 let b: Negate = try tryCast(pv)
                 rt = Pval(sctx, b.neg(), self)
             case "+":
                 guard let pv = try visitPval(sctx.expr()!) else {
-                    throw Perr(ENIL, sctx)
+                    throw Perr(ENIL, self, sctx)
                 }
                 let b: Int = try tryCast(pv)
                 rt = Pval(sctx, b, self)
@@ -1063,7 +1087,7 @@ class Pvisitor {
             case .ID:
                 let str = sctx.ID()!.getText()
                 guard let pv = getPv(str) else {
-                    throw Perr(EUNDECLARED, sctx)
+                    throw Perr(EUNDECLARED, self, sctx)
                 }
                 
                 rt = try pv.cloneIf()
@@ -1098,7 +1122,7 @@ class Pvisitor {
             let str = sctx.INT()!.getText()
             let x = Int(str)!
             if !(v.gg().isTuple() || v.gg().isPointer()) {
-                throw Perr(ETYPE, sctx)
+                throw Perr(ETYPE, self, sctx)
             }
             rt = try v.get(x)
             
@@ -1121,7 +1145,7 @@ class Pvisitor {
                         if let rh = sctx.second {
                             rhsv = try tryCast(_visitPval(rh))
                         } else if (sctx.AT() != nil) {
-                            throw Perr(ENIL, sctx)
+                            throw Perr(ENIL, self, sctx)
                         }
                         if (sctx.AT() != nil) {
                             rhsv += 1
@@ -1220,7 +1244,7 @@ class Pvisitor {
         case let sctx as PinnParser.CompoundSetContext:
             
             guard let lh = try visitPval(sctx.lExpr()!) else {
-                throw Perr(ENIL, sctx)
+                throw Perr(ENIL, self, sctx)
             }
             let rh = try _visitPval(sctx.expr()!)
             
@@ -1428,7 +1452,7 @@ class Pvisitor {
                     }
                     break
                 default:
-                    throw Perr(ETYPE, sctx, ranger)
+                    throw Perr(ETYPE, sctx, ranger, nil, "", self)
                 }
                 break
             }
@@ -1453,7 +1477,7 @@ class Pvisitor {
             if !b {
                 try visit(sctx.block()!)
                 if cfc.path == .pNormal {
-                    throw Perr(ESTATEMENT, sctx)
+                    throw Perr(ESTATEMENT, self, sctx)
                 }
             }
             
@@ -1488,7 +1512,7 @@ class Pvisitor {
                 if sctx.LPAREN() != nil {
                     let pv = try visitPval(sctx.expr()!)!
                     if !pv.getKind().gtype.isTuple() {
-                        throw Perr(ETYPE, sctx)
+                        throw Perr(ETYPE, self, sctx)
                     }
                     for index in try 0..<pv.getCount() {
                         try ae.append(pv.get(index))
@@ -1498,7 +1522,7 @@ class Pvisitor {
                     ae = try visitList(el)
                 }
                 if ae.count != sctx.ID().count {
-                    throw Perr(ERANGE, sctx)
+                    throw Perr(ERANGE, self, sctx)
                 }
                     for (k, v) in sctx.ID().enumerated() {
                             let str = v.getText()

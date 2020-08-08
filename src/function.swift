@@ -27,36 +27,7 @@ func parse(_ s: String) -> (PinnParser.FileContext?, PinnParser) {
 
 var ds = DispatchSemaphore(value: 0)
 
-class MyT: Thread {
-    var str = ""
-    var pfc: PinnParser.FileContext?
-    var pp: PinnParser?
-    override func main() {
-//        let inp1 = fnToString(prefix + str + postfix)
-//        while true {
-        
-//  try! exe(inp1)
-//        do {
-//            try exe(inp1)
-//        } catch let err{
-//            print("here", err)
-//        }
-    let pv = try! Pvisitor(pp!)
-        try! pv.visitFile(pfc!, nil)
-//        do {
-//    try
-//} catch let err where err is Perr {
-//    print((err as! Perr).string)
-//    } catch let err2 {
-//        print(err2)
-//        }
-//
-//
-        
-//        }
-        ds.signal()
-    }
-}
+
 func execute() throws  {
     let args = ProcessInfo.processInfo.arguments
     let s = args[1]
