@@ -1,6 +1,7 @@
 //var m [map]sm;
 print("sos");
 //exit();
+
+
 md := "/2020/2018jan/m2/";
-
-print("cannot quit");
+print("refuse quit");
