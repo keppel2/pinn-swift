@@ -21,20 +21,6 @@ class Pvisitor {
                 let pva = ast.map { Pval(sctx, $0, pv) }
                 return try Pval (sctx, pva, false, Kind(Gtype.gDefined("string")), pv)
             },
-            "sha512": { sctx, pv, s in
-                let fn: String = try tryCast(s[0]);
-                
-                let fm = FileManager.default
-                
-                let cont = fm.contents(atPath: "/Users/ryankeppel/" + fn)
-                
-                let audioFileDigest = SHA512.hash(data: cont!)
-                let s: String = audioFileDigest.description
-                
-                
-                return Pval(sctx, s, pv)
-                
-            },
             "bad": { sctx, pv, s in
                 try assertPvals(s, 0);
                 throw Perr(ETEST_FAIL, pv, sctx);
