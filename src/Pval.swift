@@ -88,7 +88,7 @@ class Pval {
             }
             e = Pvalp(ke, Contents.map(Wrap(m)), c)
             
-        case .gDefined(let _):
+        case .gDefined( _):
             aden()
 
         }
@@ -238,7 +238,7 @@ let newstr = str[start..<end]
                 pv.const = true;
                 }
                 return pv
-            } else  if case .gStructure(let osk) = g {
+            } else  if case .gStructure( _) = g {
                 let pv = e.con.getMap()[v1v]!
                 if const {
                 pv.const = true;
@@ -315,9 +315,9 @@ let newstr = str[start..<end]
         
 
                 switch gg() {
-        case .gScalar(let pt):
+                case .gScalar( _):
 break
-        case .gArray(let k, let i):
+                case .gArray(let k, _):
             try e.con.getAr().forEach {
                 $0.e.k = k
                 try $0.gFix()
@@ -333,7 +333,7 @@ break
             }
         case .gMap(let k):
 
-             for (k2, v) in e.con.getMap() {
+            for (_, v) in e.con.getMap() {
                 v.e.k = k
                 try v.gFix()
                 
@@ -398,7 +398,7 @@ break
         return e.k.gtype
     }
     func stringOrLetter() throws -> String {
-        if try getKind().gtype.isPointer() && e.con.getAr().count != 0 {
+        if getKind().gtype.isPointer() && e.con.getAr().count != 0 {
             return "P"
         }
         return try string()
@@ -463,13 +463,12 @@ break
                 for (k, v) in e.con.getMap() {
                     sv[k] = try v.cloneIf()
                 }
-                let con = try Contents.map(Wrap(sv))
+                let con = Contents.map(Wrap(sv))
                 let pvp = Pvalp(Kind(Gtype.gStructure(osk)), con, e.prc)
                 return Pval(pvp, pv)
             default:
                 aden()
             }
-            return Pval(self)
         }
     }
     private class Pvalp {

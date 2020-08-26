@@ -235,7 +235,7 @@ enum Gtype {
                 }
             }
             return false
-        case .gDefined(let s):
+        case .gDefined(_):
             aden()
             //                return Kind.getPKind(s).gtype.gEquivalent(g2)
         }

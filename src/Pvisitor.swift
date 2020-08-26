@@ -38,7 +38,7 @@ class Pvisitor {
             "bad": { sctx, pv, s in
                 try assertPvals(s, 0);
                 throw Perr(ETEST_FAIL, pv, sctx);
-                return nil
+
             },
             "at": { sctx, pv, s in
                 try assertPvals(s, 1);
@@ -263,7 +263,7 @@ class Pvisitor {
         
         if str == "in" {
             switch rhs.gg() {
-            case .gSlice(let t), .gArray(let t, let _):
+            case .gSlice(let t), .gArray(let t, _):
                 if try !lhs.gg().gEquivalent(t.gtype, self) {
                     throw Perr(ETYPE, sctx)
                 }
@@ -498,7 +498,7 @@ class Pvisitor {
             if let pv = lfc!.m[fh.fkinds[index].s]  {
                 throw Perr(EREDECLARE, sctx, pv)
             }
-            lfc!.m[fh.fkinds[index].s] = try Pval(s[index])//.cloneType()
+            lfc!.m[fh.fkinds[index].s] = Pval(s[index])
         }
         try visit(ctx.block()!)
         
@@ -540,7 +540,7 @@ class Pvisitor {
                     do {
                         try visitHeader(spec)
                     } catch let err where err is Perr {
-                        let perr = err as! Perr
+                        _ = err as! Perr
                         //                         if perr.str == ENEGTEST_FAIL {
                         //                             perr.str += ", " + neg
                         //                             throw perr
@@ -638,7 +638,7 @@ class Pvisitor {
             //            }
         }
         var fkinds = [FKind]()
-        for (index, child) in sctx.fvarDecl().enumerated() {
+        for (_, child) in sctx.fvarDecl().enumerated() {
             let vfks = try visitFKind(child)
             for vfk in vfks {
                 if (fkinds.contains { fk in vfk.s == fk.s }) {
@@ -672,7 +672,7 @@ class Pvisitor {
             }
         } else
             if sctx.LPAREN() != nil {
-                rt = try Kind.emptyTuple()
+                rt = Kind.emptyTuple()
             } else
                 if sctx.structurePair().count > 0 {
                     var stki = [String: Kind]()
@@ -683,14 +683,14 @@ class Pvisitor {
                         }
                         stki[s] = k
                     }
-                    rt = try Kind(Gtype.gStructure(stki))
+                    rt = Kind(Gtype.gStructure(stki))
                 }
                 else if let type = sctx.ID() {
                     let strType = type.getText()
                     //                if Kind.isNil(strType) {
                     //                    rt = gOne.nkind
                     //                } else {
-                    rt = try Kind(Gtype.gDefined(strType))
+                    rt = Kind(Gtype.gDefined(strType))
                     
                 }
                 else {
@@ -715,7 +715,7 @@ class Pvisitor {
         defer {popDebug()}
         
         
-        let ai = try visitIdList(sctx.idList()!)
+        let ai = visitIdList(sctx.idList()!)
         let k = try visitKind(sctx.kind()!)
         
         
@@ -966,8 +966,6 @@ class Pvisitor {
         case let sctx as PinnParser.ObjectLiteralContext:
             let list = sctx.objectPair()
             let ast = sctx.AST() != nil
-            var kind: Kind?
-            var ckind: Kind?
             if list.count == 0 {
                 rt = try Pval(sctx, Kind.nilMap(), self)
                 return rt
@@ -1529,7 +1527,7 @@ class Pvisitor {
                     if str == "_" {
                         continue
                     }
-                    let pv = try ae[k]//.cloneType()
+                    let pv = ae[k]//.cloneType()
                     if let prev = map[str] {
                         throw Perr(EREDECLARE, sctx, prev)
                     }
@@ -1547,7 +1545,7 @@ class Pvisitor {
             
             
             
-            let ai = try visitIdList(sctx.idList()!)
+            let ai = visitIdList(sctx.idList()!)
             let k = try visitKind(sctx.kind()!)
             
             for v in ai {

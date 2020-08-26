@@ -57,14 +57,14 @@ func execute() throws  {
         for n in fnames {
             print()
             print("Now ", n)
-            try exe(fnToString(prefix + n + postfix), plib)
+            _ = try exe(fnToString(prefix + n + postfix), plib)
         }
         return
     }
-    var fname = s == "-c" ? FNAME : s
+    let fname = s == "-c" ? FNAME : s
     
     let myinput = fnToString(prefix + fname + postfix)
-    try exe(myinput, plib)
+    _ = try exe(myinput, plib)
     
     
 }
@@ -90,7 +90,7 @@ func stringDequote(_ s: String) -> String {
 }
 
 func tryCast<T> (_ pv: Pval) throws -> T {
-    if case .gDefined (let s) = pv.getKind().gtype {
+    if case .gDefined ( _) = pv.getKind().gtype {
         
     }
     if case .gScalar = pv.getKind().gtype {
