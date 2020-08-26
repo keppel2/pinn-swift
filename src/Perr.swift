@@ -34,7 +34,7 @@ class Perr : Error {
     convenience init(_ s: String, _ pv: Pvisitor) {
         self.init(s, nil, nil, nil, "", pv)
     }
-
+    
     convenience init(_ s: String, _ p: Pval) {
         self.init(s, nil, p, nil, "", p.pv)
     }

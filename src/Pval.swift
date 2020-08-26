@@ -88,10 +88,9 @@ class Pval {
             }
             e = Pvalp(ke, Contents.map(Wrap(m)), c)
             
-        case .gDefined(let s):
+        case .gDefined(let _):
             aden()
-//            let pv = try Pval(c, Kind.getPKind(s))
-//            e = Pvalp(ke, pv.e.con, c)
+
         }
         
     }

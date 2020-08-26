@@ -7,40 +7,40 @@ enum Gtype {
     case gPointer([Kind])
     case gDefined(String)
     case gStructure([String: Kind])
-
+    
     func isNilSlice() -> Bool {
-                if case .gSlice(let k) = self {
-                    
-                    if case .gScalar(let pt) = k.gtype {
-                        return pt == Nil.self
-                    }
-                    
+        if case .gSlice(let k) = self {
+            
+            if case .gScalar(let pt) = k.gtype {
+                return pt == Nil.self
             }
+            
+        }
         return false
     }
     func isNilPointer() -> Bool {
-                if case .gPointer(let ka) = self {
-                    return ka.count == 0
-            }
+        if case .gPointer(let ka) = self {
+            return ka.count == 0
+        }
         return false
     }
     func isNilMap() -> Bool {
-                 if case .gMap(let k) = self {
-                     
-                     if case .gScalar(let pt) = k.gtype {
-                         return pt == Nil.self
-                     }
-                     
-             }
-         return false
-     }
+        if case .gMap(let k) = self {
+            
+            if case .gScalar(let pt) = k.gtype {
+                return pt == Nil.self
+            }
+            
+        }
+        return false
+    }
     func isNil() -> Bool {
         if case .gScalar(let pt) = self {
             
             
             
-                return pt == Nil.self
-            }
+            return pt == Nil.self
+        }
         return false
     }
     func isRef() -> Bool {
@@ -48,8 +48,8 @@ enum Gtype {
             
             
             
-                return pt == Ref.self
-            }
+            return pt == Ref.self
+        }
         return false
     }
     func isPointer() -> Bool {
@@ -70,7 +70,7 @@ enum Gtype {
         }
         return false
     }
-
+    
     func openString() -> String {
         switch self {
         case .gArray, .gSlice:
@@ -106,56 +106,56 @@ enum Gtype {
         return self
     }
     
-//    func toSelf() throws -> Gtype {
-//        let g2 = try toPGtype()
-//        switch g2 {
-//        case .gScalar(let pt):
-//            return self
-//        case .gArray(let k, let i):
-//            return Gtype.gArray(Kind(k.gtype.toSelf()), i)
-//        case .gSlice(let k):
-//            return Gtype.gSlice(Kind(k.gtype.toSelf()))
-//        case .gMap(let k):
-//            return Gtype.gMap(Kind(k.gtype.toSelf()))
-//        case .gPointer(let ka):
-//            var ka2 = [Kind]()
-//            for k in ka {
-//                if k.gtype.isNilPointer() {
-//                    ka2.append(Kind(Gtype.gScalar(Ref.self)))
-//                    
-//                } else {
-//                    ka2.append(Kind(k.gtype.toSelf()))
-//                }
-//            }
-//            return Gtype.gPointer(ka2)
-//        case .gStructure(let osk):
-//            var osk2 = [String: Kind]()
-//                for (s, k) in osk {
-//                    osk2[s] = Kind(k.gtype.toSelf())
-//            }
-//            return Gtype.gStructure(osk2)
-//        case .gTuple(let ka):
-//        return Gtype.gTuple(ka.map{
-//            Kind($0.gtype.toSelf())
-//            
-//        })
-//            case .gDefined(let s):
-//        
-//        aden()
-//        
-//        
-//        
-//        
-//        
-//        
-//        }
-//    }
-//    
+    //    func toSelf() throws -> Gtype {
+    //        let g2 = try toPGtype()
+    //        switch g2 {
+    //        case .gScalar(let pt):
+    //            return self
+    //        case .gArray(let k, let i):
+    //            return Gtype.gArray(Kind(k.gtype.toSelf()), i)
+    //        case .gSlice(let k):
+    //            return Gtype.gSlice(Kind(k.gtype.toSelf()))
+    //        case .gMap(let k):
+    //            return Gtype.gMap(Kind(k.gtype.toSelf()))
+    //        case .gPointer(let ka):
+    //            var ka2 = [Kind]()
+    //            for k in ka {
+    //                if k.gtype.isNilPointer() {
+    //                    ka2.append(Kind(Gtype.gScalar(Ref.self)))
+    //
+    //                } else {
+    //                    ka2.append(Kind(k.gtype.toSelf()))
+    //                }
+    //            }
+    //            return Gtype.gPointer(ka2)
+    //        case .gStructure(let osk):
+    //            var osk2 = [String: Kind]()
+    //                for (s, k) in osk {
+    //                    osk2[s] = Kind(k.gtype.toSelf())
+    //            }
+    //            return Gtype.gStructure(osk2)
+    //        case .gTuple(let ka):
+    //        return Gtype.gTuple(ka.map{
+    //            Kind($0.gtype.toSelf())
+    //
+    //        })
+    //            case .gDefined(let s):
+    //
+    //        aden()
+    //
+    //
+    //
+    //
+    //
+    //
+    //        }
+    //    }
+    //
     
     func gEquivalentSym(_ g: Gtype, _ pvik: Pvisitor) throws -> Bool {
         return try gEquivalent(g, pvik) || g.gEquivalent(self, pvik)
     }
-  
+    
     
     func gEquivalent(_ g2x: Gtype, _ pvik: Pvisitor) throws -> Bool {
         let g2 = try g2x.toPGtype(pvik)
@@ -204,7 +204,7 @@ enum Gtype {
                         }
                         return try self.gEquivalent($1.gtype, pvik)
                     } else {
-                    return try $0.gtype.gEquivalent($1.gtype, pvik)
+                        return try $0.gtype.gEquivalent($1.gtype, pvik)
                     }
                 }
             }
@@ -224,7 +224,7 @@ enum Gtype {
                     }
                 }
                 return true
-
+                
             }
             return false
         case .gTuple(let ka):
@@ -235,9 +235,9 @@ enum Gtype {
                 }
             }
             return false
-            case .gDefined(let s):
-                aden()
-//                return Kind.getPKind(s).gtype.gEquivalent(g2)
+        case .gDefined(let s):
+            aden()
+            //                return Kind.getPKind(s).gtype.gEquivalent(g2)
         }
     }
 }

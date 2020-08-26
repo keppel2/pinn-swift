@@ -10,7 +10,7 @@ func exe(_ s: String, _ api: Pvisitor? = nil) throws -> Pvisitor {
     try! pv.reset()
     
     if tree != nil {
-            try pv.visitFile(tree!, api)
+        try pv.visitFile(tree!, api)
     } else {
         let parser = stringToParser(s)
         try parser.file()
@@ -32,23 +32,23 @@ func execute() throws  {
     let args = ProcessInfo.processInfo.arguments
     let s = args[1]
     let test = s == "-t"
-//    let fnames = ["a", "xeek"]
-//    var mar = [MyT]()
-//    for name in fnames {
-//        let mt = MyT()
-//        mt.str = name
-//        (mt.pfc, mt.pp) = parse(fnToString(prefix + mt.str + postfix))
-//        
-//        mar.append(mt)
-//    }
-//    for t in mar {
-//        t.start()
-//    }
-//    for _ in fnames {
-//        ds.wait()
-//    }
-//    return
-//    
+    //    let fnames = ["a", "xeek"]
+    //    var mar = [MyT]()
+    //    for name in fnames {
+    //        let mt = MyT()
+    //        mt.str = name
+    //        (mt.pfc, mt.pp) = parse(fnToString(prefix + mt.str + postfix))
+    //        
+    //        mar.append(mt)
+    //    }
+    //    for t in mar {
+    //        t.start()
+    //    }
+    //    for _ in fnames {
+    //        ds.wait()
+    //    }
+    //    return
+    //    
     
     let plib = try exe(fnToString(prefix + "libp" + postfix))
     plib.removeReserved()
@@ -65,7 +65,7 @@ func execute() throws  {
     
     let myinput = fnToString(prefix + fname + postfix)
     try exe(myinput, plib)
-
+    
     
 }
 
@@ -99,7 +99,7 @@ func tryCast<T> (_ pv: Pval) throws -> T {
         }
         return try pv.getUnwrap() as! T
     }
-
+    
     
     throw Perr(ETYPE, pv)
 }
