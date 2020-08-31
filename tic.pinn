@@ -22,17 +22,17 @@ func rHash(board [SIZE][SIZE]int, player int) int {
     return rt;
 }
 func printBoard (board [SIZE][SIZE]int) {
-	var y int;
-	var x int;
-	for y = range 0:SIZE {
+  var y int;
+  var x int;
+  for y = range 0:SIZE {
         print (board[0][y]);
-		for x = range 1:SIZE {
+    for x = range 1:SIZE {
         print (" ");
         print (board[x][y]);
-		}
+    }
         println("");
-	}
-	println ("---");
+  }
+  println ("---");
 }
 
 func full (board [SIZE][SIZE]int) bool {
@@ -64,7 +64,7 @@ func line (board [SIZE][SIZE]int, x int, y int, dx int, dy int) int {
 }
 
 func winner (board [SIZE][SIZE]int) int {
-	var i int;
+  var i int;
     var rt int;
 
     for i = range 0:SIZE {
@@ -83,30 +83,30 @@ func winner (board [SIZE][SIZE]int) int {
 }
 
 func opposite (x int) int { return x == PLAYER_A ? PLAYER_B : PLAYER_A; }
-			
+      
 func minimax (player int, board [SIZE][SIZE]int) int
 {
     marker++;
     if marker == 100 {
     printBoard(board);
     }
-	var result int;
-	best := opposite(player);
+  var result int;
+  best := opposite(player);
 
-	result = winner(board);
-	if result != TIE {
-		return result;
+  result = winner(board);
+  if result != TIE {
+    return result;
     }
     if full(board) {
         return TIE;
     }
-	var x int;
-	var y int;
+  var x int;
+  var y int;
     var strRHash string;
-	for x = range 0:SIZE {
-		for y = range 0:SIZE {
-			if board[x][y] == EMPTY {
-				board[x][y] = player;
+  for x = range 0:SIZE {
+    for y = range 0:SIZE {
+      if board[x][y] == EMPTY {
+        board[x][y] = player;
                 strRHash = stringValue(rHash(board, player));
                 if rHashMap[strRHash] > 0 {
                     result = rHashMap[strRHash];
@@ -114,17 +114,17 @@ func minimax (player int, board [SIZE][SIZE]int) int
                     result = minimax(opposite(player), board);
                     rHashMap[strRHash] = result;
                 }
-				if result == player {
-					return player;
-				}
-				if result == TIE {
-					best = TIE;
-				}
-				board[x][y] = EMPTY;
-			}
-		}
-	}
-	return best;
+        if result == player {
+          return player;
+        }
+        if result == TIE {
+          best = TIE;
+        }
+        board[x][y] = EMPTY;
+      }
+    }
+  }
+  return best;
 }
 
 func main() {

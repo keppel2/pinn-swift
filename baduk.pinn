@@ -16,15 +16,15 @@ type bt [SIZER][SIZEC]int;
 
 
 func printBoard (board bt) {
-	var y int;
-	var x int;
-	for x = range 0:SIZER {
-		for y = range 0:SIZEC {
+  var y int;
+  var x int;
+  for x = range 0:SIZER {
+    for y = range 0:SIZEC {
         print (board[x][y]);
-		}
+    }
         println("");
-	}
-	println ("---", score(board));
+  }
+  println ("---", score(board));
 }
 
 
