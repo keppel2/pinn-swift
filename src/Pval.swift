@@ -443,7 +443,7 @@ break
             if getKind().gtype.isPointer() {
                 aden()
             }
-            return Pval(e.prc, pw.clone().unwrap(), pv)
+            return Pval(e.prc, pw.unwrap(), pv)
         case .multi(let ar):
             switch getKind().gtype {
             case .gSlice, .gPointer:
