@@ -1,5 +1,5 @@
 _Second version of Pinn. Updated ANTLR and Swift. Archived._
-# Pinn is a computer language that lets you be correct.
+# Pinn is a computer language that lets you be correct..
 
 Pinn is a statically typed, imperative language for computers.
 
