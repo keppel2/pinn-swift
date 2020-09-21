@@ -69,7 +69,6 @@
 /* Begin PBXFileReference section */
 		E215A42C24B3EF2E007F6168 /* libp.pinn */ = {isa = PBXFileReference; explicitFileType = sourcecode.c; path = libp.pinn; sourceTree = "<group>"; };
 		E218086924A82A8A0041ECE1 /* tcontrol.pinn */ = {isa = PBXFileReference; explicitFileType = sourcecode.c; path = tcontrol.pinn; sourceTree = "<group>"; };
-		E218086A24A83BBF0041ECE1 /* xeek.pinn */ = {isa = PBXFileReference; lastKnownFileType = text; path = xeek.pinn; sourceTree = "<group>"; };
 		E22C2FA62399FD9E007AD1D5 /* Antlr4-swift */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Antlr4-swift"; sourceTree = "<group>"; };
 		E25081B124D695E70094B27F /* Pthread.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pthread.swift; sourceTree = "<group>"; };
 		E2673962235BC825000CF830 /* pinn */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = pinn; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -151,7 +150,6 @@
 				E2B287D8248A1351000A968F /* tic.pinn */,
 				E26E76A024A9B11900D7743F /* tneg.pinn */,
 				E2B287D4248A1351000A968F /* ttypes.pinn */,
-				E218086A24A83BBF0041ECE1 /* xeek.pinn */,
 			);
 			sourceTree = "<group>";
 		};
