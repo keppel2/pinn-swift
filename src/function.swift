@@ -59,6 +59,18 @@ func execute() throws  {
             print("Now ", n)
             _ = try exe(fnToString(prefix + n + postfix), plib)
         }
+        let pnames = ["tparse"]
+        for n in pnames {
+            print("Parse", n)
+            let src = fnToString(prefix + n + postfix)
+            let (tree, _) = parse(src)
+            if tree == nil {
+                let p = stringToParser(src)
+                try p.file()
+                throw Perr(EPARSE_FAIL)
+            }
+            
+        }
         return
     }
     let fname = s == "-c" ? FNAME : s
