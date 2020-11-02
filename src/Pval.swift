@@ -403,6 +403,7 @@ break
         }
         return try string()
     }
+
     func string() throws -> String {
         switch e.con {
         case .single(let pw):

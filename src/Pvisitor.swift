@@ -118,6 +118,22 @@ class Pvisitor {
             "stringValue":
                 { sctx, pv, s in try assertPvals(s, 1)
                     return Pval(sctx, try s[0].string(), pv) },
+            "ascii":
+                {
+                    sctx, pv, s in try assertPvals(s, 1)
+                    let i = try s[0].getUnwrap() as! Int
+                    
+                    return try Pval(sctx, String(UnicodeScalar(UInt8(i))), pv)
+                },
+
+            "numValue":
+                {
+                    sctx, pv, s in try assertPvals(s, 1)
+                    let str = try s[0].getUnwrap() as! String
+                    let char = Character(str)
+                    
+                    return try Pval(sctx, Int(char.asciiValue!), pv)
+                },
             "sprint":
                 {
                     sctx, pv, s in
