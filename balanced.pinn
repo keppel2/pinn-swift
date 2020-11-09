@@ -1,0 +1,44 @@
+var stack []string;
+func push(s string) {
+  stack[len(stack)] = s;
+}
+func pop() string {
+  if len(stack) == 0 {
+    return "E";
+  }
+  rt := stack[len(stack) - 1];
+  stack = stack[0:len(stack)-1];
+  return rt;
+}
+
+func isBalanced(s string) bool {
+t := "";
+  var sc string;
+for sc = range s {
+  println(sc);
+  match sc {
+    when "{", "(", "[":
+    push(sc);
+    when "}":
+    t = pop();
+    if t != "{" {
+      return false;
+    }
+    when ")":
+    t = pop();
+    if t != "(" {
+      return false;
+    }
+    when "]":
+    t = pop();
+    if t != "[" {
+      return false;
+    }
+  }
+  
+}
+  return len(stack) == 0;
+}
+println(isBalanced("{}"));
+println(isBalanced("{{[[(())]]}}"));
+println(isBalanced("{[(])}"));

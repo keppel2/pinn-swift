@@ -1,0 +1,40 @@
+print(ascii(101));
+input := "Zebra-493?";
+input = "abcdefghijklmNOPQRSTUVWXYZ0123456789";
+rotFact := 3;
+rotFact = 39;
+var k int;
+var v string;
+output := "";
+a, z := numValue("a"), numValue("z");
+A, Z := numValue("A"), numValue("Z");
+d0, d9 := numValue("0"), numValue("9");
+oc := "";
+var i, nv int;
+func rot(b, e int, c string) string {
+  rt := "";
+  nv := numValue(c);
+  i := nv - b;
+  i += rotFact;
+  i %= e - b + 1;
+  rt = ascii(b + i);
+  return rt;
+}
+
+var s string;
+for k, v = range input {
+  println(k, v);
+  nv = numValue(v);
+  s = v;
+  if nv >= a && nv <=z {
+    s = rot(a, z, v);
+  }
+  if nv >= A && nv <= Z {
+    s = rot(A, Z, v);
+  }
+  if nv >= d0 && nv <= d9 {
+    s = rot(d0, d9, v);
+  }
+  output += s;
+}
+println(input, output);

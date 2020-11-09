@@ -1,0 +1,25 @@
+ar := [3, 4, 1, 6, 2];
+var ar2 [len(ar)]int;
+arL := ar2;
+arR := ar2;
+var i, j, k, tot int;
+
+for i, j = range ar {
+  tot = 1;
+  for k = i - 1; k >= 0; k-- {
+    if ar[k] < j {
+      tot++;
+    } else {
+      break;
+    }
+  }
+  for k = i + 1; k < len(ar); k++  {
+    if k < j {
+      tot++;
+    } else {
+      break;
+    }
+  }
+  ar2[i] = tot;
+}
+println(ar2);

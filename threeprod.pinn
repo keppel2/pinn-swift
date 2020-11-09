@@ -1,0 +1,33 @@
+// hi
+
+ar := [2,1,2,1,2];
+
+
+
+
+top3 := [-1, -1, -1];
+func tinsert(a int) {
+  if a > top3[0] {
+    top3[2] = top3[1];
+    top3[1] = top3[0];
+    top3[0] = a;
+  } else if a > top3[1] {
+    top3[2] = top3[1];
+    top3[1] = a;
+  } else if a > top3[2] {
+    top3[2] = a;
+  }
+}
+
+var out [len(ar)]int;
+out[0] = -1;
+out[1] = -1;
+var k, v int;
+tinsert(ar[0]);
+tinsert(ar[1]);
+for k, v = range ar[2:len(ar)] {
+  tinsert(v);
+  out[k + 2] = top3[0] * top3[1] * top3[2];
+}
+
+println(out);

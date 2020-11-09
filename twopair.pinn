@@ -1,0 +1,20 @@
+ar := [1, 2, 3, 4, 3];
+//ar := [1, 5, 3, 3, 3];
+sum := 6;
+tot := 0;
+var i, j, k int;
+ar2 = ar;
+for k, i = range ar {
+  ar2[k] = tot - i
+}
+
+
+
+for k, i = range ar[0:len(ar) - 1] {
+  for j = range ar[k + 1:len(ar)] {
+    if i + j == sum {
+      tot++;
+    }
+  }
+}
+println(tot);
