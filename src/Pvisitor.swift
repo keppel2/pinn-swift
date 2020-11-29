@@ -150,6 +150,7 @@ class Pvisitor {
                         throw Perr(EPARAM_LENGTH, pv, sctx)
                     }
                     let rt = Pvisitor.printSpace(try s.map {try $0.string()})
+                    
                     return Pval(sctx, rt + "\n", pv)
             },
             "print":
@@ -157,8 +158,12 @@ class Pvisitor {
                     if s.count == 0 {
                         throw Perr(EPARAM_LENGTH, pv, sctx)
                     }
+                    
+                    
                     let rt = Pvisitor.printSpace(try s.map {try $0.string()})
+                    
                     pv.textout(rt)
+    
                     return nil
             }, "rand":
                 { sctx, pv, s in try assertPvals(s, 1)
@@ -168,11 +173,16 @@ class Pvisitor {
                "println":
                 {sctx, pv, s in
                     if s.count == 0 {
-                        throw Perr(EPARAM_LENGTH, pv, sctx)
+                        pv.textout("\n")
+                        return nil
                     }
                     
                     var rt = Pvisitor.printSpace(try s.map {try $0.string()})
                     pv.textout(rt + "\n")
+                    if s.count == 2 {
+                    let x: Int = try tryCast(s[1])
+                    pv.textout(String(format:",%x", x))
+                    }
                     return nil
             },
                "readLine": {

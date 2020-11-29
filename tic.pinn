@@ -2,7 +2,7 @@ EMPTY := 0;
 TIE := 3;
 PLAYER_A := 1;
 PLAYER_B := 2;
-SIZE := 2;
+SIZE := 3;
 var rHashMap [map]int;
 
 func rHash(board [SIZE][SIZE]int, player int) int {
@@ -24,10 +24,8 @@ func rHash(board [SIZE][SIZE]int, player int) int {
 func printBoard (board [SIZE][SIZE]int) {
   var y int;
   var x int;
-  for y = range 0:SIZE {
-        print (board[0][y]);
-    for x = range 1:SIZE {
-        print (" ");
+  for x = range 0:SIZE {
+    for y = range 0:SIZE {
         print (board[x][y]);
     }
         println("");
@@ -84,12 +82,17 @@ func winner (board [SIZE][SIZE]int) int {
 
 func opposite (x int) int { return x == PLAYER_A ? PLAYER_B : PLAYER_A; }
       
-func minimax (player int, board [SIZE][SIZE]int) int
+func minimax (player int, board [SIZE][SIZE]int, depth int) int
 {
     marker++;
-    if marker == 100 {
+//    if marker % 10 == 0 {
+    println(";", marker);
+    println("");
+    println(player);
+    println("d", depth);
+    println("");
     printBoard(board);
-    }
+//    }
   var result int;
   best := opposite(player);
 
@@ -107,13 +110,13 @@ func minimax (player int, board [SIZE][SIZE]int) int
     for y = range 0:SIZE {
       if board[x][y] == EMPTY {
         board[x][y] = player;
-                strRHash = stringValue(rHash(board, player));
-                if rHashMap[strRHash] > 0 {
-                    result = rHashMap[strRHash];
-                } else {
-                    result = minimax(opposite(player), board);
-                    rHashMap[strRHash] = result;
-                }
+//                strRHash = stringValue(rHash(board, player));
+//                if rHashMap[strRHash] > 0 {
+//                    result = rHashMap[strRHash];
+//                } else {
+                    result = minimax(opposite(player), board, depth + 1);
+//                    rHashMap[strRHash] = result;
+//                }
         if result == player {
           return player;
         }
@@ -129,11 +132,17 @@ func minimax (player int, board [SIZE][SIZE]int) int
 
 func main() {
     var    board [SIZE][SIZE]int;
+    board [0][0] = PLAYER_A;
+    board [0][1] = PLAYER_A;
+    board [0][2] = PLAYER_B;
+    board [1][0] = PLAYER_A;
+
+    
     println("Initial board");
 
     printBoard(board);
     
-    result := minimax (PLAYER_A, board);
+    result := minimax (PLAYER_A, board, 0);
    
     resultString := "";
     match result {
@@ -144,18 +153,10 @@ func main() {
         when PLAYER_B:
             resultString = "Player B.";
     }
-    println ("Winner:", resultString);
+    println (resultString);
 }
 marker := 0;
 time := 0;
-loop {
-println("loop", time);
 rHashMap = {};
 main();
-time += 1;
-marker = 0;
-    
-    
-    break;
-}
-//main();
+print(marker);
