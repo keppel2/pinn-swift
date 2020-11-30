@@ -1,6 +1,9 @@
 grammar Pinn;
 
-file : ( function | statement )+ EOF ;
+file : defines* ( function | statement )+ EOF ;
+
+defines
+  : '#define' ID ID ;
 
 function
   : 'func' ID LPAREN (fvarDecl (',' fvarDecl)*)? RPAREN kind? block ;

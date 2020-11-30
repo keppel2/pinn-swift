@@ -25,6 +25,7 @@ class Perr : Error {
         if let pv2 = self.pv {
             if !pv2.trip {
 // breakpoint here
+                de(self)
                 
             }
         }

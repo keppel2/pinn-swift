@@ -369,6 +369,7 @@ class Pvisitor {
     private var lfc: Fc?
     var fkmap = [String:Fheader]()
     var apifkmap = [String:Fheader]()
+    var dmap = [String:String]()
     private var line = -1
     private var prc: ParserRuleContext?
     private var oldPrc: ParserRuleContext?
@@ -547,6 +548,9 @@ class Pvisitor {
         
         
         for child in sctx.children! {
+            if let spec = child as? PinnParser.DefinesContext {
+                self.dmap[spec.ID(0)!.getText()] = spec.ID(1)!.getText()
+            }
             if let spec = child as? PinnParser.FunctionContext {
                 if trip {
                     do {
@@ -1096,11 +1100,16 @@ class Pvisitor {
                 rt = pv
             case .ID:
                 let str = sctx.ID()!.getText()
+                if self.dmap[str] != nil {
+                    let x = Int(self.dmap[str]!)!
+                    rt = Pval(sctx, x, self)
+                } else {
                 guard let pv = getPv(str) else {
                     throw Perr(EUNDECLARED, self, sctx)
                 }
                 
                 rt = try pv.cloneIf()
+                }
             default:
                 aden()
             }
