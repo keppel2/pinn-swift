@@ -1,0 +1,45 @@
+ar := [1, 2, 8, 9, 16, 12, 5, 22];
+
+func printLL(inp *(self, int)) {
+  while inp != *() {
+    print(inp[1], "");
+    inp = inp[0];
+  }
+}
+//ar := [2, 8, 12, 24];
+var TLL, TLLH, LL *(self, int);
+
+LL = *(*(), ar[0]);
+BLL := LL;
+
+v := 0;
+for v= range ar[1:len(ar)] {
+  LL[0] = *(*(), v);
+  LL = LL[0];
+}
+
+LL = BLL;
+printLL(BLL);
+println();
+LL = BLL;
+
+while LL != *() {
+  if LL[1] % 2 == 1 {
+    if TLLH != *() {
+      printLL(TLLH);
+      TLLH = *();
+    }
+    print(LL[1], "");
+
+  } else {
+    if TLLH == *() {
+      TLLH = *(*(), LL[1]);
+    } else {
+      TLLH = *(TLLH, LL[1]);
+    }
+  }
+  LL = LL[0];
+}
+if TLLH != *() {
+  printLL(TLLH);
+}
