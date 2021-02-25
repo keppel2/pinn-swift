@@ -8,7 +8,7 @@ Pinn is a statically typed, imperative language for computers.
 
 # Running.
 
-* `swift run pinn tic.pinn`.
+* `swift run pinn`. plays a game of tic-tac-toe.
 
 _Implementations as interpreters in Antlr for Go and Swift. Current progress in Swift._
 
