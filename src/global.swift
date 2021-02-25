@@ -1,7 +1,7 @@
 //var pvik: Pvisitor?
-let FNAME = "a"
+var FNAME = "tic"
 let ECONST = "Constant"
-let prefix = "/tmp/"
+var prefix = ""
 let postfix = ".pinn"
 let ENIL = "Unexpected nil"
 let EPARAM_LENGTH = "Parameter length mismatch"

@@ -30,7 +30,13 @@ var ds = DispatchSemaphore(value: 0)
 
 func execute() throws  {
     let args = ProcessInfo.processInfo.arguments
-    let s = args[1]
+    let s: String
+    
+    if args.count > 1 {
+    s = args[1]
+    } else {
+		  s = FNAME
+	  }
     let test = s == "-t"
     //    let fnames = ["a", "xeek"]
     //    var mar = [MyT]()
@@ -49,9 +55,9 @@ func execute() throws  {
     //    }
     //    return
     //    
-    
     let plib = try exe(fnToString(prefix + "libp" + postfix))
     plib.removeReserved()
+    
     if test {
         let fnames = ["texpr", "ttypes", "tcontrol", "tneg", "tnegcontrol"]
         for n in fnames {
@@ -73,9 +79,8 @@ func execute() throws  {
         }
         return
     }
-    let fname = s == "-c" ? FNAME : s
     
-    let myinput = fnToString(prefix + fname + postfix)
+    let myinput = fnToString(prefix + s + postfix)
     _ = try exe(myinput, plib)
     
     
