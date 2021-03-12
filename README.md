@@ -1,4 +1,4 @@
-_Second version of Pinn. Updated ANTLR and Swift. Archived._
+_Second version of Pinn. Archived._
 # Pinn is a computer language that lets you be correct..
 
 Pinn is a statically typed, imperative language for computers.
@@ -117,7 +117,7 @@ A function calls a piece of code, assigning each variable in the parameter list 
 * `<ID> ":=" <expr> ;`
   * Short declaration. The `id` is set to the type and value of the `expr`.
 
-The grammar is clean of implementation language and is written in ANTLR as a visitor to the tree. It has implementations in Go and Swift. The Swift implementation is more recent.
+The grammar is clean of implementation language and is written in ANTLR as a visitor to the tree.
 
 ## Built-in functions
 * `exit()`
